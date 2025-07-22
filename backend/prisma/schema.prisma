@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Webpage {
+  id       String    @id
+  name     String
+  contents Content[] // One webpage has many sections
+}
+
+model Content {
+  id        String   @id
+  name      String
+  order     Int    @default(0)    // ✅ New field to preserve order
+  webpage   Webpage  @relation(fields: [webpageId], references: [id])
+  webpageId String
+
+  elements  Element[]
+  style     Style    @relation("ContentStyle", fields: [styleId], references: [id])
+  styleId   String   @unique
+}
+
+model Element {
+  id        String  @id
+  name      String
+  content   String
+  order     Int    @default(0)   // ✅ New field to preserve order
+
+  contentId String
+  contentRef Content @relation(fields: [contentId], references: [id])
+
+  style     Style   @relation("ElementStyle", fields: [styleId], references: [id])
+  styleId   String  @unique
+}
+
+
+model Style {
+  id String @id @default(uuid())
+
+  xl Json
+  lg Json
+  md Json
+  sm Json
+
+  content Content? @relation("ContentStyle")
+  element Element? @relation("ElementStyle")
+}
+
