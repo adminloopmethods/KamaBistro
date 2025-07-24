@@ -40,11 +40,11 @@ const Login = () => {
   }, []);
 
   return (
-    <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center border border-blue-500">
+    <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center bg-[#AE9060]">
       <BackroundImage />
-      <div className="flex h-full border border-red-500 border-2 justify-center w-full sm:w-3/5 md:w-3/5 lg:w-3/5 xl:w-2/5 sm:px-20 md:px-20 lg:px-24 bg-base-200 border border-stone-500">
+      <div className="flex h-full justify-center w-full sm:w-3/5 md:w-3/5 lg:w-3/5 xl:w-2/5 sm:px-20 md:px-20 lg:px-24 bg-base-200 shadow-[-1px_0px_10px_#00000080]">
         <div className="w-[24rem] flex flex-col items-center justify-center gap-8">
-          <h2 className="text-2xl font-semibold mb-4 text-center">Sign in to Dashboard</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-center dark:text-stone-900">Sign in to Dashboard</h2>
           <form onSubmit={handleSubmit} className="w-full">
             <div className="mb-4 relative flex flex-col gap-4">
               <InputField
@@ -69,7 +69,7 @@ const Login = () => {
             <SubmitButton
               label="Login"
               onClick={handleSubmit}
-              className="rounded-md text-[.8rem] w-full h-[2.3rem] btn-primary dark:bg-primary bg-stone-700 hover:bg-stone-700 border-none"
+              className="rounded-md text-[1rem] w-full h-[2.3rem] btn-primary text-[white] bg-stone-700 hover:bg-[#661ae6] border-none"
             />
           </form>
         </div>

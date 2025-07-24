@@ -7,7 +7,7 @@ const InputField = ({ type = 'text', name, value, onChange, placeholder }) => {
       onChange={onChange}
       placeholder={placeholder}
       // style={{padding: "10px 10px"}}
-      className="w-full px-[20px] py-2 h-10 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+      className="w-full px-[10px] py-2 h-10 border rounded-md focus:outline-none focus:ring focus:border-blue-100 focus:ring-2"
     />
   );
 };
