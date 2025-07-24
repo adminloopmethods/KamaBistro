@@ -6,10 +6,65 @@
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["prismaSchemaFolder"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// User models
+model User {
+    id        String   @id @default(uuid())
+    email     String   @unique
+    password  String
+    role      String   @default("user")
+    deleted   Boolean  @default(false)
+    createdAt DateTime @default(now())
+}
+
+
+
+// Content Models
+model Webpage {
+    id       String    @id
+    name     String
+    contents Content[] 
+}
+
+model Content {
+    id        String  @id
+    name      String
+    order     Int     @default(0) 
+    webpage   Webpage @relation(fields: [webpageId], references: [id])
+    webpageId String
+
+    elements Element[]
+    style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
+    styleId  String    @unique
+}
+
+model Element {
+    id      String @id
+    name    String
+    content String
+    order   Int    @default(0)
+
+    contentId  String
+    contentRef Content @relation(fields: [contentId], references: [id])
+
+    style   Style  @relation("ElementStyle", fields: [styleId], references: [id])
+    styleId String @unique
+}
+
+model Style {
+    id String @id @default(uuid())
+
+    xl Json
+    lg Json
+    md Json
+    sm Json
+
+    content Content? @relation("ContentStyle")
+    element Element? @relation("ElementStyle")
 }

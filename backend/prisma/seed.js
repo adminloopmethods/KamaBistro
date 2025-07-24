@@ -1,46 +1,40 @@
 // prisma/seed.js
-import { PrismaClient } from '@prisma/client'
-import dotenv from 'dotenv'
-import bcrypt from 'bcrypt'
+import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
 
-dotenv.config()
-
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 async function main() {
-  const email = process.env.SUPERUSER_EMAIL
-  const password = process.env.SUPERUSER_PASSWORD
+    const SUPERUSER_EMAIL = "anukool.singh@loopmethods.com";
+    const SUPERUSER_PASSWORD = "Anukool@123";
 
-  if (!email || !password) {
-    throw new Error("SUPERUSER_EMAIL and SUPERUSER_PASSWORD must be defined in .env")
-  }
+    // Hash password
+    const hashedPassword = await bcrypt.hash(SUPERUSER_PASSWORD, 10);
 
-  const hashedPassword = await bcrypt.hash(password, 10)
+    // Check if superuser already exists
+    const existing = await prisma.user.findUnique({
+        where: { email: SUPERUSER_EMAIL },
+    });
 
-  const existingUser = await prisma.user.findUnique({
-    where: { email }
-  })
-
-  if (existingUser) {
-    console.log('Superuser already exists:', existingUser.email)
-    return
-  }
-
-  const superUser = await prisma.user.create({
-    data: {
-      email,
-      password: hashedPassword,
-      role: 'admin'
+    if (!existing) {
+        await prisma.user.create({
+            data: {
+                email: SUPERUSER_EMAIL,
+                password: hashedPassword,
+                role: "superuser",
+            },
+        });
+        console.log("✅ Superuser created");
+    } else {
+        console.log("ℹ️ Superuser already exists");
     }
-  })
-
-  console.log('Superuser created:', superUser.email)
 }
 
 main()
-  .then(() => prisma.$disconnect())
-  .catch(e => {
-    console.error(e)
-    prisma.$disconnect()
-    process.exit(1)
-  })
+    .catch((e) => {
+        console.error(e);
+        process.exit(1);
+    })
+    .finally(async () => {
+        await prisma.$disconnect();
+    });
