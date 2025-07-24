@@ -2,15 +2,15 @@
 
 async function run() {
   const resp = await fetch(
-    `https://toast-api-server/authentication/v1/authentication/login`,
+    `https://ws-api.toasttab.com/authentication/v1/authentication/login`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        clientId: 'VKuhk4NaLedOcjZpJM8grvdrsFi3MlcM',
-        clientSecret: 'eS960aiKdvgbSDcLUCk68HR2CJKwwHNO2HKfgxjCWxoj27KIp6jFAi2XOOc_oCuv',
+        clientId: 'ol5K1dXoXdkMvwq0V2X6UJKw8Wj3DtJ',
+        clientSecret: 'aVtButyY_UBJqeMX-jbFnSBARzFRJLZub9D7xq0m51CuD2TGJ8i9F8bJ2pU4hx-U',
         userAccessType: 'TOAST_MACHINE_CLIENT'
       })
     }

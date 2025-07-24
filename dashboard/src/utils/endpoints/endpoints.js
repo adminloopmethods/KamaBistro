@@ -1,13 +1,6 @@
-const BASE_URL = "http://localhost:5000/";
+const BASE_URL = import.meta.env.VITE_BACK_ENDPOINT;
 
 const auth = "auth";
-const role = "role";
-const permission = "permission";
-const user = "user";
-const notification = "notification";
-const content = "content";
-const media = "media";
-const reminder = "reminder"
 
 
 const endpoint = {
