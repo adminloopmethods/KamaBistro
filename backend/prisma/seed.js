@@ -1,17 +1,24 @@
 // prisma/seed.js
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
 
 async function main() {
-    const SUPERUSER_EMAIL = "anukool.singh@loopmethods.com";
-    const SUPERUSER_PASSWORD = "Anukool@123";
+    const SUPERUSER_EMAIL = process.env.SUPERUSER_EMAIL;
+    const SUPERUSER_PASSWORD = process.env.SUPERUSER_PASSWORD;
+    const SUPERUSER_NAME = process.env.SUPERUSER_NAME;
 
-    // Hash password
+
+    if (!SUPERUSER_EMAIL || !SUPERUSER_PASSWORD) {
+        throw new Error("❌ SUPERUSER_EMAIL or SUPERUSER_PASSWORD not found in .env file");
+    }
+
     const hashedPassword = await bcrypt.hash(SUPERUSER_PASSWORD, 10);
 
-    // Check if superuser already exists
     const existing = await prisma.user.findUnique({
         where: { email: SUPERUSER_EMAIL },
     });
@@ -21,7 +28,8 @@ async function main() {
             data: {
                 email: SUPERUSER_EMAIL,
                 password: hashedPassword,
-                role: "superuser",
+                role: "ADMIN",
+                name: SUPERUSER_NAME
             },
         });
         console.log("✅ Superuser created");

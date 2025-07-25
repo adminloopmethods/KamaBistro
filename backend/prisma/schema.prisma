@@ -14,13 +14,22 @@ datasource db {
 }
 
 // User models
+enum Role {
+  ADMIN 
+  MANAGER
+  USER
+}
+
 model User {
-    id        String   @id @default(uuid())
-    email     String   @unique
+    id        String   @id @default(uuid()) 
+    email     String   @unique // it should be one in a database
+    name      String
+    phone     String?   // ? means it is optional
     password  String
-    role      String   @default("user")
-    deleted   Boolean  @default(false)
+    role      Role   @default(USER) // find Role Enum describing that only those values are able to be here maybe above this schema
+    deleted   Boolean  @default(false) // a user shall never be removed from database but no query shall be made once its property turn to delete
     createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 }
 
 
@@ -29,7 +38,7 @@ model User {
 model Webpage {
     id       String    @id
     name     String
-    contents Content[] 
+    contents Content[]
 }
 
 model Content {
@@ -60,10 +69,10 @@ model Element {
 model Style {
     id String @id @default(uuid())
 
-    xl Json
-    lg Json
-    md Json
-    sm Json
+    xl Json?
+    lg Json?
+    md Json?
+    sm Json?
 
     content Content? @relation("ContentStyle")
     element Element? @relation("ElementStyle")
