@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import InputField from '../elem-dashboard/InputField';
-import SubmitButton from '../elem-dashboard/SubmitButton';
+import { useNavigate } from 'react-router-dom';
+import InputField from '../Dashboard/elem-dashboard/InputField';
+import SubmitButton from '../Dashboard/elem-dashboard/SubmitButton';
 
-import { loginReq } from '../../../app/fetch';
-import getFingerPrint from '../../../app/fingerprint';
-import BackroundImage from '../utils/WelcomeImages';
+import { loginReq } from '../../app/fetch';
+import getFingerPrint from '../../app/fingerprint';
+import BackroundImage from './utils/WelcomeImages';
+import { toast, Toaster } from 'sonner';
+import { toastWithUpdate } from '../../Functionality/toastWithUpdate';
 
 const Login = () => {
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,8 +26,18 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await loginReq(formData);
-      console.log('Login Success:', response.data);
+      const response = await toastWithUpdate(() => loginReq(formData), {
+        loading: "Logging in...",
+        success: "Login Successful!",
+        error: (err) => err.message || "Login failed",
+      });
+      if (response?.ok && response.token && response.user) {
+        localStorage.setItem("token", response.token)
+        localStorage.setItem("user", JSON.stringify(response.user))
+        navigate("/")
+      } else {
+        throw new Error(response)
+      }
     } catch (error) {
       console.error('Login Failed:', error);
     }
@@ -38,6 +52,14 @@ const Login = () => {
     }
     FP();
   }, []);
+
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    navigate("/");
+  }
+}, []);
+
 
   return (
     <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center bg-[#AE9060]">
@@ -74,6 +96,7 @@ const Login = () => {
           </form>
         </div>
       </div>
+      <Toaster richColors position="top-right" />
     </div>
   );
 };

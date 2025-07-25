@@ -4,10 +4,13 @@ import dotenv from "dotenv";
 import corsOptions from "./config/corsOptions.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
+import { requestLogger } from "./utils/logger.js";
 
 dotenv.config();
 
 const app = express();
+
+app.use(requestLogger);
 
 app.use(cors(corsOptions));
 app.use(express.json());
