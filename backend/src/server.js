@@ -1,10 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+// middleware
 import corsOptions from "./config/corsOptions.js";
+import { requestLogger } from "./utils/logger.js";
+// routes
 import contentRoutes from "./routes/contentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-import { requestLogger } from "./utils/logger.js";
+import logRoutes from "./routes/logRoutes.js";
 
 dotenv.config();
 
@@ -15,8 +18,10 @@ app.use(requestLogger);
 app.use(cors(corsOptions));
 app.use(express.json());
 
-app.use("/content", contentRoutes);
 app.use("/auth", authRoutes);
+app.use("/content", contentRoutes);
+app.use("/logs", logRoutes);
+
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

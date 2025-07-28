@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,65 +15,75 @@ datasource db {
 
 // User models
 enum Role {
-  ADMIN 
+  ADMIN
   MANAGER
   USER
 }
 
 model User {
-    id        String   @id @default(uuid()) 
-    email     String   @unique // it should be one in a database
-    name      String
-    phone     String?   // ? means it is optional
-    password  String
-    role      Role   @default(USER) // find Role Enum describing that only those values are able to be here maybe above this schema
-    deleted   Boolean  @default(false) // a user shall never be removed from database but no query shall be made once its property turn to delete
-    createdAt DateTime @default(now())
-    updatedAt DateTime @default(now())
+  id        String   @id @default(uuid())
+  email     String   @unique // it should be one in a database
+  name      String
+  phone     String? // ? means it is optional
+  password  String
+  role      Role     @default(USER) // find Role Enum describing that only those values are able to be here maybe above this schema
+  deleted   Boolean  @default(false) // a user shall never be removed from database but no query shall be made once its property turn to delete
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  Log       Log[]
 }
-
-
 
 // Content Models
 model Webpage {
-    id       String    @id
-    name     String
-    contents Content[]
+  id       String    @id
+  name     String
+  contents Content[]
 }
 
 model Content {
-    id        String  @id
-    name      String
-    order     Int     @default(0) 
-    webpage   Webpage @relation(fields: [webpageId], references: [id])
-    webpageId String
+  id        String  @id
+  name      String
+  order     Int     @default(0)
+  webpage   Webpage @relation(fields: [webpageId], references: [id])
+  webpageId String
 
-    elements Element[]
-    style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
-    styleId  String    @unique
+  elements Element[]
+  style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
+  styleId  String    @unique
 }
 
 model Element {
-    id      String @id
-    name    String
-    content String
-    order   Int    @default(0)
+  id      String @id
+  name    String
+  content String
+  order   Int    @default(0)
 
-    contentId  String
-    contentRef Content @relation(fields: [contentId], references: [id])
+  contentId  String
+  contentRef Content @relation(fields: [contentId], references: [id])
 
-    style   Style  @relation("ElementStyle", fields: [styleId], references: [id])
-    styleId String @unique
+  style   Style  @relation("ElementStyle", fields: [styleId], references: [id])
+  styleId String @unique
 }
 
 model Style {
-    id String @id @default(uuid())
+  id String @id @default(uuid())
 
-    xl Json?
-    lg Json?
-    md Json?
-    sm Json?
+  xl Json?
+  lg Json?
+  md Json?
+  sm Json?
 
-    content Content? @relation("ContentStyle")
-    element Element? @relation("ElementStyle")
+  content Content? @relation("ContentStyle")
+  element Element? @relation("ElementStyle")
+}
+
+// Logs
+model Log {
+  id        String   @id @default(uuid())
+  action    String
+  message   String?
+  userId    String? // Nullable if not related to a user
+  timestamp DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id])
 }

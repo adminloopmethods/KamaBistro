@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 import { generateToken } from "../utils/jwt.js";
+import { logActivity } from "../utils/logger.js";
 
 const prisma = new PrismaClient();
 
@@ -9,29 +10,30 @@ export const register = async (req, res) => {
   try {
     const { email, name, phone, password, role } = req.body;
 
-    // Check if user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
+      await logActivity({ action: "Register Failed", message: `User with email ${email} already exists.` });
       return res.status(400).json({ message: "User already exists." });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create the user
     const newUser = await prisma.user.create({
       data: {
         email,
         name,
         phone,
         password: hashedPassword,
-        role, // optional: you can restrict allowed roles manually here too
+        role,
       },
     });
+
+    await logActivity({ action: "User Registered", userId: newUser.id, message: `New user ${email} registered.` });
 
     const { password: _, ...safeUser } = newUser;
     res.status(201).json({ message: "User registered successfully", user: safeUser });
   } catch (err) {
+    await logActivity({ action: "Register Error", message: err.message });
     res.status(500).json({ error: err.message });
   }
 };
@@ -41,34 +43,29 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find active (non-deleted) user
     const user = await prisma.user.findFirst({
-      where: {
-        email,
-        deleted: false,
-      },
+      where: { email, deleted: false },
     });
 
     if (!user) {
+      await logActivity({ action: "Login Failed", message: `User not found or deleted: ${email}` });
       return res.status(404).json({ message: "User not found or deleted." });
     }
 
-    // Compare passwords
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) {
+      await logActivity({ action: "Login Failed", userId: user.id, message: `Invalid password attempt.` });
       return res.status(401).json({ message: "Invalid password." });
     }
 
-    // Generate JWT token
-    const token = generateToken({
-      id: user.id,
-      email: user.email,
-      role: user.role,
-    });
+    const token = generateToken({ id: user.id, email: user.email, role: user.role });
+
+    await logActivity({ action: "Login Success", userId: user.id, message: `User ${email} logged in.` });
 
     const { password: _, ...safeUser } = user;
     res.json({ message: "Login successful", token, user: safeUser });
   } catch (err) {
+    await logActivity({ action: "Login Error", message: err.message });
     res.status(500).json({ error: err.message });
   }
 };
@@ -91,9 +88,12 @@ export const updateUser = async (req, res) => {
       data,
     });
 
+    await logActivity({ action: "User Updated", userId: updatedUser.id, message: `User ${updatedUser.email} updated.` });
+
     const { password: _, ...safeUser } = updatedUser;
     res.json({ message: "User updated", user: safeUser });
   } catch (err) {
+    await logActivity({ action: "Update User Error", message: err.message });
     res.status(500).json({ error: err.message });
   }
 };
@@ -103,13 +103,16 @@ export const softDeleteUser = async (req, res) => {
   try {
     const { id } = req.params;
 
-    await prisma.user.update({
+    const user = await prisma.user.update({
       where: { id },
       data: { deleted: true },
     });
 
+    await logActivity({ action: "User Deleted", userId: user.id, message: `Soft-deleted user ${user.email}` });
+
     res.json({ message: "User deleted (soft delete applied)" });
   } catch (err) {
+    await logActivity({ action: "Delete User Error", message: err.message });
     res.status(500).json({ error: err.message });
   }
 };

@@ -34,7 +34,9 @@ const Login = () => {
       if (response?.ok && response.token && response.user) {
         localStorage.setItem("token", response.token)
         localStorage.setItem("user", JSON.stringify(response.user))
-        navigate("/")
+        setTimeout(() => {
+          navigate("/")
+        }, 1000)
       } else {
         throw new Error(response)
       }
