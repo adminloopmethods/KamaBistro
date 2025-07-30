@@ -70,13 +70,14 @@ const Login = () => {
         <div className="w-[24rem] flex flex-col items-center justify-center gap-8">
           <h2 className="text-2xl font-semibold mb-4 text-center dark:text-stone-900">Sign in to Dashboard</h2>
           <form onSubmit={handleSubmit} className="w-full">
-            <div className="mb-4 relative flex flex-col gap-4">
+            <div className="mb-4 relative flex flex-col gap-4 text-sm text-[black]">
               <InputField
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your email"
+                label={"Email"}
               />
               <InputField
                 type="password"
@@ -84,6 +85,7 @@ const Login = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Enter your password"
+                label={"Password"}
                 className="mt-4"
               />
             </div>

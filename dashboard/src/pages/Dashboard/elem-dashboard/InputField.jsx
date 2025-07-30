@@ -7,6 +7,9 @@ const InputField = ({
   value,
   onChange,
   placeholder,
+  required = true,
+  label,
+  labelStyle
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
@@ -16,7 +19,19 @@ const InputField = ({
   };
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full ">
+      {/* {
+        required &&
+        <span className="text-red-500 absolute top-">*</span>
+      } */}
+      {label &&
+        <label className={`pl-0 inline-block mb-1`}>
+          <span className={"label-text text-stone-800 " + labelStyle}>
+            {label}
+            {(required) && (<span className="text-red-500 ml-1 -translate-y-[3px] inline-block">*</span>)}
+          </span>
+        </label>
+      }
       <input
         type={isPassword && !showPassword ? "password" : "text"}
         name={name}
@@ -29,7 +44,7 @@ const InputField = ({
         <button
           type="button"
           onClick={togglePasswordVisibility}
-          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500"
+          className={`absolute right-2 ${label ? "top-3/4 -translate-y-3/4": "top-1/2 -translate-y-1/2"} transform  text-gray-500`}
         >
           {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
