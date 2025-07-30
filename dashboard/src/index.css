@@ -51,3 +51,20 @@ main {
   border-radius: 4px;
   background-color: rgb(0, 57, 132);
 }
+
+/* Chrome, Safari, Edge */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* Firefox */
+input[type="search"]::-moz-search-clear-button {
+  display: none;
+}
+
+/* Internet Explorer (very old versions) — doesn't support type="search" well, but just in case */
+input[type="search"]::-ms-clear {
+  display: none;
+}

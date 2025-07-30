@@ -1,3 +1,5 @@
+import SearchAndFilter from "./component/SearchAndFilter"
+
 const Users = () => {
 
     return (
@@ -11,7 +13,7 @@ const Users = () => {
                     Add User
                 </button>
             </div>
-
+            <SearchAndFilter />
         </div>
     )
 }

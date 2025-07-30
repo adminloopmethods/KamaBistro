@@ -25,25 +25,41 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validation
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all fields.");
+      return;
+    }
+
+    if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
     try {
       const response = await toastWithUpdate(() => loginReq(formData), {
         loading: "Logging in...",
         success: "Login Successful!",
         error: (err) => err.message || "Login failed",
       });
+
       if (response?.ok && response.token && response.user) {
-        localStorage.setItem("token", response.token)
-        localStorage.setItem("user", JSON.stringify(response.user))
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("user", JSON.stringify(response.user));
         setTimeout(() => {
-          navigate("/")
-        }, 1000)
+          navigate("/");
+        }, 1000);
       } else {
-        throw new Error(response)
+        throw new Error(response);
       }
     } catch (error) {
-      console.error('Login Failed:', error);
+      console.error("Login Failed:", error);
     }
   };
+
 
   useEffect(() => {
     async function FP() {
@@ -56,11 +72,11 @@ const Login = () => {
   }, []);
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  if (token) {
-    navigate("/");
-  }
-}, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
 
 
   return (
