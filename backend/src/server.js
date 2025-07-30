@@ -8,6 +8,7 @@ import { requestLogger } from "./utils/logger.js";
 import contentRoutes from "./routes/contentRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import logRoutes from "./routes/logRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes)
 app.use("/content", contentRoutes);
 app.use("/logs", logRoutes);
 

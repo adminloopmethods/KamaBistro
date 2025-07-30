@@ -1,14 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableComp from './component/TableComp';
+import UserFormDialog from './component/UserFormDialog';
 
 const Users = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editUser, setEditUser] = useState(null);
+
+  const [users, setUsers] = useState([
+    {
+      user: { name: 'Anukool', email: 'anukool@example.com', phone: '', role: 'USER' },
+      status: 'Active'
+    },
+    {
+      user: { name: 'Ravi', email: 'ravi@example.com', phone: '', role: 'ADMIN' },
+      status: 'Inactive'
+    }
+  ]);
+
+  const handleAddClick = () => {
+    setEditUser(null);
+    setIsDialogOpen(true);
+  };
+
+  const handleEditClick = (user) => {
+    setEditUser(user);
+    setIsDialogOpen(true);
+  };
+
+  const handleFormSubmit = (formData) => {
+    if (editUser) {
+      // update logic
+      setUsers((prev) =>
+        prev.map((item) =>
+          item.user.email === editUser.email
+            ? { ...item, user: { ...item.user, ...formData } }
+            : item
+        )
+      );
+    } else {
+      // create logic
+      setUsers((prev) => [...prev, { user: formData, status: 'Active' }]);
+    }
+  };
+
   const columns = [
     {
       key: 'user',
       header: 'User',
       render: (_, row) => (
-        <div className="flex items-center gap-3">
-          {/* Avatar placeholder — replace with actual image if needed */}
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleEditClick(row.user)}>
           <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">
             {row.user.name[0]}
           </div>
@@ -34,17 +74,6 @@ const Users = () => {
     }
   ];
 
-  const data = [
-    {
-      user: { name: 'Anukool', email: 'anukool@example.com', profile: null },
-      status: 'Active'
-    },
-    {
-      user: { name: 'Ravi', email: 'ravi@example.com', profile: null },
-      status: 'Inactive'
-    }
-  ];
-
   return (
     <div>
       <div className="mb-5 flex justify-between">
@@ -56,12 +85,22 @@ const Users = () => {
             Manage user accounts and permissions
           </p>
         </div>
-        <button className="theme-gradient text-[14px] px-[24px] py-[12px] rounded-3xl self-center">
+        <button
+          onClick={handleAddClick}
+          className="theme-gradient text-[14px] px-[24px] py-[12px] rounded-3xl self-center"
+        >
           Add User
         </button>
       </div>
 
-      <TableComp columns={columns} data={data} title="Users" />
+      <TableComp columns={columns} data={users} title="Users" />
+
+      <UserFormDialog
+        open={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        onSubmit={handleFormSubmit}
+        initialData={editUser}
+      />
     </div>
   );
 };

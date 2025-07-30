@@ -29,7 +29,8 @@ async function main() {
                 email: SUPERUSER_EMAIL,
                 password: hashedPassword,
                 role: "ADMIN",
-                name: SUPERUSER_NAME
+                name: SUPERUSER_NAME,
+                status: true
             },
         });
         console.log("✅ Superuser created");

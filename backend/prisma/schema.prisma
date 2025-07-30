@@ -30,6 +30,7 @@ model User {
   deleted   Boolean  @default(false) // a user shall never be removed from database but no query shall be made once its property turn to delete
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  status    Boolean  @default(true)
   Log       Log[]
 }
 
