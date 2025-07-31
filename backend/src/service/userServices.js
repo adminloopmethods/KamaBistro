@@ -63,7 +63,7 @@ export const getNonAdminUserById = async (id) => {
 };
 
 export const updateUserById = async (id, data) => {
-    
+
     const updateData = {};
 
     if (data.email) updateData.email = data.email;
@@ -108,4 +108,16 @@ export const findActiveUserByEmail = async (email) => {
 
 export const isPasswordValid = async (plainPassword, hashedPassword) => {
     return await bcrypt.compare(plainPassword, hashedPassword);
+};
+
+export const toggleUserStatusById = async (id) => {
+    const user = await prisma.user.findUnique({ where: { id } });
+    if (!user) throw new Error("User not found.");
+
+    const updatedUser = await prisma.user.update({
+        where: { id },
+        data: { isActive: !user.isActive },
+    });
+
+    return updatedUser;
 };

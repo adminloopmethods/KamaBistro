@@ -4,6 +4,7 @@ import UserFormDialog from './component/UserFormDialog';
 import { getUsersReq } from '../../app/fetch';
 import { Toaster } from 'sonner';
 import { SquarePen } from 'lucide-react';
+import { Switch } from '@headlessui/react';
 
 const usersModel = {
   id: '',
@@ -98,15 +99,24 @@ const Users = () => {
         </button>
 
         {/* Status toggle switch */}
-        <label className="inline-flex items-center cursor-pointer">
-          <input
-            type="checkbox"
-            className="sr-only peer"
-            checked={user.status === 'Active'}
-            onChange={() => handleToggleStatus(user)}
-          />
-          <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-500 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600"></div>
-        </label>
+        <div className="flex items-center space-x-4 ">
+          <Switch
+            checked={user?.status === "Active"}
+            onChange={() => {
+            }}
+            className={`${user?.status === "Active"
+              ? "theme-gradient"
+              : "bg-gray-300"
+              } relative inline-flex h-[6px] w-6 items-center rounded-full`}
+          >
+            <span
+              className={`${user?.status === "Active"
+                ? "translate-x-4"
+                : "translate-x-0"
+                } inline-block h-4 w-4 bg-white rounded-full shadow-2xl border border-gray-300 transition`}
+            />
+          </Switch>
+        </div>
       </div>
     );
   };

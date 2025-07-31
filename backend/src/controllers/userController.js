@@ -5,6 +5,7 @@ import {
   softDeleteUserById,
   createUser,
   checkIfUserExists,
+  toggleUserStatusById,
 } from "../service/userServices.js";
 
 import { validatePasswordFields } from "../utils/userHelper.js";
@@ -140,3 +141,28 @@ export const softDeleteUser = async (req, res) => {
     res.status(500).json({ message: "Failed to delete user." });
   }
 };
+
+
+export const toggleStatus = async (req, res) => {
+
+  const { id } = req.params;
+
+  try {
+    const updatedUser = await toggleUserStatusById(id);
+    const { password: _, ...safeUser } = updatedUser;
+
+    await logActivity({
+      action: "User Status Toggled",
+      userId: updatedUser.id,
+      message: `User status changed to ${updatedUser.isActive ? "Active" : "Inactive"}`,
+    });
+  } catch (err) {
+    await logActivity({
+      action: "Toggle User Status Error",
+      message: err.message,
+    });
+
+    const status = err.message === "User not found." ? 404 : 500;
+    res.status(status).json({ message: err.message || "Failed to toggle user status." });
+  }
+}
