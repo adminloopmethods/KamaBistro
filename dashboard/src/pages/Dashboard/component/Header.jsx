@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Moon, SunMedium, BellRing, UserCircle, ChevronDown } from "lucide-react";
 import { useTheme } from "../../../Context/ThemeContext";
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ brand }) => {
+    const navigate = useNavigate()
     const { theme, toggleTheme } = useTheme();
     const [dropDown, setDropDown] = useState(false);
+    const [user, setUser] = useState(null)
 
-    // You can replace these with actual user data from props or context
-    const user = {
-        name: "John Doe",
-        email: "john.doe@example.com",
-    };
+    console.log(user)
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem("user"))
+        if (user) {
+            setUser(user)
+        } else {
+            navigate("/login")
+            localStorage.clear()
+        }
+    }, [])
 
     return (
         <header className="rounded-[16px_16px_0px_0px] px-4 py-5 bg-white dark:bg-gray-900 flex items-center justify-between">
@@ -39,11 +48,11 @@ const Header = ({ brand }) => {
                 </button>
 
                 {/* Profile section */}
-                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition">
+                <div className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition max-w-[298px]">
                     <UserCircle className="w-8 h-8 text-gray-600 dark:text-white" />
                     <div className="text-sm leading-tight">
-                        <p className="font-medium text-gray-900 dark:text-white">{user.name}</p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400">{user.email}</p>
+                        <p className="font-medium text-gray-900 dark:text-white">{user?.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{user?.email}</p>
                     </div>
                     <span>
                         <ChevronDown className="w-5 text-gray-600 dark:text-white" />
@@ -59,4 +68,4 @@ const Header = ({ brand }) => {
     );
 };
 
-export default Header;
+export default React.memo(Header);

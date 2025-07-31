@@ -97,3 +97,28 @@ export async function loginReq(data) {
         ContentType.json
     );
 }
+
+export async function getUsersReq() {
+    return await makerequest(
+        endpoint.route("getUsers"),
+        "GET",
+    );
+}
+
+export async function createUserReq(data) {
+    return await makerequest(
+        endpoint.route("submitUser"),
+        "POST",
+        JSON.stringify(data),
+        ContentType.json
+    );
+}
+
+export async function updateUserReq(id, data) {
+    return await makerequest(
+        endpoint.route("updateUser") + id,
+        "PUT",
+        JSON.stringify(data),
+        ContentType.json
+    );
+}

@@ -1,24 +1,24 @@
+import { checkIfUserExists, isPasswordValid } from "../service/userServices.js";
 import { generateToken } from "../utils/jwt.js";
 import { logActivity } from "../utils/logger.js";
-import { findActiveUserByEmail, validatePassword } from "../utils/userHelper.js";
-
+import { userMessages, authMessages } from "../constants/messages.js";
 
 // Login existing user
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const user = await findActiveUserByEmail(email)
+    const user = await checkIfUserExists(email);
 
     if (!user) {
-      await logActivity({ action: "Login Failed", message: `User not found or deleted: ${email}` });
-      return res.status(404).json({ message: "User not found or deleted." });
+      await logActivity({ action: "Login Failed", message: `User not found: ${email}` });
+      return res.status(404).json({ message: userMessages.USER_NOT_FOUND });
     }
 
-    const isValid = await validatePassword(password, user.password);
+    const isValid = await isPasswordValid(password, user.password);
     if (!isValid) {
-      await logActivity({ action: "Login Failed", userId: user.id, message: `Invalid password attempt.` });
-      return res.status(401).json({ message: "Invalid password." });
+      await logActivity({ action: "Login Failed", userId: user.id, message: authMessages.INVALID_PASSWORD });
+      return res.status(401).json({ message: authMessages.INVALID_PASSWORD });
     }
 
     const token = generateToken({ id: user.id, email: user.email, role: user.role });
@@ -26,7 +26,7 @@ export const login = async (req, res) => {
     await logActivity({ action: "Login Success", userId: user.id, message: `User ${email} logged in.` });
 
     const { password: _, ...safeUser } = user;
-    res.json({ message: "Login successful", token, user: safeUser });
+    res.json({ message: authMessages.LOGIN_SUCCESS, token, user: safeUser });
   } catch (err) {
     await logActivity({ action: "Login Error", message: err.message });
     res.status(500).json({ error: err.message });

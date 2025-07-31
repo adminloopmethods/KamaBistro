@@ -1,21 +1,25 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TableComp from './component/TableComp';
 import UserFormDialog from './component/UserFormDialog';
+import { getUsersReq } from '../../app/fetch';
+import { Toaster } from 'sonner';
+
+const usersModel = {
+  id:'',
+  name: '',
+  email: '',
+  phone: '',
+  role: '',
+  status: '',
+}
 
 const Users = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editUser, setEditUser] = useState(null);
+  const [refresh, setRefresh] = useState(0)
 
-  const [users, setUsers] = useState([
-    {
-      user: { name: 'Anukool', email: 'anukool@example.com', phone: '', role: 'USER' },
-      status: 'Active'
-    },
-    {
-      user: { name: 'Ravi', email: 'ravi@example.com', phone: '', role: 'ADMIN' },
-      status: 'Inactive'
-    }
-  ]);
+  const [users, setUsers] = useState([usersModel]);
+
 
   const handleAddClick = () => {
     setEditUser(null);
@@ -27,37 +31,43 @@ const Users = () => {
     setIsDialogOpen(true);
   };
 
-  const handleFormSubmit = (formData) => {
-    if (editUser) {
-      // update logic
-      setUsers((prev) =>
-        prev.map((item) =>
-          item.user.email === editUser.email
-            ? { ...item, user: { ...item.user, ...formData } }
-            : item
-        )
-      );
-    } else {
-      // create logic
-      setUsers((prev) => [...prev, { user: formData, status: 'Active' }]);
+
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await getUsersReq();
+        const users = response.users.map((e) => ({
+          id: e.id,
+          name: e.name,
+          email: e.email,
+          phone: e.phone || '',
+          role: e.role || 'USER',
+          status: e.status ? 'Active' : 'Inactive',
+        }));
+        setUsers(users);
+      } catch (err) {
+        console.error("Failed to fetch users", err);
+      }
     }
-  };
+    fetchUsers();
+  }, [refresh]);
 
   const columns = [
     {
-      key: 'user',
+      key: 'name',
       header: 'User',
       render: (_, row) => (
-        <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleEditClick(row.user)}>
+        <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleEditClick(row)}>
           <div className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white font-bold">
-            {row.user.name[0]}
+            {row.name[0]}
           </div>
           <div className="flex flex-col">
             <span className="text-gray-900 dark:text-white font-medium">
-              {row.user.name}
+              {row.name}
             </span>
             <span className="text-gray-500 dark:text-gray-400 text-sm">
-              {row.user.email}
+              {row.email}
             </span>
           </div>
         </div>
@@ -87,7 +97,7 @@ const Users = () => {
         </div>
         <button
           onClick={handleAddClick}
-          className="theme-gradient text-[14px] px-[24px] py-[12px] rounded-3xl self-center"
+          className="theme-gradient text-[14px] px-[24px] py-[12px] rounded-3xl self-center text-[white]"
         >
           Add User
         </button>
@@ -98,9 +108,11 @@ const Users = () => {
       <UserFormDialog
         open={isDialogOpen}
         onClose={() => setIsDialogOpen(false)}
-        onSubmit={handleFormSubmit}
+        setUserObject={setEditUser}
         initialData={editUser}
+        refresh={() => setRefresh(Math.random)}
       />
+      <Toaster richColors position="top-right" />
     </div>
   );
 };

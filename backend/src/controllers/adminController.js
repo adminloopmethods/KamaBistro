@@ -1,9 +1,13 @@
-import prisma from "../models/prismaClient.js";
+import {
+  deleteAllUsersService,
+  deleteAllContentService,
+  nukeAllUsersAndContentService,
+} from "../service/maintenanceService.js";
 
 // Delete all users
 export const deleteAllUsers = async (req, res) => {
   try {
-    await prisma.user.deleteMany();
+    await deleteAllUsersService();
     res.json({ message: "All users deleted." });
   } catch (err) {
     console.error("Error deleting users:", err);
@@ -14,12 +18,7 @@ export const deleteAllUsers = async (req, res) => {
 // Delete all content-related records
 export const deleteAllContent = async (req, res) => {
   try {
-    // Delete in correct order due to foreign key constraints
-    await prisma.style.deleteMany();
-    await prisma.element.deleteMany();
-    await prisma.content.deleteMany();
-    await prisma.webpage.deleteMany();
-
+    await deleteAllContentService();
     res.json({ message: "All content-related data deleted." });
   } catch (err) {
     console.error("Error deleting content:", err);
@@ -30,12 +29,7 @@ export const deleteAllContent = async (req, res) => {
 // Delete users and content together
 export const nukeAllUsersAndContent = async (req, res) => {
   try {
-    await prisma.style.deleteMany();
-    await prisma.element.deleteMany();
-    await prisma.content.deleteMany();
-    await prisma.webpage.deleteMany();
-    await prisma.user.deleteMany();
-
+    await nukeAllUsersAndContentService();
     res.json({ message: "All users and content-related data deleted." });
   } catch (err) {
     console.error("Error nuking everything:", err);

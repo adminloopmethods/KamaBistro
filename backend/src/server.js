@@ -20,7 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use("/user", userRoutes)
+app.use("/users", userRoutes)
 app.use("/content", contentRoutes);
 app.use("/logs", logRoutes);
 

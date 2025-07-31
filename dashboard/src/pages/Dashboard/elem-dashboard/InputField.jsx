@@ -25,8 +25,8 @@ const InputField = ({
         <span className="text-red-500 absolute top-">*</span>
       } */}
       {label &&
-        <label className={`pl-0 inline-block mb-1`}>
-          <span className={"label-text text-stone-800 " + labelStyle}>
+        <label className={`pl-0 inline-block mb-1 `}>
+          <span className={"label-text text-stone-800 dark:text-stone-200 " + labelStyle}>
             {label}
             {(required) && (<span className="text-red-500 ml-1 -translate-y-[3px] inline-block">*</span>)}
           </span>
@@ -38,7 +38,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full px-[10px] pr-10 py-2 h-10 border rounded-md focus:outline-none focus:ring focus:border-blue-100 focus:ring-2"
+        className="w-full px-[10px] dark:bg-stone-100 pr-10 py-2 h-10 border rounded-md focus:outline-none focus:ring focus:border-blue-100 focus:ring-2"
       />
       {isPassword && (
         <button

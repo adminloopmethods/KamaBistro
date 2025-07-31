@@ -43,13 +43,13 @@ const CustomSelect = ({
   };
 
   return (
-    <div ref={dropdownRef} className={baseClasses ? baseClasses : `relative rounded-3xl flex-[1] ${addBaseClass}`}>
+    <div ref={dropdownRef} className={baseClasses ? baseClasses : `dark:bg-stone-100 relative rounded-3xl h-full flex-[1] ${addBaseClass}`}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
         className={styleClasses || `w-full text-left px-3 py-2 rounded-3xl border border-gray-300 rounded-md shadow-sm bg-white flex items-center justify-between focus:outline-none ${addStyleClass}`}
       >
-        <span className={selected === firstValue ? 'text-gray-400' : ''}>
+        <span className={selected === firstValue ? ' text-gray-500 dark:text-gray-500 ' : 'text-stone-700 text-sm'}>
           {getLabel(selected)}
         </span>
         <ChevronDown size={18} className="ml-2 text-gray-500" />
@@ -76,7 +76,7 @@ const CustomSelect = ({
             <li
               key={opt.value}
               onClick={() => handleSelect(opt.value)}
-              className={`px-3 py-2 hover:bg-gray-100 cursor-pointer ${selected === opt.value ? 'bg-gray-100 font-medium' : ''
+              className={`px-3 py-2 hover:bg-gray-100 cursor-pointer dark:text-[black] ${selected === opt.value ? 'bg-gray-100 font-medium' : ''
                 }`}
             >
               {opt.label}

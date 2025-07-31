@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SearchC from "../elem-dashboard/Search";
-import Select from "../elem-dashboard/Select";
+import Select from "../elem-dashboard/CustomSelect";
 
 export default function SearchAndFilter() {
     const [searchValue, setSearchValue] = useState("")

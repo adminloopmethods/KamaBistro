@@ -1,58 +1,36 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
 
-const prisma = new PrismaClient();
-
-export const findUserByEmail = async (email) => {
-    return await prisma.user.findUnique({
-        where: { email },
-    });
-};
-
-export const findActiveUserByEmail = async (email) => {
-    return await prisma.user.findFirst({
-        where: {
-            email,
-            deleted: false,
-        },
-    });
-};
-
-export const validatePassword = async (password, userPassword) => {
-    return await bcrypt.compare(password, userPassword);
-}
-
-export const existingUser = async (req, res, email) => {
-    console.log(email)
-    const existingUser = await findUserByEmail(email);
-
-    if (existingUser) {
-        await logActivity({ action: "Register Failed", message: `User with email ${email} already exists.` });
-        return res.status(400).json({ message: "User already exists." });
+export const validatePasswordFields = (password, cnfmpassword) => {
+    if (typeof password !== "string" || typeof cnfmpassword !== "string") {
+        throw new Error("Password and confirmation must be strings.");
     }
-}
+    if (password !== cnfmpassword) {
+        throw new Error("Passwords do not match.");
+    }
 
-export const createUser = async (userObject) => {
-    return await prisma.user.create({
-        data: userObject,
-    });
-}
+    const structureCheck = validatePasswordStructure(password);
+    if (structureCheck !== true) {
+        throw new Error(structureCheck);
+    }
+};
 
-export const findingAllUsers = async () => {
+export const validatePasswordStructure = (password) => {
+    const minLength = 8;
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSymbol = /[^A-Za-z0-9]/.test(password);
 
-    return prisma.user.findMany({
-        where: {
-            role: { not: "ADMIN" },
-            deleted: false,
-        },
-        select: {
-            id: true,
-            email: true,
-            name: true,
-            phone: true,
-            role: true,
-            createdAt: true,
-            updatedAt: true,
-        },
-    })
-}
+    if (password.length < minLength) return "Password must be at least 8 characters.";
+    if (!hasUpperCase) return "Password must include at least one uppercase letter.";
+    if (!hasLowerCase) return "Password must include at least one lowercase letter.";
+    if (!hasNumber) return "Password must include at least one number.";
+    if (!hasSymbol) return "Password must include at least one special character.";
+
+    return true;
+};
+
+// Compare plain and hashed password
+export const validatePassword = async (plainPassword, hashedPassword) => {
+    return await bcrypt.compare(plainPassword, hashedPassword);
+};
