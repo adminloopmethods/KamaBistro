@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TableComp = ({ columns = [], data = [], title, action }) => {
+const TableComp = ({ columns = [], data = [], title, action, actions }) => {
   return (
     <div className="overflow-x-auto w-full border rounded-3xl mt-6 p-6 border-gray-200 dark:border-gray-700 bg-white dark:bg-stone-900">
       <h2 className="text-[24px] font-[600] mb-3 text-black dark:text-white">
@@ -58,11 +58,10 @@ const TableComp = ({ columns = [], data = [], title, action }) => {
                 {
                   action &&
                   <td className="px-4 py-2">
-                    <button className="text-sm text-blue-600 hover:underline">
-                      View
-                    </button>
+                    {actions ? actions(row) : null}
                   </td>
                 }
+
               </tr>
             ))
           )}

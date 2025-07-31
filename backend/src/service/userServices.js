@@ -63,8 +63,6 @@ export const getNonAdminUserById = async (id) => {
 };
 
 export const updateUserById = async (id, data) => {
-    console.log(data)
-    console.log(id)
     
     const updateData = {};
 
