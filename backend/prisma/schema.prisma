@@ -17,29 +17,39 @@ datasource db {
 enum Role {
   ADMIN
   MANAGER
-  USER
+  EDITOR
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique // it should be one in a database
-  name      String
-  phone     String? // ? means it is optional
-  password  String
-  role      Role     @default(USER) // find Role Enum describing that only those values are able to be here maybe above this schema
-  deleted   Boolean  @default(false) // a user shall never be removed from database but no query shall be made once its property turn to delete
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  status    Boolean  @default(true)
-  Log       Log[]
+  id         String    @id @default(uuid())
+  email      String    @unique
+  name       String
+  phone      String?
+  password   String
+  role       Role      @default(EDITOR)
+  autoApproval Boolean @default(false)
+  deleted    Boolean   @default(false)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+  status     Boolean   @default(true)
+
+  Log        Log[]
+
+  webpages   Webpage[] @relation("UserWebpages")
+  manager    User?     @relation("ManagerToEditors", fields: [managerId], references: [id])
+  managerId  String?
+  editors    User[]    @relation("ManagerToEditors")
 }
 
-// Content Models
 model Webpage {
   id       String    @id
   name     String
   contents Content[]
+
+  userId   String
+  user     User @relation("UserWebpages", fields: [userId], references: [id])
 }
+
 
 model Content {
   id        String  @id
