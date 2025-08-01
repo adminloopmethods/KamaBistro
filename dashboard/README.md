@@ -25,33 +25,47 @@ To provide a CMS platform where users can visually create and manage website pag
 
 ```bash
 kamabistro/
-├── dashboard/                # CMS UI (React + Vite)
+│
+├── dashboard/                  # CMS UI (React + Vite)
 │   ├── src/
 │   ├── public/
 │   ├── index.html
 │   ├── package.json
-│   ├── tailwind.config.js    # Tailwind
-│   └── vite.config.js
+│   ├── tailwind.config.js      # Tailwind CSS config
+│   └── vite.config.js          # Vite config
 │
-├── backend/                  # REST API and Database
-│   ├── prisma/               # Prisma schema and migrations
+├── backend/                    # REST API and Database (Express + PostgreSQL + Prisma)
+│   ├── prisma/                 # Prisma schema and migrations
 │   ├── src/
-│   │   ├── config/           # App configuration files
-│   │   ├── constants/        # Constants
-│   │   ├── controllers/      # Route logic
-│   │   ├── middlewares/      # Custom Express middlewares
-│   │   ├── models/           # Prisma Client setup
-│   │   ├── routes/           # Route definitions
-│   │   ├── service/          # Business logic
-│   │   ├── utils/            # Helper functions
-│   │   └── server.js         # Entry point
+│   │   ├── config/             # App configuration files
+│   │   ├── constants/          # Constants used in app
+│   │   ├── controllers/        # Route logic handlers
+│   │   ├── middlewares/        # Custom Express middlewares
+│   │   ├── models/             # Prisma Client setup
+│   │   ├── routes/             # API route definitions
+│   │   ├── service/            # Business logic layer
+│   │   ├── utils/              # Utility/helper functions
+│   │   └── server.js           # Entry point of the backend
 │   ├── package.json
-│   └── authRes.json
+│   └── authRes.json            # Sample API response (for testing or mocking)
 │
-├── render/                   # Next.js frontend (planned)
-│   └── [to be implemented]
+├── frontend/                   # Public-facing website (Next.js + TypeScript)
+│   ├── public/                 # Static assets (images, fonts, etc.)
+│   ├── src/                    # Application source code
+│   │   ├── app/                # App Router (if used)
+│   │   ├── pages/              # Pages (if using Pages Router)
+│   │   ├── components/         # Reusable UI components
+│   │   ├── styles/             # Tailwind / global styles
+│   │   └── utils/              # Shared utility functions
+│   ├── package.json            # Frontend dependencies and scripts
+│   ├── next.config.ts          # Next.js configuration
+│   ├── tsconfig.json           # TypeScript configuration
+│   ├── eslint.config.mjs       # ESLint configuration
+│   ├── postcss.config.mjs      # PostCSS config (for Tailwind)
+│   └── next-env.d.ts           # TypeScript Next.js environment definitions
 │
-└── README.md                 # This file
+└── ProjectDetails.md           # Project documentation (this file)
+
 ```
 
 ---
