@@ -77,7 +77,8 @@ backend/
 
 * **User 1\:N Log** — One user can have many logs
 * **User 1\:N Webpage** — One user can have many Webpage
-* **Webpage 1:3 Users** — A webpage can have max three users to make changes
+* **Webpage N:M User (with limit)** — A webpage can be edited by multiple users (up to 3). 
+  However, `ADMIN` can bypass this and make changes without being assigned.
 * **Webpage 1\:N Content** — A webpage contains many content blocks
 * **Content 1\:N Element** — A content block can have many elements
 * **Content 1:1 Style** — Each content block has a unique style
@@ -91,7 +92,7 @@ backend/
 ```js
 "/auth"
     router.post("/login");
-    router.post("/login"); // yet to be created
+    router.post("/forget_password"); // yet to be created
 
 "/users"
     router.get("/"); // all user
