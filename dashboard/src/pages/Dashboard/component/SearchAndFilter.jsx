@@ -33,7 +33,7 @@ export default function SearchAndFilter() {
                 Default="allUsers"
                 firstOption={"All Users"}
                 onChange={handleSelectChange}
-                styleClasses={'bg-stone-200/50 text-sm'}
+                styleClasses={'bg-stone-200/50 text-sm dark:bg-stone-100 relative rounded-3xl h-full flex-[1] px-3 py-2 w-full justify-between flex'}
             />
         </div>
     )

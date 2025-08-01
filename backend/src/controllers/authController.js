@@ -14,7 +14,7 @@ export const login = async (req, res) => {
       await logActivity({ action: "Login Failed", message: `User not found: ${email}` });
       return res.status(404).json({ message: userMessages.USER_NOT_FOUND });
     }
-
+console.log("qwer")
     const isValid = await isPasswordValid(password, user.password);
     if (!isValid) {
       await logActivity({ action: "Login Failed", userId: user.id, message: authMessages.INVALID_PASSWORD });

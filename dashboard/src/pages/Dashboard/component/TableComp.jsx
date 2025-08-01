@@ -7,19 +7,30 @@ const TableComp = ({ columns = [], data = [], title, action, actions }) => {
         {title || 'Title'} ({data.length})
       </h2>
 
-      <table className="min-w-full">
+      <table className="min-w-full table-fixed">
         <thead className="bg-white dark:bg-stone-800">
           <tr>
-            {
-              columns.map((col) => (
+            {columns.map((col, index) => {
+              const baseCols = columns.length;
+              const firstColWeight = 1.5; // first column is 1.5x wider
+              const otherColWeight = 1;
+              const totalWeight = firstColWeight + (baseCols - 1) * otherColWeight;
+
+              const widthPercent = index === 0
+                ? `${(firstColWeight / totalWeight) * 100}%`
+                : `${(otherColWeight / totalWeight) * 100}%`;
+
+              return (
                 <th
                   key={col.key}
                   className="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200"
+                  style={{ width: widthPercent }}
                 >
                   {col.header}
                 </th>
-              ))
-            }
+              );
+            })}
+
             {
               action &&
               <th className="px-4 py-2 text-left text-sm font-semibold text-gray-700 dark:text-gray-200">
@@ -48,7 +59,8 @@ const TableComp = ({ columns = [], data = [], title, action, actions }) => {
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200"
+                    className="px-4 py-2 text-sm text-gray-700 dark:text-gray-200 truncate"
+                    style={{ width: col.width || "auto" }}
                   >
                     {typeof col.render === 'function'
                       ? col.render(row[col.key], row)

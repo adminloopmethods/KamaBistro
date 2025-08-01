@@ -156,6 +156,12 @@ export const toggleStatus = async (req, res) => {
       userId: updatedUser.id,
       message: `User status changed to ${updatedUser.isActive ? "Active" : "Inactive"}`,
     });
+
+    res.json({
+      message: `User status changed to ${updatedUser.isActive ? "Active" : "Inactive"}`,
+      user: safeUser,
+    });
+
   } catch (err) {
     await logActivity({
       action: "Toggle User Status Error",

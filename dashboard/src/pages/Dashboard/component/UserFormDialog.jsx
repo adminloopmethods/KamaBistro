@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import InputField from "../elem-dashboard/InputField";
 import CustomSelect from "../elem-dashboard/CustomSelect";
@@ -7,6 +7,7 @@ import { checkRegex as validateEmail } from "../../../Components/tools/emailRege
 import { validateEmpty } from "../../../utils/validator/validateEmptyFields";
 import { createUserReq, updateUserReq } from "../../../app/fetch";
 import { toastWithUpdate } from "../../../Functionality/toastWithUpdate";
+import { useClickOutside } from "../../../app/useClickOutside";
 
 const roles = ["USER", "MANAGER", "ADMIN"];
 const baseFormObj = {
@@ -21,6 +22,7 @@ const baseFormObj = {
 
 const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refresh }) => {
     const isEdit = Boolean(initialData);
+    const DialogRef = useRef()
 
     const roleOptions = roles.map((r) => ({ label: r, value: r }));
 
@@ -28,6 +30,8 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
         setUserObject(baseFormObj)
         onClose()
     }
+
+    useClickOutside(DialogRef, close)
 
     const [formData, setFormData] = useState(baseFormObj);
 
@@ -108,7 +112,7 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 text-sm">
-            <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl w-[50vw] shadow-lg">
+            <div ref={DialogRef} className="bg-white dark:bg-zinc-900 p-6 rounded-xl w-[50vw] shadow-lg">
                 <h2 className="text-3xl font-bold mb-10 font-[300]">
                     {isEdit ? "Update User" : "Add New User"}
                 </h2>
@@ -175,6 +179,8 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
                             placeholder="Re-enter password"
                         />
                     </div>
+            <PasswordValidation new_password={formData.password} />
+
 
                     <div className="flex justify-end gap-2 pt-3">
                         <button
@@ -193,7 +199,6 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
                     </div>
                 </form>
             </div>
-            <PasswordValidation new_password={formData.password} />
         </div>
     );
 };

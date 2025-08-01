@@ -122,3 +122,12 @@ export async function updateUserReq(id, data) {
         ContentType.json
     );
 }
+
+export async function switchStatusReq(id, data) {
+    return await makerequest(
+        endpoint.route("changeStatus") + id,
+        "PUT",
+        JSON.stringify(data),
+        ContentType.json
+    );
+}

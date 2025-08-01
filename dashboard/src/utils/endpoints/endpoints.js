@@ -11,6 +11,7 @@ const endpoint = {
     getUsers: `${users}/`,
     submitUser: `${users}/register`,
     updateUser: `${users}/`,
+    changeStatus: `${users}/switchStatus/`,
 
     route(route) {
         if (this[route]) {

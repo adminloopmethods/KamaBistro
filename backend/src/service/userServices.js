@@ -5,18 +5,17 @@ import { validatePasswordStructure } from "../utils/userHelper.js";
 import { userMessages } from "../constants/messages.js";
 
 export const checkIfUserExists = async (email) => {
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.findUnique({
         where: {
-            email: email.toLowerCase(),
+            email: email,
             deleted: false,
-            role: {
-                not: "ADMIN",
-            },
         },
     });
     if (user) {
-        throw new Error(userMessages.USER_ALREADY_EXISTS);
+        console.log(user)
+        // throw new Error(userMessages.USER_ALREADY_EXISTS);
     }
+    return user
 };
 
 export const createUser = async ({ name, email, phone, role, password }) => {
@@ -38,6 +37,7 @@ export const getAllNonAdminUsers = async () => {
             role: { not: "ADMIN" },
             deleted: false,
         },
+        orderBy: { createdAt: 'asc' },
         select: {
             id: true,
             email: true,
@@ -116,7 +116,7 @@ export const toggleUserStatusById = async (id) => {
 
     const updatedUser = await prisma.user.update({
         where: { id },
-        data: { isActive: !user.isActive },
+        data: { status: !user.status },
     });
 
     return updatedUser;

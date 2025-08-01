@@ -5,6 +5,7 @@ import {
   updateUser,
   softDeleteUser,
   register,
+  toggleStatus,
 } from "../controllers/userController.js";
 
 const router = express.Router();
@@ -14,5 +15,6 @@ router.post("/register", register);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", softDeleteUser);
+router.put("/switchStatus/:id", toggleStatus)
 
 export default router;

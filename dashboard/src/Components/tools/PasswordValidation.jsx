@@ -61,8 +61,8 @@ const PasswordValidation = ({ new_password }) => {
 
   return (
     <ul
-      className={`${show ? "block animateLeft" : "hidden"
-        } fixed top-8 left-8 z-[20] shadow-lg bg-white p-4 rounded-xl`}
+      className={`${show ? "block" : "hidden"
+        }  z-[20]  bg-white p-4 rounded-xl`}
     >
       {passwordValidationRules.map((rule, index) => (
         <li
