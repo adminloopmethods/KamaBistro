@@ -73,7 +73,7 @@ const Users = () => {
           name: e.name,
           email: e.email,
           phone: e.phone || '',
-          role: e.role || 'USER',
+          role: e.role || 'EDITOR',
           status: e.status ? 'Active' : 'Inactive',
         }));
         setUsers(users);

@@ -9,7 +9,7 @@ import { createUserReq, updateUserReq } from "../../../app/fetch";
 import { toastWithUpdate } from "../../../Functionality/toastWithUpdate";
 import { useClickOutside } from "../../../app/useClickOutside";
 
-const roles = ["USER", "MANAGER", "ADMIN"];
+const roles = ["EDITOR", "MANAGER", "ADMIN"];
 const baseFormObj = {
     id: "",
     name: "",
@@ -17,7 +17,7 @@ const baseFormObj = {
     phone: "",
     password: "",
     cnfmpassword: "",
-    role: "USER"
+    role: "EDITOR"
 }
 
 const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refresh }) => {
@@ -44,7 +44,7 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
                 phone: initialData.phone || "",
                 password: "",
                 cnfmpassword: "",
-                role: initialData.role || "USER"
+                role: initialData.role || "EDITOR"
             });
         } else {
             setFormData({
@@ -54,7 +54,7 @@ const UserFormDialog = ({ open, onClose, initialData = null, setUserObject, refr
                 phone: "",
                 password: "",
                 cnfmpassword: "",
-                role: "USER"
+                role: "EDITOR"
             });
         }
     }, [initialData]);
