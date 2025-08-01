@@ -1,4 +1,4 @@
-import Section from "../Components/elements/Section";
+import Section from "../Components/Editor/elements/Section.jsx";
 
 const baseStyle = {
     width: '100%',

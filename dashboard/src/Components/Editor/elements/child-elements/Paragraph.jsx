@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { useMyContext } from "../../../Context/ContextApi";
+import { useMyContext } from "../../../../Context/ContextApi";
 
 const Paragraph = ({ element, editable = true, updateContent, style, updateElement, rmElement }) => {
     const elementRef = useRef(null);

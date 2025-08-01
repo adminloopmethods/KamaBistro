@@ -1,7 +1,6 @@
-import Heading from "../Components/elements/child-elements/Heading"
-import Paragraph from "../Components/elements/child-elements/Paragraph"
-import ImageComponent from "../Components/elements/child-elements/Image";
-
+import Heading from "../Components/Editor/elements/child-elements/Heading"
+import Paragraph from "../Components/Editor/elements/child-elements/Paragraph"
+import ImageComponent from "../Components/Editor/elements/child-elements/Image"
 
 const styles = {
     "xl": {},

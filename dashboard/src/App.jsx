@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import dashboardRoutes from './routes/dashboard';
 import Spinner from './pages/Dashboard/component/Spinner';
 import "./App.css";
+import Webpage from './Components/Webpage';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             <Route key={i} path={path} element={element} />
           ))}
         </Route>
+        <Route path="/editor" element={<Webpage />} />
       </Routes>
     </Suspense>
   );

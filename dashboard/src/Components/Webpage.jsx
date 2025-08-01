@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import Section from "./elements/Section";
+import Section from "./Editor/elements/Section.jsx";
 import RichTextToolBar from "./tools/RichtextToolbar";
 import { useMyContext } from "../Context/ContextApi";
 import AddSection from "./tools/AddSection";
@@ -111,7 +111,6 @@ const Webpage = () => {
 
     return (
         <div ref={containerRef} style={{ position: "relative", display: "flex", height: "100vh" }}>
-            <h1 className="text-[40px] text-stone-500">Webpage</h1>
             {/* website */}
             <div style={{ position: "relative", flex: "1", overflowY: "scroll" }} className="scroll-one">
 

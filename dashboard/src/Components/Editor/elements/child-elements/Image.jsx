@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import ImageStyleToolbar from "../../tools/ImageToolbar";
+import ImageStyleToolbar from "../../../tools/ImageToolbar";
 
 const ImageComponent = ({
   element,
