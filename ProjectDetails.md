@@ -26,12 +26,12 @@ To provide a CMS platform where users can visually create and manage website pag
 ```bash
 kamabistro/
 ├── dashboard/                # CMS UI (React + Vite)
-│   ├── src/
-│   ├── public/
-│   ├── index.html
-│   ├── package.json
-│   ├── tailwind.config.js    # Tailwind
-│   └── vite.config.js
+│   ├── src/                 # Components, pages, routes, etc.
+│   ├── public/              # Static assets
+│   ├── index.html           # Main HTML entry
+│   ├── package.json         # Dashboard dependencies
+│   ├── tailwind.config.js   # Tailwind CSS configuration
+│   └── vite.config.js       # Vite bundler config
 │
 ├── backend/                  # REST API and Database
 │   ├── prisma/               # Prisma schema and migrations
@@ -45,14 +45,20 @@ kamabistro/
 │   │   ├── service/          # Business logic
 │   │   ├── utils/            # Helper functions
 │   │   └── server.js         # Entry point
+│   ├── package.json          # Backend dependencies
+│   └── authRes.json          # Sample auth response
+│
+├── frontend/                 # Public-facing site (Next.js, planned)
+│   ├── src/                  # Will contain UI for visitors
+│   ├── public/               # Static assets
+│   ├── next.config.ts        # Next.js config
+│   ├── tsconfig.json         # TypeScript config
 │   ├── package.json
-│   └── authRes.json
+│   └── README.md             # Frontend-specific notes
 │
-├── render/                   # Next.js frontend (planned)
-│   └── [to be implemented]
-│
-└── README.md                 # This file
+└── README.md                 # Project overview and setup
 ```
+
 
 ---
 
