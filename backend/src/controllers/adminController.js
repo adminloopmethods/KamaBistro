@@ -1,8 +1,8 @@
 import {
-  deleteAllUsersService,
   deleteAllContentService,
-  nukeAllUsersAndContentService,
-} from "../service/maintenanceService.js";
+  deleteAllUsersService,
+  nukeAllUsersAndContentService
+} from "../services/maintenanceService";
 
 // Delete all users
 export const deleteAllUsers = async (req, res) => {

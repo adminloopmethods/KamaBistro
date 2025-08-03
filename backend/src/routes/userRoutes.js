@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get("/", getAllUsers);
 router.post("/register", register);
+router.get("/", getAllUsers);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
-router.delete("/:id", softDeleteUser);
 router.put("/switchStatus/:id", toggleStatus)
+router.delete("/:id", softDeleteUser);
 
 export default router;
