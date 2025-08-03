@@ -3,6 +3,13 @@
 A CMS Dashboard built with **React**, **Vite**, and **Tailwind CSS**. This interface allows Super Users and Managers to create, manage, and approve website pages and content dynamically.
 
 ---
+## Brand Assinging
+```bash
+"index.html" "title tag" # the html file in root
+"Header.jsx" "Brand prop" # Header component
+"index.js" "import and export logo" # the file in assets for brand logo
+```
+---
 
 ## 📁 Folder Structure
 

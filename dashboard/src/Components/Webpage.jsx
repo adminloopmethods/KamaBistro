@@ -84,7 +84,7 @@ const Webpage = () => {
                 bodyPayload.id = websiteContent
             }
             try {
-                const response = await fetch("http://localhost:9000/content", {
+                const response = await fetch("http://localhost:9000/content/", {
                     method: saveData ? "POST" : "PUT",
                     headers: {
                         "Content-Type": "application/json"

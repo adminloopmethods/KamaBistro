@@ -1,4 +1,4 @@
-import { checkIfUserExists, isPasswordValid } from "../service/userServices.js";
+import { checkIfUserExists, isPasswordValid } from "../services/userServices.js";
 import { generateToken } from "../utils/jwt.js";
 import { logActivity } from "../utils/logger.js";
 import { userMessages, authMessages } from "../constants/messages.js";
@@ -8,13 +8,13 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    console.log("qwer")
     const user = await checkIfUserExists(email);
 
     if (!user) {
       await logActivity({ action: "Login Failed", message: `User not found: ${email}` });
       return res.status(404).json({ message: userMessages.USER_NOT_FOUND });
     }
-console.log("qwer")
     const isValid = await isPasswordValid(password, user.password);
     if (!isValid) {
       await logActivity({ action: "Login Failed", userId: user.id, message: authMessages.INVALID_PASSWORD });

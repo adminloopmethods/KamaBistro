@@ -6,7 +6,7 @@ import {
   createUser,
   checkIfUserExists,
   toggleUserStatusById,
-} from "../service/userServices.js";
+} from "../services/userServices.js";
 
 import { validatePasswordFields } from "../utils/userHelper.js";
 import { logActivity } from "../utils/logger.js";
@@ -27,7 +27,7 @@ export const getAllUsers = async (req, res) => {
 // Register a new user
 export const register = async (req, res) => {
   try {
-    const { email, name, phone, password, cnfmpassword, role } = req.body;
+    const { email, name, phone, password, cnfmpassword, role, managerId, autoApproval } = req.body;
 
     await checkIfUserExists(email);
     validatePasswordFields(password, cnfmpassword);
@@ -38,7 +38,10 @@ export const register = async (req, res) => {
       phone,
       password,
       role,
+      managerId,
+      autoApproval,
     });
+
 
     await logActivity({
       action: "User Registered",
@@ -154,13 +157,14 @@ export const toggleStatus = async (req, res) => {
     await logActivity({
       action: "User Status Toggled",
       userId: updatedUser.id,
-      message: `User status changed to ${updatedUser.isActive ? "Active" : "Inactive"}`,
+      message: `User status changed to ${updatedUser.status ? "Active" : "Inactive"}`,
     });
 
     res.json({
-      message: `User status changed to ${updatedUser.isActive ? "Active" : "Inactive"}`,
+      message: `User status changed to ${updatedUser.status ? "Active" : "Inactive"}`,
       user: safeUser,
     });
+
 
   } catch (err) {
     await logActivity({

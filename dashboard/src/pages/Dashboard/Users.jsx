@@ -207,7 +207,7 @@ const Users = () => {
         onClose={() => setIsDialogOpen(false)}
         setUserObject={setEditUser}
         initialData={editUser}
-        refresh={() => setRefresh(Math.random)}
+        refresh={() => setRefresh(Math.random())}
       />
       <Toaster richColors position="top-right" />
     </div>

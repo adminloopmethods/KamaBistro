@@ -4,7 +4,7 @@ import { authenticate, authorizeAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/")
+// router.get("/")
 router.post("/delete", authenticate, authorizeAdmin, deleteLogsByDateRange);
 
 export default router;

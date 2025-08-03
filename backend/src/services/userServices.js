@@ -2,23 +2,19 @@
 import bcrypt from "bcrypt";
 import prisma from "../models/prismaClient.js";
 import { validatePasswordStructure } from "../utils/userHelper.js";
-import { userMessages } from "../constants/messages.js";
+// import { userMessages } from "../constants/messages.js";
 
 export const checkIfUserExists = async (email) => {
-    const user = await prisma.user.findUnique({
+    return await prisma.user.findFirst({
         where: {
-            email: email,
+            email: email.toLowerCase(),
             deleted: false,
         },
     });
-    if (user) {
-        console.log(user)
-        // throw new Error(userMessages.USER_ALREADY_EXISTS);
-    }
-    return user
 };
 
-export const createUser = async ({ name, email, phone, role, password }) => {
+
+export const createUser = async ({ name, email, phone, role, password, managerId, autoApproval }) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     return await prisma.user.create({
         data: {
@@ -27,9 +23,12 @@ export const createUser = async ({ name, email, phone, role, password }) => {
             phone,
             role,
             password: hashedPassword,
+            managerId,
+            autoApproval,
         },
     });
 };
+
 
 export const getAllNonAdminUsers = async () => {
     return await prisma.user.findMany({
@@ -70,6 +69,10 @@ export const updateUserById = async (id, data) => {
     if (data.name) updateData.name = data.name;
     if (data.phone !== undefined) updateData.phone = data.phone;
     if (data.role && data.role !== "ADMIN") updateData.role = data.role;
+    if (data.managerId !== undefined) updateData.managerId = data.managerId;
+    if (data.autoApproval !== undefined) updateData.autoApproval = data.autoApproval;
+    if (data.status !== undefined) updateData.status = data.status;
+
 
     if (data.password) {
         const isValid = validatePasswordStructure(data.password);

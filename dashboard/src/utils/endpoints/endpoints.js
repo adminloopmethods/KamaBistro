@@ -1,8 +1,8 @@
 const BASE_URL = import.meta.env.VITE_BACK_ENDPOINT;
 
 const auth = "auth";
-const users = "users"
-
+const users = "users";
+const content = "content";
 
 const endpoint = {
     login: `${auth}/login`, // API for Auth
@@ -12,6 +12,9 @@ const endpoint = {
     submitUser: `${users}/register`,
     updateUser: `${users}/`,
     changeStatus: `${users}/switchStatus/`,
+
+    // content
+    createContent: `${content}/`,
 
     route(route) {
         if (this[route]) {

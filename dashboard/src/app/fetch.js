@@ -131,3 +131,21 @@ export async function switchStatusReq(id, data) {
         ContentType.json
     );
 }
+
+export async function createContentReq(data) {
+    return await makerequest(
+        endpoint.route("createContent"),
+        "POST",
+        JSON.stringify(data),
+        ContentType.json
+    )
+}
+
+export async function saveContentReq(data) {
+    return await makerequest(
+        endpoint.route("createContent"),
+        "PUT",
+        JSON.stringify(data),
+        ContentType.json
+    )
+}
