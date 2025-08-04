@@ -20,7 +20,6 @@ const Pages = () => {
                 </div>
                 <SearchAndFilter />
                 <TableComp title={"Pages"} />
-
             </div>
         </div>
     )

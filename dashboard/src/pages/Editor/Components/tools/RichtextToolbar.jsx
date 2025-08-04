@@ -9,6 +9,7 @@ import {
     onFamilyFontChange, onColorChange, onAlignChange
 } from './StyleObject';
 import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
+import CustomSelect from '../../../Dashboard/elem-dashboard/CustomSelect';
 
 const RichTextToolBar = () => {
     const {
@@ -94,92 +95,91 @@ const RichTextToolBar = () => {
         <div
             ref={toolbarRef}
             onClick={handleClick}
-            style={{
-                backgroundColor: '#f3f4f6',
-                padding: '0.75rem',
-                // borderRadius: '0.5rem',
-                // boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)',
-                fontFamily: 'sans-serif',
-                cursor: 'default',
-                width: '240px',
-                maxWidth: '20vw',
-                // width:"100%",
-                transition: '.1s width ease-in-out',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.5rem'
-            }}
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[240px] max-w-[20vw] shadow-md transition-all duration-100 ease-in-out flex flex-col gap-4 z-[var(--zIndex)]"
         >
-
             {/* Remove Button */}
             <button
-                style={buttonStyle}
+                className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100"
                 onClick={() => rmElementFunc(element.id)}
                 title="Remove Element"
             >
                 Remove This Element
             </button>
-            <div style={{ width: "100%", height: "1px", backgroundColor: "black", margin: "10px auto" }}></div>
-            {/* Row: Bold, Italic, Underline */}
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button style={buttonStyle} onClick={() => onBold(element, Setter, currentWidth)}><b>B</b></button>
-                <button style={buttonStyle} onClick={() => onItalic(element, Setter, currentWidth)}><i>I</i></button>
-                <button style={buttonStyle} onClick={() => onUnderline(element, Setter, currentWidth)}><u>U</u></button>
+
+            {/* Bold, Italic, Underline */}
+            <div className="flex gap-2">
+                <button className="tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onBold(element, Setter, currentWidth)}>B</button>
+                <button className="tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onItalic(element, Setter, currentWidth)}>I</button>
+                <button className="tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onUnderline(element, Setter, currentWidth)}>U</button>
             </div>
 
-            {/* Font & Size Dropdowns */}
-            <select defaultValue="" style={selectStyle} onChange={(e) => onFamilyFontChange(e.target.value, element, Setter, currentWidth)}>
+            {/* Font & Size */}
+            {/* <select
+                defaultValue=""
+                onChange={(e) => onFamilyFontChange(e.target.value, element, Setter, currentWidth)}
+                className="form-select"
+            >
                 <option value="" disabled>Font</option>
                 {fontFamilies.map(f => <option key={f} value={f}>{f}</option>)}
-            </select>
+            </select> */}
+            <CustomSelect
+                options={fontFamilyOptions}
+                Default=''
+                firstOption='fonts'
+                onChange={(value) => { onFamilyFontChange(value, element, Setter, currentWidth) }}
+                disableFirstValue={true}
+            />
 
-            <select defaultValue="" style={selectStyle} onChange={(e) => onSizeChange(e.target.value, element, Setter, currentWidth)}>
+            {/* <select
+                defaultValue=""
+                onChange={(e) => onSizeChange(e.target.value, element, Setter, currentWidth)}
+                className="form-select"
+            >
                 <option value="" disabled>Size</option>
                 {fontSizes.map(size => <option key={size} value={size}>{size}</option>)}
-            </select>
+            </select> */}
+            <CustomSelect
+                options={fontSizeOptions}
+                firstOption='text size'
+                Default=''
+                onChange={(value) => { onSizeChange(value, element, Setter, currentWidth) }}
+                disableFirstValue={true}
+            />
 
             {/* Color Picker */}
             <input
                 type="color"
                 value={textColor}
                 onChange={(e) => onColorChange(e.target.value, element, Setter, currentWidth)}
-                style={colorInputStyle}
+                className="w-8 h-8 border border-gray-300 dark:border-gray-700 rounded cursor-pointer"
                 title="Text color"
             />
 
-            {/* Row: Align Buttons */}
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <button style={buttonStyle} onClick={() => onAlignChange("left", element, Setter, currentWidth)} title="Align Left"><AlignLeft /></button>
-                <button style={buttonStyle} onClick={() => onAlignChange("center", element, Setter, currentWidth)} title="Align Center"><AlignCenter /></button>
-                <button style={buttonStyle} onClick={() => onAlignChange("right", element, Setter, currentWidth)} title="Align Right"><AlignRight /></button>
-                <button style={buttonStyle} onClick={() => onAlignChange("justify", element, Setter, currentWidth)} title="Justify"><AlignJustify /></button>
+            {/* Align */}
+            <div className="flex gap-2">
+                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("left", element, Setter, currentWidth)} title="Align Left"><AlignLeft /></button>
+                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("center", element, Setter, currentWidth)} title="Align Center"><AlignCenter /></button>
+                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("right", element, Setter, currentWidth)} title="Align Right"><AlignRight /></button>
+                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("justify", element, Setter, currentWidth)} title="Justify"><AlignJustify /></button>
             </div>
 
             {/* Toggle Dimensions */}
             <button
-                style={buttonStyle}
+                className="tool-btn w-full flex items-center justify-between border-t pt-2"
                 onClick={() => setIsDimensionOpen(!isDimensionOpen)}
                 title={isDimensionOpen ? 'Hide Dimensions' : 'Show Dimensions'}
             >
                 Dimensions {isDimensionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
 
-
-
             {/* Dimension Inputs */}
-            <div
-                style={{
-                    overflow: 'hidden',
-                    transition: 'max-height 0.3s ease, opacity 0.3s ease',
-                    maxHeight: isDimensionOpen ? '500px' : '0',
-                    opacity: isDimensionOpen ? 1 : 0,
-                    marginTop: isDimensionOpen ? '0.5rem' : '0',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '0.5rem',
-                }}
-            >
-                {['width', 'height', 'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom'].map(key => {
+            <div className={`transition-all duration-300 grid grid-cols-2 gap-2 overflow-hidden ${isDimensionOpen ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0'
+                }`}>
+                {[
+                    'width', 'height',
+                    'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom',
+                    'marginLeft', 'marginRight', 'marginTop', 'marginBottom'
+                ].map(key => {
                     const isHeight = key === 'height';
                     return (
                         <input
@@ -188,7 +188,7 @@ const RichTextToolBar = () => {
                             placeholder={key}
                             value={dimension[key] || ''}
                             onChange={(e) => valueChangeOfInputs(e, key, isHeight)}
-                            style={inputStyle}
+                            className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full"
                         />
                     );
                 })}
@@ -197,43 +197,30 @@ const RichTextToolBar = () => {
     );
 };
 
-const fontFamilies = ['Arial', 'Courier New', 'serif', 'system-ui', 'Helvetica',
-    'Trebuchet MS', 'Tahoma', 'Monospace'
+const fontFamilyOptions = [
+    { label: 'Arial', value: 'Arial, sans-serif' },
+    { label: 'Courier New', value: '"Courier New", monospace' },
+    { label: 'Serif', value: 'serif' },
+    { label: 'System UI', value: 'system-ui' },
+    { label: 'Helvetica', value: 'Helvetica, sans-serif' },
+    { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
+    { label: 'Tahoma', value: 'Tahoma, sans-serif' },
+    { label: 'Monospace', value: 'monospace' }
 ];
-const fontSizes = ['10px', '11px', '12px', '14px', '16px', '18px', '24px', '32px', '36px', '40px', '48px', '54px', '64px'];
-
-const buttonStyle = {
-    padding: '4px 8px',
-    borderRadius: '4px',
-    border: '1px solid #d1d5db',
-    background: 'white',
-    cursor: 'pointer',
-    fontSize: '14px',
-};
-
-const selectStyle = {
-    padding: '4px',
-    borderRadius: '4px',
-    border: '1px solid #d1d5db',
-    background: 'white',
-    fontSize: '14px',
-    cursor: 'pointer',
-};
-
-const inputStyle = {
-    padding: '4px 6px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-    fontSize: '13px',
-    width: '100%',
-};
-
-const colorInputStyle = {
-    width: '32px',
-    height: '32px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    cursor: 'pointer'
-};
+const fontSizeOptions = [
+    { label: '10 px', value: '10px' },
+    { label: '11 px', value: '11px' },
+    { label: '12 px', value: '12px' },
+    { label: '14 px', value: '14px' },
+    { label: '16 px', value: '16px' },
+    { label: '18 px', value: '18px' },
+    { label: '24 px', value: '24px' },
+    { label: '32 px', value: '32px' },
+    { label: '36 px', value: '36px' },
+    { label: '40 px', value: '40px' },
+    { label: '48 px', value: '48px' },
+    { label: '54 px', value: '54px' },
+    { label: '64 px', value: '64px' },
+];
 
 export default RichTextToolBar;

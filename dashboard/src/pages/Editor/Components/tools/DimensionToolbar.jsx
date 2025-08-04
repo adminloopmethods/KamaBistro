@@ -1,209 +1,103 @@
 import React, { useState } from 'react';
 import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
+import { ChevronUp, ChevronDown } from 'lucide-react';
 
 const DimensionToolbar = ({ updateStyles }) => {
-    const [widthInput, setWidthInput] = useState('100vw');
-    const [heightInput, setHeightInput] = useState('20vh');
-
-    const [paddingTopInput, setPaddingTopInput] = useState(20);
-    const [paddingRightInput, setPaddingRightInput] = useState(20);
-    const [paddingBottomInput, setPaddingBottomInput] = useState(20);
-    const [paddingLeftInput, setPaddingLeftInput] = useState(20);
-
-    const [marginTopInput, setMarginTopInput] = useState(0);
-    const [marginRightInput, setMarginRightInput] = useState(0);
-    const [marginBottomInput, setMarginBottomInput] = useState(0);
-    const [marginLeftInput, setMarginLeftInput] = useState(0);
-
-    const [positionInput, setPositionInput] = useState('static');
-    const [zIndexInput, setZIndexInput] = useState(1);
-    const [borderRadiusInput, setBorderRadiusInput] = useState(0);
-
     const [zIndex, setZIndex] = useState(500);
+    const [isOpen, setIsOpen] = useState(true);
 
-    const applySingleStyle = (propertyName, value) => {
-        console.log("qwer")
-        updateStyles({ [propertyName]: value });
+    const [stylesState, setStylesState] = useState({
+        width: '100vw',
+        height: '20vh',
+        paddingTop: 20,
+        paddingRight: 20,
+        paddingBottom: 20,
+        paddingLeft: 20,
+        marginTop: 0,
+        marginRight: 0,
+        marginBottom: 0,
+        marginLeft: 0,
+        position: 'static',
+        zIndexInput: 1,
+        borderRadius: 0,
+    });
+
+    const applyStyle = (key, val) => {
+        setStylesState((prev) => ({ ...prev, [key]: val }));
+        updateStyles({ [key]: val });
     };
 
-    const handleToolbarClick = () => setZIndex(getNextZIndex());
+    const handleClick = () => setZIndex(getNextZIndex());
 
-    const renderInputRow = (label, value, onChange, type = 'text') => (
-        <div style={styles.row}>
-            <label style={styles.label}>{label}</label>
+    const renderInput = (label, key, type = 'text', suffix = '') => (
+        <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
             <input
                 type={type}
-                value={value}
-                onChange={onChange}
-                style={styles.input}
+                value={stylesState[key]}
+                onChange={(e) => {
+                    const val = type === 'number' ? Number(e.target.value) : e.target.value;
+                    const suffixVal = suffix ? `${val}${suffix}` : val;
+                    applyStyle(key, suffixVal);
+                }}
+                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
             />
         </div>
     );
 
     return (
         <div
-            style={{ ...styles.toolbar, zIndex }}
-            onClick={handleToolbarClick}
+            onClick={handleClick}
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
+            style={{ zIndex }}
         >
-            <div style={styles.dragHandle}>
-                <h3 style={styles.heading}>Dimension Controls</h3>
+            <div className="flex justify-between items-center border-b pb-2 mb-2">
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                    Dimension Controls
+                </h3>
             </div>
 
-            {renderInputRow('Width:', widthInput, (e) => {
-                setWidthInput(e.target.value);
-                applySingleStyle('width', e.target.value);
-            })}
+            {/* <button
+                className="tool-btn w-full flex items-center justify-between border-t pt-2"
+                onClick={() => setIsOpen(!isOpen)}
+            >
+                {isOpen ? 'Hide Dimensions' : 'Show Dimensions'}{' '}
+                {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+            </button> */}
 
-            {renderInputRow('Height:', heightInput, (e) => {
-                setHeightInput(e.target.value);
-                applySingleStyle('height', e.target.value);
-            })}
+            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                {renderInput('Width', 'width')}
+                {renderInput('Height', 'height')}
 
-            <h4 style={styles.sectionLabel}>Padding (px):</h4>
-            <div style={styles.grid}>
-                {renderInputRow('Top:', paddingTopInput, (e) => {
-                    const v = Number(e.target.value);
-                    setPaddingTopInput(v);
-                    applySingleStyle('paddingTop', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Right:', paddingRightInput, (e) => {
-                    const v = Number(e.target.value);
-                    setPaddingRightInput(v);
-                    applySingleStyle('paddingRight', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Bottom:', paddingBottomInput, (e) => {
-                    const v = Number(e.target.value);
-                    setPaddingBottomInput(v);
-                    applySingleStyle('paddingBottom', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Left:', paddingLeftInput, (e) => {
-                    const v = Number(e.target.value);
-                    setPaddingLeftInput(v);
-                    applySingleStyle('paddingLeft', `${v}px`);
-                }, 'number')}
-            </div>
+                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Padding (px)</h4>
+                {['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'].map((key) =>
+                    renderInput(key.replace('padding', ''), key, 'number', 'px')
+                )}
 
-            <h4 style={styles.sectionLabel}>Margin (px):</h4>
-            <div style={styles.grid}>
-                {renderInputRow('Top:', marginTopInput, (e) => {
-                    const v = Number(e.target.value);
-                    setMarginTopInput(v);
-                    applySingleStyle('marginTop', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Right:', marginRightInput, (e) => {
-                    const v = Number(e.target.value);
-                    setMarginRightInput(v);
-                    applySingleStyle('marginRight', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Bottom:', marginBottomInput, (e) => {
-                    const v = Number(e.target.value);
-                    setMarginBottomInput(v);
-                    applySingleStyle('marginBottom', `${v}px`);
-                }, 'number')}
-                {renderInputRow('Left:', marginLeftInput, (e) => {
-                    const v = Number(e.target.value);
-                    setMarginLeftInput(v);
-                    applySingleStyle('marginLeft', `${v}px`);
-                }, 'number')}
-            </div>
+                <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Margin (px)</h4>
+                {['marginTop', 'marginRight', 'marginBottom', 'marginLeft'].map((key) =>
+                    renderInput(key.replace('margin', ''), key, 'number', 'px')
+                )}
 
-            <h4 style={styles.sectionLabel}>Other Styles:</h4>
-            <div style={styles.grid}>
-                <div style={styles.row}>
-                    <label style={styles.label}>Position:</label>
+                <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Position</label>
                     <select
-                        value={positionInput}
-                        onChange={(e) => {
-                            const value = e.target.value;
-                            setPositionInput(value);
-                            applySingleStyle('position', value);
-                        }}
-                        style={styles.input}
+                        value={stylesState.position}
+                        onChange={(e) => applyStyle('position', e.target.value)}
+                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                     >
                         <option value="static">static</option>
                         <option value="absolute">absolute</option>
+                        <option value="relative">relative</option>
+                        <option value="fixed">fixed</option>
                     </select>
                 </div>
 
-                {renderInputRow('Z-Index:', zIndexInput, (e) => {
-                    const v = Number(e.target.value);
-                    setZIndexInput(v);
-                    applySingleStyle('zIndex', v);
-                }, 'number')}
-
-                {renderInputRow('Border Radius:', borderRadiusInput, (e) => {
-                    const v = Number(e.target.value);
-                    setBorderRadiusInput(v);
-                    applySingleStyle('borderRadius', `${v}px`);
-                }, 'number')}
+                {renderInput('Z-Index', 'zIndexInput', 'number')}
+                {renderInput('Border Radius', 'borderRadius', 'number', 'px')}
             </div>
         </div>
     );
 };
-
-const styles = {
-    toolbar: {
-        backgroundColor: '#f3f4f6',
-        padding: '1rem',
-        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        maxWidth: '100vw',
-        width: '240px',  // 👈 Shrunk toolbar width
-        overflowX: 'hidden',
-        userSelect: 'none',
-    },
-    dragHandle: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingBottom: '0.5rem',
-        borderBottom: '1px solid #d1d5db',
-        marginBottom: '0.5rem',
-    },
-    heading: {
-        fontSize: '1.125rem',
-        fontWeight: 600,
-        color: '#1f2937',
-    },
-    sectionLabel: {
-        fontSize: '1rem',
-        fontWeight: 500,
-        color: '#1f2937',
-        marginTop: '1rem',
-    },
-    grid: {
-        display: 'grid',
-        gridTemplateColumns: '1fr', // 👈 one column to fit narrow width
-        gap: '0.75rem',
-    },
-    row: {
-        display: 'flex',
-        alignItems: 'center',
-        marginBottom: '10px',
-        gap: '8px',
-        flexWrap: 'wrap',
-    },
-    label: {
-        fontSize: '0.875rem',
-        fontWeight: 500,
-        color: '#374151',
-        flex: '0 0 auto',
-    },
-    input: {
-        padding: '4px 6px',
-        fontSize: '13px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        outline: 'none',
-        transition: 'box-shadow 0.2s ease-in-out',
-        userSelect: 'none',
-        width: '100%',        // 👈 takes full row width
-        flex: 1,              // 👈 allow it to shrink/grow with layout
-        minWidth: 0,
-    },
-};
-
 
 export default DimensionToolbar;

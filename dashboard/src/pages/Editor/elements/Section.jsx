@@ -165,7 +165,7 @@ const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateDa
     }, [elements, sectionStyle, currentWidth])
 
     return (
-        <>
+        <div className="relative">
             <section
                 ref={sectionRef}
                 style={sectionStyle}
@@ -186,13 +186,9 @@ const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateDa
                         />
                     );
                 })}
-
-                {onAddElement && <AddElement controller={addElement} />}
             </section>
-
-
-
-        </>
+            {onAddElement && <AddElement controller={addElement} />}
+        </div>
     );
 };
 

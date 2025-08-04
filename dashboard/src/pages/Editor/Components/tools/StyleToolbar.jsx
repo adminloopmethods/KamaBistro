@@ -56,9 +56,9 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
     };
 
     const renderInputRow = (label, input, extra = null) => (
-        <div style={styles.row}>
-            <label style={styles.label}>{label}</label>
-            <div style={styles.inputGroup}>
+        <div className="flex flex-col gap-1 w-full">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+            <div className="flex flex-col gap-2">
                 {input}
                 {extra}
             </div>
@@ -68,58 +68,47 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
     return (
         <div
             ref={toolbarRef}
-            style={{ ...styles.toolbar, top: toolbarTop, left: toolbarLeft, zIndex }}
             onClick={handleClick}
+            className=" bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4"
+            style={{ top: toolbarTop, left: toolbarLeft, zIndex }}
         >
-            <div style={styles.dragHandle}>
-                <h3 style={styles.heading}>Advanced Style Controls</h3>
+            <div className="flex justify-between items-center border-b pb-2 mb-2">
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
+                    Advanced Style Controls
+                </h3>
             </div>
 
-            {/* Gradient Controls */}
-            <div style={styles.row}>
-                <label style={styles.label}>Gradient Colors:</label>
-                <div style={styles.colorPair}>
-                    <div style={styles.colorItem}>
-                        <span style={styles.colorLabel}>Color 1</span>
-                        <input
-                            type="color"
-                            value={'#' + rgbaToHex(color1)}
-                            onChange={(e) => setColor1(hexToRgba(e.target.value, 1))}
-                            className={dimensionStyle.colorInput}
-                        />
-                        <input
-                            type="text"
-                            value={color1}
-                            onChange={(e) => setColor1(e.target.value)}
-                            placeholder="rgba(255,0,0,0.5)"
-                            style={{ ...styles.input, width: '120px' }}
-                        />
-                    </div>
-                    <div style={styles.colorItem}>
-                        <span style={styles.colorLabel}>Color 2</span>
-                        <input
-                            type="color"
-                            value={'#' + rgbaToHex(color2)}
-                            onChange={(e) => setColor2(hexToRgba(e.target.value, 1))}
-                            className={dimensionStyle.colorInput}
-                        />
-                        <input
-                            type="text"
-                            value={color2}
-                            onChange={(e) => setColor2(e.target.value)}
-                            placeholder="rgba(0,0,255,0.5)"
-                            style={{ ...styles.input, width: '120px' }}
-                        />
-                    </div>
+            {/* Gradient Colors */}
+            <div className="flex flex-col gap-3">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
+                <div className="flex flex-col gap-3">
+                    {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
+                        <div key={idx} className="flex flex-col gap-1">
+                            <span className="text-xs font-semibold">{label}</span>
+                            <input
+                                type="color"
+                                value={'#' + rgbaToHex(color)}
+                                onChange={(e) => setColor(hexToRgba(e.target.value, 1))}
+                                className={dimensionStyle.colorInput}
+                            />
+                            <input
+                                type="text"
+                                value={color}
+                                onChange={(e) => setColor(e.target.value)}
+                                placeholder="rgba(...)"
+                                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                            />
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {renderInputRow(
-                'Gradient Direction:',
+                'Gradient Direction',
                 <select
                     value={gradientDirection}
                     onChange={(e) => setGradientDirection(e.target.value)}
-                    style={styles.input}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 >
                     <option value="to top">Top</option>
                     <option value="to right">Right</option>
@@ -128,24 +117,29 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
                     <option value="to top right">Top Right</option>
                     <option value="to bottom left">Bottom Left</option>
                 </select>,
-                <>
-                    <button style={styles.button} onClick={applyGradient}>Apply</button>
-                    <button style={styles.button} onClick={() => updateStyles({ backgroundImage: '' })}>Clear</button>
-                </>
+                <div className="flex gap-2">
+                    <button onClick={applyGradient} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-md">Apply</button>
+                    <button onClick={() => updateStyles({ backgroundImage: '' })} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
+                </div>
             )}
 
             {renderInputRow(
-                'Background Image:',
-                <input type="file" accept="image/*" onChange={handleImageUpload} />,
-                <button style={styles.button} onClick={() => updateStyles({ backgroundImage: '' })}>Clear</button>
+                'Background Image',
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="text-xs"
+                />,
+                <button onClick={() => updateStyles({ backgroundImage: '' })} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
             )}
 
             {renderInputRow(
-                'Repeat:',
+                'Repeat',
                 <select value={repeat} onChange={(e) => {
                     setRepeat(e.target.value);
                     updateStyles({ backgroundRepeat: e.target.value });
-                }} style={styles.input}>
+                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
                     <option value="no-repeat">No Repeat</option>
                     <option value="repeat">Repeat</option>
                     <option value="repeat-x">Repeat X</option>
@@ -154,11 +148,11 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
             )}
 
             {renderInputRow(
-                'Attachment:',
+                'Attachment',
                 <select value={attachment} onChange={(e) => {
                     setAttachment(e.target.value);
                     updateStyles({ backgroundAttachment: e.target.value });
-                }} style={styles.input}>
+                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
                     <option value="scroll">Scroll</option>
                     <option value="fixed">Fixed</option>
                     <option value="local">Local</option>
@@ -166,11 +160,11 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
             )}
 
             {renderInputRow(
-                'Size:',
+                'Size',
                 <select value={size} onChange={(e) => {
                     setSize(e.target.value);
                     updateStyles({ backgroundSize: e.target.value });
-                }} style={styles.input}>
+                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
                     <option value="auto">Auto</option>
                     <option value="cover">Cover</option>
                     <option value="contain">Contain</option>
@@ -178,11 +172,11 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
             )}
 
             {renderInputRow(
-                'Position:',
+                'Position',
                 <select value={position} onChange={(e) => {
                     setPosition(e.target.value);
                     updateStyles({ backgroundPosition: e.target.value });
-                }} style={styles.input}>
+                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
                     <option value="center">Center</option>
                     <option value="top left">Top Left</option>
                     <option value="top right">Top Right</option>
@@ -192,11 +186,11 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
             )}
 
             {renderInputRow(
-                'Object Fit:',
+                'Object Fit',
                 <select value={objectFit} onChange={(e) => {
                     setObjectFit(e.target.value);
                     updateStyles({ objectFit: e.target.value });
-                }} style={styles.input}>
+                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
                     <option value="fill">Fill</option>
                     <option value="contain">Contain</option>
                     <option value="cover">Cover</option>
@@ -206,14 +200,14 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
             )}
 
             {renderInputRow(
-                'Font Family:',
+                'Font Family',
                 <select
                     value={fontFamily}
                     onChange={(e) => {
                         setFontFamily(e.target.value);
                         updateStyles({ fontFamily: e.target.value });
                     }}
-                    style={styles.input}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 >
                     <option value="Arial">Arial</option>
                     <option value="Helvetica">Helvetica</option>
@@ -228,13 +222,12 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
                 </select>
             )}
 
-            {/* ✅ Final Updated Shadow Section */}
-            <div style={styles.row}>
-                <label style={styles.label}>Box Shadow:</label>
+            {renderInputRow(
+                'Box Shadow',
                 <select
-                    style={styles.input}
                     onChange={handleShadowChange}
                     value={Object.entries(shadowPresets).find(([key, val]) => val === boxShadow)?.[0] || "none"}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 >
                     <optgroup label="Light Shadows">
                         <option value="none">None</option>
@@ -250,7 +243,7 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
                         <option value="dark-xl">Dark Extra Large</option>
                     </optgroup>
                 </select>
-            </div>
+            )}
         </div>
     );
 };
@@ -258,7 +251,6 @@ const StyleToolbar = ({ updateStyles, rmSection }) => {
 export default StyleToolbar;
 
 // === Helper Functions ===
-
 function rgbaToHex(rgba) {
     const match = rgba.match(/\d+(\.\d+)?/g);
     if (!match) return 'ffffff';
@@ -274,97 +266,3 @@ function hexToRgba(hex, alpha = 1) {
     const b = bigint & 255;
     return `rgba(${r},${g},${b},${alpha})`;
 }
-
-// === Styles Object ===
-
-const styles = {
-    toolbar: {
-        borderTop: "1px solid black",
-        backgroundColor: '#f3f4f6',
-        padding: '1rem',
-        boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '0.75rem',
-        maxWidth: '100vw',
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        userSelect: 'none',
-        width: '240px',
-    },
-    dragHandle: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingBottom: '0.5rem',
-        borderBottom: '1px solid #d1d5db',
-        marginBottom: '0.5rem',
-        cursor: 'default',
-        touchAction: 'none',
-    },
-    heading: {
-        fontSize: '1.125rem',
-        fontWeight: 600,
-        color: '#1f2937',
-    },
-    row: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        marginBottom: '10px',
-        gap: '4px',
-        width: '100%',
-    },
-    label: {
-        fontWeight: 500,
-        color: '#374151',
-        fontSize: '0.9rem',
-    },
-    inputGroup: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'stretch',
-        gap: '6px',
-        width: '100%',
-    },
-    input: {
-        padding: '4px 6px',
-        fontSize: '13px',
-        borderRadius: '4px',
-        border: '1px solid #ccc',
-        outline: 'none',
-        transition: 'box-shadow 0.2s ease-in-out',
-        width: '100%',
-        minWidth: 0,
-        boxSizing: 'border-box',
-    },
-    button: {
-        padding: '6px',
-        backgroundColor: '#007bff',
-        color: 'white',
-        border: 'none',
-        borderRadius: '6px',
-        fontSize: '13px',
-        cursor: 'pointer',
-        transition: 'background-color 0.2s',
-        width: '100%',
-        boxSizing: 'border-box',
-    },
-    colorPair: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '12px',
-        width: '100%',
-    },
-    colorItem: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '4px',
-        width: '100%',
-    },
-    colorLabel: {
-        fontSize: '12px',
-        fontWeight: 500,
-    },
-};
