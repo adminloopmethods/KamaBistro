@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import styles from "./dimensionToolbar.module.css";
-import { getNextZIndex } from "../../Functionality/globalZIndCounter";
+import { getNextZIndex } from "../../../../Functionality/globalZIndCounter";
+// import { getNextZIndex } from "../../Functionality/globalZIndCounter";
 
 const boxShadowPresets = {
     none: "none",

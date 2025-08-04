@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useMyContext } from '../../Context/ContextApi';
+import { useMyContext } from '../../../../Context/ContextApi';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
     ChevronDown, ChevronUp
@@ -8,7 +8,7 @@ import {
     onBold, onItalic, onUnderline, onSizeChange,
     onFamilyFontChange, onColorChange, onAlignChange
 } from './StyleObject';
-import { getNextZIndex } from '../../Functionality/globalZIndCounter';
+import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
 
 const RichTextToolBar = () => {
     const {

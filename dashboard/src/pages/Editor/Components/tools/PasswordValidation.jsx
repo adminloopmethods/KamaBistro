@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
-import xSign from "../../assets/icons/x-close.png";
-import checkSign from "../../assets/icons/check.png";
+import xSign from "../../../../assets/icons/x-close.png"
+import checkSign from "../../../../assets/icons/check.png"
+
 
 const passwordValidationRules = [
   {

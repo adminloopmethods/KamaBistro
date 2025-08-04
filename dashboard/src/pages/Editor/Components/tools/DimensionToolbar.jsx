@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getNextZIndex } from '../../Functionality/globalZIndCounter';
+import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
 
 const DimensionToolbar = ({ updateStyles }) => {
     const [widthInput, setWidthInput] = useState('100vw');

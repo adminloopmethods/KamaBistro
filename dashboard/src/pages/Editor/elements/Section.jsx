@@ -1,9 +1,9 @@
-import AddElement from "../../tools/AddElement";
-import { mapElement, CreateElement } from "../../../Functionality/createElement";
 import { useEffect, useRef, useState } from "react";
-import DimensionToolbar from "../../tools/DimensionToolbar";
+import { CreateElement, mapElement } from "../../../Functionality/createElement";
+import AddElement from "../Components/tools/AddElement";
+import DimensionToolbar from "../Components/tools/DimensionToolbar";
 import { useMyContext } from "../../../Context/ContextApi";
-import StyleToolbar from "../../tools/StyleToolbar";
+import StyleToolbar from "../Components/tools/StyleToolbar";
 
 const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateData, lastSection, section }) => {
     const [openToolBar, setOpenToolBar] = useState(false);

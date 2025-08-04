@@ -1,13 +1,13 @@
 import { useRef, useEffect, useState } from "react";
-import Section from "./Editor/elements/Section.jsx";
-import RichTextToolBar from "./tools/RichtextToolbar";
-import { useMyContext } from "../Context/ContextApi";
-import AddSection from "./tools/AddSection";
-import { CreateSection } from "../Functionality/createSection";
-import DimensionToolbar from "./tools/DimensionToolbar";
-import StyleToolbar from "./tools/StyleToolbar";
+import Section from "./elements/Section";
+import RichTextToolBar from "./Components/tools/RichtextToolbar";
+import { useMyContext } from "../../Context/ContextApi";
+import AddSection from "./Components/tools/AddSection";
+import { CreateSection } from "../../Functionality/createSection";
+import DimensionToolbar from "./Components/tools/DimensionToolbar";
+import StyleToolbar from "./Components/tools/StyleToolbar";
 
-const Webpage = () => {
+const Editor = () => {
     const containerRef = useRef(null);
     const [saveData, setUpdateData] = useState(false)
 
@@ -171,4 +171,4 @@ const Webpage = () => {
     );
 };
 
-export default Webpage;
+export default Editor;
