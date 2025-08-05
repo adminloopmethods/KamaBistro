@@ -3,7 +3,9 @@ import { useMyContext } from "../../../../Context/ContextApi";
 
 const Heading = ({ element, editable = true, updateContent, style, updateElement, rmElement }) => {
     const elementRef = useRef(null);
+    console.log(element)
     const [thisElement, setThisElement] = useState(element)
+    console.log("asdfqweqqqq", thisElement)
     const { contextRef, contextElement, toolbarRef } = useMyContext()
     const [isEditing, setEditing] = useState(false)
 
@@ -13,7 +15,10 @@ const Heading = ({ element, editable = true, updateContent, style, updateElement
         }
     }, [element.content]);
 
+    console.log(elementRef.current)
+
     const activateTheEditing = () => {
+        console.log(thisElement)
         setEditing(true)
         contextElement.setElementSetter(() => () => setThisElement)
         contextElement.setElement(thisElement)
@@ -24,7 +29,11 @@ const Heading = ({ element, editable = true, updateContent, style, updateElement
 
     const handleBlur = () => {
         const value = elementRef.current.innerHTML;
-        updateContent(element.id, "content", value)
+
+        setThisElement((prev) => {
+            return { ...prev, content: value.trim() }
+        })
+        // contextRef.clearReference()
     };
 
     useEffect(() => {
@@ -50,6 +59,10 @@ const Heading = ({ element, editable = true, updateContent, style, updateElement
         updateElement(element.id, thisElement)
 
     }, [thisElement.style])
+
+    useEffect(() => {
+        updateContent(element.id, "content", thisElement.content)
+    }, [thisElement])
 
     return (
         <>

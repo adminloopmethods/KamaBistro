@@ -6,9 +6,11 @@ import { useMyContext } from "../../../Context/ContextApi";
 import StyleToolbar from "../Components/tools/StyleToolbar";
 
 const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateData, lastSection, section }) => {
+    console.log("prop-element", element)
     const [openToolBar, setOpenToolBar] = useState(false);
     const [onAddElement, setOnAddElement] = useState(false)
     const [elements, setElements] = useState(element);
+    console.log("state from prop", elements)
     const { contextRef, currentWidth, contextElement, websiteContent, SubmissionObject } = useMyContext();
     const sectionRef = useRef(null)
     const [sectionStyle, setSectionStyle] = useState(style)
@@ -139,7 +141,7 @@ const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateDa
         };
     }, [isDragging]);
 
-    console.log(sectionStyle)
+    // console.log(sectionStyle)
 
 
     useEffect(() => {

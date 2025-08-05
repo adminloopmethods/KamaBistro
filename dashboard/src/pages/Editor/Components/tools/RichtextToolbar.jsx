@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMyContext } from '../../../../Context/ContextApi';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
@@ -10,6 +10,7 @@ import {
 } from './StyleObject';
 import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
 import CustomSelect from '../../../Dashboard/elem-dashboard/CustomSelect';
+import { debounce } from 'lodash';
 
 const RichTextToolBar = () => {
     const {
@@ -41,6 +42,13 @@ const RichTextToolBar = () => {
     });
 
     const handleClick = () => setZIndex(getNextZIndex());
+
+    const debouncedColorChange = useCallback(
+        debounce((value) => {
+            onColorChange(value, element, Setter, currentWidth);
+        }, 100),
+        [element, Setter, currentWidth]
+    );
 
     const valueChangeOfInputs = (e, key, isHeight) => {
         const val = e.target.value.trim();
@@ -114,14 +122,6 @@ const RichTextToolBar = () => {
             </div>
 
             {/* Font & Size */}
-            {/* <select
-                defaultValue=""
-                onChange={(e) => onFamilyFontChange(e.target.value, element, Setter, currentWidth)}
-                className="form-select"
-            >
-                <option value="" disabled>Font</option>
-                {fontFamilies.map(f => <option key={f} value={f}>{f}</option>)}
-            </select> */}
             <CustomSelect
                 options={fontFamilyOptions}
                 Default=''
@@ -130,14 +130,6 @@ const RichTextToolBar = () => {
                 disableFirstValue={true}
             />
 
-            {/* <select
-                defaultValue=""
-                onChange={(e) => onSizeChange(e.target.value, element, Setter, currentWidth)}
-                className="form-select"
-            >
-                <option value="" disabled>Size</option>
-                {fontSizes.map(size => <option key={size} value={size}>{size}</option>)}
-            </select> */}
             <CustomSelect
                 options={fontSizeOptions}
                 firstOption='text size'
@@ -150,7 +142,10 @@ const RichTextToolBar = () => {
             <input
                 type="color"
                 value={textColor}
-                onChange={(e) => onColorChange(e.target.value, element, Setter, currentWidth)}
+                onChange={(e) => {
+                    setTextColor(e.target.value);
+                    debouncedColorChange(e.target.value);
+                }}
                 className="w-8 h-8 border border-gray-300 dark:border-gray-700 rounded cursor-pointer"
                 title="Text color"
             />

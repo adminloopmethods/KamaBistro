@@ -29,21 +29,23 @@ const DimensionToolbar = ({ updateStyles }) => {
 
     const handleClick = () => setZIndex(getNextZIndex());
 
-    const renderInput = (label, key, type = 'text', suffix = '') => (
-        <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
-            <input
-                type={type}
-                value={stylesState[key]}
-                onChange={(e) => {
-                    const val = type === 'number' ? Number(e.target.value) : e.target.value;
-                    const suffixVal = suffix ? `${val}${suffix}` : val;
-                    applyStyle(key, suffixVal);
-                }}
-                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-            />
-        </div>
-    );
+    const renderInput = (label, key, type = 'text', suffix = '') => {
+        return (
+            <div className="flex flex-col gap-1" key={key}>
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+                <input
+                    type={type}
+                    value={stylesState[key]}
+                    onChange={(e) => {
+                        const val = type === 'number' ? Number(e.target.value) : e.target.value;
+                        const suffixVal = suffix ? `${val}${suffix}` : val;
+                        applyStyle(key, suffixVal);
+                    }}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+            </div>
+        )
+    };
 
     return (
         <div
