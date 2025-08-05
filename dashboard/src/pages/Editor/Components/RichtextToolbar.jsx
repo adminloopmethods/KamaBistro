@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useMyContext } from '../../../../Context/ContextApi';
+import { useMyContext } from '../../../Context/ContextApi';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
     ChevronDown, ChevronUp
@@ -7,9 +7,9 @@ import {
 import {
     onBold, onItalic, onUnderline, onSizeChange,
     onFamilyFontChange, onColorChange, onAlignChange
-} from './StyleObject';
-import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
-import CustomSelect from '../../../Dashboard/elem-dashboard/CustomSelect';
+} from './tools/StyleObject';
+import { getNextZIndex } from '../../../Functionality/globalZIndCounter';
+import CustomSelect from '../../Dashboard/elem-dashboard/CustomSelect';
 import { debounce } from 'lodash';
 
 const RichTextToolBar = () => {

@@ -1,11 +1,11 @@
 import { useRef, useEffect, useState } from "react";
 import Section from "./elements/Section";
-import RichTextToolBar from "./Components/tools/RichtextToolbar";
+import RichTextToolBar from "./Components/RichtextToolbar";
 import { useMyContext } from "../../Context/ContextApi";
-import AddSection from "./Components/tools/AddSection";
+import AddSection from "./Components/AddSection";
 import { CreateSection } from "../../Functionality/createSection";
-import DimensionToolbar from "./Components/tools/DimensionToolbar";
-import StyleToolbar from "./Components/tools/StyleToolbar";
+import DimensionToolbar from "./Components/DimensionToolbar";
+import StyleToolbar from "./Components/StyleToolbar";
 
 const Editor = () => {
     const containerRef = useRef(null);

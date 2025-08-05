@@ -1,5 +1,5 @@
 import React, { useState } from "react"; // Import useState
-import CustomSelect from "../../../Dashboard/elem-dashboard/CustomSelect";
+import CustomSelect from "../../Dashboard/elem-dashboard/CustomSelect";
 
 
 const AddSection = ({ controller }) => {

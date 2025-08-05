@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
+import { getNextZIndex } from '../../../Functionality/globalZIndCounter';
 import dimensionStyle from "./dimensionToolbar.module.css";
 
 const shadowPresets = {

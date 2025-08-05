@@ -17,7 +17,7 @@ function Provider({ children }) {
     const width = {
         currentWidth,
         setWidth
-    }
+    };
 
     const contextRef = {
         activeRef,
@@ -41,7 +41,7 @@ function Provider({ children }) {
         finalSubmit,
         setFinalSubmit,
         setContent
-    }
+    };
 
     return (
         <MyFunctionContext.Provider value={{

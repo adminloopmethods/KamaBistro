@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getNextZIndex } from '../../../../Functionality/globalZIndCounter';
+import { getNextZIndex } from '../../../Functionality/globalZIndCounter';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 
 const DimensionToolbar = ({ updateStyles }) => {

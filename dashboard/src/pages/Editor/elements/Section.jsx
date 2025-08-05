@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { CreateElement, mapElement } from "../../../Functionality/createElement";
-import AddElement from "../Components/tools/AddElement";
-import DimensionToolbar from "../Components/tools/DimensionToolbar";
+import AddElement from "../Components/AddElement";
+import DimensionToolbar from "../Components/DimensionToolbar";
 import { useMyContext } from "../../../Context/ContextApi";
-import StyleToolbar from "../Components/tools/StyleToolbar";
+import StyleToolbar from "../Components/StyleToolbar";
 
 const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateData, lastSection, section }) => {
     console.log("prop-element", element)
