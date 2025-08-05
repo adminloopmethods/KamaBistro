@@ -1,0 +1,13 @@
+model SEO {
+  id              Int      @id @default(autoincrement())
+  metaTitle       Json // Multi-language support for SEO titles
+  metaDescription Json // Multi-language support for SEO descriptions
+  keywords        Json // Multi-language support for keywords
+  createdAt       DateTime @default(now())
+
+  // Relation
+  resource   Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String   @unique
+
+  @@index([resourceId])
+}

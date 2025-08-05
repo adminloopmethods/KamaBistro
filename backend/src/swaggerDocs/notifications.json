@@ -1,0 +1,290 @@
+{
+  "paths": {
+    "/notification/{id}": {
+      "get": {
+        "summary": "Retrieve all notifications for a specific user",
+        "tags": ["Notifications"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The unique identifier of the user to fetch notifications for",
+            "schema": {
+              "type": "string",
+              "example": "cmaoux1f1000qpc0w5vlqhgjx"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notifications fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "notification fetched successfully"
+                    },
+                    "notifications": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "aabbb41f-065e-49f8-a764-55173d3f7717"
+                          },
+                          "userId": {
+                            "type": "string",
+                            "example": "cmaoux1f1000qpc0w5vlqhgjx"
+                          },
+                          "role": {
+                            "type": "string",
+                            "example": "MANAGER"
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "A user 'Deepanshu Kataria' has been updated"
+                          },
+                          "isRead": {
+                            "type": "boolean",
+                            "example": false
+                          },
+                          "createdAt": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2025-05-16T10:43:04.841Z"
+                          }
+                        }
+                      }
+                    },
+                    "ok": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or no notifications available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error retrieving notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/read/{id}": {
+      "put": {
+        "summary": "Mark a specific notification as read",
+        "tags": ["Notifications"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The unique identifier of the notification to mark as read",
+            "schema": {
+              "type": "string",
+              "example": "aabbb41f-065e-49f8-a764-55173d3f7717"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "notification read successfully"
+                    },
+                    "mark": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "aabbb41f-065e-49f8-a764-55173d3f7717"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "cmaoux1f1000qpc0w5vlqhgjx"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "MANAGER"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "A user 'Deepanshu Kataria' has been updated"
+                        },
+                        "isRead": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-05-16T10:43:04.841Z"
+                        }
+                      }
+                    },
+                    "ok": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Notification not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error while marking notification",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notification/read-all/{id}": {
+      "put": {
+        "summary": "Mark all notifications as read for a specific user",
+        "tags": ["Notifications"],
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "description": "The unique identifier of the user whose notifications will be marked as read",
+            "schema": {
+              "type": "string",
+              "example": "user-1234abcd"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification marked as read successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "notification read successfully"
+                    },
+                    "mark": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string",
+                          "format": "uuid",
+                          "example": "aabbb41f-065e-49f8-a764-55173d3f7717"
+                        },
+                        "userId": {
+                          "type": "string",
+                          "example": "cmaoux1f1000qpc0w5vlqhgjx"
+                        },
+                        "role": {
+                          "type": "string",
+                          "example": "MANAGER"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "A user 'Deepanshu Kataria' has been updated"
+                        },
+                        "isRead": {
+                          "type": "boolean",
+                          "example": true
+                        },
+                        "createdAt": {
+                          "type": "string",
+                          "format": "date-time",
+                          "example": "2025-05-16T10:43:04.841Z"
+                        }
+                      }
+                    },
+                    "ok": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found or no notifications available",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server error while marking notifications",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

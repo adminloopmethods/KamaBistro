@@ -1,0 +1,10 @@
+model RateLimit {
+  id          String     @id @default(cuid())
+  userId      String    @unique
+  attempts    Int      @default(0)
+  failures    Int      @default(0)
+  lastAttempt DateTime @default(now())
+  blockUntil  DateTime?
+  
+  @@index([userId])
+}

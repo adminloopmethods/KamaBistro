@@ -1,0 +1,27 @@
+model SubPermission {
+    id          String                    @id @default(uuid())
+    name        String           @unique
+    description String           @default("")
+    permissions PermissionSubPermission[]
+
+    @@index([id])
+}
+
+model Permission {
+    id          String           @id @default(cuid())
+    name        String           @unique
+    description String           @default("")
+    roles       RolePermission[]
+
+    roleType   RoleType @relation(fields: [roleTypeId], references: [id]) // New field
+    roleTypeId String
+
+    subPermissions PermissionSubPermission[]
+
+    created_at DateTime @default(now())
+    updated_at DateTime @updatedAt
+
+    @@index([name])
+    @@index([roleTypeId])
+
+}

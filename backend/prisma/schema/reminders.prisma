@@ -1,0 +1,17 @@
+model Reminder {
+  id          String   @id @default(cuid())
+  sender      User     @relation("SentReminders", fields: [senderId], references: [id])
+  senderId    String
+  receiver    User     @relation("ReceivedReminders", fields: [receiverId], references: [id])
+  receiverId  String
+  subject     String
+  message     String
+  replied     Boolean  @default(false)
+  response    String?
+  sendOnEmail Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([senderId])
+  @@index([receiverId])
+}
