@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CreateElement, mapElement } from "../../../Functionality/createElement";
 import AddElement from "../Components/tools/AddElement";
 import DimensionToolbar from "../Components/tools/DimensionToolbar";
@@ -192,4 +192,4 @@ const Section = ({ element, rmSection, onEditing, style, updateData, setUpdateDa
     );
 };
 
-export default Section;
+export default React.memo(Section);
