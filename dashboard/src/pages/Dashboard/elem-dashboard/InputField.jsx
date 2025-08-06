@@ -38,7 +38,7 @@ const InputField = ({
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="w-full px-[10px] dark:bg-stone-100 pr-10 py-2 h-10 border rounded-md focus:outline-none focus:ring focus:border-blue-100 focus:ring-2"
+        className="w-full px-[10px] dark:bg-stone-100 pr-10 py-2 h-10 border rounded-md focus:outline-none focus:border-blue-100 focus:ring-2"
       />
       {isPassword && (
         <button
