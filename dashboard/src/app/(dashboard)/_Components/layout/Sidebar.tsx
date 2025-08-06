@@ -32,8 +32,8 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <div className="w-64 text-black p-4 bg-white dark:bg-gray-900 dark:text-white ">
-      <ul className="flex flex-col gap-2">
+    <div className="w-64 h-full flex flex-col text-black p-4 bg-white dark:bg-gray-900 dark:text-white">
+      <ul className="flex flex-col gap-2 flex-1">
         {sidebarRoutes.map((element, i) => (
           <li key={i}>
             <Link

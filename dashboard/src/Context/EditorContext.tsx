@@ -48,14 +48,14 @@ type SubmissionObjectType = {
 
 type MyContextType = {
   contextRef: ContextRefType;
-  activeRef: RefType;
+  activeRef: RefType | any;
   contextElement: ContextElementType;
   element: any;
   elementSetter: any;
-  rmElementFunc: () => void;
+  rmElementFunc: (id: string) => void;
   width: WidthType;
   currentWidth: string;
-  toolbarRef: MutableRefObject<HTMLElement | null>;
+  toolbarRef: any;
   websiteContent: WebsiteContentType;
   SubmissionObject: SubmissionObjectType;
   finalSubmit: FinalSubmitType[];
@@ -68,7 +68,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [elementSetter, setElementSetter] = useState<any>(null);
   const [element, setElement] = useState<any>(null);
   const [currentWidth, setWidth] = useState<string>('');
-  const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => {});
+  const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { });
   const [content, setContent] = useState<any[]>([]);
   const [finalSubmit, setFinalSubmit] = useState<FinalSubmitType[]>([]);
 
