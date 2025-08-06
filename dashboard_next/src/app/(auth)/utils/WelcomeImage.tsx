@@ -12,7 +12,7 @@ const BackroundImage = () => {
             className="w-full h-full xl:max-w-6xl l-bg lg:flex-5 bg-repeat-none bg-center bg-cover p-10"
             ref={bgRef}
             style={{
-                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.43)), url(${login.restaurant})`,
+                backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.43)), url(${login.restaurant.src})`,
             }}
         >
             {/* Logo with spotlight gradient */}

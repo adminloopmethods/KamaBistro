@@ -18,7 +18,7 @@ type FormData = {
 };
 
 const Login: React.FC = () => {
-  const router = useRouter(); // ✅ replaces useNavigate
+  const router = useRouter(); // replaces useNavigate
   const [formData, setFormData] = useState<FormData>({
     email: "",
     password: "",
@@ -57,7 +57,7 @@ const Login: React.FC = () => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         setTimeout(() => {
-          router.push("/"); // ✅ Next.js navigation
+          router.push("/"); // Next.js navigation
         }, 1000);
       } else {
         console.error("Unexpected login response:", response);
@@ -79,7 +79,7 @@ const Login: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      router.push("/"); // ✅ Next.js navigation
+      router.push("/"); // Next.js navigation
     }
   }, [router]);
 
