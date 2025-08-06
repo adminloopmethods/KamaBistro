@@ -16,40 +16,45 @@ datasource db {
 // User models
 enum Role {
   ADMIN
-  MANAGER
+  VERIFIER
   EDITOR
 }
 
 model User {
-  id         String    @id @default(uuid())
-  email      String    @unique
-  name       String
-  phone      String?
-  password   String
-  role       Role      @default(EDITOR)
-  autoApproval Boolean @default(false)
-  deleted    Boolean   @default(false)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
-  status     Boolean   @default(true)
+  id           String    @id @default(uuid())
+  email        String    @unique
+  name         String
+  phone        String?
+  password     String
+  role         Role      @default(EDITOR)
+  autoApproval Boolean   @default(false)
+  deleted      Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @default(now())
+  status       Boolean   @default(true)
+  locationId   String?
+  location     location? @relation(fields: [locationId], references: [id])
 
-  Log        Log[]
+  Log Log[]
 
-  webpages   Webpage[] @relation("UserWebpages")
-  manager    User?     @relation("ManagerToEditors", fields: [managerId], references: [id])
-  managerId  String?
-  editors    User[]    @relation("ManagerToEditors")
+  editedWebpages   Webpage[] @relation("WebpageEditor")
+  verifiedWebpages Webpage[] @relation("WebpageVerifier")
 }
 
 model Webpage {
-  id       String    @id
-  name     String
-  contents Content[]
+  id         String    @id
+  name       String
+  locationId String?
+  location   location? @relation(fields: [locationId], references: [id])
 
-  userId   String
-  user     User @relation("UserWebpages", fields: [userId], references: [id])
+  contents   Content[]
+
+  editorId   String?
+  editor     User?   @relation("WebpageEditor", fields: [editorId], references: [id])
+
+  verifierId String?
+  verifier   User?   @relation("WebpageVerifier", fields: [verifierId], references: [id])
 }
-
 
 model Content {
   id        String  @id
@@ -97,4 +102,11 @@ model Log {
   timestamp DateTime @default(now())
 
   user User? @relation(fields: [userId], references: [id])
+}
+
+model location {
+  id      String    @id @default(uuid())
+  name    String
+  User    User[]
+  Webpage Webpage[]
 }

@@ -12,10 +12,10 @@ To provide a CMS platform where users can visually create and manage website pag
 
 ## 🧰 Tech Stack
 
-| Layer       | Technology                          |
+| Layer       | Technology                           |
 |-------------|--------------------------------------|
-| CMS         | React + Vite + Tailwind CSS          |
-| Frontend    | Next.js *(to be implemented)*        |
+| CMS         | Next.js +  Tailwind CSS              |
+| Frontend    | Next.js +  Tailwind CSS              |
 | Backend     | Node.js + Express                    |
 | Database    | PostgreSQL + Prisma ORM              |
 
@@ -125,9 +125,3 @@ Relevant files:
 
 ## 🚧 Roadmap
 
-- [x] Backend with Express + PostgreSQL
-- [ ] CMS UI using React + Vite + Tailwind
-- [ ] Frontend website using Next.js
-- [ ] Role-based access (Editor, Viewer)
-- [ ] Drag-and-drop page builder
-- [ ] Deployment with Docker
