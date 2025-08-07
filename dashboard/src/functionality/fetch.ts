@@ -164,3 +164,10 @@ export async function saveContentReq(data: Record<string, any>): Promise<ApiResp
         ContentType.json
     );
 }
+
+export async function getContentReq(id: string): Promise<ApiResponse> {
+    return await makerequest(
+        endpoint.route("createContent") + id,
+        "GET",
+    );
+}

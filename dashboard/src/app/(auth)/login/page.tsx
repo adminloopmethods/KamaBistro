@@ -84,7 +84,7 @@ const Login: React.FC = () => {
   }, [router]);
 
   return (
-    <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center bg-[#AE9060]">
+    <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center bg-[#AE9060] ">
       <BackroundImage />
       <div className="flex h-full justify-center w-full sm:w-3/5 md:w-3/5 lg:w-3/5 xl:w-2/5 sm:px-20 md:px-20 lg:px-24 bg-base-200 shadow-[-1px_0px_10px_#00000080]">
         <div className="w-[24rem] flex flex-col items-center justify-center gap-8">

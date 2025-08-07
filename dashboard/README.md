@@ -56,7 +56,7 @@ dashboard_next/
 ## 🧠 Core Functionality
 
 | File/Folder                      | Purpose                                          |
-| ------------------------------- | ------------------------------------------------ |
+| -------------------------------- | ------------------------------------------------ |
 | `functionality/fetch.ts`         | Custom fetch with token handling, timeout, etc. |
 | `functionality/fingerprint.ts`   | Device fingerprint using FingerprintJS          |
 | `functionality/ToastWithUpdate.ts` | Toast wrapper for async status messages       |

@@ -56,8 +56,17 @@ export const createWebpageService = async ({ name, content }) => {
     },
   });
 
+  // Create a version snapshot
+  await prisma.version.create({
+    data: {
+      webpageId: id,
+      version: webpage, // Full snapshot of the page in JSON
+    },
+  });
+
   return { webpage, id };
 };
+
 
 export const getAllWebpagesService = async () => {
   return await prisma.webpage.findMany({
@@ -97,7 +106,7 @@ export const getWebpageByIdService = async (id) => {
 export const updateWebpageByIdService = async (id, { name, content }) => {
   await prisma.content.deleteMany({ where: { webpageId: id } });
 
-  return await prisma.webpage.update({
+  const updatedWebpage = await prisma.webpage.update({
     where: { id },
     data: {
       name,
@@ -148,4 +157,23 @@ export const updateWebpageByIdService = async (id, { name, content }) => {
       },
     },
   });
+
+  // Create a new version snapshot after update
+  await prisma.version.create({
+    data: {
+      webpageId: id,
+      version: updatedWebpage,
+    },
+  });
+
+  return updatedWebpage;
 };
+
+
+export const getWebpageVersionsService = async (webpageId) => {
+  return await prisma.version.findMany({
+    where: { webpageId },
+    orderBy: { id: 'desc' },
+  });
+};
+

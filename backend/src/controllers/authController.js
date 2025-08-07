@@ -8,7 +8,6 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log("qwer")
     const user = await checkIfUserExists(email);
 
     if (!user) {

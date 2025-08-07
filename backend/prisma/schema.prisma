@@ -48,6 +48,7 @@ model Webpage {
   location   location? @relation(fields: [locationId], references: [id])
 
   contents Content[]
+  versions version[]
 
   editorId String?
   editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
@@ -55,18 +56,6 @@ model Webpage {
   verifierId String?
   verifier   User?   @relation("WebpageVerifier", fields: [verifierId], references: [id])
 }
-
-// model Content {
-//   id        String  @id
-//   name      String
-//   order     Int     @default(0)
-//   webpage   Webpage @relation(fields: [webpageId], references: [id])
-//   webpageId String
-
-//   elements Element[]
-//   style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
-//   styleId  String    @unique
-// }
 
 model Content {
   id    String @id
@@ -128,4 +117,12 @@ model location {
   name    String
   User    User[]
   Webpage Webpage[]
+}
+
+model version {
+  id      String @id @default(uuid())
+  version Json
+
+  webpageId String
+  webpage   Webpage @relation(fields: [webpageId], references: [id])
 }
