@@ -47,21 +47,40 @@ model Webpage {
   locationId String?
   location   location? @relation(fields: [locationId], references: [id])
 
-  contents   Content[]
+  contents Content[]
 
-  editorId   String?
-  editor     User?   @relation("WebpageEditor", fields: [editorId], references: [id])
+  editorId String?
+  editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
 
   verifierId String?
   verifier   User?   @relation("WebpageVerifier", fields: [verifierId], references: [id])
 }
 
+// model Content {
+//   id        String  @id
+//   name      String
+//   order     Int     @default(0)
+//   webpage   Webpage @relation(fields: [webpageId], references: [id])
+//   webpageId String
+
+//   elements Element[]
+//   style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
+//   styleId  String    @unique
+// }
+
 model Content {
-  id        String  @id
-  name      String
-  order     Int     @default(0)
-  webpage   Webpage @relation(fields: [webpageId], references: [id])
-  webpageId String
+  id    String @id
+  name  String
+  order Int    @default(0)
+
+  // For top-level sections
+  webpageId String?
+  webpage   Webpage? @relation(fields: [webpageId], references: [id])
+
+  // For nested sections
+  parentId String?
+  parent   Content?  @relation("SectionChildren", fields: [parentId], references: [id])
+  children Content[] @relation("SectionChildren")
 
   elements Element[]
   style    Style     @relation("ContentStyle", fields: [styleId], references: [id])

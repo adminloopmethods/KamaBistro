@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, FocusEvent } from "react";
-import { BaseElement } from "@/app/(dashboard)/editor/_functionality/createElement";
+import { BaseElement } from "@/app/(dashboard)/(editor)/_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 
 type HeadingProps = {

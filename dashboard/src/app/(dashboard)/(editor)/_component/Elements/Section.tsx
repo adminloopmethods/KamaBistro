@@ -17,7 +17,7 @@ type ElementType = {
 
 type SectionProps = {
   element: ElementType[];
-  rmSection: () => void;
+  rmSection: (id: string) => void;
   onEditing: () => void;
   style: React.CSSProperties;
   updateData: any;

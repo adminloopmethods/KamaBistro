@@ -2,14 +2,13 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-// import RichTextToolBar from "./Components/RichtextToolbar";
-import DimensionToolbar from "./Components/DimensionToolbar";
-import StyleToolbar from "./Components/StyleToolbar";
-import Section from "./_component/Elements/Section";
+import Section from "../_component/Elements/Section";
 import { useMyContext } from "@/Context/EditorContext";
-import { CreateSection } from "./_functionality/createSection";
-import AddSection from "./_component/common/AddSection";
-import RichTextToolBar from "./_component/common/RichTextToolbar";
+import { CreateSection } from "../_functionality/createSection";
+import AddSection from "../_component/common/AddSection";
+import RichTextToolBar from "../_component/common/RichTextToolbar";
+import StyleToolbar from "../_component/common/StyleToolbar";
+import DimensionToolbar from "../_component/common/DimensionToolbar";
 
 const Editor = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -39,7 +38,7 @@ const Editor = () => {
         if (w > 1024) return "xl";
         if (w >= 768) return "lg";
         if (w >= 425) return "md";
-        if (w <= 425) return "sm";
+        return "sm";
     };
 
     const addSection = (section = "section") => {
