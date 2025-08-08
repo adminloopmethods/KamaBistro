@@ -18,7 +18,7 @@ const Editor = () => {
     // const router = useRouter()
     const nav = usePathname()
     const navigationArray = nav.split("/")
-    const page = nav[2]
+    const page = navigationArray[2]
     const isPage = navigationArray.length >= 3
     const [saveData, setUpdateData] = useState(false);
 

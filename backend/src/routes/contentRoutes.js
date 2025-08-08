@@ -4,11 +4,11 @@ import { authenticate } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.use(authenticate); 
+// router.use(authenticate);
 
-router.post("/", createWebpage);
 router.get("/", getAllWebpages)
+router.post("/", authenticate, createWebpage);
 router.get("/:id", getWebpageById);
-router.put("/:id", updateWebpageById);
+router.put("/:id", authenticate, updateWebpageById);
 
 export default router;

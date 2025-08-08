@@ -86,6 +86,7 @@ export const getAllWebpagesService = async () => {
 };
 
 export const getWebpageByIdService = async (id) => {
+  console.log(id)
   return await prisma.webpage.findUnique({
     where: { id },
     include: {

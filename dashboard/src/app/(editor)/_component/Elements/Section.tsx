@@ -52,7 +52,7 @@ const Section: React.FC<SectionProps> = ({
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
-  const [allowUpdate, setAllowUpdate] = useState(true);
+  // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffsetX, setDragOffsetX] = useState(0);

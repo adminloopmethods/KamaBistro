@@ -18,7 +18,7 @@ export interface SectionElementType {
 
 const baseStyle: StyleObject = {
     width: "100%",
-    minHeight: "20vh",
+    minHeight: "1vh",
     paddingTop: "20px",
     paddingRight: "20px",
     paddingBottom: "20px",

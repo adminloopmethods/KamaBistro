@@ -1,99 +1,101 @@
-"use client";
+'use client';
 
+import { useRef, useEffect, useState, FocusEvent } from "react";
+import { BaseElement } from "@/app/(editor)/_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
-import { useRef, useEffect, useState, RefObject } from "react";
 
-// Define prop types
-type ElementType = {
-    id: string;
-    content: string;
-    style?: React.CSSProperties;
-    [key: string]: any; // For any extra properties
+type HeadingProps = {
+  element: BaseElement;
+  editable?: boolean;
+  style?: React.CSSProperties;
+  updateContent: (id: string, property: string, value: any) => void;
+  updateElement: (id: string, updatedElement: BaseElement) => void;
+  rmElement: (id: string) => void;
 };
 
-type ParagraphProps = {
-    element: ElementType;
-    editable?: boolean;
-    style?: React.CSSProperties;
-    updateContent: (id: string, key: string, value: any) => void;
-    updateElement: (id: string, updatedElement: ElementType) => void;
-    rmElement?: (id: string) => void;
-};
+const Paragraph: React.FC<HeadingProps> = ({
+  element,
+  editable = true,
+  style,
+  updateContent,
+  updateElement,
+  rmElement,
+}) => {
+  const elementRef = useRef<HTMLHeadingElement | null>(null);
+  const [thisElement, setThisElement] = useState<BaseElement>(element);
+  const { contextRef, contextElement, toolbarRef } = useMyContext();
+  const [isEditing, setEditing] = useState<boolean>(false);
 
-const Paragraph = ({
-    element,
-    editable = true,
-    updateContent,
-    style,
-    updateElement,
-    rmElement
-}: ParagraphProps) => {
-    const elementRef = useRef<HTMLParagraphElement | null>(null);
-    const [content, setContent] = useState<string>("New Heading");
-    const [thisElement, setThisElement] = useState<ElementType>(element);
-    const { contextRef, contextElement, toolbarRef } = useMyContext();
-    const [isEditing, setEditing] = useState<boolean>(false);
+  // Set innerHTML when content updates
+  useEffect(() => {
+    if (elementRef.current && (element.content || element.content === "")) {
+      elementRef.current.innerHTML = element.content;
+    }
+  }, [element.content]);
 
-    useEffect(() => {
-        if (elementRef.current && (element.content || element.content === "")) {
-            elementRef.current.innerHTML = element.content || content;
-        }
-    }, [element.content]);
+  const activateTheEditing = () => {
+    setEditing(true);
+    contextElement.setElementSetter(() => () => setThisElement);
+    contextElement.setElement(thisElement);
+    contextElement?.setRmElementFunc(() => () => rmElement(element.id));
+    if (elementRef.current) {
+      elementRef.current.style.outline = "1px solid black";
+    }
+    contextRef.setReference(elementRef.current);
+  };
 
-    const handleBlur = () => {
+  const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
+    const value = elementRef.current?.innerHTML ?? "";
+    setThisElement((prev: BaseElement) => ({
+      ...prev,
+      content: value.trim(),
+    }));
+  };
+
+  // Remove outline if clicked outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        toolbarRef.current &&
+        !toolbarRef.current.contains(e.target as Node) &&
+        elementRef.current &&
+        !elementRef.current.contains(e.target as Node)
+      ) {
         if (elementRef.current) {
-            const value = elementRef.current.innerHTML;
-            setContent(value);
-            updateContent(element.id, "content", value);
+          console.log("qwer")
+          elementRef.current.style.outline = "none";
         }
+      }
     };
 
-    const activateTheEditing = () => {
-        setEditing(true);
-        contextElement.setElementSetter(() => () => setThisElement);
-        contextElement.setElement(thisElement);
-        if (elementRef.current) {
-            elementRef.current.style.outline = "1px solid black";
-        }
-        contextRef.setReference(elementRef.current);
-    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [contextRef]);
 
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (
-                toolbarRef.current &&
-                !toolbarRef.current.contains(e.target as Node) &&
-                elementRef.current &&
-                !elementRef.current.contains(e.target as Node)
-            ) {
-                if (elementRef.current) {
-                    elementRef.current.style.outline = "none";
-                }
-            }
-        };
+  // Sync style changes
+  useEffect(() => {
+    if (isEditing) {
+      contextElement.setElement(thisElement);
+    }
+    updateElement(element.id, thisElement);
+  }, [thisElement.style]);
 
-        document.addEventListener("click", handleClickOutside);
-        return () => document.removeEventListener("click", handleClickOutside);
-    }, [toolbarRef]);
+  // Sync content changes
+  useEffect(() => {
+    updateContent(element.id, "content", thisElement.content);
+  }, [thisElement]);
 
-    useEffect(() => {
-        if (isEditing) {
-            contextElement.setElement(thisElement);
-        }
-        updateElement(element.id, thisElement);
-    }, [thisElement.style]);
-
-    return (
-        <p
-            id={element.id}
-            ref={elementRef}
-            onBlur={handleBlur}
-            contentEditable={editable}
-            suppressContentEditableWarning={true}
-            style={style}
-            onFocus={activateTheEditing}
-        />
-    );
+  return (
+    <p
+      id={element.id}
+      ref={elementRef}
+      onBlur={handleBlur}
+      contentEditable={editable}
+      suppressContentEditableWarning={true}
+      style={style}
+      onFocus={activateTheEditing}
+    />
+  );
 };
 
 export default Paragraph;

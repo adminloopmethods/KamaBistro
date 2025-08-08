@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, FocusEvent } from "react";
-import { BaseElement } from "@/app/(dashboard)/(editor)/_functionality/createElement";
+import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
 
 type HeadingProps = {
@@ -46,10 +46,14 @@ const Heading: React.FC<HeadingProps> = ({
 
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
     const value = elementRef.current?.innerHTML ?? "";
-    setThisElement((prev) => ({
-      ...prev,
-      content: value.trim(),
-    }));
+    setThisElement((prev: BaseElement) => {
+      console.log(prev)
+      return ({
+        ...prev,
+        content: value.trim(),
+      })
+    });
+
   };
 
   // Remove outline if clicked outside
