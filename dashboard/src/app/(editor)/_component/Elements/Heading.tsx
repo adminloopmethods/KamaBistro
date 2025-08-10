@@ -23,6 +23,8 @@ const Heading: React.FC<HeadingProps> = ({
 }) => {
   const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
+  console.log(element)
+  console.log(thisElement)
   const { contextRef, contextElement, toolbarRef } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
 
@@ -34,6 +36,7 @@ const Heading: React.FC<HeadingProps> = ({
   }, [element.content]);
 
   const activateTheEditing = () => {
+
     setEditing(true);
     contextElement.setElementSetter(() => () => setThisElement);
     contextElement.setElement(thisElement);
@@ -59,21 +62,23 @@ const Heading: React.FC<HeadingProps> = ({
   // Remove outline if clicked outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        toolbarRef.current &&
-        !toolbarRef.current.contains(e.target as Node) &&
-        elementRef.current &&
-        !elementRef.current.contains(e.target as Node)
-      ) {
-        if (elementRef.current) {
-          elementRef.current.style.outline = "none";
-        }
+      if (!elementRef.current) return;
+
+      const clickedToolbar =
+        toolbarRef.current?.contains(e.target as Node) ?? false;
+      const clickedElement =
+        elementRef.current?.contains(e.target as Node) ?? false;
+
+      if (!clickedToolbar && !clickedElement) {
+        elementRef.current.style.outline = "none";
+        setEditing(false);
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [contextRef]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [toolbarRef, elementRef]); // contextRef not needed
+
 
   // Sync style changes
   useEffect(() => {
@@ -88,6 +93,13 @@ const Heading: React.FC<HeadingProps> = ({
     updateContent(element.id, "content", thisElement.content);
   }, [thisElement]);
 
+  useEffect(() => {
+    console.log(
+      "[Heading] element changed:",
+      JSON.stringify(element, null, 2)
+    );
+  }, [element]);
+
   return (
     <h1
       id={element.id}
@@ -97,6 +109,7 @@ const Heading: React.FC<HeadingProps> = ({
       suppressContentEditableWarning={true}
       style={style}
       onFocus={activateTheEditing}
+      onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
     />
   );
 };

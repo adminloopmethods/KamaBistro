@@ -1,12 +1,15 @@
 "use client"
 
+import { StyleObject } from '@/app/(editor)/_functionality/createElement';
 import React, {
   createContext,
   useContext,
   useRef,
   useState,
   ReactNode,
-  MutableRefObject
+  MutableRefObject,
+  ElementType,
+  RefObject
 } from 'react';
 
 type RefType = HTMLElement | null;
@@ -46,6 +49,16 @@ type SubmissionObjectType = {
   setContent: React.Dispatch<React.SetStateAction<any[]>>;
 };
 
+interface ImageStyleToolbarProps {
+  element: ElementType;
+  style?: StyleObject;
+  onStyleChange?: (style: StyleObject) => void; // optional callback if needed
+  setElement: any;
+  currentWidth: string;
+  imageRef: RefObject<HTMLImageElement | null>;
+  onClose: () => void
+}
+
 type MyContextType = {
   contextRef: ContextRefType;
   activeRef: RefType | any;
@@ -59,6 +72,10 @@ type MyContextType = {
   websiteContent: WebsiteContentType;
   SubmissionObject: SubmissionObjectType;
   finalSubmit: FinalSubmitType[];
+  imageContext: ImageStyleToolbarProps | Record<string, any> | null;
+  setImageContext: React.Dispatch<React.SetStateAction<ImageStyleToolbarProps | Record<string, any> | null>>
+  imageEdit: Boolean,
+  setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -71,6 +88,9 @@ function Provider({ children }: { children: ReactNode }) {
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { });
   const [content, setContent] = useState<any[]>([]);
   const [finalSubmit, setFinalSubmit] = useState<FinalSubmitType[]>([]);
+  const [imageContext, setImageContext] = useState<ImageStyleToolbarProps | Record<string, any> | null>(null)
+  const [imageEdit, setImageEdit] = useState<Boolean>(false)
+
 
   const toolbarRef = useRef<HTMLElement | null>(null);
 
@@ -104,6 +124,10 @@ function Provider({ children }: { children: ReactNode }) {
     setContent
   };
 
+  const ImageToolbarContext: ImageStyleToolbarProps | Record<string, any> = {
+
+  }
+
   return (
     <MyFunctionContext.Provider
       value={{
@@ -118,7 +142,11 @@ function Provider({ children }: { children: ReactNode }) {
         toolbarRef,
         websiteContent,
         SubmissionObject,
-        finalSubmit
+        finalSubmit,
+        imageContext,
+        setImageContext,
+        imageEdit,
+        setImageEdit
       }}
     >
       {children}

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useState, ChangeEvent, useRef } from 'react';
 // import { useMyContext } from '../../../Context/ContextApi';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
@@ -9,19 +9,7 @@ import { useMyContext } from '@/Context/EditorContext';
 import { onAlignChange, onBold, onColorChange, onFamilyFontChange, onItalic, onSizeChange, onUnderline } from '../../_functionality/styleObject';
 import CustomSelect from '@/app/_common/CustomSelect';
 
-type Dimension = {
-    width?: string;
-    height?: string;
-    paddingLeft?: string;
-    paddingRight?: string;
-    paddingTop?: string;
-    paddingBottom?: string;
-    marginLeft?: string;
-    marginRight?: string;
-    marginTop?: string;
-    marginBottom?: string;
-    [key: string]: string | undefined;
-};
+type Style = Partial<Record<keyof React.CSSProperties, string | number>>;
 
 const fontFamilyOptions = [
     { label: 'Arial', value: 'Arial, sans-serif' },
@@ -34,19 +22,15 @@ const fontFamilyOptions = [
     { label: 'Monospace', value: 'monospace' }
 ];
 const fontSizeOptions = [
-    { label: '10 px', value: '10px' },
-    { label: '11 px', value: '11px' },
-    { label: '12 px', value: '12px' },
-    { label: '14 px', value: '14px' },
-    { label: '16 px', value: '16px' },
-    { label: '18 px', value: '18px' },
-    { label: '24 px', value: '24px' },
-    { label: '32 px', value: '32px' },
-    { label: '36 px', value: '36px' },
-    { label: '40 px', value: '40px' },
-    { label: '48 px', value: '48px' },
-    { label: '54 px', value: '54px' },
-    { label: '64 px', value: '64px' },
+    10, 11, 12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
+].map(size => ({
+    label: `${size} px`,
+    value: `${size}px`
+}));
+
+const positionOptions = [
+    { label: 'Static', value: 'static' },
+    { label: 'Relative', value: 'relative' },
 ];
 
 const RichTextToolBar: React.FC = () => {
@@ -63,22 +47,40 @@ const RichTextToolBar: React.FC = () => {
     const Setter = elementSetter?.();
     const [isDimensionOpen, setIsDimensionOpen] = useState<boolean>(false);
     const [textColor, setTextColor] = useState<string>('#000000');
-    const [zIndex, setZIndex] = useState<number>(500);
+    const [parentElement, setParentElement] = useState<HTMLElement | null>(null)
 
-    const [dimension, setDimension] = useState<Dimension>({
-        width: element?.style?.[currentWidth]?.width || '',
-        height: element?.style?.[currentWidth]?.height || '',
-        paddingLeft: element?.style?.[currentWidth]?.paddingLeft || '',
-        paddingRight: element?.style?.[currentWidth]?.paddingRight || '',
-        paddingTop: element?.style?.[currentWidth]?.paddingTop || '',
-        paddingBottom: element?.style?.[currentWidth]?.paddingBottom || '',
-        marginLeft: element?.style?.[currentWidth]?.marginLeft || '',
-        marginRight: element?.style?.[currentWidth]?.marginRight || '',
-        marginTop: element?.style?.[currentWidth]?.marginTop || '',
-        marginBottom: element?.style?.[currentWidth]?.marginBottom || '',
-    });
+    useEffect(() => {
+        if (activeRef) {
+            setParentElement(activeRef.parentElement);
+        }
+    }, [activeRef]);
 
-    // const handleClick = () => setZIndex(getNextZIndex());
+    // States for tools
+    const [isBold, setIsBold] = useState(false);
+    const [isItalic, setIsItalic] = useState(false);
+    const [isUnderline, setIsUnderline] = useState(false);
+    const [alignment, setAlignment] = useState<'left' | 'center' | 'right' | 'justify' | ''>('');
+    const [style, setStyle] = useState<Style>(element?.style?.[currentWidth] || {});
+
+    // Sync when element or screen size changes
+    useEffect(() => {
+        const st = element?.style?.[currentWidth] || {};
+        setStyle(st);
+
+        setIsBold(st.fontWeight === 'bold');
+        setIsItalic(st.fontStyle === 'italic');
+        setIsUnderline(st.textDecoration === 'underline');
+        setAlignment((st.textAlign as any) || '');
+        setTextColor((st.color as string) || '#000000');
+    }, [element, currentWidth]);
+
+    useEffect(() => {
+        if (element?.style?.[currentWidth]) {
+            setStyle(element.style[currentWidth]);
+        } else {
+            setStyle({});
+        }
+    }, [element, currentWidth]);
 
     const debouncedColorChange = useCallback(
         debounce((value: string) => {
@@ -115,7 +117,22 @@ const RichTextToolBar: React.FC = () => {
                 }
             }
         }
-        setDimension((prev) => ({ ...prev, [key]: val }));
+        setStyle((prev) => ({ ...prev, [key]: val }));
+    };
+
+    // Position input handler with mutual exclusivity
+    const handlePositionInput = (key: 'top' | 'bottom' | 'left' | 'right', value: string) => {
+        setStyle((prev) => {
+            const newStyle = { ...prev, [key]: value };
+
+            // Mutual exclusivity: clear opposite property if value is entered
+            if (key === 'top' && value) newStyle.bottom = '';
+            if (key === 'bottom' && value) newStyle.top = '';
+            if (key === 'left' && value) newStyle.right = '';
+            if (key === 'right' && value) newStyle.left = '';
+
+            return newStyle;
+        });
     };
 
     useEffect(() => {
@@ -141,15 +158,14 @@ const RichTextToolBar: React.FC = () => {
         if (Setter) {
             Setter((prev: any) => ({
                 ...prev,
-                style: { ...prev.style, [currentWidth]: dimension }
+                style: { ...prev.style, [currentWidth]: style }
             }));
         }
-    }, [dimension]);
+    }, [style]);
 
     return (
         <div
             ref={toolbarRef}
-            // onClick={handleClick}
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[240px] max-w-[20vw] shadow-md transition-all duration-100 ease-in-out flex flex-col gap-4 z-[var(--zIndex)]"
         >
             {/* Remove Button */}
@@ -161,17 +177,21 @@ const RichTextToolBar: React.FC = () => {
                 Remove This Element
             </button>
 
+            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">
+                Style
+            </h3>
+
             {/* Bold, Italic, Underline */}
             <div className="flex gap-2">
-                <button className="tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onBold(element, Setter, currentWidth)}>B</button>
-                <button className="tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onItalic(element, Setter, currentWidth)}>I</button>
-                <button className="tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm" onClick={() => onUnderline(element, Setter, currentWidth)}>U</button>
+                <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && "bg-stone-600 text-white"}`} onClick={() => onBold(element, Setter, currentWidth)}>B</button>
+                <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && "bg-stone-600 text-white"}`} onClick={() => onItalic(element, Setter, currentWidth)}>I</button>
+                <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && "bg-stone-600 text-white"}`} onClick={() => onUnderline(element, Setter, currentWidth)}>U</button>
             </div>
 
             {/* Font & Size */}
             <CustomSelect
                 options={fontFamilyOptions}
-                Default=""
+                Default={style.fontFamily?.toString() || undefined}
                 firstOption="fonts"
                 onChange={(value: string) => { onFamilyFontChange(value, element, Setter, currentWidth); }}
                 disableFirstValue={true}
@@ -180,7 +200,7 @@ const RichTextToolBar: React.FC = () => {
             <CustomSelect
                 options={fontSizeOptions}
                 firstOption="text size"
-                Default=""
+                Default={style.fontSize?.toString() || undefined}
                 onChange={(value: string) => { onSizeChange(value, element, Setter, currentWidth); }}
                 disableFirstValue={true}
             />
@@ -199,24 +219,68 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Align */}
             <div className="flex gap-2">
-                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("left", element, Setter, currentWidth)} title="Align Left"><AlignLeft /></button>
-                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("center", element, Setter, currentWidth)} title="Align Center"><AlignCenter /></button>
-                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("right", element, Setter, currentWidth)} title="Align Right"><AlignRight /></button>
-                <button className="tool-btn border p-1 rounded-md shadow-sm" onClick={() => onAlignChange("justify", element, Setter, currentWidth)} title="Justify"><AlignJustify /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "left" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("left", element, Setter, currentWidth)} title="Align Left"><AlignLeft /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "center" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("center", element, Setter, currentWidth)} title="Align Center"><AlignCenter /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "right" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("right", element, Setter, currentWidth)} title="Align Right"><AlignRight /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "justify" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("justify", element, Setter, currentWidth)} title="Justify"><AlignJustify /></button>
             </div>
 
-            {/* Toggle Dimensions */}
-            <button
-                className="tool-btn w-full flex items-center justify-between border-t pt-2"
-                onClick={() => setIsDimensionOpen(!isDimensionOpen)}
-                title={isDimensionOpen ? 'Hide Dimensions' : 'Show Dimensions'}
-            >
-                Dimensions {isDimensionOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button>
+            {/* Position & Z-Index */}
+            <CustomSelect
+                options={positionOptions}
+                firstOption="position"
+                Default={style.position?.toString() || undefined}
+                onChange={(value: string) => {
+                    setStyle(prev => ({ ...prev, position: value, zIndex: 1 }));
+                }}
+                disableFirstValue={true}
+            />
+            <input
+                type="number"
+                placeholder="z-index"
+                value={style.zIndex?.toString() || ''}
+                onChange={(e) => setStyle(prev => ({ ...prev, zIndex: parseInt(e.target.value) || 0 }))}
+                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full"
+            />
 
-            {/* Dimension Inputs */}
-            <div className={`transition-all duration-300 grid grid-cols-2 gap-2 overflow-hidden ${isDimensionOpen ? 'max-h-[500px] opacity-100 mt-2' : 'max-h-0 opacity-0'
-                }`}>
+            {/* Top/Bottom/Left/Right */}
+            <div className="grid grid-cols-2 gap-2">
+                <input
+                    type="text"
+                    placeholder="top"
+                    value={style.top?.toString() || ''}
+                    onChange={(e) => handlePositionInput('top', e.target.value)}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+                <input
+                    type="text"
+                    placeholder="bottom"
+                    value={style.bottom?.toString() || ''}
+                    onChange={(e) => handlePositionInput('bottom', e.target.value)}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+                <input
+                    type="text"
+                    placeholder="left"
+                    value={style.left?.toString() || ''}
+                    onChange={(e) => handlePositionInput('left', e.target.value)}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+                <input
+                    type="text"
+                    placeholder="right"
+                    value={style.right?.toString() || ''}
+                    onChange={(e) => handlePositionInput('right', e.target.value)}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+            </div>
+
+            {/* Dimensions */}
+            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">
+                Dimensions
+            </h3>
+
+            <div className={`transition-all duration-300 grid grid-cols-2 gap-2 overflow-hidden`}>
                 {[
                     'width', 'height',
                     'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom',
@@ -228,7 +292,7 @@ const RichTextToolBar: React.FC = () => {
                             key={key}
                             type="text"
                             placeholder={key}
-                            value={dimension[key] || ''}
+                            value={style[key as keyof React.CSSProperties] || ''}
                             onChange={(e) => valueChangeOfInputs(e, key, isHeight)}
                             className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full"
                         />

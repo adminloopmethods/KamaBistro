@@ -44,11 +44,13 @@ model User {
 model Webpage {
   id         String    @id
   name       String
+  route      String
   locationId String?
   location   location? @relation(fields: [locationId], references: [id])
 
-  contents Content[]
-  versions version[]
+  contents       Content[]
+  versions       version[]
+  currentVersion String
 
   editorId String?
   editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])

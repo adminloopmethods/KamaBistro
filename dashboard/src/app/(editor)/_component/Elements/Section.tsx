@@ -179,6 +179,7 @@ const Section: React.FC<SectionProps> = ({
               style={Element.style?.[currentWidth]}
               currentWidth={currentWidth}
               rmElement={rmElement}
+              activeScreen={currentWidth}
             />
           );
         })}

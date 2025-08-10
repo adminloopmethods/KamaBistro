@@ -12,8 +12,15 @@ interface Option {
 }
 
 const baseClasses = `dark:bg-stone-100 z-[3] 
-rounded-3xl h-full flex-[1] absolute 
+rounded-[4px] h-full flex-[1] absolute 
 max-w-[340px] w-fit top-[1px] right-0 select-none`;
+
+const styleClasses = `
+  w-full text-left px-3 py-2 
+  rounded-md border border-gray-300 
+  shadow-sm bg-white flex items-center 
+  justify-between focus:outline-none
+`;
 
 const AddElement: React.FC<AddElementProps> = ({ controller }) => {
     const [selectedValue, setSelectedValue] = useState<string>("");
@@ -41,6 +48,7 @@ const AddElement: React.FC<AddElementProps> = ({ controller }) => {
             firstOption="Add Element"
             disableFirstValue={true}
             baseClasses={baseClasses}
+            styleClasses={styleClasses}
         />
     );
 };

@@ -14,7 +14,6 @@ const Heading: React.FC<HeadingProps> = ({
   style,
 }) => {
   const elementRef = useRef<HTMLHeadingElement | null>(null);
-//   const [thisElement, setThisElement] = useState<BaseElement>(element);
 
   // Set innerHTML when content updates
   useEffect(() => {

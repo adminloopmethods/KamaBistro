@@ -12,6 +12,7 @@ import DimensionToolbar from "../_component/common/DimensionToolbar";
 import { usePathname, useRouter } from "next/navigation";
 import { createContentReq, getContentReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
+import ImageStyleToolbar from "../_component/common/ImageToolbar";
 
 const Editor = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -20,7 +21,7 @@ const Editor = () => {
     const navigationArray = nav.split("/")
     const page = navigationArray[2]
     const isPage = navigationArray.length >= 3
-    const [saveData, setUpdateData] = useState(false);
+    const [saveData, setUpdateData] = useState<Boolean>(false);
 
     const {
         width,
@@ -28,8 +29,11 @@ const Editor = () => {
         contextRef,
         currentWidth,
         elementSetter,
-        finalSubmit
+        finalSubmit,
+        imageEdit
     } = useMyContext();
+
+
 
     const sectionStyleSetter = elementSetter ? elementSetter() : () => { };
 
@@ -188,7 +192,9 @@ const Editor = () => {
                             <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
                         </>
                     ) : (
-                        <RichTextToolBar />
+                        imageEdit ?
+                            <ImageStyleToolbar />
+                            : <RichTextToolBar />
                     )
                 }
             </div>

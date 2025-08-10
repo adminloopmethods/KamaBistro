@@ -4,7 +4,7 @@ import { useRef, useEffect, useState, FocusEvent } from "react";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 
-type HeadingProps = {
+type ParagraphProps = {
   element: BaseElement;
   editable?: boolean;
   style?: React.CSSProperties;
@@ -13,7 +13,7 @@ type HeadingProps = {
   rmElement: (id: string) => void;
 };
 
-const Paragraph: React.FC<HeadingProps> = ({
+const Paragraph: React.FC<ParagraphProps> = ({
   element,
   editable = true,
   style,
@@ -21,7 +21,7 @@ const Paragraph: React.FC<HeadingProps> = ({
   updateElement,
   rmElement,
 }) => {
-  const elementRef = useRef<HTMLHeadingElement | null>(null);
+  const elementRef = useRef<HTMLParagraphElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
   const { contextRef, contextElement, toolbarRef } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
@@ -44,7 +44,7 @@ const Paragraph: React.FC<HeadingProps> = ({
     contextRef.setReference(elementRef.current);
   };
 
-  const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
+  const handleBlur = (e: FocusEvent<HTMLParagraphElement>) => {
     const value = elementRef.current?.innerHTML ?? "";
     setThisElement((prev: BaseElement) => ({
       ...prev,
@@ -55,22 +55,22 @@ const Paragraph: React.FC<HeadingProps> = ({
   // Remove outline if clicked outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        toolbarRef.current &&
-        !toolbarRef.current.contains(e.target as Node) &&
-        elementRef.current &&
-        !elementRef.current.contains(e.target as Node)
-      ) {
-        if (elementRef.current) {
-          console.log("qwer")
-          elementRef.current.style.outline = "none";
-        }
+      if (!elementRef.current) return;
+
+      const clickedToolbar =
+        toolbarRef.current?.contains(e.target as Node) ?? false;
+      const clickedElement =
+        elementRef.current?.contains(e.target as Node) ?? false;
+
+      if (!clickedToolbar && !clickedElement) {
+        elementRef.current.style.outline = "none";
+        setEditing(false);
       }
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
-  }, [contextRef]);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [toolbarRef, elementRef]);
 
   // Sync style changes
   useEffect(() => {
@@ -94,6 +94,7 @@ const Paragraph: React.FC<HeadingProps> = ({
       suppressContentEditableWarning={true}
       style={style}
       onFocus={activateTheEditing}
+      onDoubleClick={(e: React.MouseEvent<HTMLParagraphElement>) => e.stopPropagation()}
     />
   );
 };

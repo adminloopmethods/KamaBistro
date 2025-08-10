@@ -1,20 +1,29 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
-// import ImageStyleToolbar from "../../Components/ImageToolbar";
+import ImageStyleToolbar from "../common/ImageToolbar";
+import { useMyContext } from "@/Context/EditorContext";
+
+interface StyleObject {
+  [key: string]: React.CSSProperties;
+}
 
 interface ElementType {
   id: string;
   name: string;
-  content: string;
-  style: Record<string, React.CSSProperties>;
+  content: string; // image src
+  style: StyleObject;
   alt?: string;
 }
 
 interface ImageComponentProps {
   element: ElementType;
   editable?: boolean;
-  updateElement: (element: ElementType) => void;
-  updateContent: (element: ElementType) => void;
-  currentWidth?: string;
+  updateElement: (id: string, updatedElement: ElementType) => void;
+  updateContent: (id: string, property: string, value: any) => void;
+  activeScreen?: string; // like "xl" or "md"
+  style: React.CSSProperties;
+  rmElement: (id: string) => void
 }
 
 const ImageElemComponent: React.FC<ImageComponentProps> = ({
@@ -22,17 +31,29 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   editable = true,
   updateElement,
   updateContent,
-  currentWidth = "xl",
+  activeScreen = "xl",
+  style,
+  rmElement
 }) => {
   const [toolbarIsOpen, setToolbarIsOpen] = useState(false);
-  const [previewSrc, setPreviewSrc] = useState(element?.content || "");
+  const [previewSrc, setPreviewSrc] = useState(element.content || "");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
+  const { setImageContext, setImageEdit, contextRef } = useMyContext();
 
   useEffect(() => {
-    setPreviewSrc(element?.content || "");
-  }, [element?.content]);
+    setPreviewSrc(element.content || "");
+  }, [element.content]);
+
+  const setElement = (newElementOrUpdater: React.SetStateAction<ElementType>) => {
+    if (typeof newElementOrUpdater === "function") {
+      const newElement = (newElementOrUpdater as (prev: ElementType) => ElementType)(element);
+      updateElement(element.id, newElement);
+    } else {
+      updateElement(element.id, newElementOrUpdater);
+    }
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -43,22 +64,46 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       const result = e.target?.result;
       if (typeof result === "string") {
         setPreviewSrc(result);
-        updateContent({ ...element, content: result });
+        updateContent(element.id, "content", result);
       }
     };
     reader.readAsDataURL(file);
   };
 
-  const handleClick = () => {
-    if (clickTimer.current) return;
+  // Click handler for the image to open file input
+  const  handleDoubleClick= (e: React.MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation(); // Stop bubbling to container
+    if (editable) {
+      fileInputRef.current?.click();
+    }
+  };
 
+  // Container click toggles toolbar, but ignore if click came from image
+  const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (imageRef.current && imageRef.current.contains(e.target as Node)) {
+      // Click inside image, ignore toggling toolbar
+      return;
+    }
+
+    setImageContext({
+      element,
+      style: element.style,
+      setElement,
+      currentWidth: activeScreen,
+      imageRef,
+      onClose: () => setToolbarIsOpen(false),
+    });
+    setImageEdit(true);
+
+    if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
-      setToolbarIsOpen(true);
+      setToolbarIsOpen((prev) => !prev);
       clickTimer.current = null;
     }, 250);
   };
 
-  const handleDoubleClick = () => {
+  const handleImageClick = () => {
+    contextRef.setReference(imageRef.current)
     if (clickTimer.current) {
       clearTimeout(clickTimer.current);
       clickTimer.current = null;
@@ -66,10 +111,28 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     setToolbarIsOpen((prev) => !prev);
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (!toolbarIsOpen) return;
+      if (!(e.target instanceof HTMLElement)) return;
+
+      if (
+        imageRef.current?.contains(e.target)
+        // Add toolbarRef?.current?.contains(e.target) check if you have toolbar ref
+      )
+        return;
+
+      setToolbarIsOpen(false);
+    };
+
+    document.addEventListener("click", handleOutsideClick);
+    return () => document.removeEventListener("click", handleOutsideClick);
+  }, [toolbarIsOpen]);
+
   return (
     <div
       style={{ position: "relative", display: "inline-block" }}
-      onClick={handleClick}
+      onClick={handleContainerClick}
       onDoubleClick={handleDoubleClick}
     >
       {editable && (
@@ -83,28 +146,19 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       )}
 
       <img
-        src={previewSrc}
-        alt={element.alt || "Selected"}
+        src={previewSrc || undefined}
+        alt={element.alt || "Selected Image"}
         ref={imageRef}
-        onClick={() => editable && fileInputRef.current?.click()}
+        onClick={handleImageClick} // open file input only on image click
         style={{
           maxWidth: "100%",
           cursor: editable ? "pointer" : "default",
-          ...element?.style?.[currentWidth],
+          ...element.style?.[activeScreen],
         }}
       />
-
-      {/* {toolbarIsOpen && editable && (
-        <ImageStyleToolbar
-          element={element}
-          updateElement={updateElement}
-          currentWidth={currentWidth}
-          imageRef={imageRef}
-          onClose={() => setToolbarIsOpen(false)}
-        />
-      )} */}
     </div>
   );
 };
+
 
 export default ImageElemComponent;
