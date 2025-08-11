@@ -3,9 +3,9 @@ import {
   assert,
   //  assertEvery
 } from "../../errors/assertError.js";
-import { compareEncryptedData, EncryptData } from "../../helper/bcryptManager.js";
-import { generateToken } from "../../helper/jwtManager.js";
-import { sendEmail } from "../../helper/sendEmail.js";
+import {compareEncryptedData, EncryptData} from "../../helper/bcryptManager.js";
+import {generateToken} from "../../helper/jwtManager.js";
+import {sendEmail} from "../../helper/sendEmail.js";
 import {
   findUserByEmail,
   updateUserPassword,
@@ -18,7 +18,6 @@ import {
   deleteLogsByDateRange as repoDeleteLogsByDateRange,
 } from "../../repository/user.repository.js";
 import {generateRandomOTP} from "../../helper/generateOtp.js";
-
 
 // MAIN SERVICE FUNCTIONS
 const login = async (email, password) => {
@@ -205,7 +204,7 @@ const generateOtpAndSendOnEmail = async (user, deviceId, otpOrigin) => {
   // Send otp on email
   const emailPayload = {
     to: user.email,
-    subject: "Shade Corporation: OTP for password reset request",
+    subject: "Kama Bistro: OTP for password reset request",
     text: `Please use the following OTP to reset your password: ${otp}. This OTP will expire in 5 minutes.`,
     html: `<p>Please use the following OTP to reset your password: <strong>${otp}</strong></p><p>This OTP will expire in 5 minutes.</p>`,
   };
@@ -228,8 +227,24 @@ const generateOtpAndSendOnEmail = async (user, deviceId, otpOrigin) => {
   return otp;
 };
 
-const getAllLogs = async (search, status, pageNum, limitNum, entity, startDate, endDate) => {
-  return await findAllLogs(search, status, pageNum, limitNum, entity, startDate, endDate);
+const getAllLogs = async (
+  search,
+  status,
+  pageNum,
+  limitNum,
+  entity,
+  startDate,
+  endDate
+) => {
+  return await findAllLogs(
+    search,
+    status,
+    pageNum,
+    limitNum,
+    entity,
+    startDate,
+    endDate
+  );
 };
 
 const deleteLogsByDateRange = async (startDate, endDate) => {

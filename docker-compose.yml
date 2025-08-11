@@ -1,7 +1,7 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres-service
+    container_name: ${POSTGRES_HOST}
     # restart: always
     env_file:
       - .env # Dynamically load the correct .env file
@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${DATABASE_URL}
-    container_name: backend-service
+    container_name: kama-backend
     env_file:
       - .env # Dynamically load the correct .env file
     ports:
@@ -38,7 +38,6 @@ services:
       - /app/node_modules # Avoid overwriting node_modules in the container
     environment:
       - CHOKIDAR_USEPOLLING=true # Enables file watching inside Docker
-
 
 networks:
   cms_network:

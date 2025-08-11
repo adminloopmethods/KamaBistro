@@ -18,12 +18,15 @@ const rolesRule = Joi.array()
   .items(Joi.string())
   .messages({"array.includes": "Invalid role ID format"});
 
+const locationRule = Joi.string().optional();
+
 const userSchema = Joi.object({
   name: nameRule,
   email: emailRule,
   password: passwordRule,
   phone: phoneRule,
-  roles: rolesRule,
+  // roles: rolesRule,
+  locationId: locationRule,
 });
 
 const updateUserSchema = Joi.object({

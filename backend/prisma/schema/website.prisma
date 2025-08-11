@@ -1,0 +1,72 @@
+model Webpage {
+  id         String         @id @default(uuid())
+  name       String
+  route      String         @unique
+  locationId String?
+  location   location?      @relation(fields: [locationId], references: [id])
+  contents   Content[]
+  versions   version[]
+  pageRoles  PageUserRole[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([locationId])
+}
+
+model Content {
+  id        String   @id
+  name      String
+  order     Int      @default(0)
+  // For top-level sections
+  webpageId String?
+  webpage   Webpage? @relation(fields: [webpageId], references: [id])
+
+  // For nested sections
+  parentId String?
+  parent   Content?  @relation("SectionChildren", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  children Content[] @relation("SectionChildren")
+  elements Element[]
+  style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
+  styleId  String    @unique
+
+  @@index([webpageId])
+  @@index([parentId])
+}
+
+model Element {
+  id         String  @id
+  name       String
+  content    String
+  order      Int     @default(0)
+  contentId  String
+  contentRef Content @relation(fields: [contentId], references: [id])
+  style      Style   @relation("ElementStyle", fields: [styleId], references: [id])
+  styleId    String  @unique
+
+  @@index([contentId])
+}
+
+model Style {
+  id      String   @id @default(uuid())
+  xl      Json?
+  lg      Json?
+  md      Json?
+  sm      Json?
+  content Content? @relation("ContentStyle")
+  element Element? @relation("ElementStyle")
+}
+
+model version {
+  id        String  @id @default(uuid())
+  version   Json
+  webpageId String
+  webpage   Webpage @relation(fields: [webpageId], references: [id])
+
+  @@index([webpageId])
+}
+
+// Roles (like Editor and Verifier) are assigned per webpage, not globally.
+// A user can be an editor on one page and a verifier on another.
+// A webpage has exactly one editor and one verifier at a time.
+// A user cannot be both the editor and verifier of the same webpage.
+// The concept of Role (like "Editor", "Verifier") still exists but isn't globally assigned to users.

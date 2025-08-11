@@ -1,6 +1,6 @@
-import { verifyToken } from "../helper/jwtManager.js";
-import { assert } from "../errors/assertError.js";
-import { findUserById } from "../repository/user.repository.js";
+import {verifyToken} from "../helper/jwtManager.js";
+import {assert} from "../errors/assertError.js";
+import {findUserById} from "../repository/user.repository.js";
 
 const authenticateUser = async (req, res, next) => {
   try {
@@ -14,9 +14,9 @@ const authenticateUser = async (req, res, next) => {
       "Authorization failed: 'Bearer' token is missing or malformed."
     );
 
-    token = token.split(" ")[1]; 
+    token = token.split(" ")[1];
 
-    const userPayload = verifyToken(token); 
+    const userPayload = verifyToken(token);
 
     assert(userPayload?.id, "UNAUTHORIZED", "Invalid token payload");
     // Find user and validate status
@@ -26,8 +26,8 @@ const authenticateUser = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
-    next(err); 
+    next(err);
   }
 };
 
-export { authenticateUser };
+export {authenticateUser};

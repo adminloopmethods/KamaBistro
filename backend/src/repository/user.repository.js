@@ -1,6 +1,8 @@
+// import {select} from "three/tsl";
 import prismaClient from "../config/dbConfig.js";
-import { EncryptData } from "../helper/bcryptManager.js";
-import { addEmailJob } from "../helper/emailJobQueue.js";
+import {assert} from "../errors/assertError.js";
+import {EncryptData} from "../helper/bcryptManager.js";
+import {addEmailJob} from "../helper/emailJobQueue.js";
 import {
   userAccountCreationPayload,
   userAccountDeactivatedPayload,
@@ -17,10 +19,10 @@ export const createUserHandler = async (
   email,
   password,
   phone,
-  roles
+  locationId
 ) => {
   const existingUser = await prismaClient.user.findUnique({
-    where: { email },
+    where: {email},
   });
 
   if (existingUser) {
@@ -34,26 +36,30 @@ export const createUserHandler = async (
       email,
       password: hashedPassword,
       phone,
-      roles: {
-        create:
-          roles?.map((roleId) => ({
-            role: {
-              connect: { id: roleId },
-            },
-          })) || [],
-      },
+      location: locationId ? {connect: {id: locationId}} : "",
     },
     include: {
-      roles: {
-        include: { role: true },
-      },
+      location: true,
     },
   });
 
   // Use dynamic payload
-  addEmailJob(userAccountCreationPayload({ name, email, password, dashboardUrl }));
+  addEmailJob(
+    userAccountCreationPayload({name, email, password, dashboardUrl})
+  );
 
   return newUser;
+};
+
+// Assign page role to user
+export const assignPageRole = async (userId, webpageId, roleId) => {
+  return prismaClient.pageUserRole.create({
+    data: {
+      user: {connect: {id: userId}},
+      webpage: {connect: {id: webpageId}},
+      role: {connect: {id: roleId}},
+    },
+  });
 };
 
 //Fetch all users
@@ -74,27 +80,14 @@ export const fetchAllUsers = async (
         contains: name,
         mode: "insensitive",
       },
-      email: email ? { contains: email, mode: "insensitive" } : undefined,
-      phone: phone ? { contains: phone } : undefined,
-      ...(status ? { status: status } : {}),
+      email: email ? {contains: email, mode: "insensitive"} : undefined,
+      phone: phone ? {contains: phone} : undefined,
+      ...(status ? {status: status} : {}),
     },
     include: {
-      roles: {
-        include: {
-          role: {
-            // include: {
-            //   permissions: {
-            //     include: {
-            //       permission: true,
-            //     },
-            //   },
-            //   roleType: true,
-            // },
-          },
-        },
-      },
+      location: true,
     },
-    orderBy: { createdAt: "asc" },
+    orderBy: {createdAt: "asc"},
     skip,
     take: limit,
   });
@@ -106,9 +99,9 @@ export const fetchAllUsers = async (
         contains: name,
         mode: "insensitive",
       },
-      email: email ? { contains: email, mode: "insensitive" } : undefined,
-      phone: phone ? { contains: phone } : undefined,
-      ...(status ? { status: status } : {}),
+      email: email ? {contains: email, mode: "insensitive"} : undefined,
+      phone: phone ? {contains: phone} : undefined,
+      ...(status ? {status: status} : {}),
     },
   });
 
@@ -124,7 +117,7 @@ export const fetchAllUsers = async (
 };
 
 // Update User
-export const updateUser = async (id, name, password, phone, roles) => {
+export const updateUser = async (id, name, password, phone, locationId) => {
   const dataToUpdate = {
     name,
     phone,
@@ -132,7 +125,7 @@ export const updateUser = async (id, name, password, phone, roles) => {
       deleteMany: {},
       create:
         roles?.map((roleId) => ({
-          role: { connect: { id: roleId } },
+          role: {connect: {id: roleId}},
         })) || [],
     },
   };
@@ -144,7 +137,7 @@ export const updateUser = async (id, name, password, phone, roles) => {
   }
 
   const updatedUser = await prismaClient.user.update({
-    where: { id },
+    where: {id},
     data: dataToUpdate,
     include: {
       roles: {
@@ -189,7 +182,7 @@ export const updateUser = async (id, name, password, phone, roles) => {
 
 export const getUserDetails = async (id) => {
   const user = await prismaClient.user.findUnique({
-    where: { id },
+    where: {id},
     include: {
       roles: {
         include: {
@@ -227,10 +220,8 @@ export const getUserDetails = async (id) => {
     roles: roleAndPermission,
   };
   delete userWithoutPassword.password;
-  return {result  : userWithoutPassword, msg: "updated through socket"};
+  return {result: userWithoutPassword, msg: "updated through socket"};
 };
-
-
 
 export const updateProfile = async (id, name, phone, image) => {
   const updatedUser = await prismaClient.user.update({
@@ -326,22 +317,23 @@ export const findUserByEmail = async (email) => {
     where: {
       email,
     },
-    include: {
-      roles: {
-        include: {
-          role: {
-            include: {
-              permissions: {
-                include: {
-                  permission: true,
-                },
-              },
-              roleType: true,
-            },
-          },
-        },
-      },
-    },
+    // include: {
+    //   roles: true,
+    //   // {
+    //   //   include: {
+    //   //     role: {
+    //   //       include: {
+    //   //         permissions: {
+    //   //           include: {
+    //   //             permission: true,
+    //   //           },
+    //   //         },
+    //   //         roleType: true,
+    //   //       },
+    //   //     },
+    //   //   },
+    //   // },
+    // },
   });
 
   if (!user) {
@@ -354,77 +346,75 @@ export const findUserByEmail = async (email) => {
   //     role.role.permissions.map((permission) => permission.permission.name)
   //   ) || [];
 
-  const roleAndPermission =
-    user.roles?.map((role) => ({
-      id: role.role.id,
-      role: role.role.name,
-      roleType: role.role.roleType.name,
-      status: role.role.status,
-      permissions: role.role.permissions.map((perm) => perm.permission.name),
-    })) || [];
+  // const roleAndPermission =
+  //   user.roles?.map((role) => ({
+  //     id: role.role.id,
+  //     role: role.role.name,
+  //     // roleType: role.role.roleType.name,
+  //     status: role.role.status,
+  //     // permissions: role.role.permissions.map((perm) => perm.permission.name),
+  //   })) || [];
   // const roles = user.roles?.map((role) => role.role.name) || [];
   // const permissions =
   //   user.roles?.flatMap((role) =>
   //     role.role.permissions.map((permission) => permission.permission.name)
   //   ) || [];
 
-  return {
-    ...user,
-    roles: roleAndPermission,
-    // permissions,
-  };
+  return user;
+  // roles: roleAndPermission,
+  // permissions,
 };
 
 export const findUserById = async (id) => {
   const user = await prismaClient.user.findUnique({
-    where: { id },
-    include: {
-      roles: {
-        include: {
-          role: {
-            include: {
-              permissions: {
-                select: {
-                  permission: true,
-                },
-              },
-              roleType: true,
-            },
-          },
-        },
-      },
-      resourceRoles: {
-        where: {
-          status: "ACTIVE",
-        },
-        select: {
-          role: true,
-          userId: true,
-          resource: {
-            select: {
-              titleEn: true,
-              resourceType: true,
-              resourceTag: true,
-            },
-          },
-        },
-      },
-      resourceVerifiers: {
-        where: {
-          status: "ACTIVE",
-        },
-        select: {
-          resource: {
-            select: {
-              titleEn: true,
-              resourceType: true,
-            },
-          },
-          userId: true,
-          stage: true,
-        },
-      },
-    },
+    where: {id},
+    // include: {
+    //   roles: {
+    //     include: {
+    //       role: {
+    //         include: {
+    //           permissions: {
+    //             select: {
+    //               permission: true,
+    //             },
+    //           },
+    //           roleType: true,
+    //         },
+    //       },
+    //     },
+    //   },
+    //   resourceRoles: {
+    //     where: {
+    //       status: "ACTIVE",
+    //     },
+    //     select: {
+    //       role: true,
+    //       userId: true,
+    //       resource: {
+    //         select: {
+    //           titleEn: true,
+    //           resourceType: true,
+    //           resourceTag: true,
+    //         },
+    //       },
+    //     },
+    //   },
+    //   resourceVerifiers: {
+    //     where: {
+    //       status: "ACTIVE",
+    //     },
+    //     select: {
+    //       resource: {
+    //         select: {
+    //           titleEn: true,
+    //           resourceType: true,
+    //         },
+    //       },
+    //       userId: true,
+    //       stage: true,
+    //     },
+    //   },
+    // },
   });
 
   return user;
@@ -433,8 +423,8 @@ export const findUserById = async (id) => {
 // Update user password
 export const updateUserPassword = async (userId, newPassword) => {
   return await prismaClient.user.update({
-    where: { id: userId },
-    data: { password: newPassword },
+    where: {id: userId},
+    data: {password: newPassword},
   });
 };
 
@@ -456,30 +446,30 @@ export const createOrUpdateOTP = async (
         otpOrigin,
       },
     },
-    create: { userId, deviceId, otpOrigin, otpCode, expiresAt },
-    update: { otpCode, expiresAt, isUsed: false },
+    create: {userId, deviceId, otpOrigin, otpCode, expiresAt},
+    update: {otpCode, expiresAt, isUsed: false},
   });
 };
 
 // find existing otp
 export const findOTP = async (userId, deviceId, otpOrigin) => {
   return await prismaClient.otp.findFirst({
-    where: { userId, deviceId, otpOrigin },
+    where: {userId, deviceId, otpOrigin},
   });
 };
 
 // mark otp as used
 export const markOTPUsed = async (otpId) => {
   return await prismaClient.otp.update({
-    where: { id: otpId },
-    data: { isUsed: true },
+    where: {id: otpId},
+    data: {isUsed: true},
   });
 };
 
 // delete otp
 export const deleteOTP = async (otpId) => {
   return await prismaClient.otp.delete({
-    where: { id: otpId },
+    where: {id: otpId},
   });
 };
 
@@ -488,7 +478,7 @@ export const deleteOTP = async (otpId) => {
 // Find OTP attempts
 export const findOtpAttempts = async (userId) => {
   return await prismaClient.rateLimit.findFirst({
-    where: { userId },
+    where: {userId},
   });
 };
 
@@ -497,9 +487,9 @@ export const createOrUpdateOtpAttempts = async (userId) => {
   const now = new Date();
 
   return await prismaClient.rateLimit.upsert({
-    where: { userId },
+    where: {userId},
     update: {
-      attempts: { increment: 1 },
+      attempts: {increment: 1},
       lastAttempt: now,
     },
     create: {
@@ -515,8 +505,8 @@ export const createOrUpdateOtpAttempts = async (userId) => {
 // Block a user temporarily
 export const blockUser = async (userId, blockUntil) => {
   return await prismaClient.rateLimit.update({
-    where: { userId },
-    data: { blockUntil },
+    where: {userId},
+    data: {blockUntil},
   });
 };
 
@@ -524,8 +514,8 @@ export const blockUser = async (userId, blockUntil) => {
 export const resetOtpAttempts = async () => {
   const now = new Date();
   await prismaClient.rateLimit.updateMany({
-    where: { blockUntil: { lte: now } },
-    data: { attempts: 0, failures: 0, blockUntil: null },
+    where: {blockUntil: {lte: now}},
+    data: {attempts: 0, failures: 0, blockUntil: null},
   });
 };
 
@@ -565,7 +555,7 @@ export const resetUserOtpAttempts = async () => {
 export const userActivation = async (id) => {
   // Fetch user first to check current status
   const userBefore = await prismaClient.user.findUnique({
-    where: { id },
+    where: {id},
   });
 
   if (!userBefore) return null;
@@ -585,7 +575,13 @@ export const userActivation = async (id) => {
   });
 
   // Send activation email
-  addEmailJob(userAccountActivatedPayload({ name: user.name, email: user.email, dashboardUrl }));
+  addEmailJob(
+    userAccountActivatedPayload({
+      name: user.name,
+      email: user.email,
+      dashboardUrl,
+    })
+  );
 
   return user;
 };
@@ -593,7 +589,7 @@ export const userActivation = async (id) => {
 export const userDeactivation = async (id) => {
   // Fetch user first to check current status
   const userBefore = await prismaClient.user.findUnique({
-    where: { id },
+    where: {id},
   });
 
   if (!userBefore) return null;
@@ -613,14 +609,20 @@ export const userDeactivation = async (id) => {
   });
 
   // Send deactivation email
-  addEmailJob(userAccountDeactivatedPayload({ name: user.name, email: user.email, supportEmail }));
+  addEmailJob(
+    userAccountDeactivatedPayload({
+      name: user.name,
+      email: user.email,
+      supportEmail,
+    })
+  );
 
   return user;
 };
 
 export const findRoleTypeByUserId = async (id) => {
   const roleType = await prismaClient.user.findUnique({
-    where: { id },
+    where: {id},
     include: {
       roles: {
         include: {
@@ -652,7 +654,7 @@ export const fetchAllRolesForUser = async () => {
         },
       },
     },
-    orderBy: { created_at: "asc" },
+    orderBy: {created_at: "asc"},
   });
 
   return {
@@ -660,27 +662,35 @@ export const fetchAllRolesForUser = async () => {
   };
 };
 
-export const findAllLogs = async (search, status, pageNum, limitNum, entity, startDate, endDate) => {
+export const findAllLogs = async (
+  search,
+  status,
+  pageNum,
+  limitNum,
+  entity,
+  startDate,
+  endDate
+) => {
   const skip = (pageNum - 1) * limitNum;
 
   // Helper function to create date range that includes the entire end date
   const createDateRange = (start, end) => {
     const startDateTime = new Date(start);
     const endDateTime = new Date(end);
-    
+
     // Set start date to beginning of day (00:00:00.000)
     startDateTime.setHours(0, 0, 0, 0);
-    
+
     // Set end date to end of day (23:59:59.999)
     endDateTime.setHours(23, 59, 59, 999);
-    
-    console.log('Date Range Debug:', {
+
+    console.log("Date Range Debug:", {
       originalStart: start,
       originalEnd: end,
       adjustedStart: startDateTime.toISOString(),
-      adjustedEnd: endDateTime.toISOString()
+      adjustedEnd: endDateTime.toISOString(),
     });
-    
+
     return {
       gte: startDateTime,
       lte: endDateTime,
@@ -693,8 +703,8 @@ export const findAllLogs = async (search, status, pageNum, limitNum, entity, sta
       contains: search,
       mode: "insensitive",
     },
-    ...(status ? { outcome: status } : {}),
-    ...(entity ? { entity } : {}),
+    ...(status ? {outcome: status} : {}),
+    ...(entity ? {entity} : {}),
     ...(startDate && endDate
       ? {
           timestamp: createDateRange(startDate, endDate),
@@ -744,26 +754,27 @@ export const updateProfileImage = async (userId, imageUrl) => {
 };
 
 export const deleteLogsByDateRange = async (startDate, endDate) => {
-  if (!startDate || !endDate) throw new Error('Both startDate and endDate are required');
-  
+  if (!startDate || !endDate)
+    throw new Error("Both startDate and endDate are required");
+
   // Helper function to create date range that includes the entire end date
   const createDateRange = (start, end) => {
     const startDateTime = new Date(start);
     const endDateTime = new Date(end);
-    
+
     // Set start date to beginning of day (00:00:00.000)
     startDateTime.setHours(0, 0, 0, 0);
-    
+
     // Set end date to end of day (23:59:59.999)
     endDateTime.setHours(23, 59, 59, 999);
-    
-    console.log('Delete Date Range Debug:', {
+
+    console.log("Delete Date Range Debug:", {
       originalStart: start,
       originalEnd: end,
       adjustedStart: startDateTime.toISOString(),
-      adjustedEnd: endDateTime.toISOString()
+      adjustedEnd: endDateTime.toISOString(),
     });
-    
+
     return {
       gte: startDateTime,
       lte: endDateTime,

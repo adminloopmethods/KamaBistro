@@ -10,16 +10,19 @@ import {
   updatePasswordSchema,
 } from "../../validation/authSchema.js";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
-import { resendOtpRateLimiter, generateOtpRateLimiter} from "../../helper/rateLimiter.js";
-import { checkPermission } from "../../helper/roleBasedAccess.js";
+import {
+  resendOtpRateLimiter,
+  generateOtpRateLimiter,
+} from "../../helper/rateLimiter.js";
+import {checkPermission} from "../../helper/roleBasedAccess.js";
 
 const router = Router();
 
-const requiredPermissionsLog = ["AUDIT_LOGS_MANAGEMENT"];
+// const requiredPermissionsLog = ["AUDIT_LOGS_MANAGEMENT"];
 
 router.post(
   "/login",
-  validator(loginSchema),
+  // validator(loginSchema),
   tryCatchWrap(AuthController.Login)
 );
 
@@ -83,16 +86,15 @@ router.post(
 router.get(
   "/logs",
   authenticateUser,
-  checkPermission(requiredPermissionsLog),
+  // checkPermission(requiredPermissionsLog),
   tryCatchWrap(AuthController.GetAllLogs)
 );
 
 router.post(
   "/logs/delete",
   authenticateUser,
-  checkPermission(requiredPermissionsLog),
+  // checkPermission(requiredPermissionsLog),
   tryCatchWrap(AuthController.DeleteLogsByDateRange)
 );
 
 export default router;
-
