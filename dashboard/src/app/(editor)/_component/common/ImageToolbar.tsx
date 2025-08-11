@@ -3,6 +3,7 @@
 
 import React, { useState, useRef, ChangeEvent, useEffect } from "react";
 import { useMyContext } from "@/Context/EditorContext";
+import CustomSelect from "@/app/_common/CustomSelect";
 
 type StyleObject = React.CSSProperties;
 
@@ -37,7 +38,7 @@ const ImageStyleToolbar: React.FC = () => {
   const renderInputRow = (
     label: string,
     value: string | number = "",
-    type: "text" | "range" = "text",
+    type: "text" | "range" | "number" = "text",
     handleInput: (value: string) => void,
     min?: string,
     max?: string,
@@ -124,8 +125,8 @@ const ImageStyleToolbar: React.FC = () => {
 
 
 
-  const handlePositionChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value;
+  const handlePositionChange = (value: string) => {
+
     setElement((prev: any) => ({
       ...prev,
       style: {
@@ -133,6 +134,9 @@ const ImageStyleToolbar: React.FC = () => {
         [currentWidth]: {
           ...prev.style?.[currentWidth],
           position: value,
+          top: "20px",
+          left: "20px",
+          zIndex: "1"
         },
       },
     }));
@@ -237,7 +241,7 @@ const ImageStyleToolbar: React.FC = () => {
         "0.1"
       )}
 
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Draggable:</label>
         <select
           className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -245,9 +249,25 @@ const ImageStyleToolbar: React.FC = () => {
           onChange={handlePositionChange}
         >
           <option value="static">No</option>
-          <option value="relative">Yes</option>
+          <option value="relative">Soft Drag</option>
+          <option value="absolute">Hard Drag</option>
         </select>
-      </div>
+      </div> */}
+
+      <CustomSelect
+        options={[
+          { value: "relative", label: "Soft Drag" },
+          { value: "absolute", label: "Hard Drag" }
+        ]}
+        onChange={(value) => handlePositionChange(value)}
+        firstOption="No"
+        firstValue="static"
+      />
+      {renderInputRow("Stack Index:", style?.[currentWidth].zIndex, "number", handleInputStyles("zIndex"))}
+      {renderInputRow("top:", style?.[currentWidth].top, "text", handleInputStyles("top"))}
+      {renderInputRow("left:", style?.[currentWidth].left, "text", handleInputStyles("left"))}
+
+
     </div>
   );
 };

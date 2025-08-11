@@ -161,10 +161,10 @@ const Section: React.FC<SectionProps> = ({
   }, [elements, sectionStyle, currentWidth]);
 
   return (
-    <div className="relative">
+    <div className="relative border border-red-600">
       <section
         ref={sectionRef}
-        style={sectionStyle}
+        style={{...sectionStyle, position: "relative"}}
         onDoubleClick={onEdit}
         onMouseDown={handleMouseDown}
       >
