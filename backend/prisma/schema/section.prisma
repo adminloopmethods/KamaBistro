@@ -1,0 +1,55 @@
+// // Reusable content components
+
+// model SectionType {
+//     id         String    @id @default(cuid())
+//     name       String    @unique
+//     sections   Section[] // One-to-many relationship
+//     created_at DateTime  @default(now())
+//     updated_at DateTime  @updatedAt
+
+//     @@index([name])
+// }
+
+// model Section {
+//     id            String           @id @default(cuid())
+//     title         String           @unique // Component name
+//     sectionTypeId String // Foreign key
+//     sectionType   SectionType      @relation(fields: [sectionTypeId], references: [id]) // Relation
+//     isGlobal      Boolean          @default(false) // Whether section can be reused across resources
+//     versions      SectionVersion[] // Version history
+//     createdAt     DateTime         @default(now())
+//     updatedAt     DateTime         @updatedAt
+
+//     @@index([sectionTypeId]) // For component filtering
+//     @@index([isGlobal]) // For finding reusable components
+// }
+
+// // Versioned section content
+// model SectionVersion {
+//     id                      String                   @id @default(cuid())
+//     icon                    String?
+//     version                 Int
+//     sectionVersionTitle     String?
+//     content                 Json
+//     // Relationships
+//     section                 Section                  @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+//     sectionId               String
+//     resource                Resource                 @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+//     resourceId              String
+//     resourceVersion         ResourceVersion          @relation(fields: [resourceVersionId], references: [id], onDelete: Cascade)
+//     resourceVersionId       String
+//     // Self-referencing relationship (parent-child)
+//     parentVersion           SectionVersion?          @relation("SectionVersionChildren", fields: [parentVersionId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+//     parentVersionId         String?
+//     children                SectionVersion[]         @relation("SectionVersionChildren")
+//     items                   SectionVersionItem[]
+//     resourceVersionSections ResourceVersionSection[]
+
+//     // Constraints & indexes
+//     @@unique([sectionId, resourceId, version])
+//     @@index([sectionId, resourceId])
+//     @@index([resourceVersionId])
+//     @@index([sectionId])
+//     @@index([resourceId])
+//     @@index([parentVersionId])
+// }

@@ -1,65 +1,70 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import helmet from "helmet";
+import {createServer} from "http";
+import {createApp, finishApp} from "./app.js";
+import {useModules} from "./config/index.js";
+import {Server} from "socket.io";
+import {
+  removeUserSocket,
+  setUserSocket,
+} from "./helper/socketConnectionID.js";
+import {scheduleCronJobs} from "./helper/cronJobs.js";
+import { getUserDetails } from "./repository/user.repository.js";
 
-// middleware
-import corsOptions from "./config/corsOptions.js";
-import { requestLogger } from "./utils/logger.js";
-import { errorHandler, notFoundHandler } from "./middlewares/errorHandlers.js";
-import { globalRateLimiter } from "./middlewares/rateLimiter.js";
-import { logActivity } from "./utils/logger.js";
+(async () => {
+  const app = createApp();
+  const server = createServer(app);
 
-// routes
-import contentRoutes from "./routes/contentRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import logRoutes from "./routes/logRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
+  // Initialize all modules
+  useModules(app);
 
-dotenv.config();
+  // Call your cron job scheduler
+  scheduleCronJobs();
 
-const app = express();
+  // Add middleware for errors and 404
+  finishApp(app);
 
-// Security and rate limit
-app.use(helmet());
-app.use(globalRateLimiter);
-
-// Logger and JSON parser
-app.use(requestLogger);
-app.use(cors(corsOptions));
-app.use(express.json());
-
-// Routes
-app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
-app.use("/content", contentRoutes);
-app.use("/logs", logRoutes);
-
-// 404 Handler — keep after routes
-app.use(notFoundHandler);
-
-// Error handler — keep after all middleware
-app.use(errorHandler);
-
-// Start the server at the end
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
-
-process.on("uncaughtException", async (err) => {
-  await logActivity({
-    action: "UNCAUGHT_EXCEPTION",
-    message: err.stack || err.message,
-    userId: null,
+  // Initialize Socket.io
+  const io = new Server(server, {
+    cors: {
+      // origin: "http://localhost:3001", 
+      origin: JSON.parse(process.env.CORS_ORIGIN),// your frontend URL
+      credentials: true, // allow credentials
+    },
   });
-  process.exit(1);
-});
 
-process.on("unhandledRejection", async (reason) => {
-  await logActivity({
-    action: "UNHANDLED_REJECTION",
-    message: reason?.stack || reason?.message || JSON.stringify(reason),
-    userId: null,
+  // Function to send notifications in real-time
+  app.locals.io = io;
+
+  io.on("connection",  (socket) => {
+    console.log("User connected: ", socket.id);
+
+    socket.on("join", async (userId) => {
+      socket.join(userId);
+      console.log(`User ${userId} joined room`);
+      socket.userId = userId;
+      setUserSocket(userId, socket.id);
+      try{
+        const user = await getUserDetails(userId);
+        if (user) {
+          socket.emit("userUpdated",user);
+        }
+      }
+      catch(e){
+        console.error("Error fetching user details for socket connect:", err);
+      }
+
+
+    });
+
+    socket.on("disconnect", () => {
+      console.log("User disconnected: ", socket.id);
+      removeUserSocket(socket.userId);
+    });
   });
-});
+
+  server.listen(process.env.BACKEND_PORT, async () => {
+    console.log(
+      `Server running in ${process.env.MODE} mode on port ${process.env.BACKEND_PORT}`
+    );
+    await import("./config/dbConfig.js"); // Ensure DB connection is logged
+  });
+})();

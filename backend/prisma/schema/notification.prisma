@@ -1,0 +1,10 @@
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String? // Can be null for role-based notifications
+  role      String // ADMIN, EDITOR, PUBLISHER, etc.
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId]) // Add an index for better performance
+}

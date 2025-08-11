@@ -1,0 +1,7 @@
+{
+    "watch": ["src", "new_folder"],
+    "ext": "js,json",
+    "ignore": ["node_modules", "logs"],
+    "legacyWatch": true
+  }
+  

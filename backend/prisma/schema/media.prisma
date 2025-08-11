@@ -1,0 +1,15 @@
+model Media {
+  id         String    @id @default(uuid())
+  url        String
+  publicId   String
+  type       MediaType
+  width      Int?
+  height     Int?
+  altText    Json? // { en: "Alt text", ar: "نص بديل" }
+  createdAt  DateTime  @default(now())
+  // Relation
+  // resource   Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  resourceId String
+
+  @@index([resourceId])
+}

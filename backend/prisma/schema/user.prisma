@@ -1,0 +1,58 @@
+// // Represents a user in the system
+
+// model User {
+//   id           String         @id @default(cuid())
+//   name         String
+//   image        String         @default("")
+//   email        String         @unique
+//   password     String
+//   isSuperUser  Boolean        @default(false)
+//   status       Status         @default(ACTIVE)
+//   phone        String         @default("")
+//   deleted      Boolean        @default(false)
+//   locationId   String?
+//   location     location?      @relation(fields: [locationId], references: [id])
+//   userPageRole UserPageRole[]
+
+//   // relationship references
+//   // roles                  UserRole[] // is a many-to-many relationship with Role, managed through UserRole
+//   auditLog         UserAuditLog[] // is a many-to-many relationship with Logs, managed through AuditLog
+//   editedWebpages   Webpage[]      @relation("WebpageEditor")
+//   verifiedWebpages Webpage[]      @relation("WebpageVerifier")
+
+//   // Resource relations
+//   // lockedResourceVersions ResourceVersion[] @relation("UserToLockedResourceVersions")
+//   // resourceRoles          ResourceRole[]
+//   // resourceVersionRoles   ResourceVersionRole[]
+//   // resourceVerifiers      ResourceVerifier[]
+//   // resourceVersionVerifiers ResourceVersionVerifier[]
+//   // sentRequests      ResourceVersioningRequest[] @relation("sender")
+//   // approvals         RequestApproval[]           @relation("approver")
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@index([email])
+//   @@index([id])
+//   @@index([locationId])
+// }
+
+model User {
+  id          String         @id @default(cuid())
+  name        String
+  image       String         @default("")
+  email       String         @unique
+  password    String
+  isSuperUser Boolean        @default(false)
+  status      Status         @default(ACTIVE)
+  phone       String         @default("")
+  pageRoles   PageUserRole[]
+  auditLog    UserAuditLog[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  location    location?      @relation(fields: [locationId], references: [id])
+  locationId  String?
+
+  @@index([email])
+  @@index([id])
+}

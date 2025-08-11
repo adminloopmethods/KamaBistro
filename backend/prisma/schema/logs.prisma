@@ -1,0 +1,33 @@
+// Store the action performed by user 
+model AuditLog {
+  id               String     @id @default(uuid())
+  action_performed String
+  actionType       String
+  entity           String
+  entityId         String
+  oldValue         Json? // Stores old value as JSON (optional)
+  newValue         Json? // Stores new value as JSON (optional)
+  ipAddress        String?
+  browserInfo      String?
+  outcome          logOutcome @default(Unknown) // E.g. 'Success' or 'Failure'
+  timestamp        DateTime   @default(now())
+  metadata         Json? // Any additional metadata (optional)
+
+  user UserAuditLog?
+
+  @@index([id])
+}
+
+// Explanation of Fields
+// id: Unique identifier for the log entry.
+// userId: A foreign key that references the user who performed the action. This allows us to link the audit log to a user.
+// actionType: A string describing what action was performed (e.g., CREATE, UPDATE, DELETE, LOGIN).
+// entity: Describes the type of entity being audited (e.g., User, Product).
+// entityId: The ID of the entity being affected. For example, if a User is updated, this field will store the User's ID.
+// oldValue: Stores the old value of the entity before the update (optional, only for actions like UPDATE and DELETE).
+// newValue: Stores the new value of the entity after the update (optional, only for actions like CREATE and UPDATE).
+// ipAddress: Stores the IP address of the user who performed the action.
+// browserInfo: Stores the user agent or browser/device info (optional).
+// outcome: Stores whether the action was successful or not (e.g., Success, Failure).
+// timestamp: The time when the action occurred.
+// metadata: Any additional metadata related to the action (optional).

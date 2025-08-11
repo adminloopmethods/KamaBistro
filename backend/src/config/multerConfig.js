@@ -1,40 +1,51 @@
+// // src/config/multerConfig.js
 // import multer from "multer";
 // import path from "path";
 // import fs from "fs";
+// import {fileURLToPath} from "url";
 
-// // Create uploads folder if not exists
-// const uploadFolder = path.join(process.cwd(), "uploads");
-// if (!fs.existsSync(uploadFolder)) {
-//   fs.mkdirSync(uploadFolder);
+// // ─── Fix for __dirname in ES module ─────────────────────────────────────────────
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// // ────────────────────────────────────────────────────────────────────────────────
+
+// // 1. Define where PDFs should live
+// const uploadDir = path.join(__dirname, "uploads", "pdfs");
+
+// // Make sure the folder exists
+// if (!fs.existsSync(uploadDir)) {
+//   fs.mkdirSync(uploadDir, {recursive: true});
 // }
 
-// // Storage config
-// const storage = multer.diskStorage({
+// // 2. Storage settings: put PDF files into uploadDir, name them <originalName>-<timestamp>.pdf
+// const pdfStorage = multer.diskStorage({
 //   destination: (req, file, cb) => {
-//     cb(null, uploadFolder);
+//     cb(null, uploadDir);
 //   },
 //   filename: (req, file, cb) => {
-//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//     cb(null, uniqueSuffix + path.extname(file.originalname));
+//     const nameWithoutExt = path.parse(file.originalname).name;
+//     const timestamp = Date.now();
+//     cb(null, `${nameWithoutExt}-${timestamp}.pdf`);
 //   },
 // });
 
-// // File filter (optional)
-// const fileFilter = (req, file, cb) => {
-//   // Accept only images as an example
-//   const allowed = ["image/jpeg", "image/png", "image/gif"];
-//   if (allowed.includes(file.mimetype)) {
+// // 3. Only allow “application/pdf”
+// const pdfFileFilter = (req, file, cb) => {
+//   if (file.mimetype === "application/pdf") {
 //     cb(null, true);
 //   } else {
-//     cb(new Error("Only JPEG, PNG, and GIF files are allowed"), false);
+//     cb(new Error("Only PDF files are allowed as referenceDoc"), false);
 //   }
 // };
 
-// export const upload = multer({
-//   storage,
-//   fileFilter,
-//   limits: { fileSize: 9 * 1024 * 1024 }, // 5MB limit
+// // 4. Export a single Multer instance
+// export const uploadPdf = multer({
+//   storage: pdfStorage,
+//   fileFilter: pdfFileFilter,
+//   limits: {fileSize: 10 * 1024 * 1024}, // 10 MB max
 // });
+
+// src/helper/pdfMover.js
 import fs from "fs";
 import path from "path";
 
