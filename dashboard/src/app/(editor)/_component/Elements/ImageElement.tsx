@@ -42,6 +42,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const { setImageContext, setImageEdit, contextRef } = useMyContext();
   const [thisElement, setThisElement] = useState<ElementType>(element);
+  const [divleft, setDivLeft] = useState<number | string>(0)
+  const [divTop, setDivTop] = useState<number | string>(0)
 
   // For drag
   const dragStartPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -108,13 +110,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      !["relative", "absolute"].includes(
-        thisElement.style?.[activeScreen]?.position ?? ""
-      )
+      thisElement.style?.[activeScreen]?.position !== "relative"
     ) {
       return;
     }
-
 
     e.preventDefault();
     isDragging.current = true;
@@ -150,6 +149,9 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         },
       },
     }));
+
+    setDivTop(() => (Number(divTop) + dy) + "px")
+    setDivLeft(() => (Number(divleft) + dy) + "px")
   };
 
   const handleMouseUp = () => {
@@ -189,7 +191,12 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   return (
     <div
-      style={{ position: thisElement.style?.[activeScreen]?.position, display: "inline-block" }}
+      style={{
+        position: "relative", display: "inline-block",
+        border: "1px solid black",
+        top: thisElement.style?.[activeScreen]?.top,
+        left: thisElement.style?.[activeScreen]?.left,
+      }}
       onClick={handleContainerClick}
       onDoubleClick={handleDoubleClick}
     >
@@ -218,7 +225,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 ? "pointer"
                 : "default",
           ...thisElement.style?.[activeScreen],
-          position: "relative",
+          top:0,
+          left:0
         }}
       />
     </div>

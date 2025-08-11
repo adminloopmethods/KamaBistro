@@ -1,7 +1,6 @@
-
 "use client";
 
-import React, { useState, useRef, ChangeEvent, useEffect } from "react";
+import React, { useRef, ChangeEvent, useEffect } from "react";
 import { useMyContext } from "@/Context/EditorContext";
 import CustomSelect from "@/app/_common/CustomSelect";
 
@@ -76,7 +75,6 @@ const ImageStyleToolbar: React.FC = () => {
         },
       },
     }));
-    console.log("lkjkjqweropuqwe")
   };
 
   const handleInputValue = (name: keyof ElementType) => (value: string) => {
@@ -172,7 +170,7 @@ const ImageStyleToolbar: React.FC = () => {
     <div
       ref={toolbarRef}
       className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[280px] max-w-[22vw] shadow-md transition-all duration-100 ease-in-out flex flex-col gap-4 z-[var(--zIndex)]"
-      style={{}}
+      style={{width: "240px"}}
       onClick={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}
     >
@@ -235,30 +233,18 @@ const ImageStyleToolbar: React.FC = () => {
           style?.[currentWidth]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"
         ),
         "range",
-        (val) => handleFilterChange("brightness")(val), // val is 0–1
+        (val) => handleFilterChange("brightness")(val),
         "0",
         "2",
         "0.1"
       )}
 
-      {/* <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Draggable:</label>
-        <select
-          className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={style.position || "static"}
-          onChange={handlePositionChange}
-        >
-          <option value="static">No</option>
-          <option value="relative">Soft Drag</option>
-          <option value="absolute">Hard Drag</option>
-        </select>
-      </div> */}
-
       <CustomSelect
         options={[
           { value: "relative", label: "Soft Drag" },
-          { value: "absolute", label: "Hard Drag" }
+          // { value: "absolute", label: "Hard Drag" }
         ]}
+        Default={style?.[currentWidth].position}
         onChange={(value) => handlePositionChange(value)}
         firstOption="No"
         firstValue="static"
