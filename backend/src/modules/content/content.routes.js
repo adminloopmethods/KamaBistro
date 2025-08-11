@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import ContentController from "./content.controller.js";
 // import validator from "../../validation/validator.js";
 // import {ContentSchema} from "../../validation/contentSchema.js";
