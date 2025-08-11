@@ -44,15 +44,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const [thisElement, setThisElement] = useState<ElementType>(element)
 
 
-  const setElement = (newElementOrUpdater: React.SetStateAction<ElementType>) => {
-    if (typeof newElementOrUpdater === "function") {
-      const newElement = (newElementOrUpdater as (prev: ElementType) => ElementType)(element);
-      updateElement(element.id, newElement);
-    } else {
-      updateElement(element.id, newElementOrUpdater);
-    }
-  };
-
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -62,7 +53,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       const result = e.target?.result;
       if (typeof result === "string") {
         setPreviewSrc(result);
-        updateContent(element.id, "content", result);
+        // updateContent(element.id, "content", result);
         setThisElement((prev: ElementType): ElementType => {
           return {
             ...prev,
@@ -89,17 +80,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       return;
     }
 
-    console.log(thisElement)
-    setImageContext({
-      element: thisElement,
-      setElement: setThisElement,
-      style: element.style,
-      currentWidth: activeScreen,
-      imageRef,
-      onClose: () => setToolbarIsOpen(false),
-    });
-    setImageEdit(true);
-
     if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
       setToolbarIsOpen((prev) => !prev);
@@ -109,6 +89,16 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   const handleImageClick = () => {
     contextRef.setReference(imageRef.current)
+
+    setImageContext({
+      element: thisElement,
+      setElement: setThisElement,
+      style: thisElement.style,
+      currentWidth: activeScreen,
+      imageRef,
+      onClose: () => setToolbarIsOpen(false),
+    });
+    setImageEdit(true);
     if (clickTimer.current) {
       clearTimeout(clickTimer.current);
       clickTimer.current = null;
@@ -137,15 +127,16 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   useEffect(() => {
     updateContent(element.id, "content", thisElement.content);
     setPreviewSrc(thisElement.content || "");
-    setImageContext({
-      element: thisElement,
-      setElement: setThisElement,
-      style: element.style,
-      currentWidth: activeScreen,
-      imageRef,
-      onClose: () => setToolbarIsOpen(false),
-    });
+
   }, [thisElement.content])
+
+  useEffect(() => {
+    setImageContext((prev) => {
+      return { ...prev, element: thisElement, style: thisElement.style }
+    })
+  }, [thisElement.style])
+
+  console.log(thisElement)
 
   return (
     <div
@@ -171,7 +162,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         style={{
           maxWidth: "100%",
           cursor: editable ? "pointer" : "default",
-          ...element.style?.[activeScreen],
+          ...thisElement.style?.[activeScreen],
         }}
       />
     </div>

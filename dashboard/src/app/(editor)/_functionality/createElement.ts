@@ -1,6 +1,7 @@
 import Heading from "../_component/Elements/Heading";
 import ImageElemComponent from "../_component/Elements/ImageElement";
 import Paragraph from "../_component/Elements/Paragraph";
+import placeHolderImage from "@/assets/placeholderImage.png"
 
 // Define screen sizes for style keys
 // elements.ts
@@ -145,7 +146,7 @@ const gED = generateElementData;
 export const CreateElement: Record<string, () => BaseElement | ImageElementType> = {
   heading: () => gED("h1", "New Heading"),
   paragraph: () => gED("p", "New Paragraph"),
-  image: () => gED("img", "", "Placeholder Image"),
+  image: () => gED("img", placeHolderImage.src, "Placeholder Image"),
   ul: () => gED("ul", "", undefined, ["List item 1", "List item 2"]),
   ol: () => gED("ol", "", undefined, ["First", "Second"]),
   button: () => gED("button", "Click me", "doSomething"),
@@ -160,7 +161,7 @@ export default {
 
 // Component map
 export const mapElement: Record<string, React.ComponentType<any>> = {
-    h1: Heading,
-    p: Paragraph,
-    img: ImageElemComponent,
+  h1: Heading,
+  p: Paragraph,
+  img: ImageElemComponent,
 };

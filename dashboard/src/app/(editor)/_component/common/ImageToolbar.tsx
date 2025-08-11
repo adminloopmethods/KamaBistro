@@ -32,9 +32,7 @@ const ImageStyleToolbar: React.FC = () => {
   if (!imageContext || !("element" in imageContext)) return null;
 
   const { element, style = {}, setElement, currentWidth, onClose } = imageContext;
-  console.log(element)
-  console.log(setElement)
-  console.log(style[currentWidth])
+
   // Unified input row with Tailwind styling
   const renderInputRow = (
     label: string,
@@ -51,8 +49,14 @@ const ImageStyleToolbar: React.FC = () => {
         type={type}
         value={value}
         onChange={(e) => handleInput(e.target.value)}
+        // onBlur={(e) => {
+        //   const val = e.target.value.trim();
+        //   if (val === "") {
+        //     handleInput("auto");
+        //   }
+        // }}
         className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        min={min}
+        min={min || 0}
         max={max}
         step={step}
       />
@@ -60,7 +64,7 @@ const ImageStyleToolbar: React.FC = () => {
   );
 
   const handleInputStyles = (name: keyof StyleObject) => (value: string) => {
-    
+
     setElement((prev: any) => ({
       ...prev,
       style: {
@@ -94,11 +98,14 @@ const ImageStyleToolbar: React.FC = () => {
           .map(([, name, val]: any) => [name, val])
       );
 
-      filters[filterName] = value;
+      let newVal = value;
+      if (filterName === "grayscale") {
+        newVal = `${parseFloat(value) * 100}%`; // keep 0–1 in slider, convert to %
+      } else if (filterName === "brightness") {
+        newVal = value; // keep as-is
+      }
 
-      const newFilter = Object.entries(filters)
-        .map(([name, val]) => `${name}(${val})`)
-        .join(" ");
+      filters[filterName] = newVal;
 
       return {
         ...prev,
@@ -106,12 +113,16 @@ const ImageStyleToolbar: React.FC = () => {
           ...prev.style,
           [currentWidth]: {
             ...prevStyle,
-            filter: newFilter,
+            filter: Object.entries(filters)
+              .map(([name, val]) => `${name}(${val})`)
+              .join(" "),
           },
         },
       };
     });
   };
+
+
 
   const handlePositionChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -157,7 +168,7 @@ const ImageStyleToolbar: React.FC = () => {
     <div
       ref={toolbarRef}
       className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[280px] max-w-[22vw] shadow-md transition-all duration-100 ease-in-out flex flex-col gap-4 z-[var(--zIndex)]"
-      style={{ }}
+      style={{}}
       onClick={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}
     >
@@ -165,13 +176,17 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Alternate text:", element.alt || "", "text", handleInputValue("alt"))}
 
-      {renderInputRow("Width:", style?.[currentWidth].width || "300px", "text", handleInputStyles("width"))}
+      {renderInputRow("Width:", style?.[currentWidth].width, "text", handleInputStyles("width"))}
 
-      {renderInputRow("Height:", style?.[currentWidth].height || "200px", "text", handleInputStyles("height"))}
+      {renderInputRow("Height:", style?.[currentWidth].height, "text", handleInputStyles("height"))}
 
-      {renderInputRow("Margin:", style?.[currentWidth].margin || "0px", "text", handleInputStyles("margin"))}
+      {renderInputRow("Margin Top:", style?.[currentWidth].marginTop, "text", handleInputStyles("marginTop"))}
+      {renderInputRow("Margin Bottom:", style?.[currentWidth].marginBottom, "text", handleInputStyles("marginBottom"))}
+      {renderInputRow("Margin Left:", style?.[currentWidth].marginLeft, "text", handleInputStyles("marginLeft"))}
+      {renderInputRow("Margin Right:", style?.[currentWidth].marginRight, "text", handleInputStyles("marginRight"))}
 
-      {renderInputRow("Radius:", style?.[currentWidth].borderRadius || "0px", "text", handleInputStyles("borderRadius"))}
+
+      {renderInputRow("Radius:", style?.[currentWidth].borderRadius, "text", handleInputStyles("borderRadius"))}
 
       <div className="flex flex-col">
         <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label>
@@ -202,9 +217,9 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow(
         "Grayscale:",
-        parseFloat(style.filter?.match(/grayscale\(([^)]+)\)/)?.[1] || "0"),
+        parseFloat(style?.[currentWidth]?.filter?.match(/grayscale\(([^)]+)\)/)?.[1]?.replace('%', '') || "0") / 100, // normalize
         "range",
-        handleFilterChange("grayscale"),
+        (val) => handleFilterChange("grayscale")(val), // val is 0–1
         "0",
         "1",
         "0.1"
@@ -212,9 +227,11 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow(
         "Brightness:",
-        parseFloat(style.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"),
+        parseFloat(
+          style?.[currentWidth]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"
+        ),
         "range",
-        handleFilterChange("brightness"),
+        (val) => handleFilterChange("brightness")(val), // val is 0–1
         "0",
         "2",
         "0.1"
@@ -228,7 +245,7 @@ const ImageStyleToolbar: React.FC = () => {
           onChange={handlePositionChange}
         >
           <option value="static">No</option>
-          <option value="absolute">Yes</option>
+          <option value="relative">Yes</option>
         </select>
       </div>
     </div>

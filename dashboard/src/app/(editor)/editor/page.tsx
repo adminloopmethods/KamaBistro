@@ -34,7 +34,6 @@ const Editor = () => {
     } = useMyContext();
 
 
-
     const sectionStyleSetter = elementSetter ? elementSetter() : () => { };
 
     const saveAllSection = () => {
