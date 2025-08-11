@@ -41,10 +41,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const imageRef = useRef<HTMLImageElement | null>(null);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const { setImageContext, setImageEdit, contextRef } = useMyContext();
+  const [thisElement, setThisElement] = useState<ElementType>(element)
 
-  useEffect(() => {
-    setPreviewSrc(element.content || "");
-  }, [element.content]);
 
   const setElement = (newElementOrUpdater: React.SetStateAction<ElementType>) => {
     if (typeof newElementOrUpdater === "function") {
@@ -65,13 +63,19 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       if (typeof result === "string") {
         setPreviewSrc(result);
         updateContent(element.id, "content", result);
+        setThisElement((prev: ElementType): ElementType => {
+          return {
+            ...prev,
+            content: result
+          }
+        })
       }
     };
     reader.readAsDataURL(file);
   };
 
   // Click handler for the image to open file input
-  const  handleDoubleClick= (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleDoubleClick = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation(); // Stop bubbling to container
     if (editable) {
       fileInputRef.current?.click();
@@ -85,10 +89,11 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       return;
     }
 
+    console.log(thisElement)
     setImageContext({
-      element,
+      element: thisElement,
+      setElement: setThisElement,
       style: element.style,
-      setElement,
       currentWidth: activeScreen,
       imageRef,
       onClose: () => setToolbarIsOpen(false),
@@ -128,6 +133,19 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [toolbarIsOpen]);
+
+  useEffect(() => {
+    updateContent(element.id, "content", thisElement.content);
+    setPreviewSrc(thisElement.content || "");
+    setImageContext({
+      element: thisElement,
+      setElement: setThisElement,
+      style: element.style,
+      currentWidth: activeScreen,
+      imageRef,
+      onClose: () => setToolbarIsOpen(false),
+    });
+  }, [thisElement.content])
 
   return (
     <div

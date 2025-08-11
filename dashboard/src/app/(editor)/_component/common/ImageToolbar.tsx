@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useRef, ChangeEvent, useEffect } from "react";
@@ -31,7 +32,9 @@ const ImageStyleToolbar: React.FC = () => {
   if (!imageContext || !("element" in imageContext)) return null;
 
   const { element, style = {}, setElement, currentWidth, onClose } = imageContext;
-
+  console.log(element)
+  console.log(setElement)
+  console.log(style[currentWidth])
   // Unified input row with Tailwind styling
   const renderInputRow = (
     label: string,
@@ -57,6 +60,7 @@ const ImageStyleToolbar: React.FC = () => {
   );
 
   const handleInputStyles = (name: keyof StyleObject) => (value: string) => {
+    
     setElement((prev: any) => ({
       ...prev,
       style: {
@@ -67,6 +71,7 @@ const ImageStyleToolbar: React.FC = () => {
         },
       },
     }));
+    console.log("lkjkjqweropuqwe")
   };
 
   const handleInputValue = (name: keyof ElementType) => (value: string) => {
@@ -160,13 +165,13 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Alternate text:", element.alt || "", "text", handleInputValue("alt"))}
 
-      {renderInputRow("Width:", style.width || "300px", "text", handleInputStyles("width"))}
+      {renderInputRow("Width:", style?.[currentWidth].width || "300px", "text", handleInputStyles("width"))}
 
-      {renderInputRow("Height:", style.height || "200px", "text", handleInputStyles("height"))}
+      {renderInputRow("Height:", style?.[currentWidth].height || "200px", "text", handleInputStyles("height"))}
 
-      {renderInputRow("Margin:", style.margin || "0px", "text", handleInputStyles("margin"))}
+      {renderInputRow("Margin:", style?.[currentWidth].margin || "0px", "text", handleInputStyles("margin"))}
 
-      {renderInputRow("Radius:", style.borderRadius || "0px", "text", handleInputStyles("borderRadius"))}
+      {renderInputRow("Radius:", style?.[currentWidth].borderRadius || "0px", "text", handleInputStyles("borderRadius"))}
 
       <div className="flex flex-col">
         <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label>
