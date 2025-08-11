@@ -1,0 +1,94 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* :root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+} */
+
+
+section:hover{
+  user-select: none !important;
+}
+
+input {
+  user-select: none !important;
+}
+
+input:focus {
+  user-select: auto;
+}
+
+.scroll-one::-webkit-scrollbar {
+  width: 8px;
+  background-color: rgb(117, 164, 161);
+}
+
+.scroll-one::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgb(0, 57, 132);
+}
+
+/* Chrome, Safari, Edge */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+/* Firefox */
+input[type="search"]::-moz-search-clear-button {
+  display: none;
+}
+
+/* Internet Explorer (very old versions) — doesn't support type="search" well, but just in case */
+input[type="search"]::-ms-clear {
+  display: none;
+}
+
+.gradient-clipped {
+  background: linear-gradient(135deg, #637fe3 0%, #8556c2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.theme-gradient {
+  background: linear-gradient(135deg, #637fe3 0%, #8556c2 100%);
+}
+
+.animateLeft {
+  animation: animate-left 0.5s ease-in-out forwards;
+}
+
+@keyframes animate-left {
+  from {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
