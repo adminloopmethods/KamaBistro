@@ -128,3 +128,8 @@ model version {
   webpageId String
   webpage   Webpage @relation(fields: [webpageId], references: [id])
 }
+
+model images {
+  id  String @id @default(cuid())
+  url String
+}

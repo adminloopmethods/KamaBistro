@@ -1,10 +1,12 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BACK_ENDPOINT as string;
+const CLOUDINARY_API_POINT = process.env.NEXT_PUBLIC_CLOUDINARY_API as string
 
-console.log(BASE_URL)
 
 const auth = "auth";
 const users = "users";
 const content = "content";
+const media = "media";
+
 
 const endpointMap = {
     login: `${auth}/login`,                 // Auth
@@ -17,6 +19,11 @@ const endpointMap = {
 
     // content
     createContent: `${content}/`,
+
+    // Media
+    uploadMedia: `${media}/upload`,
+    deleteMedia: `${media}/delete`,
+    getMedia: `${media}/getMedia`,
 } as const;
 
 type EndpointKey = keyof typeof endpointMap;
@@ -29,4 +36,5 @@ const endpoint = {
     }
 };
 
+export { CLOUDINARY_API_POINT }
 export default endpoint;
