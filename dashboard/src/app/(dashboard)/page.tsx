@@ -1,9 +1,5 @@
 import Image from "next/image";
 
-export default function Home() {
-  return (
-    <div className="">
-      asdf
-    </div>
-  );
+export default function Dashboard() {
+  return <div className="">Dashboard</div>;
 }

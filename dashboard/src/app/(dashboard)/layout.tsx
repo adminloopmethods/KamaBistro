@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono} from "next/font/google";
 import "../globals.css";
 import Header from "./_Components/layout/Header";
 import Sidebar from "./_Components/layout/Sidebar";
-import { ThemeProvider } from "@/Context/ThemeContext";
-import { Provider } from "@/Context/EditorContext";
+import {ThemeProvider} from "@/Context/ThemeContext";
+import {Provider} from "@/Context/EditorContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,15 +29,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-4 pb-0 theme-gradient min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased p-2 pb-0 theme-gradient min-h-screen`}
       >
         <ThemeProvider>
           <Provider>
-
-            <Header brand="kama" />
-            <div className="flex flex-1 h-[85.65vh]">
+            <Header brand="KAMA" />
+            <div className="flex flex-1 h-[83.9vh]">
               <Sidebar />
-              <div className="flex-1 h-full">{children}</div>
+              <div className="flex-1 m-1 rounded-lg bg-white dark:bg-gray-900 dark:text-white h-full">
+                {children}
+              </div>
             </div>
           </Provider>
         </ThemeProvider>

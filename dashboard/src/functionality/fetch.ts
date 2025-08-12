@@ -10,20 +10,6 @@ interface ApiResponse<T = any> {
     [key: string]: any;
 }
 
-
-export interface UploadMediaResponse {
-    ok: boolean;
-    message?: string;
-    imageUrl?: string;
-    [key: string]: any;
-}
-
-export interface FetchAllImagesQuery {
-    [key: string]: string | number | boolean | undefined;
-}
-
-
-
 // Check if JWT token is expired
 const isTokenExpired = (token: string): boolean => {
     try {
@@ -48,8 +34,8 @@ type HeadersType = Record<string, string>;
 // Core fetch logic
 const makerequest = async (
     uri: string,
-    method: methods = "GET",
-    body?: string | FormData,
+    method: string = "GET",
+    body?: string,
     headers: HeadersType = {},
     cookie: boolean = false,
     timeout: number = 10000
@@ -184,51 +170,4 @@ export async function getContentReq(id: string): Promise<ApiResponse> {
         endpoint.route("createContent") + id,
         "GET",
     );
-}
-
-export async function fetchAllImages(
-    query?: FetchAllImagesQuery
-): Promise<ApiResponse> {
-    if (
-        !query ||
-        typeof query !== "object" ||
-        Object.keys(query).length === 0
-    ) {
-        return await makerequest(endpoint.route("getMedia"), "GET");
-    }
-
-    const params = new URLSearchParams(
-        Object.entries(query).map(([key, value]) => [key, String(value)])
-    ).toString();
-
-    const url = `${endpoint.route("getMedia")}?${params}`;
-
-    return await makerequest(url, "GET");
-}
-
-
-// Upload media file(s)
-export async function uploadMedia(
-    data: FormData
-): Promise<Record<string, any>> {
-    return await makerequest(
-        endpoint.route("uploadMedia"),
-        "POST",
-        data // makerequest accepts FormData without setting Content-Type manually
-    );
-}
-
-// Delete media by ID
-export async function deleteMedia(id: string): Promise<Record<string, any>> {
-    if (typeof id === "string" && id.trim() !== "") {
-        return await makerequest(
-            `${endpoint.route("deleteMedia")}${id}`,
-            "DELETE",
-            id, // body still passed as in your original JS
-            {},
-            true // include cookies
-        );
-    } else {
-        throw new Error("No ID received");
-    }
 }

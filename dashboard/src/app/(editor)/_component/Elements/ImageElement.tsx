@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import ImageStyleToolbar from "../common/ImageToolbar";
 import { useMyContext } from "@/Context/EditorContext";
-import ImageSelector from "../common/ImageSelector";
 
 interface StyleObject {
   [key: string]: React.CSSProperties;
@@ -23,7 +23,7 @@ interface ImageComponentProps {
   updateContent: (id: string, property: string, value: any) => void;
   activeScreen?: string; // like "xl" or "md"
   style: React.CSSProperties;
-  rmElement: (id: string) => void;
+  rmElement: (id: string) => void
 }
 
 const ImageElemComponent: React.FC<ImageComponentProps> = ({
@@ -37,25 +37,41 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 }) => {
   const [toolbarIsOpen, setToolbarIsOpen] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(element.content || "");
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const { setImageContext, setImageEdit, contextRef } = useMyContext();
   const [thisElement, setThisElement] = useState<ElementType>(element);
-  const [divleft, setDivLeft] = useState<number | string>(0);
-  const [divTop, setDivTop] = useState<number | string>(0);
-
-  // New state for ImageSelector modal
-  const [showImageSelector, setShowImageSelector] = useState(false);
+  const [divleft, setDivLeft] = useState<number | string>(0)
+  const [divTop, setDivTop] = useState<number | string>(0)
 
   // For drag
   const dragStartPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const elementStartPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isDragging = useRef(false);
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const result = e.target?.result;
+      if (typeof result === "string") {
+        setPreviewSrc(result);
+        setThisElement((prev: ElementType): ElementType => ({
+          ...prev,
+          content: result
+        }));
+      }
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleDoubleClick = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
     if (editable) {
-      setShowImageSelector(true); // open selector instead of file picker
+      fileInputRef.current?.click();
     }
   };
 
@@ -63,6 +79,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     if (imageRef.current && imageRef.current.contains(e.target as Node)) {
       return;
     }
+
     if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
       setToolbarIsOpen((prev) => !prev);
@@ -72,6 +89,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   const handleImageClick = () => {
     contextRef.setReference(imageRef.current);
+
     setImageContext({
       element: thisElement,
       setElement: setThisElement,
@@ -96,13 +114,18 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     ) {
       return;
     }
+
     e.preventDefault();
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
-    const currentLeft =
-      parseFloat(thisElement.style?.[activeScreen]?.left as string) || 0;
-    const currentTop =
-      parseFloat(thisElement.style?.[activeScreen]?.top as string) || 0;
+
+    const currentLeft = parseFloat(
+      thisElement.style?.[activeScreen]?.left as string
+    ) || 0;
+    const currentTop = parseFloat(
+      thisElement.style?.[activeScreen]?.top as string
+    ) || 0;
+
     elementStartPos.current = { x: currentLeft, y: currentTop };
 
     document.addEventListener("mousemove", handleMouseMove);
@@ -111,8 +134,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current) return;
+
     const dx = e.clientX - dragStartPos.current.x;
     const dy = e.clientY - dragStartPos.current.y;
+
     setThisElement((prev) => ({
       ...prev,
       style: {
@@ -124,8 +149,9 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         },
       },
     }));
-    setDivTop(() => Number(divTop) + dy + "px");
-    setDivLeft(() => Number(divleft) + dx + "px");
+
+    setDivTop(() => (Number(divTop) + dy) + "px")
+    setDivLeft(() => (Number(divleft) + dy) + "px")
   };
 
   const handleMouseUp = () => {
@@ -140,9 +166,12 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     const handleOutsideClick = (e: MouseEvent) => {
       if (!toolbarIsOpen) return;
       if (!(e.target instanceof HTMLElement)) return;
+
       if (imageRef.current?.contains(e.target)) return;
+
       setToolbarIsOpen(false);
     };
+
     document.addEventListener("click", handleOutsideClick);
     return () => document.removeEventListener("click", handleOutsideClick);
   }, [toolbarIsOpen]);
@@ -161,61 +190,46 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   }, [thisElement.style]);
 
   return (
-    <>
-      <div
-        style={{
-          position: "relative",
-          display: "inline-block",
-          border: "1px solid black",
-          top: thisElement.style?.[activeScreen]?.top,
-          left: thisElement.style?.[activeScreen]?.left,
-        }}
-        onClick={handleContainerClick}
-        onDoubleClick={handleDoubleClick}
-      >
-        <img
-          src={previewSrc || undefined}
-          alt={element.alt || "Selected Image"}
-          ref={imageRef}
-          onClick={handleImageClick}
-          onMouseDown={handleMouseDown} // DRAG INITIATOR
-          style={{
-            maxWidth: "100%",
-            cursor:
-              editable &&
-              thisElement.style?.[activeScreen]?.position === "relative"
-                ? "move"
-                : editable
-                ? "pointer"
-                : "default",
-            ...thisElement.style?.[activeScreen],
-            top: 0,
-            left: 0,
-          }}
-        />
-      </div>
-
-      {/* Image Selector Modal */}
-      {showImageSelector && (
-        <ImageSelector
-          onSelectImage={(fileInfo: any, altText: any) => {
-            // fileInfo can be string[] or string — normalize to string
-            const src =
-              typeof fileInfo === "string"
-                ? fileInfo
-                : fileInfo.join("");
-            setThisElement((prev) => ({
-              ...prev,
-              content: `${process.env.NEXT_PUBLIC_CLOUDINARY_API_POINT}/${src}`,
-              alt: altText?.en || prev.alt,
-            }));
-            setShowImageSelector(false);
-          }}
-          onClose={() => setShowImageSelector(false)}
-          type="IMAGE"
+    <div
+      style={{
+        position: "relative", display: "inline-block",
+        border: "1px solid black",
+        top: thisElement.style?.[activeScreen]?.top,
+        left: thisElement.style?.[activeScreen]?.left,
+      }}
+      onClick={handleContainerClick}
+      onDoubleClick={handleDoubleClick}
+    >
+      {editable && (
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          style={{ display: "none" }}
         />
       )}
-    </>
+
+      <img
+        src={previewSrc || undefined}
+        alt={element.alt || "Selected Image"}
+        ref={imageRef}
+        onClick={handleImageClick}
+        onMouseDown={handleMouseDown} // DRAG INITIATOR
+        style={{
+          maxWidth: "100%",
+          cursor:
+            editable && thisElement.style?.[activeScreen]?.position === "relative"
+              ? "move"
+              : editable
+                ? "pointer"
+                : "default",
+          ...thisElement.style?.[activeScreen],
+          top:0,
+          left:0
+        }}
+      />
+    </div>
   );
 };
 
