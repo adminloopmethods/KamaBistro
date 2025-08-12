@@ -1,0 +1,122 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# next.js
+.next/
+out/
+/DOC
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+.env
+.env.* 
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs
+logs/
+*.log
+
+# OS-specific files
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Build output
+/dist/
+/.next/
+/out/
+
+# Temporary files
+*.tmp
+*.cache/
+
+# Docker
+*.pid
+*.sock
+
+# Prisma
+/prisma/migrations/
+
+# Docker volumes
+postgres-data/
+
+# Node.js related files
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+
+# Build directories
+/dist
+/build
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Docker files
+docker-compose.override.yml
+docker-compose.local.yml
+
+# .env files (if you don't want to include sensitive environment files in the container)
+.env
+.env.* 
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Temporary files
+*.swp
+*.swo
+
+# Cache files
+.cache/
+tmp/
+
+# Dependencies folder inside frontend
+website/node_modules/
+dashboard/node_modules/
+
+# Exclude files/folders that should not be copied from the whole project
+shade-co/
+
+
+
+node_modules
+*.log
+tmp
+*.lock
+.env
+env
+env.* 
+
+
