@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, ChangeEvent, MouseEvent } from "react";
 import { Upload, X } from "lucide-react";
 // import { deleteMedia, fetchAllImages } from "../../app/fetch";
 
-import { CLOUDINARY_API_POINT } from "@/utils/endpoints";
+import { cloudinaryApiPoint } from "@/utils/endpoints";
 // import { toast } from "react-toastify";
 import { Toaster, toast } from "sonner";
 import Popups from "@/app/_common/PopUps";
@@ -253,7 +253,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                             ) : (
                                 images.map((imgObj, idx) => {
                                     const even = idx % 2 === 0;
-                                    const imgSrc = `${CLOUDINARY_API_POINT}/${imgObj.publicId}`;
+                                    const imgSrc = `${cloudinaryApiPoint}/${imgObj.publicId}`;
                                     return (
                                         <div
                                             key={idx}
