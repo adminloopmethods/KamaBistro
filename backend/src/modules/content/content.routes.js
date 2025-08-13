@@ -10,11 +10,10 @@ import { createWebpage, getAllWebpages, getWebpageById, updateWebpageById } from
 
 const router = Router();
 
-
 router.get("/", tryCatchWrap(getAllWebpages))
 router.get("/:id", tryCatchWrap(getWebpageById));
-router.post("/", auditLogger, tryCatchWrap(createWebpage));
-router.put("/:id", auditLogger, tryCatchWrap(updateWebpageById));
+router.post("/",  tryCatchWrap(createWebpage));
+router.put("/:id", tryCatchWrap(updateWebpageById));
 
 // router.post(
 //   "/addResource",

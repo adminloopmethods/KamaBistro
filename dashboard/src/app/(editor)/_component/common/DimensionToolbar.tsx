@@ -69,7 +69,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
     return (
         <div
             // onClick={handleClick}
-            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -83,14 +83,14 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Padding (px)</h4>
                 <div className='grid grid-cols-2 gap-x-2'>
-                    {(['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'] as (keyof StylesState)[]).map((key) =>
+                    {(['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'] as (keyof StylesState)[]).map((key) =>
                         renderInput(key.replace('padding', ''), key, 'number', 'px')
                     )}
                 </div>
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Margin (px)</h4>
                 <div className='grid grid-cols-2 gap-x-2'>
-                    {(['marginTop', 'marginRight', 'marginBottom', 'marginLeft'] as (keyof StylesState)[]).map((key) =>
+                    {(['marginTop', 'marginBottom', 'marginLeft', 'marginRight'] as (keyof StylesState)[]).map((key) =>
                         renderInput(key.replace('margin', ''), key, 'number', 'px')
                     )}
                 </div>

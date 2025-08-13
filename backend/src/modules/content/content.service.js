@@ -1,7 +1,7 @@
 import prismaClient from "../../config/dbConfig.js";
 import crypto from "node:crypto";
 
-export const createWebpageService = async ({ name, content }) => {
+export const createWebpageService = async ({ name, content, route }) => {
   const id = crypto.randomUUID();
 
   const webpage = await prismaClient.webpage.create({
@@ -41,6 +41,7 @@ export const createWebpageService = async ({ name, content }) => {
           },
         })),
       },
+      route: route
     },
     include: {
       contents: {

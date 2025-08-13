@@ -88,12 +88,13 @@ const Editor = () => {
             const bodyPayload: Record<string, any> = {
                 name: "website-1",
                 content: websiteContent.content,
+                route: "/"
             };
 
 
-            if (saveData) {
-                bodyPayload.id = websiteContent;
-            }
+            // if (saveData) {
+            //     bodyPayload.id = websiteContent;
+            // }
 
             try {
                 const response = await toastWithUpdate(() => isPage ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {

@@ -97,28 +97,28 @@ function resolveAction(req, method, entity) {
 
 // --- Entity Audit Value Handlers ---
 async function getResourceAssignments(resourceId) {
-  const resource = await prismaClient.resource.findUnique({
-    where: { id: resourceId },
-    select: {
-      titleEn: true,
-      liveVersion: { select: { versionNumber: true } },
-      newVersionEditMode: { select: { versionNumber: true } },
-      roles: {
-        select: {
-          role: true,
-          status: true,
-          user: { select: { name: true } },
-        },
-      },
-      verifiers: {
-        select: {
-          stage: true,
-          status: true,
-          user: { select: { name: true } },
-        },
-      },
-    },
-  });
+  // const resource = await prismaClient.webpages.findUnique({
+  //   where: { id: resourceId },
+  //   select: {
+  //     titleEn: true,
+  //     liveVersion: { select: { versionNumber: true } },
+  //     newVersionEditMode: { select: { versionNumber: true } },
+  //     roles: {
+  //       select: {
+  //         role: true,
+  //         status: true,
+  //         user: { select: { name: true } },
+  //       },
+  //     },
+  //     verifiers: {
+  //       select: {
+  //         stage: true,
+  //         status: true,
+  //         user: { select: { name: true } },
+  //       },
+  //     },
+  //   },
+  // });
   if (!resource) {
     return {
       resource: null,
@@ -157,18 +157,18 @@ async function getResourceAssignments(resourceId) {
 
 const entityAuditHandlers = {
   role: async (id) => {
-    const roleRecord = await prismaClient.role.findUnique({
-      where: { id },
-      include: {
-        permissions: {
-          include: {
-            permission: {
-              select: { name: true },
-            },
-          },
-        },
-      },
-    });
+    // const roleRecord = await prismaClient.role.findUnique({
+    //   where: { id },
+    //   include: {
+    //     permissions: {
+    //       include: {
+    //         permission: {
+    //           select: { name: true },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
     if (!roleRecord) return null;
     return {
       name: roleRecord.name,
@@ -177,27 +177,27 @@ const entityAuditHandlers = {
     };
   },
   user: async (id) => {
-    const userRecord = await prismaClient.user.findUnique({
-      where: { id },
-      include: {
-        roles: {
-          include: {
-            role: {
-              include: {
-                permissions: {
-                  include: {
-                    permission: {
-                      select: { name: true },
-                    },
-                  },
-                },
-                roleType: true,
-              },
-            },
-          },
-        },
-      },
-    });
+    // const userRecord = await prismaClient.user.findUnique({
+    //   where: { id },
+    //   include: {
+    //     roles: {
+    //       include: {
+    //         role: {
+    //           include: {
+    //             permissions: {
+    //               include: {
+    //                 permission: {
+    //                   select: { name: true },
+    //                 },
+    //               },
+    //             },
+    //             roleType: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //   },
+    // });
     if (!userRecord) return null;
     return {
       name: userRecord.name,
@@ -222,15 +222,15 @@ async function getApprovalAuditValue({
   statusFilter,
 }) {
   if (!requestId || !userId) return null;
-  const request = await prismaClient.resourceVersioningRequest.findUnique({
-    where: { id: requestId },
-    select: {
-      approvals: true,
-      resourceVersion: { include: { resource: true } },
-      sender: true,
-    },
-  });
-  if (!request || !Array.isArray(request.approvals)) return null;
+  // const request = await prismaClient.resourceVersioningRequest.findUnique({
+  //   where: { id: requestId },
+  //   select: {
+  //     approvals: true,
+  //     resourceVersion: { include: { resource: true } },
+  //     sender: true,
+  //   },
+  // });
+  // if (!request || !Array.isArray(request.approvals)) return null;
   let approval;
   if (statusFilter) {
     approval = request.approvals.find(
@@ -298,9 +298,9 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
   let { actionType, action_performed } = resolveAction(req, method, entity);
 
   // Handler for fetching audit values
-  const fetchAuditValue =
-    entityAuditHandlers[entity] ||
-    (async (id) => await prismaClient[entity]?.findUnique({ where: { id } }));
+  // const fetchAuditValue =
+  //   entityAuditHandlers[entity] ||
+  //   (async (id) => await prismaClient[entity]?.findUnique({ where: { id } }));
 
   // Special DRAFT (updateContent), DIRECT PUBLISH (directPublishContent), REQUEST GENERATED (generateRequest), REJECT, APPROVE, SCHEDULE cases
   if (
@@ -379,39 +379,39 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         approvalAudit.role === "PUBLISHER"
       ) {
         // Fetch the request to check type
-        const request = await prismaClient.resourceVersioningRequest.findUnique(
-          {
-            where: { id: requestId },
-            select: {
-              type: true,
-              resourceVersion: { select: { id: true, resourceId: true } },
-            },
-          }
-        );
-        if (request && request.type === "PUBLICATION") {
-          isPublisherPublication = true;
-          // Fetch the resource to get the liveVersionId BEFORE publishing/scheduling
-          const resourceBefore = await prismaClient.resource.findUnique({
-            where: { id: request.resourceVersion.resourceId },
-            select: { liveVersionId: true },
-          });
-          let oldLiveContent = null;
-          if (resourceBefore?.liveVersionId) {
-            const oldLiveVersion = await fetchVersionContent(
-              resourceBefore.liveVersionId
-            );
-            oldLiveContent = oldLiveVersion?.versionData || null;
-          }
-          const scheduledOrPublishedContent = await fetchVersionContent(
-            request.resourceVersion.id
-          );
-          versionContentObj = {
-            versionContent: {
-              old: oldLiveContent,
-              new: scheduledOrPublishedContent?.versionData || null,
-            },
-          };
-        }
+        // const request = await prismaClient.resourceVersioningRequest.findUnique(
+        //   {
+        //     where: { id: requestId },
+        //     select: {
+        //       type: true,
+        //       resourceVersion: { select: { id: true, resourceId: true } },
+        //     },
+        //   }
+        // );
+        // if (request && request.type === "PUBLICATION") {
+        //   isPublisherPublication = true;
+        //   // Fetch the resource to get the liveVersionId BEFORE publishing/scheduling
+        //   const resourceBefore = await prismaClient.resource.findUnique({
+        //     where: { id: request.resourceVersion.resourceId },
+        //     select: { liveVersionId: true },
+        //   });
+        //   let oldLiveContent = null;
+        //   if (resourceBefore?.liveVersionId) {
+        //     const oldLiveVersion = await fetchVersionContent(
+        //       resourceBefore.liveVersionId
+        //     );
+        //     oldLiveContent = oldLiveVersion?.versionData || null;
+        //   }
+        //   const scheduledOrPublishedContent = await fetchVersionContent(
+        //     request.resourceVersion.id
+        //   );
+        //   versionContentObj = {
+        //     versionContent: {
+        //       old: oldLiveContent,
+        //       new: scheduledOrPublishedContent?.versionData || null,
+        //     },
+        //   };
+        // }
       }
       if (isPublisherPublication) {
         oldValue = { ...approvalAudit, ...(versionContentObj || {}) };
@@ -484,39 +484,39 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         approvalAudit.role === "PUBLISHER"
       ) {
         // Fetch the request to check type
-        const request = await prismaClient.resourceVersioningRequest.findUnique(
-          {
-            where: { id: requestId },
-            select: {
-              type: true,
-              resourceVersion: { select: { id: true, resourceId: true } },
-            },
-          }
-        );
-        if (request && request.type === "PUBLICATION") {
-          isPublisherPublication = true;
-          // Fetch the resource to get the liveVersionId BEFORE publishing/scheduling
-          const resourceBefore = await prismaClient.resource.findUnique({
-            where: { id: request.resourceVersion.resourceId },
-            select: { liveVersionId: true },
-          });
-          let oldLiveContent = null;
-          if (resourceBefore?.liveVersionId) {
-            const oldLiveVersion = await fetchVersionContent(
-              resourceBefore.liveVersionId
-            );
-            oldLiveContent = oldLiveVersion?.versionData || null;
-          }
-          const scheduledOrPublishedContent = await fetchVersionContent(
-            request.resourceVersion.id
-          );
-          versionContentObj = {
-            versionContent: {
-              old: oldLiveContent,
-              new: scheduledOrPublishedContent?.versionData || null,
-            },
-          };
-        }
+        // const request = await prismaClient.resourceVersioningRequest.findUnique(
+        //   {
+        //     where: { id: requestId },
+        //     select: {
+        //       type: true,
+        //       resourceVersion: { select: { id: true, resourceId: true } },
+        //     },
+        //   }
+        // );
+        // if (request && request.type === "PUBLICATION") {
+        //   isPublisherPublication = true;
+        //   // Fetch the resource to get the liveVersionId BEFORE publishing/scheduling
+        //   const resourceBefore = await prismaClient.resource.findUnique({
+        //     where: { id: request.resourceVersion.resourceId },
+        //     select: { liveVersionId: true },
+        //   });
+        //   let oldLiveContent = null;
+        //   if (resourceBefore?.liveVersionId) {
+        //     const oldLiveVersion = await fetchVersionContent(
+        //       resourceBefore.liveVersionId
+        //     );
+        //     oldLiveContent = oldLiveVersion?.versionData || null;
+        //   }
+        //   const scheduledOrPublishedContent = await fetchVersionContent(
+        //     request.resourceVersion.id
+        //   );
+        //   versionContentObj = {
+        //     versionContent: {
+        //       old: oldLiveContent,
+        //       new: scheduledOrPublishedContent?.versionData || null,
+        //     },
+        //   };
+        // }
       }
       if (isPublisherPublication) {
         newValue = { ...approvalAudit, ...(versionContentObj || {}) };

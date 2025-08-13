@@ -416,7 +416,7 @@ export const findUserById = async (id) => {
     //   },
     // },
   });
-
+  console.log(user)
   return user;
 };
 

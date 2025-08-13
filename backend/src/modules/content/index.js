@@ -4,7 +4,7 @@ import { authenticateUser } from "../../helper/authMiddleware.js";
 
 
 const router = Router();
-router.use("/content", authenticateUser, ContentRoutes);
+router.use("/content", ContentRoutes);
 
 export default {
   init: (app) => app.use(router),
