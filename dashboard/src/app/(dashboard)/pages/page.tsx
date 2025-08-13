@@ -246,7 +246,7 @@ const CMSDashboard = () => {
             key={page.id}
             className="bg-white dark:bg-gray-800 rounded-2xl shadow border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300 hover:shadow-xl"
           >
-            <div className="p-6">
+            <div className="p-6 ">
               <div className="flex justify-between items-start">
                 <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-xl">
                   {page.icon}
@@ -305,7 +305,7 @@ const CMSDashboard = () => {
                         </span>
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-500 dark:text-gray-400 italic">
+                      <div className="text-sm py-2 text-gray-500 dark:text-gray-400 italic">
                         No editor assigned
                       </div>
                     )}
@@ -347,7 +347,7 @@ const CMSDashboard = () => {
                         </span>
                       </div>
                     ) : (
-                      <div className="text-sm text-gray-500 dark:text-gray-400 italic">
+                      <div className="text-sm py-2 text-gray-500 dark:text-gray-400 italic">
                         No verifier assigned
                       </div>
                     )}
@@ -355,7 +355,7 @@ const CMSDashboard = () => {
                 </div>
               </div>
 
-              <div className="mt-6 flex space-x-3">
+              <div className=" flex space-x-3">
                 <button className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-xl flex items-center justify-center">
                   <Edit className="w-5 h-5 mr-2" />
                   Edit Content
