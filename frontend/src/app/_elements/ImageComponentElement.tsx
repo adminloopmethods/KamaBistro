@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import image from "@/assets/placeholderImage.png"
 
 interface ElementType {
     id: string;
@@ -39,7 +40,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             style={{ position: "relative", display: "inline-block" }}
         >
             <img
-                src={normalizeImagePath(element.content)}
+                src={
+                    // normalizeImagePath(element.content)
+                    image.src
+                }
                 alt={element.alt || "Selected"}
                 ref={imageRef}
                 style={{

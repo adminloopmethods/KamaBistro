@@ -39,6 +39,7 @@ const Section: React.FC<SectionProps> = ({
   lastSection,
   section,
 }) => {
+  console.log("console.from.section")
   const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
@@ -88,7 +89,7 @@ const Section: React.FC<SectionProps> = ({
 
   const onEdit = () => {
     onEditing();
-    contextElement.setElementSetter(() => () => setSectionStyle);
+    contextElement.setElementSetter(() => setSectionStyle);
     contextElement.setElement(sectionStyle)
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
@@ -159,7 +160,7 @@ const Section: React.FC<SectionProps> = ({
       const removedSame = prev.filter((e) => e.id !== section.id);
       return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
     });
-    contextElement.setElement(sectionStyle)
+    // contextElement.setElement(sectionStyle)
 
   }, [elements, sectionStyle, currentWidth]);
 
