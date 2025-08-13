@@ -49,12 +49,6 @@ const ImageStyleToolbar: React.FC = () => {
         type={type}
         value={value}
         onChange={(e) => handleInput(e.target.value)}
-        // onBlur={(e) => {
-        //   const val = e.target.value.trim();
-        //   if (val === "") {
-        //     handleInput("auto");
-        //   }
-        // }}
         className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
         min={min || 0}
         max={max}

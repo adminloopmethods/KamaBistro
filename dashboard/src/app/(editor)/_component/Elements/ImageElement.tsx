@@ -169,7 +169,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         style={{
           position: "relative",
           display: "inline-block",
-          border: "1px solid black",
           top: thisElement.style?.[activeScreen]?.top,
           left: thisElement.style?.[activeScreen]?.left,
         }}
