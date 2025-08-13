@@ -69,7 +69,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
     return (
         <div
             // onClick={handleClick}
-            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -77,29 +77,23 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 </h3>
             </div>
 
-            {/* 
-            <button
-                className="tool-btn w-full flex items-center justify-between border-t pt-2"
-                onClick={() => setIsOpen(!isOpen)}
-            >
-                {isOpen ? 'Hide Dimensions' : 'Show Dimensions'}{' '}
-                {isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-            </button> 
-            */}
-
             <div className={`transition-all duration-300 grid grid-cols-1 gap-3 overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 {renderInput('Width', 'width')}
                 {renderInput('Height', 'height')}
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Padding (px)</h4>
-                {(['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'] as (keyof StylesState)[]).map((key) =>
-                    renderInput(key.replace('padding', ''), key, 'number', 'px')
-                )}
+                <div className='grid grid-cols-2 gap-x-2'>
+                    {(['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'] as (keyof StylesState)[]).map((key) =>
+                        renderInput(key.replace('padding', ''), key, 'number', 'px')
+                    )}
+                </div>
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Margin (px)</h4>
-                {(['marginTop', 'marginRight', 'marginBottom', 'marginLeft'] as (keyof StylesState)[]).map((key) =>
-                    renderInput(key.replace('margin', ''), key, 'number', 'px')
-                )}
+                <div className='grid grid-cols-2 gap-x-2'>
+                    {(['marginTop', 'marginRight', 'marginBottom', 'marginLeft'] as (keyof StylesState)[]).map((key) =>
+                        renderInput(key.replace('margin', ''), key, 'number', 'px')
+                    )}
+                </div>
 
                 <div className="flex flex-col gap-1">
                     <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Position</label>

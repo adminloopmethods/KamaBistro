@@ -2,6 +2,8 @@ import React, { useState, useRef, ChangeEvent } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
+// import CustomSelect from './CustomSelect'; // <-- Import your custom select
+import CustomSelect from '@/app/_common/CustomSelect';
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -24,32 +26,34 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
     const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
     const [gradientDirection, setGradientDirection] = useState<string>('to right');
-    const [gradient, setGradient] = useState<string>(''); // store gradient
-    const [bgImage, setBgImage] = useState<string>('');   // store background image
+    const [gradient, setGradient] = useState<string>('');
+    const [bgImage, setBgImage] = useState<string>('');
 
     const [repeat, setRepeat] = useState<string>('no-repeat');
     const [attachment, setAttachment] = useState<string>('scroll');
     const [size, setSize] = useState<string>('cover');
     const [position, setPosition] = useState<string>('center');
-    const [objectFit, setObjectFit] = useState<string>('cover');
-    const [fontFamily, setFontFamily] = useState<string>('Arial');
+    const [fontColor, setFontColor] = useState<string>('#000000');
     const [boxShadow, setBoxShadow] = useState<string>('none');
 
-    const [toolbarTop, setToolbarTop] = useState<number>(250);
-    const [toolbarLeft, setToolbarLeft] = useState<number>(500);
     const toolbarRef = useRef<HTMLDivElement>(null);
-    const [zIndex, setZIndex] = useState<number>(500);
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
+
+    // Flex-related states
+    const [isFlex, setIsFlex] = useState<boolean>(false);
+    const [flexDirection, setFlexDirection] = useState<string>('row');
+    const [flexGap, setFlexGap] = useState<string>('0px');
+    const [justifyContent, setJustifyContent] = useState<string>('flex-start');
+    const [alignItems, setAlignItems] = useState<string>('stretch');
 
     const updateBackground = (url?: string) => {
         let combined = '';
-        console.log(url)
         if (gradient && (bgImage || url)) {
-            combined = `${gradient}, url(${(url) || bgImage})`;
+            combined = `${gradient}, url(${url || bgImage})`;
         } else if (gradient) {
             combined = gradient;
         } else if (bgImage || url) {
-            combined = `url(${(url) || bgImage})`;
+            combined = `url(${url || bgImage})`;
         }
         updateStyles({ backgroundImage: combined });
     };
@@ -60,39 +64,9 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         updateBackground();
     };
 
-    const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setBgImage(url);
-            updateBackground();
-        }
-    };
-
-    const handleShadowChange = (e: ChangeEvent<HTMLSelectElement>) => {
-        const value = e.target.value;
+    const handleShadowChange = (value: string) => {
         setBoxShadow(shadowPresets[value]);
         updateStyles({ boxShadow: shadowPresets[value] });
-    };
-
-    const applyRepeat = (value: string) => {
-        setRepeat(value);
-        updateStyles({ backgroundRepeat: value });
-    };
-
-    const applyAttachment = (value: string) => {
-        setAttachment(value);
-        updateStyles({ backgroundAttachment: value });
-    };
-
-    const applySize = (value: string) => {
-        setSize(value);
-        updateStyles({ backgroundSize: value });
-    };
-
-    const applyPosition = (value: string) => {
-        setPosition(value);
-        updateStyles({ backgroundPosition: value });
     };
 
     const renderInputRow = (label: string, input: React.ReactNode, extra: React.ReactNode = null) => (
@@ -109,7 +83,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         <div
             ref={toolbarRef}
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4"
-            style={{ top: toolbarTop, left: toolbarLeft, zIndex }}
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -117,139 +90,230 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 </h3>
             </div>
 
+            {/* Background Image */}
+            <button
+                className='text-xs font-medium text-gray-700 dark:text-gray-200 border p-3 rounded-md cursor-pointer'
+                onClick={() => setShowImageSelector(true)}
+            >
+                Add Background Image
+            </button>
+
+            {/* Background Repeat */}
+            <CustomSelect
+                options={[
+                    { label: "No Repeat", value: "no-repeat" },
+                    { label: "Repeat", value: "repeat" },
+                    { label: "Repeat X", value: "repeat-x" },
+                    { label: "Repeat Y", value: "repeat-y" },
+                ]}
+                Default={repeat || undefined}
+                firstOption='Background Repeat'
+                disableFirstValue={true}
+                onChange={(val) => { setRepeat(val); updateStyles({ backgroundRepeat: val }); }}
+            />
+
+            {/* Background Attachment */}
+            <CustomSelect
+                options={[
+                    { label: "Scroll", value: "scroll" },
+                    { label: "Fixed", value: "fixed" },
+                    { label: "Local", value: "local" },
+                ]}
+                Default={attachment}
+                firstOption='Background attachment'
+                disableFirstValue={true}
+                onChange={(val) => { setAttachment(val); updateStyles({ backgroundAttachment: val }); }}
+            />
+
+            {/* Background Size */}
+            <CustomSelect
+                options={[
+                    { label: "Auto", value: "auto" },
+                    { label: "Cover", value: "cover" },
+                    { label: "Contain", value: "contain" },
+                ]}
+                Default={size}
+                firstOption='Background Size'
+                disableFirstValue={true}
+                onChange={(val) => { setSize(val); updateStyles({ backgroundSize: val }); }}
+            />
+
+            {/* Background Position */}
+            <CustomSelect
+                options={[
+                    { label: "Center", value: "center" },
+                    { label: "Top Left", value: "top left" },
+                    { label: "Top Right", value: "top right" },
+                    { label: "Bottom Left", value: "bottom left" },
+                    { label: "Bottom Right", value: "bottom right" },
+                ]}
+                Default={position}
+                firstOption='Background Position'
+                disableFirstValue={true}
+                onChange={(val) => { setPosition(val); updateStyles({ backgroundPosition: val }); }}
+            />
+
             {/* Gradient Colors */}
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
             <div className="flex flex-col gap-3">
-                <button
-                    className='text-xs font-medium text-gray-700 dark:text-gray-200 border p-3 rounded-md cursor-pointer'
-                    onClick={() => setShowImageSelector(true)}
-                >
-                    Add Background Image
-                </button>
-
-                <select value={repeat} onChange={(e) => applyRepeat(e.target.value)}>
-                    <option value="no-repeat">No Repeat</option>
-                    <option value="repeat">Repeat</option>
-                    <option value="repeat-x">Repeat X</option>
-                    <option value="repeat-y">Repeat Y</option>
-                </select>
-
-                <select value={attachment} onChange={(e) => applyAttachment(e.target.value)}>
-                    <option value="scroll">Scroll</option>
-                    <option value="fixed">Fixed</option>
-                    <option value="local">Local</option>
-                </select>
-
-                <select value={size} onChange={(e) => applySize(e.target.value)}>
-                    <option value="auto">Auto</option>
-                    <option value="cover">Cover</option>
-                    <option value="contain">Contain</option>
-                </select>
-
-                <select value={position} onChange={(e) => applyPosition(e.target.value)}>
-                    <option value="center">Center</option>
-                    <option value="top left">Top Left</option>
-                    <option value="top right">Top Right</option>
-                    <option value="bottom left">Bottom Left</option>
-                    <option value="bottom right">Bottom Right</option>
-                </select>
-
-
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
-                <div className="flex flex-col gap-3">
-                    {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
-                        <div key={idx} className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold">{label}</span>
-                            <input
-                                type="color"
-                                value={'#' + rgbaToHex(color)}
-                                onChange={(e) => setColor(hexToRgba(e.target.value, 1))}
-                                className={dimensionStyle.colorInput}
-                            />
-                            <input
-                                type="text"
-                                value={color}
-                                onChange={(e) => setColor(e.target.value)}
-                                placeholder="rgba(...)"
-                                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                            />
-                        </div>
-                    ))}
-                </div>
+                {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
+                    <div key={idx} className="flex flex-col gap-1">
+                        <span className="text-xs font-semibold">{label}</span>
+                        <input
+                            type="color"
+                            value={'#' + rgbaToHex(color)}
+                            onChange={(e) => setColor(hexToRgba(e.target.value, 1))}
+                            className={dimensionStyle.colorInput}
+                        />
+                        <input
+                            type="text"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                            placeholder="rgba(...)"
+                            className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                        />
+                    </div>
+                ))}
             </div>
 
             {renderInputRow(
                 'Gradient Direction',
-                <select
-                    value={gradientDirection}
-                    onChange={(e) => setGradientDirection(e.target.value)}
-                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                >
-                    <option value="to top">Top</option>
-                    <option value="to right">Right</option>
-                    <option value="to bottom">Bottom</option>
-                    <option value="to left">Left</option>
-                    <option value="to top right">Top Right</option>
-                    <option value="to bottom left">Bottom Left</option>
-                </select>,
+                <CustomSelect
+                    options={[
+                        { label: "Top", value: "to top" },
+                        { label: "Right", value: "to right" },
+                        { label: "Bottom", value: "to bottom" },
+                        { label: "Left", value: "to left" },
+                        { label: "Top Right", value: "to top right" },
+                        { label: "Bottom Left", value: "to bottom left" },
+                    ]}
+                    Default={gradientDirection}
+                    onChange={(val) => setGradientDirection(val)}
+                />,
                 <div className="flex gap-2">
                     <button onClick={applyGradient} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-md">Apply</button>
                     <button onClick={() => { setGradient(''); updateBackground(); }} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
                 </div>
             )}
 
+            {/* Flexbox Controls */}
+            <div className="flex flex-col gap-3 border-t pt-3 border-b pb-2">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Layout (Flexbox)</label>
+
+                <div className="flex items-center gap-2">
+                    <input
+                        type="checkbox"
+                        checked={isFlex}
+                        onChange={(e) => { setIsFlex(e.target.checked); updateStyles({ display: e.target.checked ? 'flex' : 'block' }); }}
+                    />
+                    <span className="text-sm">Enable Layout</span>
+                </div>
+
+                {isFlex && (
+                    <>
+                        {renderInputRow(
+                            'Layout Direction',
+                            <CustomSelect
+                                options={[
+                                    { label: "Row", value: "row" },
+                                    { label: "Row Reverse", value: "row-reverse" },
+                                    { label: "Column", value: "column" },
+                                    { label: "Column Reverse", value: "column-reverse" },
+                                ]}
+                                Default={flexDirection}
+                                onChange={(val) => { setFlexDirection(val); updateStyles({ flexDirection: val }); }}
+                            />
+                        )}
+
+                        {renderInputRow(
+                            'Gap (px)',
+                            <input
+                                type="number"
+                                min="0"
+                                value={parseInt(flexGap)}
+                                onChange={(e) => { setFlexGap(`${e.target.value}px`); updateStyles({ gap: `${e.target.value}px` }); }}
+                                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                            />
+                        )}
+
+                        {renderInputRow(
+                            'Justify Content',
+                            <CustomSelect
+                                options={[
+                                    { label: "Start", value: "flex-start" },
+                                    { label: "Center", value: "center" },
+                                    { label: "End", value: "flex-end" },
+                                    { label: "Space Between", value: "space-between" },
+                                    { label: "Space Around", value: "space-around" },
+                                    { label: "Space Evenly", value: "space-evenly" },
+                                ]}
+                                Default={justifyContent}
+                                onChange={(val) => { setJustifyContent(val); updateStyles({ justifyContent: val }); }}
+                            />
+                        )}
+
+                        {renderInputRow(
+                            'Align Items',
+                            <CustomSelect
+                                options={[
+                                    { label: "Stretch", value: "stretch" },
+                                    { label: "Start", value: "flex-start" },
+                                    { label: "Center", value: "center" },
+                                    { label: "End", value: "flex-end" },
+                                    { label: "Baseline", value: "baseline" },
+                                ]}
+                                Default={alignItems}
+                                onChange={(val) => { setAlignItems(val); updateStyles({ alignItems: val }); }}
+                            />
+                        )}
+                    </>
+                )}
+            </div>
+
             {renderInputRow(
-                'Font Family',
-                <select
-                    value={fontFamily}
-                    onChange={(e) => {
-                        setFontFamily(e.target.value);
-                        updateStyles({ fontFamily: e.target.value });
-                    }}
-                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                >
-                    <option value="Arial">Arial</option>
-                    <option value="Helvetica">Helvetica</option>
-                    <option value="Georgia">Georgia</option>
-                    <option value="Times New Roman">Times New Roman</option>
-                    <option value="Courier New">Courier New</option>
-                    <option value="Verdana">Verdana</option>
-                    <option value="Trebuchet MS">Trebuchet MS</option>
-                    <option value="Lucida Console">Lucida Console</option>
-                    <option value="Tahoma">Tahoma</option>
-                    <option value="Monospace">Monospace</option>
-                </select>
+                'Text Color',
+                <CustomSelect
+                    options={[
+                        { label: "Black", value: "#000000" },
+                        { label: "White", value: "#FFFFFF" },
+                        { label: "Red", value: "#FF0000" },
+                        { label: "Green", value: "#00FF00" },
+                        { label: "Blue", value: "#0000FF" },
+                        { label: "Yellow", value: "#FFFF00" },
+                        { label: "Orange", value: "#FFA500" },
+                        { label: "Purple", value: "#800080" },
+                        { label: "Pink", value: "#FFC0CB" },
+                        { label: "Gray", value: "#808080" },
+                        { label: "Dodger Blue", value: "#1E90FF" },
+                        { label: "Lime Green", value: "#32CD32" },
+                        { label: "Deep Pink", value: "#FF1493" },
+                        { label: "Gold", value: "#FFD700" },
+                        { label: "Dark Red", value: "#8B0000" },
+                        { label: "Dark Green", value: "#006400" },
+                        { label: "Indigo", value: "#4B0082" },
+                        { label: "Dark Turquoise", value: "#00CED1" },
+                        { label: "Orange Red", value: "#FF4500" },
+                    ]}
+                    Default={fontColor}
+                    onChange={(val) => { setFontColor(val); updateStyles({ color: val }); }}
+                />
             )}
 
             {renderInputRow(
                 'Box Shadow',
-                <select
+                <CustomSelect
+                    options={Object.entries(shadowPresets).map(([key]) => ({ label: key, value: key }))}
+                    Default={Object.entries(shadowPresets).find(([k, v]) => v === boxShadow)?.[0] || "none"}
                     onChange={handleShadowChange}
-                    value={Object.entries(shadowPresets).find(([key, val]) => val === boxShadow)?.[0] || "none"}
-                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                >
-                    <optgroup label="Light Shadows">
-                        <option value="none">None</option>
-                        <option value="sm">Small</option>
-                        <option value="md">Medium</option>
-                        <option value="lg">Large</option>
-                        <option value="xl">Extra Large</option>
-                    </optgroup>
-                    <optgroup label="Dark Shadows">
-                        <option value="dark-sm">Dark Small</option>
-                        <option value="dark-md">Dark Medium</option>
-                        <option value="dark-lg">Dark Large</option>
-                        <option value="dark-xl">Dark Extra Large</option>
-                    </optgroup>
-                </select>
+                />
             )}
 
             {showImageSelector &&
                 <ImageSelector
-                    onSelectImage={(fileInfo: any, altText: any) => {
-                        console.log(fileInfo)
+                    onSelectImage={(fileInfo: any) => {
                         setBgImage(cloudinaryApiPoint + fileInfo[0]);
                         updateBackground(cloudinaryApiPoint + fileInfo[0]);
-                        setShowImageSelector(false)
+                        setShowImageSelector(false);
                     }}
                     onClose={() => setShowImageSelector(false)}
                     type="IMAGE"
