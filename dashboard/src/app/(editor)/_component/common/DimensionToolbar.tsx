@@ -69,7 +69,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
     return (
         <div
             // onClick={handleClick}
-            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">

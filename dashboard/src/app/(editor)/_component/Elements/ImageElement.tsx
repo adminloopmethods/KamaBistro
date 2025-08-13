@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useMyContext } from "@/Context/EditorContext";
 import ImageSelector from "../common/ImageSelector";
+import { cloudinaryApiPoint } from "@/utils/endpoints";
 
 interface StyleObject {
   [key: string]: React.CSSProperties;
@@ -208,7 +209,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 : fileInfo.join("");
             setThisElement((prev) => ({
               ...prev,
-              content: `${process.env.NEXT_PUBLIC_CLOUDINARY_API_POINT}/${src}`,
+              content: `${cloudinaryApiPoint}/${src}`,
               alt: altText?.en || prev.alt,
             }));
             setShowImageSelector(false);
