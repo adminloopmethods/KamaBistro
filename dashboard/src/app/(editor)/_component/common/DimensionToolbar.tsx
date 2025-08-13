@@ -2,32 +2,20 @@ import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useMyContext } from '@/Context/EditorContext';
 
-type StylesState = {
-    width: string;
-    height: string;
-    paddingTop: number;
-    paddingRight: number;
-    paddingBottom: number;
-    paddingLeft: number;
-    marginTop: number;
-    marginRight: number;
-    marginBottom: number;
-    marginLeft: number;
-    position: string;
-    zIndexInput: number;
-    borderRadius: number;
-};
+type StylesState = React.CSSProperties | Record<string, any>
 
 type DimensionToolbarProps = {
     updateStyles: (styles: Partial<StylesState>) => void;
 };
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
-    const [zIndex, setZIndex] = useState<number>(500);
     const [isOpen, setIsOpen] = useState<boolean>(true);
-    const { element } = useMyContext()
-    console.log(element)
-    const [stylesState, setStylesState] = useState<StylesState>(element || {
+    const { contextForSection } = useMyContext()
+    if (!contextForSection) return null
+    const style = contextForSection.currentSection
+    // console.log(style)
+
+    const [stylesState, setStylesState] = useState<StylesState>(style || {
         width: '100vw',
         height: '20vh',
         paddingTop: 20,
@@ -39,7 +27,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         marginBottom: 0,
         marginLeft: 0,
         position: 'static',
-        zIndexInput: 1,
+        zIndex: 1,
         borderRadius: 0,
     });
 
@@ -55,27 +43,33 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         key: keyof StylesState,
         type: 'text' | 'number' = 'text',
         suffix = ''
-    ) => (
-        <div className="flex flex-col gap-1" key={key}>
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
-            <input
-                type={type}
-                value={stylesState[key]}
-                onChange={(e) => {
-                    const val = type === 'number' ? Number(e.target.value) : e.target.value;
-                    const suffixVal = suffix ? `${val}${suffix}` : val;
-                    applyStyle(key, suffix ? suffixVal : val);
-                }}
-                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-            />
-        </div>
-    );
+    ) => {
+        let value: string | number = stylesState[key];
+        if (type === 'number' && typeof value === 'string') {
+            value = parseFloat(value); // convert "20px" → 20
+        }
+
+        return (
+            <div className="flex flex-col gap-1" key={key}>
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+                <input
+                    type={type}
+                    value={value}
+                    onChange={(e) => {
+                        const val = type === 'number' ? Number(e.target.value) : e.target.value;
+                        applyStyle(key, val); // store just the number
+                    }}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+            </div>
+        )
+    };
+
 
     return (
         <div
             // onClick={handleClick}
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
-            style={{ zIndex }}
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -121,7 +115,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                     </select>
                 </div>
 
-                {renderInput('Z-Index', 'zIndexInput', 'number')}
+                {renderInput('Z-Index', 'zIndex', 'number')}
                 {renderInput('Border Radius', 'borderRadius', 'number', 'px')}
             </div>
         </div>

@@ -21,11 +21,8 @@ const Heading: React.FC<HeadingProps> = ({
   updateElement,
   rmElement,
 }) => {
-  console.log("console.from.heading")
   const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
-  console.log(element)
-  console.log(thisElement)
   const { contextRef, contextElement, toolbarRef } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
 
@@ -85,7 +82,7 @@ const Heading: React.FC<HeadingProps> = ({
   // Sync style changes
   useEffect(() => {
     if (isEditing) {
-      // contextElement.setElement(thisElement);
+      contextElement.setElement(thisElement);
     }
     updateElement(element.id, thisElement);
   }, [thisElement.style]);

@@ -27,13 +27,13 @@ const Editor = () => {
         websiteContent,
         contextRef,
         currentWidth,
-        elementSetter,
+        currentSectionSetter,
         finalSubmit,
         imageEdit
     } = useMyContext();
 
 
-    const sectionStyleSetter = elementSetter ? elementSetter : () => { };
+    const sectionStyleSetter = currentSectionSetter ? currentSectionSetter : () => { };
 
     const saveAllSection = () => {
         if (Array.isArray(finalSubmit)) {

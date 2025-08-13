@@ -1,6 +1,7 @@
 "use client"
 
-import { StyleObject } from '@/app/(editor)/_functionality/createElement';
+import { BaseElement, StyleObject } from '@/app/(editor)/_functionality/createElement';
+import { ResponsiveStyles, SectionElementType } from '@/app/(editor)/_functionality/createSection';
 import React, {
   createContext,
   useContext,
@@ -60,6 +61,13 @@ interface ImageStyleToolbarProps {
   rmElement?: () => void
 }
 
+interface SectionContextType {
+  currentSection: React.CSSProperties,
+  setCurrentSection: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
+  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
+  setCurrentSectionSetter: React.Dispatch<React.SetStateAction<() => void>>
+}
+
 type MyContextType = {
   contextRef: ContextRefType;
   activeRef: RefType | any;
@@ -77,6 +85,8 @@ type MyContextType = {
   setImageContext: React.Dispatch<React.SetStateAction<ImageStyleToolbarProps | Record<string, any> | null>>
   imageEdit: Boolean,
   setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>,
+  contextForSection: SectionContextType,
+  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>> | null,
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -92,7 +102,8 @@ function Provider({ children }: { children: ReactNode }) {
   const [element, setElement] = useState<any>(null); // to see what element is it right now
   const [elementSetter, setElementSetter] = useState<any>(null);  // to set the setter of the element to work with
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { }); // to set the rm function of the element
-
+  const [currentSection, setCurrentSection] = useState<any>(null)
+  const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
 
   // images
   const [imageContext, setImageContext] = useState<ImageStyleToolbarProps | Record<string, any> | null>(null)
@@ -114,6 +125,13 @@ function Provider({ children }: { children: ReactNode }) {
     setReference: (ref: RefType) => setContextRef(ref),
     clearReference: () => setContextRef(null)
   };
+
+  const contextForSection: SectionContextType = {
+    currentSection,
+    setCurrentSection,
+    currentSectionSetter,
+    setCurrentSectionSetter
+  }
 
   const contextElement: ContextElementType = { // element and element setter
     setElementSetter,
@@ -151,7 +169,9 @@ function Provider({ children }: { children: ReactNode }) {
         imageContext,
         setImageContext,
         imageEdit,
-        setImageEdit
+        setImageEdit,
+        contextForSection,
+        currentSectionSetter
       }}
     >
       {children}

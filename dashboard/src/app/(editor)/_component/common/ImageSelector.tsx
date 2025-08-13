@@ -156,8 +156,12 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
 
     useEffect(() => {
         async function getAllImagesHandler() {
-            setLoadingImages(true);
-            if (!imagesByResource || (imagesByResource && resourceId)) {
+            if (
+                // !imagesByResource ||
+                //  (imagesByResource && resourceId)
+                true
+                ) {
+                setLoadingImages(true);
                 try {
                     const payload = imagesByResource
                         ? { resourceId, mediaType: type }
@@ -175,6 +179,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({
                     setLoadingImages(false);
                 }
             }
+            console.log("ewqrq")
         }
         getAllImagesHandler();
     }, [imagesByResource, random, resourceId, type]);

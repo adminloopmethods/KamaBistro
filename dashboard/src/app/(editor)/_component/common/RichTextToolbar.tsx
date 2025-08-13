@@ -28,6 +28,7 @@ const fontSizeOptions = [
 const positionOptions = [
     { label: 'Static', value: 'static' },
     { label: 'Relative', value: 'relative' },
+    { label: 'Absolute', value: 'absolute' },
 ];
 
 const RichTextToolBar: React.FC = () => {
@@ -44,7 +45,7 @@ const RichTextToolBar: React.FC = () => {
 
     const Setter = elementSetter;
     const [textColor, setTextColor] = useState<string>('#000000');
-   
+
 
     // States for tools
     const [isBold, setIsBold] = useState(false);
@@ -222,7 +223,7 @@ const RichTextToolBar: React.FC = () => {
                 firstOption="position"
                 Default={style.position?.toString() || undefined}
                 onChange={(value: string) => {
-                    setStyle(prev => ({ ...prev, position: value, zIndex: 1 }));
+                    setStyle(prev => ({ ...prev, position: value, zIndex: 1, width: value === "relative" ? "fit-content" : "" }));
                 }}
                 disableFirstValue={true}
             />
@@ -295,24 +296,3 @@ const RichTextToolBar: React.FC = () => {
 }
 
 export default RichTextToolBar;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- // const [parentElement, setParentElement] = useState<HTMLElement | null>(null)
-
-    // useEffect(() => {
-    //     if (activeRef) {
-    //         setParentElement(activeRef.parentElement);
-    //     }
-    // }, [activeRef]);

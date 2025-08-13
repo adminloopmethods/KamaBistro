@@ -39,14 +39,15 @@ const Section: React.FC<SectionProps> = ({
   lastSection,
   section,
 }) => {
-  console.log("console.from.section")
+  // console.log("console.from.section")
   const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
   const {
     contextRef,
     currentWidth,
-    contextElement,
+    // contextElement,
+    contextForSection,
     websiteContent,
     SubmissionObject,
   } = useMyContext();
@@ -89,8 +90,10 @@ const Section: React.FC<SectionProps> = ({
 
   const onEdit = () => {
     onEditing();
-    contextElement.setElementSetter(() => setSectionStyle);
-    contextElement.setElement(sectionStyle)
+    // contextElement.setElementSetter(() => setSectionStyle);
+    // contextElement.setElement(sectionStyle)
+    contextForSection.setCurrentSection(sectionStyle)
+    contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
@@ -161,6 +164,7 @@ const Section: React.FC<SectionProps> = ({
       return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
     });
     // contextElement.setElement(sectionStyle)
+    contextForSection.setCurrentSection(sectionStyle)
 
   }, [elements, sectionStyle, currentWidth]);
 
@@ -168,7 +172,7 @@ const Section: React.FC<SectionProps> = ({
     <div className="relative">
       <section
         ref={sectionRef}
-        style={{...sectionStyle, position: "relative"}}
+        style={{ ...sectionStyle, position: "relative" }}
         onDoubleClick={onEdit}
         onMouseDown={handleMouseDown}
       >

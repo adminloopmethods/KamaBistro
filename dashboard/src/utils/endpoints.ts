@@ -1,5 +1,5 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
-export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API
+export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API as string
 
 if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
