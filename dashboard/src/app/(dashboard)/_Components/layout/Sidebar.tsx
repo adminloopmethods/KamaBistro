@@ -1,3 +1,4 @@
+// sidebar.tsx
 "use client";
 
 import React from "react";
@@ -23,40 +24,53 @@ const Sidebar: React.FC = () => {
   const pathname = usePathname();
 
   const sidebarRoutes: SidebarRoute[] = [
-    {name: "Dashboard", route: "/", icon: <LayoutDashboard size={18} />},
+    {name: "Dashboard", route: "/", icon: <LayoutDashboard size={20} />},
     {
       name: "Overview",
       route: "/overview",
-      icon: <BarChart3 size={18} />,
+      icon: <BarChart3 size={20} />,
     },
     {
       name: "Analytics",
       route: "/analytics",
-      icon: <Activity size={18} />,
+      icon: <Activity size={20} />,
     },
-    {name: "Pages", route: "/pages", icon: <FileText size={18} />},
-    {name: "Users", route: "/users", icon: <Users size={18} />},
-    {name: "Logs", route: "/logs", icon: <ScrollText size={18} />},
+    {name: "Pages", route: "/pages", icon: <FileText size={20} />},
+    {name: "Users", route: "/users", icon: <Users size={20} />},
+    {name: "Logs", route: "/logs", icon: <ScrollText size={20} />},
+    {name: "Settings", route: "/settings", icon: <Settings size={20} />},
   ];
 
   return (
-    <div className="w-64 h-full flex flex-col text-black p-4 m-1 shadow rounded-lg bg-white dark:bg-gray-900 dark:text-white">
-      <ul className="flex flex-col gap-2 flex-1">
-        {sidebarRoutes.map((element, i) => (
-          <li key={i}>
-            <Link
-              href={element.route}
-              className={`flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-stone-200 dark:hover:text-black transition ${
-                pathname.startsWith(element.route)
-                  ? "bg-stone-200 dark:text-black"
-                  : ""
-              }`}
-            >
-              {element.icon}
-              {element.name}
-            </Link>
-          </li>
-        ))}
+    <div className="w-64 flex flex-col text-white p-6 bg-gradient-to-b from-indigo-900 to-purple-900 rounded-xl shadow-lg">
+      <ul className="flex flex-col gap-1 flex-1">
+        {sidebarRoutes.map((element, i) => {
+          // Fixed active state detection
+          const isActive =
+            element.route === "/"
+              ? pathname === "/"
+              : pathname.startsWith(element.route);
+
+          return (
+            <li key={i}>
+              <Link
+                href={element.route}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
+                  isActive
+                    ? "bg-white/20 backdrop-blur-sm shadow-inner"
+                    : "hover:bg-white/10"
+                }`}
+              >
+                <span
+                  className={`${isActive ? "text-white" : "text-indigo-200"}`}
+                >
+                  {element.icon}
+                </span>
+                <span className="font-medium">{element.name}</span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
