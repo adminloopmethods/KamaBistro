@@ -56,7 +56,8 @@ interface ImageStyleToolbarProps {
   setElement: any;
   currentWidth: string;
   imageRef: RefObject<HTMLImageElement | null>;
-  onClose: () => void
+  onClose: () => void,
+  rmElement?: () => void
 }
 
 type MyContextType = {
@@ -75,7 +76,7 @@ type MyContextType = {
   imageContext: ImageStyleToolbarProps | Record<string, any> | null;
   setImageContext: React.Dispatch<React.SetStateAction<ImageStyleToolbarProps | Record<string, any> | null>>
   imageEdit: Boolean,
-  setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>
+  setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>,
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);

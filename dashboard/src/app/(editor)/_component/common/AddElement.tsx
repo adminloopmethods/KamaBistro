@@ -11,9 +11,9 @@ interface Option {
     disabled?: boolean;
 }
 
-const baseClasses = `dark:bg-stone-100 z-[3] 
-rounded-[4px] h-full flex-[1] absolute 
-max-w-[340px] w-fit top-[1px] right-0 select-none`;
+const baseClasses = `dark:bg-stone-100 z-[3]
+rounded-[4px] h-[fit] flex-[1] absolute right-0 
+max-w-[340px] min-w-[200px] top-[1px] select-none`;
 
 const styleClasses = `
   w-full text-left px-3 py-2 
@@ -38,6 +38,8 @@ const AddElement: React.FC<AddElementProps> = ({ controller }) => {
         { label: "Add Element", value: "", disabled: true },
         { label: "Heading", value: "heading" },
         { label: "Paragraph", value: "paragraph" },
+        { label: "Image", value: "image" },
+        { label: "Image", value: "image" },
         { label: "Image", value: "image" },
     ];
 

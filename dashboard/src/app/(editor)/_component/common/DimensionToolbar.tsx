@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
+import { useMyContext } from '@/Context/EditorContext';
 
 type StylesState = {
     width: string;
@@ -24,8 +25,9 @@ type DimensionToolbarProps = {
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
     const [zIndex, setZIndex] = useState<number>(500);
     const [isOpen, setIsOpen] = useState<boolean>(true);
-
-    const [stylesState, setStylesState] = useState<StylesState>({
+    const { element } = useMyContext()
+    console.log(element)
+    const [stylesState, setStylesState] = useState<StylesState>(element || {
         width: '100vw',
         height: '20vh',
         paddingTop: 20,

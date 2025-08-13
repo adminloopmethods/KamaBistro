@@ -5,8 +5,6 @@ if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
 }
 
-console.log(BASE_URL);
-
 const auth = "auth";
 const users = "users";
 const content = "content";
@@ -14,7 +12,7 @@ const media = "media";
 
 
 const endpointMap = {
-  login: `${auth}/login`,                 // Auth
+  login: `${auth}/login`,
 
   // user
   getUsers: `${users}/`,

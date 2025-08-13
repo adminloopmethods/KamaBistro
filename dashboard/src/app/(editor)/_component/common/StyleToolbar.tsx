@@ -1,6 +1,7 @@
 import React, { useState, useRef, ChangeEvent, RefObject } from 'react';
 // import { getNextZIndex } from '../../../Functionality/globalZIndCounter';
 import dimensionStyle from "./dimensionToolbar.module.css";
+import ImageSelector from './ImageSelector';
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -37,6 +38,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [toolbarLeft, setToolbarLeft] = useState<number>(500);
     const toolbarRef = useRef<HTMLDivElement>(null);
     const [zIndex, setZIndex] = useState<number>(500);
+    const [showImageSelector, setShowImageSelector] = useState<Boolean>(false)
 
     // const handleClick = () => setZIndex(getNextZIndex());
 
@@ -83,12 +85,13 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
-                    Advanced Style Controls
+                    Style Controls
                 </h3>
             </div>
 
             {/* Gradient Colors */}
             <div className="flex flex-col gap-3">
+                <button className='text-xs font-medium text-gray-700 dark:text-gray-200 border p-3 rounded-md cursor-pointer' onClick={() => setShowImageSelector(true)}>Add Background Image</button>
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
                 <div className="flex flex-col gap-3">
                     {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
@@ -253,6 +256,16 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     </optgroup>
                 </select>
             )}
+            {
+                showImageSelector &&
+                <ImageSelector
+                    onSelectImage={(fileInfo: any, altText: any) => {
+                        console.log(fileInfo)
+                        console.log(altText)
+                    }}
+                    onClose={() => setShowImageSelector(false)}
+                    type="IMAGE"
+                />}
         </div>
     );
 };

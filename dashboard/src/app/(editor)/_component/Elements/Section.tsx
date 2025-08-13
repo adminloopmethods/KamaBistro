@@ -89,6 +89,7 @@ const Section: React.FC<SectionProps> = ({
   const onEdit = () => {
     onEditing();
     contextElement.setElementSetter(() => () => setSectionStyle);
+    contextElement.setElement(sectionStyle)
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
@@ -158,10 +159,12 @@ const Section: React.FC<SectionProps> = ({
       const removedSame = prev.filter((e) => e.id !== section.id);
       return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
     });
+    contextElement.setElement(sectionStyle)
+
   }, [elements, sectionStyle, currentWidth]);
 
   return (
-    <div className="relative border border-red-600">
+    <div className="relative">
       <section
         ref={sectionRef}
         style={{...sectionStyle, position: "relative"}}
