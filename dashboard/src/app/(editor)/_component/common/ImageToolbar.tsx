@@ -27,11 +27,11 @@ const boxShadowPresets: Record<string, string> = {
 
 const ImageStyleToolbar: React.FC = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
-  const { imageContext } = useMyContext();
+  const { imageContext, setImageEdit, setImageContext, contextRef } = useMyContext();
 
   if (!imageContext || !("element" in imageContext)) return null;
 
-  const { element, style = {}, setElement, currentWidth, onClose } = imageContext;
+  const { element, style = {}, setElement, currentWidth, onClose, rmElement, imageRef } = imageContext;
 
   // Unified input row with Tailwind styling
   const renderInputRow = (
@@ -140,6 +140,13 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
+  const removeElement = () => {
+    setImageEdit(false)
+    setImageContext(null)
+    contextRef.setReference(null)
+    rmElement()
+  }
+
   const handleShadowChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setElement((prev: any) => ({
@@ -156,8 +163,10 @@ const ImageStyleToolbar: React.FC = () => {
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node)) {
+      if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node) &&
+        !imageRef.current.contains(event.target as Node)) {
         onClose();
+        setImageEdit(false)
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
@@ -170,11 +179,15 @@ const ImageStyleToolbar: React.FC = () => {
     <div
       ref={toolbarRef}
       className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[280px] max-w-[22vw] shadow-md transition-all duration-100 ease-in-out flex flex-col gap-4 z-[var(--zIndex)]"
-      style={{width: "240px"}}
+      style={{ width: "240px" }}
       onClick={(e) => e.stopPropagation()}
       onDoubleClick={(e) => e.stopPropagation()}
     >
       <h3 className="font-bold border-t pt-2">Image Style Controls</h3>
+
+      <button onClick={removeElement}
+        className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100">
+        Remove this Image</button>
 
       {renderInputRow("Alternate text:", element.alt || "", "text", handleInputValue("alt"))}
 

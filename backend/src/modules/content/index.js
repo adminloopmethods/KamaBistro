@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import ContentRoutes from "./content.routes.js";
 import { authenticateUser } from "../../helper/authMiddleware.js";
 

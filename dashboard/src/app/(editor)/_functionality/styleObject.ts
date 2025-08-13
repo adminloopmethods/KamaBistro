@@ -11,6 +11,8 @@ export const onBold = (
     Setter: SetterType,
     currentWidth: string
 ) => {
+    console.log(element)
+    console.log(currentWidth)
     const currentStyle = { ...element.style[currentWidth] };
     const boldness = currentStyle.fontWeight;
     if (boldness === "bold" || boldness < 600) {

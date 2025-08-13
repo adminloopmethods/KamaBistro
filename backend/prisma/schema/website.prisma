@@ -34,14 +34,15 @@ model Content {
 }
 
 model Element {
-  id         String  @id
+  id         String   @id
   name       String
   content    String
-  order      Int     @default(0)
+  items      String[] @default([]) // for list
+  order      Int      @default(0)
   contentId  String
-  contentRef Content @relation(fields: [contentId], references: [id])
-  style      Style   @relation("ElementStyle", fields: [styleId], references: [id])
-  styleId    String  @unique
+  contentRef Content  @relation(fields: [contentId], references: [id])
+  style      Style    @relation("ElementStyle", fields: [styleId], references: [id])
+  styleId    String   @unique
 
   @@index([contentId])
 }

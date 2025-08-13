@@ -12,13 +12,10 @@ import CustomSelect from '@/app/_common/CustomSelect';
 type Style = Partial<Record<keyof React.CSSProperties, string | number>>;
 
 const fontFamilyOptions = [
-    { label: 'Arial', value: 'Arial, sans-serif' },
     { label: 'Courier New', value: '"Courier New", monospace' },
     { label: 'Serif', value: 'serif' },
     { label: 'System UI', value: 'system-ui' },
-    { label: 'Helvetica', value: 'Helvetica, sans-serif' },
     { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Tahoma', value: 'Tahoma, sans-serif' },
     { label: 'Monospace', value: 'monospace' }
 ];
 const fontSizeOptions = [
@@ -31,6 +28,7 @@ const fontSizeOptions = [
 const positionOptions = [
     { label: 'Static', value: 'static' },
     { label: 'Relative', value: 'relative' },
+    { label: 'Absolute', value: 'absolute' },
 ];
 
 const RichTextToolBar: React.FC = () => {
@@ -43,17 +41,11 @@ const RichTextToolBar: React.FC = () => {
         toolbarRef,
         rmElementFunc
     } = useMyContext();
+    console.log(element)
 
-    const Setter = elementSetter?.();
-    const [isDimensionOpen, setIsDimensionOpen] = useState<boolean>(false);
+    const Setter = elementSetter;
     const [textColor, setTextColor] = useState<string>('#000000');
-    const [parentElement, setParentElement] = useState<HTMLElement | null>(null)
 
-    useEffect(() => {
-        if (activeRef) {
-            setParentElement(activeRef.parentElement);
-        }
-    }, [activeRef]);
 
     // States for tools
     const [isBold, setIsBold] = useState(false);
@@ -231,7 +223,7 @@ const RichTextToolBar: React.FC = () => {
                 firstOption="position"
                 Default={style.position?.toString() || undefined}
                 onChange={(value: string) => {
-                    setStyle(prev => ({ ...prev, position: value, zIndex: 1 }));
+                    setStyle(prev => ({ ...prev, position: value, zIndex: 1, width: value === "relative" ? "fit-content" : "" }));
                 }}
                 disableFirstValue={true}
             />

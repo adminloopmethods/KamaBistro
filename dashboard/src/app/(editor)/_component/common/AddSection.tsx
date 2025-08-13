@@ -13,7 +13,7 @@ interface AddSectionProps {
 
 const baseClasses = `
   dark:bg-stone-100 select-none
-  absolute bottom-[2px] right-0 rounded-[4px] 
+  fixed bottom-[2px] right-[258px] rounded-[4px] 
   p-[0px] w-[20%] h-max min-w-[120px] 
   rounded-3xl h-full flex-[1]
 `;

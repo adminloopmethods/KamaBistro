@@ -1,6 +1,7 @@
-import React, { useState, useRef, ChangeEvent, RefObject } from 'react';
-// import { getNextZIndex } from '../../../Functionality/globalZIndCounter';
+import React, { useState, useRef, ChangeEvent } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
+import ImageSelector from './ImageSelector';
+import { cloudinaryApiPoint } from '@/utils/endpoints';
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -23,7 +24,8 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
     const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
     const [gradientDirection, setGradientDirection] = useState<string>('to right');
-    const [bgImageUrl, setBgImageUrl] = useState<string>('');
+    const [gradient, setGradient] = useState<string>(''); // store gradient
+    const [bgImage, setBgImage] = useState<string>('');   // store background image
 
     const [repeat, setRepeat] = useState<string>('no-repeat');
     const [attachment, setAttachment] = useState<string>('scroll');
@@ -37,20 +39,33 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [toolbarLeft, setToolbarLeft] = useState<number>(500);
     const toolbarRef = useRef<HTMLDivElement>(null);
     const [zIndex, setZIndex] = useState<number>(500);
+    const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
 
-    // const handleClick = () => setZIndex(getNextZIndex());
+    const updateBackground = (url?: string) => {
+        let combined = '';
+        console.log(url)
+        if (gradient && (bgImage || url)) {
+            combined = `${gradient}, url(${(url) || bgImage})`;
+        } else if (gradient) {
+            combined = gradient;
+        } else if (bgImage || url) {
+            combined = `url(${(url) || bgImage})`;
+        }
+        updateStyles({ backgroundImage: combined });
+    };
 
     const applyGradient = () => {
-        const gradient = `linear-gradient(${gradientDirection}, ${color1}, ${color2})`;
-        updateStyles({ backgroundImage: gradient });
+        const newGradient = `linear-gradient(${gradientDirection}, ${color1}, ${color2})`;
+        setGradient(newGradient);
+        updateBackground();
     };
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const url = URL.createObjectURL(file);
-            setBgImageUrl(url);
-            updateStyles({ backgroundImage: `url(${url})` });
+            setBgImage(url);
+            updateBackground();
         }
     };
 
@@ -60,11 +75,27 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         updateStyles({ boxShadow: shadowPresets[value] });
     };
 
-    const renderInputRow = (
-        label: string,
-        input: React.ReactNode,
-        extra: React.ReactNode = null
-    ) => (
+    const applyRepeat = (value: string) => {
+        setRepeat(value);
+        updateStyles({ backgroundRepeat: value });
+    };
+
+    const applyAttachment = (value: string) => {
+        setAttachment(value);
+        updateStyles({ backgroundAttachment: value });
+    };
+
+    const applySize = (value: string) => {
+        setSize(value);
+        updateStyles({ backgroundSize: value });
+    };
+
+    const applyPosition = (value: string) => {
+        setPosition(value);
+        updateStyles({ backgroundPosition: value });
+    };
+
+    const renderInputRow = (label: string, input: React.ReactNode, extra: React.ReactNode = null) => (
         <div className="flex flex-col gap-1 w-full">
             <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
             <div className="flex flex-col gap-2">
@@ -77,18 +108,52 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     return (
         <div
             ref={toolbarRef}
-            // onClick={handleClick}
-            className=" bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4"
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4"
             style={{ top: toolbarTop, left: toolbarLeft, zIndex }}
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
-                    Advanced Style Controls
+                    Style Controls
                 </h3>
             </div>
 
             {/* Gradient Colors */}
             <div className="flex flex-col gap-3">
+                <button
+                    className='text-xs font-medium text-gray-700 dark:text-gray-200 border p-3 rounded-md cursor-pointer'
+                    onClick={() => setShowImageSelector(true)}
+                >
+                    Add Background Image
+                </button>
+
+                <select value={repeat} onChange={(e) => applyRepeat(e.target.value)}>
+                    <option value="no-repeat">No Repeat</option>
+                    <option value="repeat">Repeat</option>
+                    <option value="repeat-x">Repeat X</option>
+                    <option value="repeat-y">Repeat Y</option>
+                </select>
+
+                <select value={attachment} onChange={(e) => applyAttachment(e.target.value)}>
+                    <option value="scroll">Scroll</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="local">Local</option>
+                </select>
+
+                <select value={size} onChange={(e) => applySize(e.target.value)}>
+                    <option value="auto">Auto</option>
+                    <option value="cover">Cover</option>
+                    <option value="contain">Contain</option>
+                </select>
+
+                <select value={position} onChange={(e) => applyPosition(e.target.value)}>
+                    <option value="center">Center</option>
+                    <option value="top left">Top Left</option>
+                    <option value="top right">Top Right</option>
+                    <option value="bottom left">Bottom Left</option>
+                    <option value="bottom right">Bottom Right</option>
+                </select>
+
+
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
                 <div className="flex flex-col gap-3">
                     {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
@@ -128,84 +193,8 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 </select>,
                 <div className="flex gap-2">
                     <button onClick={applyGradient} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-md">Apply</button>
-                    <button onClick={() => updateStyles({ backgroundImage: '' })} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
+                    <button onClick={() => { setGradient(''); updateBackground(); }} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
                 </div>
-            )}
-
-            {renderInputRow(
-                'Background Image',
-                <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="text-xs"
-                />,
-                <button onClick={() => updateStyles({ backgroundImage: '' })} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
-            )}
-
-            {renderInputRow(
-                'Repeat',
-                <select value={repeat} onChange={(e) => {
-                    setRepeat(e.target.value);
-                    updateStyles({ backgroundRepeat: e.target.value });
-                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
-                    <option value="no-repeat">No Repeat</option>
-                    <option value="repeat">Repeat</option>
-                    <option value="repeat-x">Repeat X</option>
-                    <option value="repeat-y">Repeat Y</option>
-                </select>
-            )}
-
-            {renderInputRow(
-                'Attachment',
-                <select value={attachment} onChange={(e) => {
-                    setAttachment(e.target.value);
-                    updateStyles({ backgroundAttachment: e.target.value });
-                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
-                    <option value="scroll">Scroll</option>
-                    <option value="fixed">Fixed</option>
-                    <option value="local">Local</option>
-                </select>
-            )}
-
-            {renderInputRow(
-                'Size',
-                <select value={size} onChange={(e) => {
-                    setSize(e.target.value);
-                    updateStyles({ backgroundSize: e.target.value });
-                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
-                    <option value="auto">Auto</option>
-                    <option value="cover">Cover</option>
-                    <option value="contain">Contain</option>
-                </select>
-            )}
-
-            {renderInputRow(
-                'Position',
-                <select value={position} onChange={(e) => {
-                    setPosition(e.target.value);
-                    updateStyles({ backgroundPosition: e.target.value });
-                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
-                    <option value="center">Center</option>
-                    <option value="top left">Top Left</option>
-                    <option value="top right">Top Right</option>
-                    <option value="bottom left">Bottom Left</option>
-                    <option value="bottom right">Bottom Right</option>
-                </select>
-            )}
-
-            {renderInputRow(
-                'Object Fit',
-                <select value={objectFit} onChange={(e) => {
-                    setObjectFit(e.target.value);
-                    updateStyles({ objectFit: e.target.value });
-                }} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm">
-                    <option value="fill">Fill</option>
-                    <option value="contain">Contain</option>
-                    <option value="cover">Cover</option>
-                    <option value="none">None</option>
-                    <option value="scale-down">Scale Down</option>
-                </select>
             )}
 
             {renderInputRow(
@@ -253,6 +242,19 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     </optgroup>
                 </select>
             )}
+
+            {showImageSelector &&
+                <ImageSelector
+                    onSelectImage={(fileInfo: any, altText: any) => {
+                        console.log(fileInfo)
+                        setBgImage(cloudinaryApiPoint + fileInfo[0]);
+                        updateBackground(cloudinaryApiPoint + fileInfo[0]);
+                        setShowImageSelector(false)
+                    }}
+                    onClose={() => setShowImageSelector(false)}
+                    type="IMAGE"
+                />
+            }
         </div>
     );
 };
@@ -266,7 +268,6 @@ function rgbaToHex(rgba: string): string {
     const [r, g, b] = match.map((v, i) => i < 3 ? Number(v).toString(16).padStart(2, '0') : null);
     return `${r}${g}${b}`;
 }
-
 
 function hexToRgba(hex: string, alpha = 1): string {
     const parsed = hex.replace('#', '');

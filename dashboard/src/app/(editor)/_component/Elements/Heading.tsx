@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect, useState, FocusEvent } from "react";
+import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
 
@@ -23,8 +23,6 @@ const Heading: React.FC<HeadingProps> = ({
 }) => {
   const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
-  console.log(element)
-  console.log(thisElement)
   const { contextRef, contextElement, toolbarRef } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
 
@@ -35,10 +33,11 @@ const Heading: React.FC<HeadingProps> = ({
     }
   }, [element.content]);
 
-  const activateTheEditing = () => {
+  const activateTheEditing = (e: any) => {
+    e.stopPropagation()
 
     setEditing(true);
-    contextElement.setElementSetter(() => () => setThisElement);
+    contextElement.setElementSetter(() => setThisElement);
     contextElement.setElement(thisElement);
     contextElement?.setRmElementFunc(() => () => rmElement(element.id));
     if (elementRef.current) {
@@ -91,14 +90,8 @@ const Heading: React.FC<HeadingProps> = ({
   // Sync content changes
   useEffect(() => {
     updateContent(element.id, "content", thisElement.content);
-  }, [thisElement]);
+  }, [thisElement.content]);
 
-  useEffect(() => {
-    console.log(
-      "[Heading] element changed:",
-      JSON.stringify(element, null, 2)
-    );
-  }, [element]);
 
   return (
     <h1
@@ -109,9 +102,10 @@ const Heading: React.FC<HeadingProps> = ({
       suppressContentEditableWarning={true}
       style={style}
       onFocus={activateTheEditing}
+      onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
     />
   );
 };
 
-export default Heading;
+export default React.memo(Heading);

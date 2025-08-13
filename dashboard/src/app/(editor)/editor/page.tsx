@@ -9,14 +9,13 @@ import AddSection from "../_component/common/AddSection";
 import RichTextToolBar from "../_component/common/RichTextToolbar";
 import StyleToolbar from "../_component/common/StyleToolbar";
 import DimensionToolbar from "../_component/common/DimensionToolbar";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { createContentReq, getContentReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
 import ImageStyleToolbar from "../_component/common/ImageToolbar";
 
 const Editor = () => {
     const containerRef = useRef<HTMLDivElement | null>(null);
-    // const router = useRouter()
     const nav = usePathname()
     const navigationArray = nav.split("/")
     const page = navigationArray[2]
@@ -28,13 +27,13 @@ const Editor = () => {
         websiteContent,
         contextRef,
         currentWidth,
-        elementSetter,
+        currentSectionSetter,
         finalSubmit,
         imageEdit
     } = useMyContext();
 
 
-    const sectionStyleSetter = elementSetter ? elementSetter() : () => { };
+    const sectionStyleSetter = currentSectionSetter ? currentSectionSetter : () => { };
 
     const saveAllSection = () => {
         if (Array.isArray(finalSubmit)) {
@@ -76,7 +75,6 @@ const Editor = () => {
             for (let entry of entries) {
                 const newWidth = entry.contentRect.width;
                 width.setWidth(classifyWidth(newWidth));
-                // console.log(`Width: ${newWidth}, Size: ${classifyWidth(newWidth)}`);
             }
         });
 
@@ -92,6 +90,7 @@ const Editor = () => {
                 content: websiteContent.content,
             };
 
+
             if (saveData) {
                 bodyPayload.id = websiteContent;
             }
@@ -102,16 +101,11 @@ const Editor = () => {
                     success: "Login Successful!",
                     error: (err: any) => err?.message || "Login failed",
                 })
-
-
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
-                // const data = await response.json();
                 console.log("Successfully sent content:", response);
             } catch (error) {
-                // console.error("Failed to send content:", error);
             }
         }
 

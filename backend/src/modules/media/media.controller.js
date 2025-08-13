@@ -12,7 +12,7 @@ const UploadMedia = async (req, res) => {
 };
 
 const GetMedia = async (req, res) => {
-  const {resourceId, mediaType, search, page, limit } = req.query;
+  const { resourceId, mediaType, search, page, limit } = req.query;
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 100;
   const response = await getMedia(
