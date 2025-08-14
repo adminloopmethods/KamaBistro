@@ -48,7 +48,7 @@ const Editor = () => {
     // if (page) {
       async function getContentfromServer() {
         try {
-          const response: any = await getContentReq("3e9f8718-9b21-4d1d-8906-419a39b48874")
+          const response: any = await getContentReq("380ca99d-dbd8-4424-97ab-fa6980938873")
               console.log(response)
           if (response.ok) {
             websiteContent.setContent(response.contents)

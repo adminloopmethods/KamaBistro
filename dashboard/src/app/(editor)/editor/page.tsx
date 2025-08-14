@@ -10,7 +10,7 @@ import RichTextToolBar from "../_component/common/RichTextToolbar";
 import StyleToolbar from "../_component/common/StyleToolbar";
 import DimensionToolbar from "../_component/common/DimensionToolbar";
 import { usePathname } from "next/navigation";
-import { createContentReq, getContentReq, saveContentReq } from "@/functionality/fetch";
+import { createContentReq, getWebpageReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
 import ImageStyleToolbar from "../_component/common/ImageToolbar";
 
@@ -86,9 +86,9 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = {
-                name: "website-1",
+                name: "website-6",
                 content: websiteContent.content,
-                route: "/"
+                route: "/about"
             };
 
 
@@ -119,7 +119,7 @@ const Editor = () => {
         if (page) {
             async function getContentfromServer() {
                 try {
-                    const response: any = await getContentReq(page)
+                    const response: any = await getWebpageReq(page)
 
                     if (response.ok) {
                         websiteContent.setContent(response)

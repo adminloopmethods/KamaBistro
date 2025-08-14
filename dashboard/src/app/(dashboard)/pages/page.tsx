@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import {
   Edit,
   UserPlus,
@@ -12,6 +12,7 @@ import {
   BarChart2,
   ArrowRight,
 } from "lucide-react";
+import { getAllWebpagesReq, getWebpageReq } from "@/functionality/fetch";
 
 // Types
 interface User {
@@ -34,10 +35,10 @@ interface Webpage {
 
 const CMSDashboard = () => {
   const [users] = useState<User[]>([
-    {id: "1", name: "Alex Johnson", role: "editor", avatar: "/user1.jpg"},
-    {id: "2", name: "Maria Garcia", role: "verifier", avatar: "/user2.jpg"},
-    {id: "3", name: "Sam Wilson", role: "editor", avatar: "/user3.jpg"},
-    {id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg"},
+    { id: "1", name: "Alex Johnson", role: "editor", avatar: "/user1.jpg" },
+    { id: "2", name: "Maria Garcia", role: "verifier", avatar: "/user2.jpg" },
+    { id: "3", name: "Sam Wilson", role: "editor", avatar: "/user3.jpg" },
+    { id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg" },
   ]);
 
   const [webpages, setWebpages] = useState<Webpage[]>([
@@ -196,6 +197,17 @@ const CMSDashboard = () => {
 
     setWebpages(updatedPages);
   };
+
+  useEffect(() => {
+    async function getAllpages() {
+      try {
+        const response = await getAllWebpagesReq();
+        console.log(response)
+      } catch (err) {
+      }
+    }
+    getAllpages()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br dark:bg-gray-800 p-6">

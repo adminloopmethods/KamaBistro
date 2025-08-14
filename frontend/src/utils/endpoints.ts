@@ -1,5 +1,8 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BACK_ENDPOINT as string;
 
+export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API as string
+
+
 const content = "/content";
 
 const endpointMap = {

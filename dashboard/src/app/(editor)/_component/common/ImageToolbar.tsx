@@ -249,7 +249,7 @@ const ImageStyleToolbar: React.FC = () => {
       <CustomSelect
         options={[
           { value: "relative", label: "Soft Drag" },
-          // { value: "absolute", label: "Hard Drag" }
+          { value: "absolute", label: "Hard Drag" }
         ]}
         Default={style?.[currentWidth].position}
         onChange={(value) => handlePositionChange(value)}

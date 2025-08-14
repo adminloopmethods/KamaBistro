@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef, useEffect, useState, FocusEvent } from "react";
-import { BaseElement } from "@/app/(editor)/_functionality/createElement";
+import React, { useRef, useEffect, useState, FocusEvent } from "react";
+import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
 
-type ParagraphProps = {
+type ParagraphProp = {
   element: BaseElement;
   editable?: boolean;
   style?: React.CSSProperties;
@@ -13,7 +13,7 @@ type ParagraphProps = {
   rmElement: (id: string) => void;
 };
 
-const Paragraph: React.FC<ParagraphProps> = ({
+const Heading: React.FC<ParagraphProp> = ({
   element,
   editable = true,
   style,
@@ -21,7 +21,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
   updateElement,
   rmElement,
 }) => {
-  const elementRef = useRef<HTMLParagraphElement | null>(null);
+  const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
   const { contextRef, contextElement, toolbarRef } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
@@ -33,9 +33,11 @@ const Paragraph: React.FC<ParagraphProps> = ({
     }
   }, [element.content]);
 
-  const activateTheEditing = () => {
+  const activateTheEditing = (e: any) => {
+    e.stopPropagation()
+
     setEditing(true);
-    contextElement.setElementSetter(() => () => setThisElement);
+    contextElement.setElementSetter(() => setThisElement);
     contextElement.setElement(thisElement);
     contextElement?.setRmElementFunc(() => () => rmElement(element.id));
     if (elementRef.current) {
@@ -44,12 +46,16 @@ const Paragraph: React.FC<ParagraphProps> = ({
     contextRef.setReference(elementRef.current);
   };
 
-  const handleBlur = (e: FocusEvent<HTMLParagraphElement>) => {
+  const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
     const value = elementRef.current?.innerHTML ?? "";
-    setThisElement((prev: BaseElement) => ({
-      ...prev,
-      content: value.trim(),
-    }));
+    setThisElement((prev: BaseElement) => {
+      console.log(prev)
+      return ({
+        ...prev,
+        content: value.trim(),
+      })
+    });
+
   };
 
   // Remove outline if clicked outside
@@ -70,7 +76,8 @@ const Paragraph: React.FC<ParagraphProps> = ({
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [toolbarRef, elementRef]);
+  }, [toolbarRef, elementRef]); // contextRef not needed
+
 
   // Sync style changes
   useEffect(() => {
@@ -83,7 +90,8 @@ const Paragraph: React.FC<ParagraphProps> = ({
   // Sync content changes
   useEffect(() => {
     updateContent(element.id, "content", thisElement.content);
-  }, [thisElement]);
+  }, [thisElement.content]);
+
 
   return (
     <p
@@ -94,9 +102,10 @@ const Paragraph: React.FC<ParagraphProps> = ({
       suppressContentEditableWarning={true}
       style={style}
       onFocus={activateTheEditing}
-      onDoubleClick={(e: React.MouseEvent<HTMLParagraphElement>) => e.stopPropagation()}
+      onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
+      onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
     />
   );
 };
 
-export default Paragraph;
+export default React.memo(Heading);

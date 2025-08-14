@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import image from "@/assets/placeholderImage.png"
+import { cloudinaryApiPoint } from "@/utils/endpoints";
 
 interface ElementType {
     id: string;
@@ -42,7 +43,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             <img
                 src={
                     // normalizeImagePath(element.content)
-                    image.src
+                   element.content
                 }
                 alt={element.alt || "Selected"}
                 ref={imageRef}

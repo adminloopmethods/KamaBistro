@@ -94,7 +94,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      thisElement.style?.[activeScreen]?.position !== "relative"
+      thisElement.style?.[activeScreen]?.position !== "absolute"
     ) {
       return;
     }
@@ -163,14 +163,17 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     updateElement(element.id, thisElement)
   }, [thisElement.style]);
 
+  const cursorCondition = thisElement.style?.[activeScreen]?.position === "relative" || thisElement.style?.[activeScreen]?.position === "absolute"
+
   return (
     <>
       <div
         style={{
-          position: "relative",
-          display: "inline-block",
+          position: thisElement.style?.[activeScreen]?.position,
+          // display: "inline-block",
           top: thisElement.style?.[activeScreen]?.top,
           left: thisElement.style?.[activeScreen]?.left,
+          
         }}
         onClick={handleContainerClick}
         onDoubleClick={handleDoubleClick}
@@ -182,10 +185,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
           onClick={handleImageClick}
           onMouseDown={handleMouseDown} // DRAG INITIATOR
           style={{
-            maxWidth: "100%",
+            // maxWidth: "100%",
             cursor:
               editable &&
-                thisElement.style?.[activeScreen]?.position === "relative"
+                cursorCondition
                 ? "move"
                 : editable
                   ? "pointer"
@@ -193,6 +196,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             ...thisElement.style?.[activeScreen],
             top: 0,
             left: 0,
+            position: thisElement.style?.[activeScreen]?.position,
           }}
         />
       </div>

@@ -177,9 +177,16 @@ export async function saveContentReq(data: Record<string, any>): Promise<ApiResp
     );
 }
 
-export async function getContentReq(id: string): Promise<ApiResponse> {
+export async function getWebpageReq(id: string): Promise<ApiResponse> {
     return await makerequest(
         endpoint.route("createContent") + id,
+        "GET",
+    );
+}
+
+export async function getAllWebpagesReq(): Promise<ApiResponse> {
+    return await makerequest(
+        endpoint.route("createContent"),
         "GET",
     );
 }
