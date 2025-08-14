@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useState} from "react";
+import EditUserModal from "./EditUserForm";
 
 interface Location {
   id: string;
@@ -26,21 +27,45 @@ interface Pagination {
   limit: number;
 }
 
-interface UsersData {
-  message: string;
-  users: {
+interface UserTableProps {
+  data: {
     allUsers: User[];
     pagination: Pagination;
   };
+  onPageChange: (page: number) => void;
+  onCreateUser: () => void;
+  refreshUsers: () => void;
 }
 
-const UserTable: React.FC<{data: UsersData}> = ({data}) => {
+// interface UsersData {
+//   message: string;
+//   users: {
+//     allUsers: User[];
+//     pagination: Pagination;
+//   };
+// }
+
+const UserTable: React.FC<UserTableProps> = ({
+  data,
+  onPageChange,
+  onCreateUser,
+  refreshUsers,
+}) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
     });
+  };
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
+
+  // console.log("data", data?.users?.allUsers);
+
+  const handleEditClick = (user: User) => {
+    setEditingUser(user);
+    setIsEditModalOpen(true);
   };
 
   return (
@@ -49,10 +74,27 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
           Users
         </h2>
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {data.users.allUsers.length} of{" "}
-          {data.users.pagination.totalUser} users
-        </div>
+        {/* <div className="text-sm text-gray-600 dark:text-gray-400">
+          Showing {data?.allUsers.length} of {data?.pagination.totalUser} users
+        </div> */}
+        <button
+          onClick={onCreateUser}
+          className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5 mr-2"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+              clipRule="evenodd"
+            />
+          </svg>
+          New User
+        </button>
       </div>
 
       <div className="overflow-x-auto">
@@ -98,46 +140,46 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
             </tr>
           </thead>
           <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-            {data.users.allUsers.map((user) => (
+            {data?.allUsers.map((user) => (
               <tr
-                key={user.id}
+                key={user?.id}
                 className="hover:bg-gray-50 dark:hover:bg-gray-700"
               >
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
-                    {user.image ? (
+                    {user?.image ? (
                       <img
                         className="h-10 w-10 rounded-full object-cover"
-                        src={user.image}
-                        alt={user.name}
+                        src={user?.image}
+                        alt={user?.name}
                       />
                     ) : (
                       <div className="bg-gray-200 dark:bg-gray-600 border-2 border-dashed rounded-xl w-10 h-10" />
                     )}
                     <div className="ml-4">
                       <div className="text-sm font-medium text-gray-900 dark:text-white">
-                        {user.name}
+                        {user?.name}
                       </div>
                       <div className="text-sm text-gray-500 dark:text-gray-400">
-                        {user.isSuperUser ? "Admin" : "Standard User"}
+                        {user?.isSuperUser ? "Admin" : "Standard User"}
                       </div>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900 dark:text-white">
-                    {user.email}
+                    {user?.email}
                   </div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">
-                    {user.phone || "No phone"}
+                    {user?.phone || "No phone"}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900 dark:text-white">
-                    {user.location?.name || "No location"}
+                    {user?.location?.name || "No location"}
                   </div>
                   <div className="text-xs text-gray-500 dark:text-gray-400">
-                    {user.locationId}
+                    {user?.locationId}
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
@@ -149,14 +191,17 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
                         : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200"
                     }`}
                   >
-                    {user.status}
+                    {user?.status}
                   </span>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                  {formatDate(user.updatedAt)}
+                  {formatDate(user?.updatedAt)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3">
+                  <button
+                    onClick={() => handleEditClick(user)}
+                    className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
+                  >
                     Edit
                   </button>
                   <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
@@ -168,6 +213,16 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
           </tbody>
         </table>
       </div>
+
+      {/* Edit User Modal */}
+      {editingUser && (
+        <EditUserModal
+          user={editingUser}
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onUserUpdated={refreshUsers}
+        />
+      )}
 
       {/* Pagination */}
       <div className="bg-white dark:bg-gray-800 px-4 py-3 flex items-center justify-between border-t border-gray-200 dark:border-gray-700 sm:px-6">
@@ -183,11 +238,8 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
           <div>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Showing{" "}
-              <span className="font-medium">{data.users.pagination.limit}</span>{" "}
-              of{" "}
-              <span className="font-medium">
-                {data.users.pagination.totalUser}
-              </span>{" "}
+              <span className="font-medium">{data?.pagination?.limit}</span> of{" "}
+              <span className="font-medium">{data?.pagination?.totalUser}</span>{" "}
               results
             </p>
           </div>
@@ -197,9 +249,9 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
               aria-label="Pagination"
             >
               <button
-                disabled={data.users.pagination.currentPage === 1}
+                disabled={data?.pagination?.currentPage === 1}
                 className={`relative inline-flex items-center px-2 py-2 rounded-l-md border text-sm font-medium ${
-                  data.users.pagination.currentPage === 1
+                  data?.pagination?.currentPage === 1
                     ? "text-gray-300 dark:text-gray-500 cursor-not-allowed border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
                     : "text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
                 }`}
@@ -209,13 +261,13 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
               </button>
 
               {Array.from(
-                {length: data.users.pagination.totalPages},
+                {length: data?.pagination?.totalPages},
                 (_, i) => i + 1
               ).map((page) => (
                 <button
                   key={page}
                   className={`relative inline-flex items-center px-4 py-2 border text-sm font-medium ${
-                    page === data.users.pagination.currentPage
+                    page === data?.pagination?.currentPage
                       ? "z-10 bg-indigo-50 border-indigo-500 text-indigo-600 dark:bg-indigo-900 dark:border-indigo-700 dark:text-indigo-200"
                       : "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-600"
                   }`}
@@ -226,12 +278,10 @@ const UserTable: React.FC<{data: UsersData}> = ({data}) => {
 
               <button
                 disabled={
-                  data.users.pagination.currentPage ===
-                  data.users.pagination.totalPages
+                  data?.pagination?.currentPage === data?.pagination?.totalPages
                 }
                 className={`relative inline-flex items-center px-2 py-2 rounded-r-md border text-sm font-medium ${
-                  data.users.pagination.currentPage ===
-                  data.users.pagination.totalPages
+                  data?.pagination?.currentPage === data?.pagination?.totalPages
                     ? "text-gray-300 dark:text-gray-500 cursor-not-allowed border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
                     : "text-gray-500 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700"
                 }`}

@@ -117,21 +117,77 @@ export const fetchAllUsers = async (
 };
 
 // Update User
+// export const updateUser = async (id, name, password, phone, locationId) => {
+//   const dataToUpdate = {
+//     name,
+//     phone,
+//     roles: {
+//       deleteMany: {},
+//       create:
+//         roles?.map((roleId) => ({
+//           role: {connect: {id: roleId}},
+//         })) || [],
+//     },
+//   };
+
+//   if (password) {
+//     // "changes for making password optional" at apr 7 11:32
+//     const hashedPassword = await EncryptData(password, 10);
+//     dataToUpdate.password = hashedPassword;
+//   }
+
+//   const updatedUser = await prismaClient.user.update({
+//     where: {id},
+//     data: dataToUpdate,
+//     include: {
+//       roles: {
+//         include: {
+//           role: {
+//             include: {
+//               permissions: {
+//                 include: {
+//                   permission: true,
+//                 },
+//               },
+//               roleType: true,
+//             },
+//           },
+//         },
+//       },
+//     },
+//   });
+
+//   const roleAndPermission =
+//     updatedUser.roles?.map((role) => ({
+//       id: role.role.id,
+//       role: role.role.name,
+//       roleType: role.role.roleType.name,
+//       status: role.role.status,
+//       permissions: role.role.permissions.map((perm) => perm.permission.name),
+//     })) || [];
+
+//   // Use dynamic payload
+//   // const emailPayload = userAccountUpdatePayload({ name: updatedUser.name, email: updatedUser.email });
+//   // addEmailJob(emailPayload);
+
+//   // Create a new object without the password field
+//   const userWithoutPassword = {
+//     ...updatedUser,
+//     roles: roleAndPermission,
+//   };
+//   delete userWithoutPassword.password;
+
+//   return userWithoutPassword;
+// };
+
 export const updateUser = async (id, name, password, phone, locationId) => {
   const dataToUpdate = {
     name,
     phone,
-    roles: {
-      deleteMany: {},
-      create:
-        roles?.map((roleId) => ({
-          role: {connect: {id: roleId}},
-        })) || [],
-    },
+    location: locationId ? {connect: {id: locationId}} : {disconnect: true},
   };
 
   if (password) {
-    // "changes for making password optional" at apr 7 11:32
     const hashedPassword = await EncryptData(password, 10);
     dataToUpdate.password = hashedPassword;
   }
@@ -140,41 +196,12 @@ export const updateUser = async (id, name, password, phone, locationId) => {
     where: {id},
     data: dataToUpdate,
     include: {
-      roles: {
-        include: {
-          role: {
-            include: {
-              permissions: {
-                include: {
-                  permission: true,
-                },
-              },
-              roleType: true,
-            },
-          },
-        },
-      },
+      location: true,
     },
   });
 
-  const roleAndPermission =
-    updatedUser.roles?.map((role) => ({
-      id: role.role.id,
-      role: role.role.name,
-      roleType: role.role.roleType.name,
-      status: role.role.status,
-      permissions: role.role.permissions.map((perm) => perm.permission.name),
-    })) || [];
-
-  // Use dynamic payload
-  // const emailPayload = userAccountUpdatePayload({ name: updatedUser.name, email: updatedUser.email });
-  // addEmailJob(emailPayload);
-
   // Create a new object without the password field
-  const userWithoutPassword = {
-    ...updatedUser,
-    roles: roleAndPermission,
-  };
+  const userWithoutPassword = {...updatedUser};
   delete userWithoutPassword.password;
 
   return userWithoutPassword;
@@ -787,4 +814,8 @@ export const deleteLogsByDateRange = async (startDate, endDate) => {
     },
   });
   return result.count;
+};
+
+export const fetchAllLocations = async () => {
+  return await prismaClient.location.findMany();
 };

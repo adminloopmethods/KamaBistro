@@ -30,6 +30,8 @@ router.post(
   tryCatchWrap(UserController.AssignPageRoleHandler)
 );
 
+router.get("/locations", tryCatchWrap(UserController.GetAllLocations));
+
 router.get("/getRolesForUser", tryCatchWrap(UserController.GetRolesForUser));
 
 router.get(
@@ -55,7 +57,7 @@ router.put(
   "/updateUser/:id",
   // checkPermission(requiredPermissionsForUser),
   validate(updateUserSchema),
-  auditLogger,
+  // auditLogger,
   tryCatchWrap(UserController.EditUserDetails)
 );
 

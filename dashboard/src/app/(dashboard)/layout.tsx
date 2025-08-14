@@ -40,15 +40,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 pt-20`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Provider>
-            <div className="min-h-screen flex flex-col p-4 relative">
+            <div className="min-h-screen flex flex-col px-4 pb-4 relative">
               <Header brand="KAMA" />
               <div className="flex flex-1 gap-4 mt-4">
                 {/* <Sidebar /> */}
-                <main className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 overflow-hidden">
+                <main className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 overflow-hidden ">
                   {children}
                 </main>
               </div>
