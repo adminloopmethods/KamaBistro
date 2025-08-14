@@ -12,6 +12,7 @@ import {
   updateProfile,
   updateProfileImage,
   assignPageRole,
+  fetchAllLocations,
 } from "../../repository/user.repository.js";
 import {assert, assertEvery} from "../../errors/assertError.js";
 import {logger} from "../../config/logConfig.js";
@@ -119,6 +120,11 @@ const editProfileImage = async (id, imageUrl) => {
   return {message: "Profile image updated successfully", profileImage};
 };
 
+const getAllLocations = async () => {
+  const location = await fetchAllLocations();
+  return {message: "Location fetched successfully", location};
+};
+
 export {
   createUser,
   AssignPageRole,
@@ -133,4 +139,5 @@ export {
   getAllRolesForUser,
   getAllUsersByRoleId,
   editProfileImage,
+  getAllLocations,
 };

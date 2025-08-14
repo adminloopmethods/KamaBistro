@@ -1,24 +1,28 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
-export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API as string
+export const cloudinaryApiPoint = process.env
+  .NEXT_PUBLIC_CLOUDINARY_API as string;
 
 if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
 }
 
 const auth = "auth";
-const users = "users";
+const users = "user";
 const content = "content";
 const media = "media";
-
 
 const endpointMap = {
   login: `${auth}/login`,
 
   // user
-  getUsers: `${users}/`,
-  submitUser: `${users}/register`,
-  updateUser: `${users}/`,
+  getUsers: `${users}/getAllUsers`,
+  getUserProfile: `${users}/getUserProfile`,
+  createUser: `${users}/create`,
+  updateUser: `${users}/updateUser/`,
   changeStatus: `${users}/switchStatus/`,
+
+  //location
+  getLocations: `${users}/locations`,
 
   // content
   createContent: `${content}/`,
@@ -36,7 +40,7 @@ const endpoint = {
 
   route(route: EndpointKey): string {
     return BASE_URL + endpointMap[route];
-  }
+  },
 };
 
 export default endpoint;

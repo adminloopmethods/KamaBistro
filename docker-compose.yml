@@ -1,12 +1,12 @@
 services:
   postgres:
     image: postgres:latest
-    container_name: kama-service
+    container_name: kama-postgres
     # restart: always
     env_file:
       - .env # Dynamically load the correct .env file
     ports:
-      - "${POSTGRES_PORT}:5433" # Expose for development only
+      - "${POSTGRES_PORT}:5432" # Expose for development only
     networks:
       - cms_network
     environment:

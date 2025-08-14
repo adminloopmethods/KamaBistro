@@ -7,6 +7,7 @@ import {
   editProfile,
   editProfileImage,
   editUserDetails,
+  getAllLocations,
   getAllRolesForUser,
   getAllUsers,
   getAllUsersByRoleId,
@@ -149,6 +150,11 @@ const EditProfileImage = async (req, res) => {
   res.status(201).json(updatedUser);
 };
 
+const GetAllLocations = async (req, res) => {
+  const location = await getAllLocations();
+  res.status(201).json(location);
+};
+
 export default {
   CreateUserHandler,
   AssignPageRoleHandler,
@@ -163,4 +169,5 @@ export default {
   GetAllUsersByRoleId,
   GetUserProfile,
   EditProfileImage,
+  GetAllLocations,
 };

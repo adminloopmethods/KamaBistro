@@ -1,6 +1,4 @@
-// header.tsx
 "use client";
-
 import React, {useEffect, useState, useRef} from "react";
 import {
   Moon,
@@ -13,6 +11,8 @@ import {
 import {useRouter} from "next/navigation";
 import {ThemeToggleButton} from "@/components/ui/theme-toggle-button";
 import {Router} from "next/router";
+import Image from "next/image";
+import logo from "@/assets/brand/kamalogo.png";
 // import {useTheme} from "@/Context/ThemeContext";
 // import ThemeToggleButton from "@/components/ui/theme-toggle-button";
 // import ThemeToggleButton from "@components/ui/theme-toggle-button";
@@ -70,20 +70,22 @@ const Header: React.FC<HeaderProps> = ({brand}) => {
   };
 
   return (
-    <header className="rounded-xl px-6 py-4 bg-white dark:bg-gray-800 flex items-center justify-between shadow-sm">
+    <header className="fixed top-0 left-0 right-0 z-50 rounded-b-xl px-6 py-4 bg-white dark:bg-gray-800 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-6">
-        <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+        {/* <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
           {brand} CMS
-        </h1>
 
-        <div className="relative hidden md:block">
+        </h1> */}
+        <Image src={logo} width={150} alt="kama_logo" />
+
+        {/* <div className="relative hidden md:block">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4" />
           <input
             type="text"
             placeholder="Search..."
             className="pl-10 pr-4 py-2 rounded-full text-sm bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
           />
-        </div>
+        </div> */}
       </div>
 
       <div className="flex items-center gap-4">
