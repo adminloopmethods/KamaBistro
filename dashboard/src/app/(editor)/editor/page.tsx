@@ -86,9 +86,9 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = {
-                name: "website-6",
+                name: "website-10",
                 content: websiteContent.content,
-                route: "/about"
+                route: "/a"
             };
 
 

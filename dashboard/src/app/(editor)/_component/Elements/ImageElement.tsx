@@ -94,7 +94,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      thisElement.style?.[activeScreen]?.position !== "absolute"
+      thisElement.style?.[activeScreen]?.position !== "relative"
     ) {
       return;
     }

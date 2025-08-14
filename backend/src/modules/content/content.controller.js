@@ -23,7 +23,7 @@ export const getAllWebpages = async (req, res) => {
   
   try {
     const webpages = await getAllWebpagesService();
-    res.json(webpages);
+    res.json({webpages});
   } catch (error) {
     logger.error(`Error fetching webpages: ${error.message}`, { error });
     res.status(500).json({ error: "Failed to fetch webpages." });

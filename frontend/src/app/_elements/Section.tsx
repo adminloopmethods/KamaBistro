@@ -42,8 +42,8 @@ const Section: React.FC<SectionProps> = ({
         ref={sectionRef}
         style={style}
       >
-        {element.map((Element, i) => {
-          const Component = mapElement[Element.name];
+        {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}
+          const Component = mapElement[Element.name]; // mapElement.h1
           return (
             <Component
               key={i}
