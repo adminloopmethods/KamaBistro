@@ -10,7 +10,15 @@ model Webpage {
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
 
+  editorId String?
+  editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
+
+  verifierId String?
+  verifier   User?   @relation("WebpageVerifier", fields: [verifierId], references: [id])
+
   @@index([locationId])
+  @@index([editorId])
+  @@index([verifierId])
 }
 
 model Content {
