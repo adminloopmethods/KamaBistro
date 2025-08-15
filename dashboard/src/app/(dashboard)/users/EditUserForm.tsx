@@ -1,7 +1,8 @@
 // components/users/EditUserModal.tsx
-import React, {useState, useEffect} from "react";
-import {getLocationsReq, updateUserReq} from "@/functionality/fetch";
-import {toast} from "react-toastify";
+import React, { useState, useEffect } from "react";
+import { getLocationsReq, updateUserReq } from "@/functionality/fetch";
+// import {toast} from "react-toastify";
+import { toast } from "sonner";
 
 interface Location {
   id: string;
@@ -32,7 +33,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
 }) => {
   const [name, setName] = useState(user.name);
   const [phone, setPhone] = useState(user.phone);
-  const [locationId, setLocationId] = useState(user.locationId);
+  const [locationId, setLocationId] = useState<string | null>(user.locationId);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [locations, setLocations] = useState<Location[]>([]);
@@ -69,7 +70,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       name,
       phone,
       locationId: locationId || null,
-      ...(password ? {password} : {}),
+      ...(password ? { password } : {}),
     };
 
     try {

@@ -2,10 +2,7 @@
 
 import { useEffect, useRef, useState, ChangeEvent, MouseEvent } from "react";
 import { Upload, X } from "lucide-react";
-// import { deleteMedia, fetchAllImages } from "../../app/fetch";
-
 import { cloudinaryApiPoint } from "@/utils/endpoints";
-// import { toast } from "react-toastify";
 import { Toaster, toast } from "sonner";
 import Popups from "@/app/_common/PopUps";
 import { useImageUpload } from "../../_functionality/useImageUpload";
@@ -49,7 +46,7 @@ const imageStructure: ImageType[] = [
     }
 ];
 
-const ImageSelector: React.FC<ImageSelectorProps> = ({
+const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
     onSelectImage,
     onClose,
     type = "IMAGE"

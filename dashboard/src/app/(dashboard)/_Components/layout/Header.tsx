@@ -1,5 +1,5 @@
 "use client";
-import React, {useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Moon,
   SunMedium,
@@ -8,11 +8,12 @@ import {
   ChevronDown,
   Search,
 } from "lucide-react";
-import {useRouter} from "next/navigation";
-import {ThemeToggleButton} from "@/components/ui/theme-toggle-button";
-import {Router} from "next/router";
+import { useRouter } from "next/navigation";
+import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
+import { Router } from "next/router";
 import Image from "next/image";
 import logo from "@/assets/brand/kamalogo.png";
+import { useClickOutside } from "@/functionality/useClickOutside";
 // import {useTheme} from "@/Context/ThemeContext";
 // import ThemeToggleButton from "@/components/ui/theme-toggle-button";
 // import ThemeToggleButton from "@components/ui/theme-toggle-button";
@@ -26,7 +27,7 @@ type HeaderProps = {
   brand: string;
 };
 
-const Header: React.FC<HeaderProps> = ({brand}) => {
+const Header: React.FC<HeaderProps> = ({ brand }) => {
   const router = useRouter();
   // const {theme, toggleTheme} = useTheme();
   const [dropDown, setDropDown] = useState<boolean>(false);
@@ -50,19 +51,8 @@ const Header: React.FC<HeaderProps> = ({brand}) => {
     }
   }, [router]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(event.target as Node)
-      ) {
-        setDropDown(false);
-      }
-    };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  useClickOutside(profileRef, () => setDropDown(false));
 
   const handleLogout = () => {
     localStorage.clear();
@@ -72,20 +62,7 @@ const Header: React.FC<HeaderProps> = ({brand}) => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 rounded-b-xl px-6 py-4 bg-white dark:bg-gray-800 flex items-center justify-between shadow-sm">
       <div className="flex items-center gap-6">
-        {/* <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-          {brand} CMS
-
-        </h1> */}
         <Image src={logo} width={150} alt="kama_logo" />
-
-        {/* <div className="relative hidden md:block">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4" />
-          <input
-            type="text"
-            placeholder="Search..."
-            className="pl-10 pr-4 py-2 rounded-full text-sm bg-gray-100 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
-          />
-        </div> */}
       </div>
 
       <div className="flex items-center gap-4">
@@ -93,8 +70,8 @@ const Header: React.FC<HeaderProps> = ({brand}) => {
 
         <ThemeToggleButton
           variant="circle"
-          //  start="top-left"
-          // showLabel={false}
+        //  start="top-left"
+        //  showLabel={false}
         />
 
         {/* Notifications */}
@@ -120,18 +97,10 @@ const Header: React.FC<HeaderProps> = ({brand}) => {
               .map((n) => n[0])
               .join("") || "U"}
           </div>
-          {/* <div className="text-sm leading-tight hidden lg:block">
-            <p className="font-medium text-gray-900 dark:text-white">
-              {user?.name}
-            </p>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              {user?.email}
-            </p>
-          </div> */}
+          
           <ChevronDown
-            className={`w-5 text-gray-600 dark:text-gray-300 transition-transform ${
-              dropDown ? "rotate-180" : ""
-            }`}
+            className={`w-5 text-gray-600 dark:text-gray-300 transition-transform ${dropDown ? "rotate-180" : ""
+              }`}
           />
 
           {/* Dropdown */}

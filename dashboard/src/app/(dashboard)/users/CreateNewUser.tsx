@@ -1,7 +1,8 @@
 // components/UserManagement/AddUserModal.tsx
 import React, {useState, useEffect} from "react";
 import {createUserReq, getLocationsReq} from "@/functionality/fetch";
-import {toast} from "react-toastify";
+// import {toast} from "react-toastify";
+import { toast } from "sonner";
 
 interface Location {
   id: string;
