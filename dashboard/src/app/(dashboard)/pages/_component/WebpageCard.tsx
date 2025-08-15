@@ -1,6 +1,7 @@
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { Edit, UserPlus } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMyContext } from "@/Context/EditorContext";
 
 interface User {
     id: string;
@@ -37,9 +38,9 @@ const WebpageCard: React.FC<Props> = ({
     removeUser,
 }) => {
     const router = useRouter()
-    const goToEditPage = () => {
-        // console.log(page)
-        router.push(`/editor/${page.route}`)
+    const goToEditPage = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        router.push(`/editor/${page.id}`)
     }
 
     return (
@@ -156,6 +157,7 @@ const WebpageCard: React.FC<Props> = ({
                 <div className="mt-6 flex space-x-3">
                     <button
                         onClick={goToEditPage}
+                        type="button"
                         className="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2.5 rounded-xl flex items-center justify-center">
                         <Edit className="w-5 h-5 mr-2" />
                         Edit Content
@@ -171,8 +173,9 @@ const WebpageCard: React.FC<Props> = ({
                                 strokeLinecap="round"
                                 strokeLinejoin="round"
                                 strokeWidth={2}
-                                d="M12 5v.01M12 12vgoToEditPage.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+                                d="M12 5v.01M12 12v.01M12 19v.01"
                             />
+
                         </svg>
                     </button>
                 </div>

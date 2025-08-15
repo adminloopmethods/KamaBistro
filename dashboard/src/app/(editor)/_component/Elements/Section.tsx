@@ -39,7 +39,6 @@ const Section: React.FC<SectionProps> = ({
   lastSection,
   section,
 }) => {
-  // console.log("console.from.section")
   const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
@@ -141,32 +140,32 @@ const Section: React.FC<SectionProps> = ({
     };
   }, [isDragging]);
 
-  useEffect(() => {
-    function saveToGlobalObject() {
-      SubmissionObject.setContent((prev: any[]) =>
-        prev.map((e) =>
-          e.id === section.id
-            ? {
-              ...e,
-              elements: elements,
-              style: {
-                ...e.style,
-                [currentWidth]: sectionStyle,
-              },
-            }
-            : e
-        )
-      );
-    }
+  // useEffect(() => {
+  //   function saveToGlobalObject() {
+  //     SubmissionObject.setContent((prev: any[]) =>
+  //       prev.map((e) =>
+  //         e.id === section.id
+  //           ? {
+  //             ...e,
+  //             elements: elements,
+  //             style: {
+  //               ...e.style,
+  //               [currentWidth]: sectionStyle,
+  //             },
+  //           }
+  //           : e
+  //       )
+  //     );
+  //   }
 
-    SubmissionObject.setFinalSubmit((prev: any[]) => {
-      const removedSame = prev.filter((e) => e.id !== section.id);
-      return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
-    });
-    // contextElement.setElement(sectionStyle)
-    contextForSection.setCurrentSection(sectionStyle)
+  //   SubmissionObject.setFinalSubmit((prev: any[]) => {
+  //     const removedSame = prev.filter((e) => e.id !== section.id);
+  //     return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
+  //   });
+  //   // contextElement.setElement(sectionStyle)
+  //   contextForSection.setCurrentSection(sectionStyle)
 
-  }, [elements, sectionStyle, currentWidth]);
+  // }, [elements, sectionStyle, currentWidth]);
 
   return (
     <div className="relative">

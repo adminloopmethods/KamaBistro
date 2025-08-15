@@ -15,6 +15,16 @@ import React, {
 
 type RefType = HTMLElement | null;
 
+type webpageType = {
+  id: string,
+  locationId?: string | null,
+  name: string,
+  route: string,
+  contents: any[],
+  createdAt: string,
+  updatedAt: string
+}
+
 type ContextRefType = {
   activeRef: RefType;
   setContextRef: React.Dispatch<React.SetStateAction<RefType>>;
@@ -35,8 +45,8 @@ type WidthType = {
 };
 
 type WebsiteContentType = {
-  content: any[];
-  setContent: React.Dispatch<React.SetStateAction<any[]>>;
+  webpage: webpageType | null;
+  setWebpage: React.Dispatch<React.SetStateAction<webpageType | null>>;
 };
 
 type FinalSubmitType = {
@@ -47,7 +57,7 @@ type FinalSubmitType = {
 type SubmissionObjectType = {
   finalSubmit: FinalSubmitType[];
   setFinalSubmit: React.Dispatch<React.SetStateAction<FinalSubmitType[]>>;
-  setContent: React.Dispatch<React.SetStateAction<any[]>>;
+  setWebpage: React.Dispatch<React.SetStateAction<webpageType | null>>;
 };
 
 interface ImageStyleToolbarProps {
@@ -57,7 +67,7 @@ interface ImageStyleToolbarProps {
   setElement: any;
   currentWidth: string;
   imageRef: RefObject<HTMLImageElement | null>;
-  onClose: () => void,
+  onClose: () => void;
   rmElement?: () => void
 }
 
@@ -82,11 +92,11 @@ type MyContextType = {
   SubmissionObject: SubmissionObjectType;
   finalSubmit: FinalSubmitType[];
   imageContext: ImageStyleToolbarProps | Record<string, any> | null;
-  setImageContext: React.Dispatch<React.SetStateAction<ImageStyleToolbarProps | Record<string, any> | null>>
-  imageEdit: Boolean,
-  setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>,
-  contextForSection: SectionContextType,
-  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>> | null,
+  setImageContext: React.Dispatch<React.SetStateAction<ImageStyleToolbarProps | Record<string, any> | null>>;
+  imageEdit: Boolean;
+  setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>;
+  contextForSection: SectionContextType;
+  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>> | null;
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -95,7 +105,7 @@ function Provider({ children }: { children: ReactNode }) {
   // set the active screen
   const [currentWidth, setWidth] = useState<string>('');
   // global content
-  const [content, setContent] = useState<any[]>([]);
+  const [webpage, setWebpage] = useState<webpageType | null>(null);
 
   // elements
   const [activeRef, setContextRef] = useState<RefType>(null); // to active the current ref of the element
@@ -141,14 +151,14 @@ function Provider({ children }: { children: ReactNode }) {
   };
 
   const websiteContent: WebsiteContentType = { // the whole website
-    content,
-    setContent
+    webpage,
+    setWebpage
   };
 
   const SubmissionObject: SubmissionObjectType = { // handling the submission
     finalSubmit,
     setFinalSubmit,
-    setContent
+    setWebpage
   };
 
   return (
@@ -171,7 +181,7 @@ function Provider({ children }: { children: ReactNode }) {
         imageEdit,
         setImageEdit,
         contextForSection,
-        currentSectionSetter
+        currentSectionSetter,
       }}
     >
       {children}
