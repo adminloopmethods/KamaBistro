@@ -41,7 +41,7 @@ export const getWebpageById = async (req, res) => {
       return res.status(404).json({ error: "Webpage not found." });
     }
 
-    res.json(webpage);
+    res.json({webpage});
   } catch (error) {
     logger.error(`Error fetching webpage: ${error.message}`, { error });
     res.status(500).json({ error: "Failed to fetch webpage." });
