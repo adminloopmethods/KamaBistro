@@ -2,19 +2,22 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Section from "../_component/Elements/Section";
+import Section from "../../_component/Elements/Section";
 import { useMyContext } from "@/Context/EditorContext";
-import { CreateSection } from "../_functionality/createSection";
-import AddSection from "../_component/common/AddSection";
-import RichTextToolBar from "../_component/common/RichTextToolbar";
-import StyleToolbar from "../_component/common/StyleToolbar";
-import DimensionToolbar from "../_component/common/DimensionToolbar";
+import { CreateSection } from "../../_functionality/createSection";
+import AddSection from "../../_component/common/AddSection";
+import RichTextToolBar from "../../_component/common/RichTextToolbar";
+import StyleToolbar from "../../_component/common/StyleToolbar";
+import DimensionToolbar from "../../_component/common/DimensionToolbar";
 import { usePathname } from "next/navigation";
 import { createContentReq, getWebpageReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
-import ImageStyleToolbar from "../_component/common/ImageToolbar";
+import ImageStyleToolbar from "../../_component/common/ImageToolbar";
+import { useParams } from "next/navigation";
 
 const Editor = () => {
+    const params = useParams()
+    console.log(params)
     const containerRef = useRef<HTMLDivElement | null>(null);
     const nav = usePathname()
     const navigationArray = nav.split("/")

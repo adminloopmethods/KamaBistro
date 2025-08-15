@@ -24,8 +24,9 @@ export default function EditorLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const theme = 'dark'
   return (
-    <html lang="en">
+    <html lang="en" data-theme={theme} style={{ colorScheme: theme }}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-stone-100 min-h-screen p-0`}
       >
