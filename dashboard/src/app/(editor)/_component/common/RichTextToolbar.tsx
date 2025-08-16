@@ -35,7 +35,7 @@ const RichTextToolBar: React.FC = () => {
     const {
         contextRef,
         activeRef,
-        currentWidth,
+        activeScreen,
         elementSetter,
         element,
         toolbarRef,
@@ -52,11 +52,11 @@ const RichTextToolBar: React.FC = () => {
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [alignment, setAlignment] = useState<'left' | 'center' | 'right' | 'justify' | ''>('');
-    const [style, setStyle] = useState<Style>(element?.style?.[currentWidth] || {});
+    const [style, setStyle] = useState<Style>(element?.style?.[activeScreen] || {});
 
     // Sync when element or screen size changes
     useEffect(() => {
-        const st = element?.style?.[currentWidth] || {};
+        const st = element?.style?.[activeScreen] || {};
         setStyle(st);
 
         setIsBold(st.fontWeight === 'bold');
@@ -64,21 +64,21 @@ const RichTextToolBar: React.FC = () => {
         setIsUnderline(st.textDecoration === 'underline');
         setAlignment((st.textAlign as any) || '');
         setTextColor((st.color as string) || '#000000');
-    }, [element, currentWidth]);
+    }, [element, activeScreen]);
 
     useEffect(() => {
-        if (element?.style?.[currentWidth]) {
-            setStyle(element.style[currentWidth]);
+        if (element?.style?.[activeScreen]) {
+            setStyle(element.style[activeScreen]);
         } else {
             setStyle({});
         }
-    }, [element, currentWidth]);
+    }, [element, activeScreen]);
 
     const debouncedColorChange = useCallback(
         debounce((value: string) => {
-            onColorChange(value, element, Setter, currentWidth);
+            onColorChange(value, element, Setter, activeScreen);
         }, 100),
-        [element, Setter, currentWidth]
+        [element, Setter, activeScreen]
     );
 
     const valueChangeOfInputs = (
@@ -150,7 +150,7 @@ const RichTextToolBar: React.FC = () => {
         if (Setter) {
             Setter((prev: any) => ({
                 ...prev,
-                style: { ...prev.style, [currentWidth]: style }
+                style: { ...prev.style, [activeScreen]: style }
             }));
         }
     }, [style]);
@@ -175,9 +175,9 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Bold, Italic, Underline */}
             <div className="flex gap-2">
-                <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && "bg-stone-600 text-white"}`} onClick={() => onBold(element, Setter, currentWidth)}>B</button>
-                <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && "bg-stone-600 text-white"}`} onClick={() => onItalic(element, Setter, currentWidth)}>I</button>
-                <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && "bg-stone-600 text-white"}`} onClick={() => onUnderline(element, Setter, currentWidth)}>U</button>
+                <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && "bg-stone-600 text-white"}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button>
+                <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && "bg-stone-600 text-white"}`} onClick={() => onItalic(element, Setter, activeScreen)}>I</button>
+                <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && "bg-stone-600 text-white"}`} onClick={() => onUnderline(element, Setter, activeScreen)}>U</button>
             </div>
 
             {/* Font & Size */}
@@ -185,7 +185,7 @@ const RichTextToolBar: React.FC = () => {
                 options={fontFamilyOptions}
                 Default={style.fontFamily?.toString() || undefined}
                 firstOption="fonts"
-                onChange={(value: string) => { onFamilyFontChange(value, element, Setter, currentWidth); }}
+                onChange={(value: string) => { onFamilyFontChange(value, element, Setter, activeScreen); }}
                 disableFirstValue={true}
             />
 
@@ -193,7 +193,7 @@ const RichTextToolBar: React.FC = () => {
                 options={fontSizeOptions}
                 firstOption="text size"
                 Default={style.fontSize?.toString() || undefined}
-                onChange={(value: string) => { onSizeChange(value, element, Setter, currentWidth); }}
+                onChange={(value: string) => { onSizeChange(value, element, Setter, activeScreen); }}
                 disableFirstValue={true}
             />
 
@@ -211,10 +211,10 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Align */}
             <div className="flex gap-2">
-                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "left" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("left", element, Setter, currentWidth)} title="Align Left"><AlignLeft /></button>
-                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "center" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("center", element, Setter, currentWidth)} title="Align Center"><AlignCenter /></button>
-                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "right" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("right", element, Setter, currentWidth)} title="Align Right"><AlignRight /></button>
-                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "justify" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("justify", element, Setter, currentWidth)} title="Justify"><AlignJustify /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "left" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("left", element, Setter, activeScreen)} title="Align Left"><AlignLeft /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "center" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("center", element, Setter, activeScreen)} title="Align Center"><AlignCenter /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "right" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("right", element, Setter, activeScreen)} title="Align Right"><AlignRight /></button>
+                <button className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === "justify" && "bg-stone-600 text-white"}`} onClick={() => onAlignChange("justify", element, Setter, activeScreen)} title="Justify"><AlignJustify /></button>
             </div>
 
             {/* Position & Z-Index */}

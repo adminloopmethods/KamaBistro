@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
-import { useMyContext } from "@/Context/EditorContext";
+import React, { useRef, useEffect, useState, CSSProperties } from "react";
+import { useMyContext, webpageType } from "@/Context/EditorContext";
 import { useParams } from "next/navigation";
 import { createContentReq, getWebpageReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
 import Section from "../../_component/Elements/Section";
-import { CreateSection } from "../../_functionality/createSection";
+import { CreateSection, SectionElementType } from "../../_functionality/createSection";
 import AddSection from "../../_component/common/AddSection";
 import RichTextToolBar from "../../_component/common/RichTextToolbar";
 import StyleToolbar from "../../_component/common/StyleToolbar";
@@ -14,28 +14,50 @@ import DimensionToolbar from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
 
 import { CiMobile1 } from "react-icons/ci";
-// import { MdOutlineTabletMac } from "react-icons/md";
 import { IoIosTabletPortrait } from "react-icons/io";
 import { CiLaptop } from "react-icons/ci";
 import { CiDesktop } from "react-icons/ci";
 
-
+const renderInput = (
+    label: string,
+    key: string,
+    type: 'text' | 'number' = 'text',
+    suffix = '',
+    value: string | undefined,
+    onChange: (name: string, val: string) => void
+) => {
+    return (
+        <div className="flex flex-col gap-1" key={key}>
+            {/* <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label> */}
+            <input
+                type={type}
+                value={value || ""}
+                onChange={(e) => {
+                    const val = e.target.value;
+                    onChange(key, val)
+                }}
+                placeholder={label}
+                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+            />
+        </div>
+    )
+};
 
 const Editor = () => {
     const params = useParams()
     const containerRef = useRef<HTMLDivElement | null>(null);
-    const page = params.slug ? params.slug[0] : ""
-    const [saveData, setUpdateData] = useState<Boolean>(false);
-    const [pageWidth, setPageWidth] = useState<number | string>("100%")
+    const page = params.slug ? params.slug[0] : "" // hold the id from param to bring the content from backend
+    const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
+    const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
 
     const {
-        width,
-        websiteContent,
-        contextRef,
-        currentWidth,
-        currentSectionSetter,
-        finalSubmit,
-        imageEdit
+        width, // {currentWidth, setCurrentWidth}
+        websiteContent, // website object that has {name, id, route, createdAt, updatedAt, content: []} // where content is each section
+        contextRef, // if active then it toggle between the toolbar of text and section
+        imageEdit, // boolean value to switch between the rich text tool and image toolbar
+        activeScreen, // the active Screen
+        currentSectionSetter, // setter of the setter to set the section style
+        finalSubmit, // the array of the all section
     } = useMyContext();
 
     const { webpage, setWebpage } = websiteContent;
@@ -50,6 +72,7 @@ const Editor = () => {
         }
     };
 
+    ///////////// screen related functionality ///////////////////
     // Function to classify width
     const classifyWidth = (w: number) => {
         if (w > 1024) return "xl";
@@ -74,30 +97,13 @@ const Editor = () => {
         setPageWidth("100%")
     }
 
-    const addSection = (section = "section") => {
-        setWebpage((prev: any) => ({ ...prev, contents: [...prev.content, CreateSection["section"]()] }));
-    };
-
-    const rmSection = (sectionId: string) => {
-        setWebpage((prev: any) => {
-            const newSet = prev.contents.filter((element: any) => element.id !== sectionId);
-            return { ...prev, contents: newSet };
-        });
-    };
-
-    const updateSectionStyles = (newStyle: any) => {
-        sectionStyleSetter((prev: any) => {
-            return { ...prev, ...newStyle };
-        });
-    };
-
     useEffect(() => {
         if (!containerRef.current) return;
 
         const observer = new ResizeObserver((entries) => {
             for (let entry of entries) {
                 const newWidth = entry.contentRect.width;
-                width.setWidth(classifyWidth(newWidth));
+                width.setActiveScreen(classifyWidth(newWidth));
             }
         });
 
@@ -105,15 +111,55 @@ const Editor = () => {
 
         return () => observer.disconnect();
     }, []);
+    //////////////////////////////////////////////////////////////////
+
+    const addSection = (section = "section") => {
+        setWebpage((prev: webpageType | null) => {
+            if (!prev) return null
+            return ({
+                ...prev,
+                contents: [
+                    ...prev.contents,
+                    CreateSection["section"]()
+                ]
+            })
+        });
+    };
+
+    const rmSection = (sectionId: string) => {
+        setWebpage((prev: webpageType | null) => {
+            if (!prev) return null
+            const newSet = prev.contents.filter((element: any) => element.id !== sectionId);
+            return { ...prev, contents: newSet };
+        });
+    };
+
+    const updateSectionStyles = (newStyle: CSSProperties) => {
+        console.log(newStyle)
+        sectionStyleSetter((prev: CSSProperties) => {
+            return { ...prev, ...newStyle };
+        });
+    };
+
+    const finalUpdate = (id: string, element: SectionElementType, lastSection: Boolean) => {
+        setWebpage((prev: webpageType | null) => {
+            if (!prev) return null
+            const newContent = prev.contents?.map((e: SectionElementType) => {
+                if (e.id === id) return element
+                else return e
+            })
+            return {
+                ...prev,
+                contents: newContent
+            }
+        })
+
+        if (lastSection) setSaveData(false)
+    }
 
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-
-
-            // if (saveData) {
-            //     bodyPayload.id = websiteContent;
-            // }
 
             try {
                 const response = await toastWithUpdate(() => page ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {
@@ -139,10 +185,10 @@ const Editor = () => {
             const id: string = page;
             async function getContentfromServer(): Promise<void> {
                 try {
-                    const response: any = await getWebpageReq(id)
+                    const response: any = await getWebpageReq(id) // bringing the content from backend 
 
-                    if (response.ok) {
-                        setWebpage(response.webpage)
+                    if (response.ok) { // if successfull
+                        setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
                     } else {
                         throw new Error("error while fetch the page")
                     }
@@ -152,41 +198,58 @@ const Editor = () => {
             }
 
             getContentfromServer()
-        } else {
+        } else { // if the page is not there then create from  fresh
             setWebpage({
-                id: "",
+                id: crypto.randomUUID(),
+                route: "",
+                locationId: "",
                 name: "",
                 contents: [],
                 createdAt: "",
                 updatedAt: "",
-                route: "",
-                locationId: ""
             })
         }
     }, [page])
-    console.log(pageWidth)
-    console.log(width.currentWidth)
+
+    const setMetaOfPage = (name: string, value: string) => {
+        setWebpage((prev: webpageType | null) => {
+            if (!prev) return {
+                id: crypto.randomUUID(),
+                route: "",
+                locationId: "",
+                name: "",
+                contents: [],
+                createdAt: "",
+                updatedAt: "",
+                [name]: value
+            }
+
+            return { ...prev, [name]: value }
+        });
+    }
 
     return (
         <div style={{ position: "relative", display: "flex", height: "100vh" }}>
             {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll", }}>
+            <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll" }}>
 
-                <div ref={containerRef} style={{ position: "relative", flex: 1, width: pageWidth, margin: "0 auto" }} className="">
+                <div ref={containerRef} style={{ position: "relative", flex: 1, width: pageWidth, margin: "0 auto", minHeight: "100vh", transition: ".1s linear all" }} className="bg-stone-200">
                     {webpage?.contents?.map((section: any, i: number, a: any[]) => {
                         const lastSection = i === a.length - 1;
+
                         return (
                             <Section
                                 key={i}
                                 element={section.elements}
                                 section={section}
-                                style={section.style[currentWidth]}
+                                style={section.style[activeScreen]}
                                 rmSection={rmSection}
                                 onEditing={() => {
                                     contextRef.setContextRef(null);
                                 }}
                                 updateData={saveData}
-                                setUpdateData={setUpdateData}
+                                setUpdateData={setSaveData}
+                                finalUpdate={finalUpdate}
                                 lastSection={lastSection}
                             />
                         );
@@ -209,15 +272,20 @@ const Editor = () => {
                         top: 0,
                         zIndex: 1
                     }}
-                    onClick={(e) => { e.stopPropagation(); saveAllSection(); setUpdateData(true); }}
+                    onClick={(e) => { e.stopPropagation(); saveAllSection(); setSaveData(true); }}
                 >
                     Save Changes
                 </button>
                 <div className="bg-[#1C352D] text-white text-2xl p-1 py-4 flex justify-evenly">
-                    <button onClick={() => applySMScreen()} className="p-2 hover:bg-stone-500 cursor-pointer"><CiMobile1 /></button>
-                    <button onClick={() => applyMDScreen()} className="p-2 hover:bg-stone-500 cursor-pointer"><IoIosTabletPortrait /></button>
-                    <button onClick={() => applyLGScreen()} className="p-2 hover:bg-stone-500 cursor-pointer"><CiLaptop /></button>
-                    <button onClick={() => applyXLScreen()} className="p-2 hover:bg-stone-500 cursor-pointer"><CiDesktop /></button>
+                    <button onClick={() => applyXLScreen()} className={`${styleForScreenIcons} ${activeScreen === "xl" && "bg-stone-500"}`}><CiDesktop /></button>
+                    <button onClick={() => applyLGScreen()} className={`${styleForScreenIcons} ${activeScreen === "lg" && "bg-stone-500"}`}><CiLaptop /></button>
+                    <button onClick={() => applyMDScreen()} className={`${styleForScreenIcons} ${activeScreen === "md" && "bg-stone-500"}`}><IoIosTabletPortrait /></button>
+                    <button onClick={() => applySMScreen()} className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"}`}><CiMobile1 /></button>
+                </div>
+
+                <div className="p-2 w-[240px] px-4 flex gap-1 flex-col">
+                    {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
+                    {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
                 </div>
                 {/* toolbars */}
                 {
@@ -233,8 +301,10 @@ const Editor = () => {
                     )
                 }
             </div>
-        </div>
+        </div >
     );
 };
 
 export default Editor;
+
+const styleForScreenIcons = "p-2 hover:bg-stone-500 cursor-pointer rounded-sm"

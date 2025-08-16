@@ -15,7 +15,7 @@ import React, {
 
 type RefType = HTMLElement | null;
 
-type webpageType = {
+export type webpageType = {
   id: string,
   locationId?: string | null,
   name: string,
@@ -32,6 +32,21 @@ type ContextRefType = {
   clearReference: () => void;
 };
 
+
+type WebsiteContentType = {
+  webpage: webpageType | null;
+  setWebpage: React.Dispatch<React.SetStateAction<webpageType | null>>;
+};
+
+interface SectionContextType {
+  currentSection: React.CSSProperties,
+  setCurrentSection: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
+  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
+  setCurrentSectionSetter: React.Dispatch<React.SetStateAction<() => void>>,
+  rmSection: () => void,
+  setRmSection: React.Dispatch<React.SetStateAction<() => void>>
+}
+
 type ContextElementType = {
   setElementSetter: React.Dispatch<React.SetStateAction<any>>;
   setElement: React.Dispatch<React.SetStateAction<any>>;
@@ -40,13 +55,8 @@ type ContextElementType = {
 };
 
 type WidthType = {
-  currentWidth: string;
-  setWidth: React.Dispatch<React.SetStateAction<string>>;
-};
-
-type WebsiteContentType = {
-  webpage: webpageType | null;
-  setWebpage: React.Dispatch<React.SetStateAction<webpageType | null>>;
+  activeScreen: string;
+  setActiveScreen: React.Dispatch<React.SetStateAction<string>>;
 };
 
 type FinalSubmitType = {
@@ -65,17 +75,9 @@ interface ImageStyleToolbarProps {
   style?: StyleObject;
   onStyleChange?: (style: StyleObject) => void; // optional callback if needed
   setElement: any;
-  currentWidth: string;
   imageRef: RefObject<HTMLImageElement | null>;
   onClose: () => void;
   rmElement?: () => void
-}
-
-interface SectionContextType {
-  currentSection: React.CSSProperties,
-  setCurrentSection: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
-  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
-  setCurrentSectionSetter: React.Dispatch<React.SetStateAction<() => void>>
 }
 
 type MyContextType = {
@@ -86,7 +88,7 @@ type MyContextType = {
   elementSetter: any;
   rmElementFunc: (id: string) => void;
   width: WidthType;
-  currentWidth: string;
+  activeScreen: string;
   toolbarRef: any;
   websiteContent: WebsiteContentType;
   SubmissionObject: SubmissionObjectType;
@@ -96,6 +98,7 @@ type MyContextType = {
   imageEdit: Boolean;
   setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>;
   contextForSection: SectionContextType;
+  currentSection: React.CSSProperties,
   currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>> | null;
 };
 
@@ -103,7 +106,7 @@ const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
 
 function Provider({ children }: { children: ReactNode }) {
   // set the active screen
-  const [currentWidth, setWidth] = useState<string>('');
+  const [activeScreen, setActiveScreen] = useState<string>('');
   // global content
   const [webpage, setWebpage] = useState<webpageType | null>(null);
 
@@ -114,6 +117,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { }); // to set the rm function of the element
   const [currentSection, setCurrentSection] = useState<any>(null)
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
+  const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
   // images
   const [imageContext, setImageContext] = useState<ImageStyleToolbarProps | Record<string, any> | null>(null)
@@ -125,8 +129,8 @@ function Provider({ children }: { children: ReactNode }) {
   const toolbarRef = useRef<HTMLElement | null>(null);
 
   const width: WidthType = {
-    currentWidth,
-    setWidth
+    activeScreen,
+    setActiveScreen
   };
 
   const contextRef: ContextRefType = { // ref 
@@ -140,7 +144,9 @@ function Provider({ children }: { children: ReactNode }) {
     currentSection,
     setCurrentSection,
     currentSectionSetter,
-    setCurrentSectionSetter
+    setCurrentSectionSetter,
+    setRmSection,
+    rmSection
   }
 
   const contextElement: ContextElementType = { // element and element setter
@@ -171,7 +177,7 @@ function Provider({ children }: { children: ReactNode }) {
         elementSetter,
         rmElementFunc,
         width,
-        currentWidth,
+        activeScreen,
         toolbarRef,
         websiteContent,
         SubmissionObject,
@@ -181,6 +187,7 @@ function Provider({ children }: { children: ReactNode }) {
         imageEdit,
         setImageEdit,
         contextForSection,
+        currentSection,
         currentSectionSetter,
       }}
     >

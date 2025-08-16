@@ -27,6 +27,7 @@ type SectionProps = {
     id: string;
     [key: string]: any;
   };
+  finalUpdate?: (id: string, element: any, lS: Boolean) => void
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -38,13 +39,14 @@ const Section: React.FC<SectionProps> = ({
   setUpdateData,
   lastSection,
   section,
+  finalUpdate
 }) => {
   const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
   const {
     contextRef,
-    currentWidth,
+    activeScreen,
     // contextElement,
     contextForSection,
     websiteContent,
@@ -88,11 +90,7 @@ const Section: React.FC<SectionProps> = ({
   };
 
   const onEdit = () => {
-    onEditing();
-    // contextElement.setElementSetter(() => setSectionStyle);
-    // contextElement.setElement(sectionStyle)
-    contextForSection.setCurrentSection(sectionStyle)
-    contextForSection.setCurrentSectionSetter(() => setSectionStyle)
+
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
@@ -102,6 +100,15 @@ const Section: React.FC<SectionProps> = ({
     }
     setOnAddElement(!onAddElement);
   };
+
+  const onStyleEdit = () => {
+    onEditing();
+    // contextElement.setElementSetter(() => setSectionStyle);
+    // contextElement.setElement(sectionStyle)
+    contextForSection.setRmSection(() => () => rmSection(section.id))
+    contextForSection.setCurrentSection(sectionStyle)
+    contextForSection.setCurrentSectionSetter(() => setSectionStyle)
+  }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
     const element = CreateElement[elementToAdd]();
@@ -140,32 +147,16 @@ const Section: React.FC<SectionProps> = ({
     };
   }, [isDragging]);
 
-  // useEffect(() => {
-  //   function saveToGlobalObject() {
-  //     SubmissionObject.setContent((prev: any[]) =>
-  //       prev.map((e) =>
-  //         e.id === section.id
-  //           ? {
-  //             ...e,
-  //             elements: elements,
-  //             style: {
-  //               ...e.style,
-  //               [currentWidth]: sectionStyle,
-  //             },
-  //           }
-  //           : e
-  //       )
-  //     );
-  //   }
+  useEffect(() => {
+    if (finalUpdate) {
+      finalUpdate(section.id, { ...section, elements: elements }, lastSection)
+    }
+  }, [elements, sectionStyle, activeScreen]);
 
-  //   SubmissionObject.setFinalSubmit((prev: any[]) => {
-  //     const removedSame = prev.filter((e) => e.id !== section.id);
-  //     return [...removedSame, { id: section.id, submit: saveToGlobalObject }];
-  //   });
-  //   // contextElement.setElement(sectionStyle)
-  //   contextForSection.setCurrentSection(sectionStyle)
 
-  // }, [elements, sectionStyle, currentWidth]);
+  useEffect(() => {
+    contextForSection.setCurrentSection(sectionStyle)
+  }, [sectionStyle])
 
   return (
     <div className="relative">
@@ -173,6 +164,7 @@ const Section: React.FC<SectionProps> = ({
         ref={sectionRef}
         style={{ ...sectionStyle, position: "relative" }}
         onDoubleClick={onEdit}
+        onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
       >
         {elements.map((Element, i) => {
@@ -183,10 +175,10 @@ const Section: React.FC<SectionProps> = ({
               element={Element}
               updateContent={updateTheDataOfElement}
               updateElement={updateElement}
-              style={Element.style?.[currentWidth]}
-              currentWidth={currentWidth}
+              style={Element.style?.[activeScreen]}
+              currentWidth={activeScreen}
               rmElement={rmElement}
-              activeScreen={currentWidth}
+              activeScreen={activeScreen}
             />
           );
         })}

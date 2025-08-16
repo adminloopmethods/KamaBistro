@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useMyContext } from '@/Context/EditorContext';
 
-type StylesState = React.CSSProperties | Record<string, any>
+export type StylesState = React.CSSProperties | Record<string, any>
 
 type DimensionToolbarProps = {
     updateStyles: (styles: Partial<StylesState>) => void;
@@ -10,29 +10,12 @@ type DimensionToolbarProps = {
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
-    const { contextForSection } = useMyContext()
-    if (!contextForSection) return null
-    const style = contextForSection.currentSection
-    // console.log(style)
-
-    const [stylesState, setStylesState] = useState<StylesState>(style || {
-        width: '100vw',
-        height: '20vh',
-        paddingTop: 20,
-        paddingRight: 20,
-        paddingBottom: 20,
-        paddingLeft: 20,
-        marginTop: 0,
-        marginRight: 0,
-        marginBottom: 0,
-        marginLeft: 0,
-        position: 'static',
-        zIndex: 1,
-        borderRadius: 0,
-    });
+    const { currentSection } = useMyContext()
+    const style = currentSection
+    console.log(style)
 
     const applyStyle = (key: keyof StylesState, val: string | number) => {
-        setStylesState((prev) => ({ ...prev, [key]: val }));
+        // setStylesState((prev) => ({ ...prev, [key]: val }));
         updateStyles({ [key]: val } as Partial<StylesState>);
     };
 
@@ -44,7 +27,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         type: 'text' | 'number' = 'text',
         suffix = ''
     ) => {
-        let value: string | number = stylesState[key];
+        let value: string | number | undefined = style?.[key];
         if (type === 'number' && typeof value === 'string') {
             value = parseFloat(value); // convert "20px" → 20
         }
@@ -54,16 +37,19 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
                 <input
                     type={type}
-                    value={value}
+                    value={value || ""}
                     onChange={(e) => {
                         const val = type === 'number' ? Number(e.target.value) : e.target.value;
                         applyStyle(key, val); // store just the number
+                        console.log(val)
                     }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
         )
     };
+
+
 
 
     return (
@@ -98,7 +84,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 <div className="flex flex-col gap-1">
                     <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Position</label>
                     <select
-                        value={stylesState.position}
+                        value={style?.position}
                         onChange={(e) => applyStyle('position', e.target.value)}
                         className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                     >

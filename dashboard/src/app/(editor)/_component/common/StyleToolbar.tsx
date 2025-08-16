@@ -2,7 +2,6 @@ import React, { useState, useRef, ChangeEvent } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
-// import CustomSelect from './CustomSelect'; // <-- Import your custom select
 import CustomSelect from '@/app/_common/CustomSelect';
 
 const shadowPresets: Record<string, string> = {
@@ -58,15 +57,15 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         updateStyles({ backgroundImage: combined });
     };
 
-    const applyGradient = () => {
-        const newGradient = `linear-gradient(${gradientDirection}, ${color1}, ${color2})`;
-        setGradient(newGradient);
-        updateBackground();
-    };
-
     const handleShadowChange = (value: string) => {
         setBoxShadow(shadowPresets[value]);
         updateStyles({ boxShadow: shadowPresets[value] });
+    };
+
+    const handleGradientUpdate = (newColor1?: string, newColor2?: string, newDir?: string) => {
+        const g = `linear-gradient(${newDir || gradientDirection}, ${newColor1 || color1}, ${newColor2 || color2})`;
+        setGradient(g);
+        updateBackground();
     };
 
     const renderInputRow = (label: string, input: React.ReactNode, extra: React.ReactNode = null) => (
@@ -95,7 +94,14 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 className='text-xs font-medium text-gray-700 dark:text-gray-200 border p-3 rounded-md cursor-pointer'
                 onClick={() => setShowImageSelector(true)}
             >
-                Add Background Image
+                Set Background Image
+            </button>
+
+            <button
+                onClick={() => { setBgImage(''); updateBackground(); }}
+                className="px-2 py-1 bg-red-500 text-white text-xs rounded-md"
+            >
+                Remove Background Image
             </button>
 
             {/* Background Repeat */}
@@ -162,13 +168,23 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         <input
                             type="color"
                             value={'#' + rgbaToHex(color)}
-                            onChange={(e) => setColor(hexToRgba(e.target.value, 1))}
+                            onChange={(e) => {
+                                const newColor = hexToRgba(e.target.value, 1);
+                                setColor(newColor);
+                                if (label === 'Color 1') handleGradientUpdate(newColor, undefined, undefined);
+                                else handleGradientUpdate(undefined, newColor, undefined);
+                            }}
                             className={dimensionStyle.colorInput}
                         />
                         <input
                             type="text"
                             value={color}
-                            onChange={(e) => setColor(e.target.value)}
+                            onChange={(e) => {
+                                const newColor = e.target.value;
+                                setColor(newColor);
+                                if (label === 'Color 1') handleGradientUpdate(newColor, undefined, undefined);
+                                else handleGradientUpdate(undefined, newColor, undefined);
+                            }}
                             placeholder="rgba(...)"
                             className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                         />
@@ -188,12 +204,17 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         { label: "Bottom Left", value: "to bottom left" },
                     ]}
                     Default={gradientDirection}
-                    onChange={(val) => setGradientDirection(val)}
+                    onChange={(val) => {
+                        setGradientDirection(val);
+                        handleGradientUpdate(undefined, undefined, val);
+                    }}
                 />,
-                <div className="flex gap-2">
-                    <button onClick={applyGradient} className="px-2 py-1 bg-blue-600 text-white text-xs rounded-md">Apply</button>
-                    <button onClick={() => { setGradient(''); updateBackground(); }} className="px-2 py-1 bg-red-500 text-white text-xs rounded-md">Clear</button>
-                </div>
+                <button
+                    onClick={() => { setGradient(''); updateBackground(); }}
+                    className="px-2 py-1 bg-red-500 text-white text-xs rounded-md"
+                >
+                    Clear
+                </button>
             )}
 
             {/* Flexbox Controls */}

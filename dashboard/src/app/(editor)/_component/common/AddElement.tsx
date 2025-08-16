@@ -35,12 +35,11 @@ const AddElement: React.FC<AddElementProps> = ({ controller }) => {
     };
 
     const elementTypeOptions: Option[] = [
-        { label: "Add Element", value: "", disabled: true },
         { label: "Heading", value: "heading" },
         { label: "Paragraph", value: "paragraph" },
         { label: "Image", value: "image" },
-        { label: "Image", value: "image" },
-        { label: "Image", value: "image" },
+        // { label: "Image", value: "image" },
+        // { label: "Image", value: "image" },
     ];
 
     return (

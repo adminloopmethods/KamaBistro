@@ -27,11 +27,11 @@ const boxShadowPresets: Record<string, string> = {
 
 const ImageStyleToolbar: React.FC = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
-  const { imageContext, setImageEdit, setImageContext, contextRef } = useMyContext();
+  const { imageContext, setImageEdit, setImageContext, contextRef, activeScreen } = useMyContext();
 
   if (!imageContext || !("element" in imageContext)) return null;
 
-  const { element, style = {}, setElement, currentWidth, onClose, rmElement, imageRef } = imageContext;
+  const { element, style = {}, setElement, onClose, rmElement, imageRef } = imageContext;
 
   // Unified input row with Tailwind styling
   const renderInputRow = (
@@ -63,8 +63,8 @@ const ImageStyleToolbar: React.FC = () => {
       ...prev,
       style: {
         ...prev.style,
-        [currentWidth]: {
-          ...prev.style?.[currentWidth],
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
           [name]: value,
         },
       },
@@ -80,7 +80,7 @@ const ImageStyleToolbar: React.FC = () => {
 
   const handleFilterChange = (filterName: string) => (value: string) => {
     setElement((prev: any) => {
-      const prevStyle = prev.style?.[currentWidth] || {};
+      const prevStyle = prev.style?.[activeScreen] || {};
       const prevFilter = prevStyle.filter || "";
 
       const filters = Object.fromEntries(
@@ -104,7 +104,7 @@ const ImageStyleToolbar: React.FC = () => {
         ...prev,
         style: {
           ...prev.style,
-          [currentWidth]: {
+          [activeScreen]: {
             ...prevStyle,
             filter: Object.entries(filters)
               .map(([name, val]) => `${name}(${val})`)
@@ -123,8 +123,8 @@ const ImageStyleToolbar: React.FC = () => {
       ...prev,
       style: {
         ...prev.style,
-        [currentWidth]: {
-          ...prev.style?.[currentWidth],
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
           position: value,
           top: "20px",
           left: "20px",
@@ -147,27 +147,49 @@ const ImageStyleToolbar: React.FC = () => {
       ...prev,
       style: {
         ...prev.style,
-        [currentWidth]: {
-          ...prev.style?.[currentWidth],
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
           boxShadow: boxShadowPresets[value],
         },
       },
     }));
   };
 
+  // useEffect(() => {
+  //   function handleClickOutside(event: MouseEvent) {
+  //     if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node) &&
+  //       !imageRef.current.contains(event.target as Node)) {
+  //       onClose();
+  //       setImageEdit(false)
+  //     }
+  //   }
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleClickOutside);
+  //   };
+  // }, [onClose]);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node) &&
-        !imageRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+
+      const clickedInsideToolbar = toolbarRef.current?.contains(target);
+      const clickedOnActiveImage = imageRef.current?.contains(target);
+
+      // ✅ NEW: check if clicked on any image element
+      const clickedOnAnyImage = (target instanceof HTMLElement) && target.closest("img");
+
+      if (!clickedInsideToolbar && !clickedOnActiveImage && !clickedOnAnyImage) {
         onClose();
-        setImageEdit(false)
+        setImageEdit(false);
       }
     }
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [onClose]);
+  }, [onClose, setImageEdit, imageRef]);
+
 
   return (
     <div
@@ -185,24 +207,24 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Alternate text:", element.alt || "", "text", handleInputValue("alt"))}
 
-      {renderInputRow("Width:", style?.[currentWidth].width, "text", handleInputStyles("width"))}
+      {renderInputRow("Width:", style?.[activeScreen]?.width, "text", handleInputStyles("width"))}
 
-      {renderInputRow("Height:", style?.[currentWidth].height, "text", handleInputStyles("height"))}
+      {renderInputRow("Height:", style?.[activeScreen]?.height, "text", handleInputStyles("height"))}
 
-      {renderInputRow("Margin Top:", style?.[currentWidth].marginTop, "text", handleInputStyles("marginTop"))}
-      {renderInputRow("Margin Bottom:", style?.[currentWidth].marginBottom, "text", handleInputStyles("marginBottom"))}
-      {renderInputRow("Margin Left:", style?.[currentWidth].marginLeft, "text", handleInputStyles("marginLeft"))}
-      {renderInputRow("Margin Right:", style?.[currentWidth].marginRight, "text", handleInputStyles("marginRight"))}
+      {renderInputRow("Margin Top:", style?.[activeScreen]?.marginTop, "text", handleInputStyles("marginTop"))}
+      {renderInputRow("Margin Bottom:", style?.[activeScreen]?.marginBottom, "text", handleInputStyles("marginBottom"))}
+      {renderInputRow("Margin Left:", style?.[activeScreen]?.marginLeft, "text", handleInputStyles("marginLeft"))}
+      {renderInputRow("Margin Right:", style?.[activeScreen]?.marginRight, "text", handleInputStyles("marginRight"))}
 
 
-      {renderInputRow("Radius:", style?.[currentWidth].borderRadius, "text", handleInputStyles("borderRadius"))}
+      {renderInputRow("Radius:", style?.[activeScreen]?.borderRadius, "text", handleInputStyles("borderRadius"))}
 
       <div className="flex flex-col">
         <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label>
         <select
           className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={
-            Object.entries(boxShadowPresets).find(([, val]) => val === style.boxShadow)?.[0] || "none"
+            Object.entries(boxShadowPresets).find(([, val]) => val === style?.[activeScreen]?.boxShadow)?.[0] || "none"
           }
           onChange={handleShadowChange}
         >
@@ -226,7 +248,7 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow(
         "Grayscale:",
-        parseFloat(style?.[currentWidth]?.filter?.match(/grayscale\(([^)]+)\)/)?.[1]?.replace('%', '') || "0") / 100, // normalize
+        parseFloat(style?.[activeScreen]?.filter?.match(/grayscale\(([^)]+)\)/)?.[1]?.replace('%', '') || "0") / 100, // normalize
         "range",
         (val) => handleFilterChange("grayscale")(val), // val is 0–1
         "0",
@@ -237,7 +259,7 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow(
         "Brightness:",
         parseFloat(
-          style?.[currentWidth]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"
+          style?.[activeScreen]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"
         ),
         "range",
         (val) => handleFilterChange("brightness")(val),
@@ -251,14 +273,14 @@ const ImageStyleToolbar: React.FC = () => {
           { value: "relative", label: "Soft Drag" },
           { value: "absolute", label: "Hard Drag" }
         ]}
-        Default={style?.[currentWidth].position}
+        Default={style?.[activeScreen]?.position}
         onChange={(value) => handlePositionChange(value)}
         firstOption="No"
         firstValue="static"
       />
-      {renderInputRow("Stack Index:", style?.[currentWidth].zIndex, "number", handleInputStyles("zIndex"))}
-      {renderInputRow("top:", style?.[currentWidth].top, "text", handleInputStyles("top"))}
-      {renderInputRow("left:", style?.[currentWidth].left, "text", handleInputStyles("left"))}
+      {renderInputRow("Stack Index:", style?.[activeScreen]?.zIndex, "number", handleInputStyles("zIndex"))}
+      {renderInputRow("top:", style?.[activeScreen]?.top, "text", handleInputStyles("top"))}
+      {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
 
 
     </div>
