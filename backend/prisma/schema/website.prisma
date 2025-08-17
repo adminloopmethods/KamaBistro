@@ -105,7 +105,6 @@ model draft {
   @@index([userId])
 }
 
-// Roles (like Editor and Verifier) are assigned per webpage, not globally.
 // A user can be an editor on one page and a verifier on another.
 // A webpage has exactly one editor and one verifier at a time.
 // A user cannot be both the editor and verifier of the same webpage.

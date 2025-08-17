@@ -51,7 +51,7 @@ export const getWebpageById = async (req, res) => {
 export const updateWebpageById = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, content } = req.body;
+    const { name, contents, route } = req.body;
 
     const existing = await getWebpageByIdService(id);
     if (!existing) {
@@ -59,7 +59,7 @@ export const updateWebpageById = async (req, res) => {
       return res.status(404).json({ error: "Webpage not found." });
     }
 
-    const updatedWebpage = await updateWebpageByIdService(id, { name, content });
+    const updatedWebpage = await updateWebpageByIdService(id, { name, contents, route });
     res.json(updatedWebpage);
   } catch (error) {
     logger.error(`Error updating webpage: ${error.message}`, { error });

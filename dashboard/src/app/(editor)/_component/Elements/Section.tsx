@@ -190,7 +190,7 @@ const Section: React.FC<SectionProps> = ({
       console.log(section)
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
-  }, [elements, activeScreen]);
+  }, [updateData, activeScreen]);
 
 
   useEffect(() => {

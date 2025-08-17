@@ -161,7 +161,7 @@ const Editor = () => {
             const bodyPayload: Record<string, any> = { ...webpage };
             console.log(bodyPayload)
             try {
-                const response = await toastWithUpdate(() => page ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {
+                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
                     loading: page ? "Updating content..." : "Saving Content...",
                     success: "Successful saved the content!",
                     error: (err: any) => err?.message || "Failed to create the content",

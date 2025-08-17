@@ -118,7 +118,7 @@ export const getAllWebpagesService = async () => {
 };
 
 export const getWebpageByIdService = async (id) => {
-  return await prismaClient.webpage.findUnique({
+  const webpage = await prismaClient.webpage.findUnique({
     where: { id },
     include: {
       contents: {
@@ -127,51 +127,129 @@ export const getWebpageByIdService = async (id) => {
           style: true,
           elements: {
             orderBy: { order: "asc" },
-            include: { style: true },
+            include: {
+              style: true,
+            },
+          },
+          children: {
+            orderBy: { order: "asc" },
+            include: {
+              style: true,
+              elements: {
+                orderBy: { order: "asc" },
+                include: {
+                  style: true,
+                },
+              },
+            },
           },
         },
       },
     },
   });
+
+  if (!webpage) return null;
+
+  const transformSection = (section) => {
+    return {
+      id: section.id,
+      name: section.name,
+      style: section.style,
+      elements: [
+        ...(section.children?.map((child) => transformSection(child)) || []),
+        ...(section.elements?.map((el) => ({
+          id: el.id,
+          name: el.name,
+          style: el.style,
+          content: el.content,
+        })) || []),
+      ],
+    };
+  };
+
+  return {
+    ...webpage,
+    contents: webpage.contents.map(transformSection),
+  };
 };
 
-export const updateWebpageByIdService = async (id, { name, content }) => {
+export const updateWebpageByIdService = async (id, { name, contents, route }) => {
+  // clear old contents
   await prismaClient.content.deleteMany({ where: { webpageId: id } });
 
   const updatedWebpage = await prismaClient.webpage.update({
     where: { id },
     data: {
       name,
+      route,
       contents: {
-        create: content.map((section, sectionIndex) => ({
+        create: contents.map((section, sectionIndex) => ({
           id: section.id,
           name: section.name,
           order: sectionIndex,
           style: {
             create: {
               id: section.style?.id || undefined,
-              xl: section.style.xl,
-              lg: section.style.lg,
-              md: section.style.md,
-              sm: section.style.sm,
+              xl: section.style?.xl,
+              lg: section.style?.lg,
+              md: section.style?.md,
+              sm: section.style?.sm,
             },
           },
           elements: {
-            create: section.elements.map((el, elIndex) => ({
-              id: el.id,
-              name: el.name,
-              content: el.content,
-              order: elIndex,
-              style: {
-                create: {
-                  id: el.style?.id || undefined,
-                  xl: el.style.xl,
-                  lg: el.style.lg,
-                  md: el.style.md,
-                  sm: el.style.sm,
-                },
-              },
-            })),
+            create: section.elements.map((el, elIndex) => {
+              if (el.name === "section") {
+                // Nested section
+                return {
+                  id: el.id,
+                  name: el.name,
+                  order: elIndex,
+                  style: {
+                    create: {
+                      id: el.style?.id || undefined,
+                      xl: el.style?.xl,
+                      lg: el.style?.lg,
+                      md: el.style?.md,
+                      sm: el.style?.sm,
+                    },
+                  },
+                  elements: {
+                    create: el.elements.map((child, childIndex) => ({
+                      id: child.id,
+                      name: child.name,
+                      content: child.content,
+                      order: childIndex,
+                      style: {
+                        create: {
+                          id: child.style?.id || undefined,
+                          xl: child.style?.xl,
+                          lg: child.style?.lg,
+                          md: child.style?.md,
+                          sm: child.style?.sm,
+                        },
+                      },
+                    })),
+                  },
+                };
+              } else {
+                // Normal element (h1, p, img, etc.)
+                return {
+                  id: el.id,
+                  name: el.name,
+                  content: el.content,
+                  order: elIndex,
+                  style: {
+                    create: {
+                      id: el.style?.id || undefined,
+                      xl: el.style?.xl,
+                      lg: el.style?.lg,
+                      md: el.style?.md,
+                      sm: el.style?.sm,
+                    },
+                  },
+                };
+              }
+            }),
           },
         })),
       },
@@ -183,14 +261,20 @@ export const updateWebpageByIdService = async (id, { name, content }) => {
           style: true,
           elements: {
             orderBy: { order: "asc" },
-            include: { style: true },
+            include: {
+              style: true,
+              elements: {
+                orderBy: { order: "asc" },
+                include: { style: true },
+              },
+            },
           },
         },
       },
     },
   });
 
-  // Create a new version snapshot after update
+  // create new version snapshot
   await prismaClient.version.create({
     data: {
       webpageId: id,
@@ -200,6 +284,7 @@ export const updateWebpageByIdService = async (id, { name, content }) => {
 
   return updatedWebpage;
 };
+
 
 
 export const getWebpageVersionsService = async (webpageId) => {

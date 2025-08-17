@@ -41,6 +41,10 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                         const val = type === 'number' ? Number(e.target.value) : e.target.value;
                         applyStyle(key, val); // store just the number
                     }}
+                    // onChange={(e) => {
+                    //     const val = e.target.value;
+                    //     sectionRef?.current?.style.setProperty(key, val, "important")
+                    // }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
