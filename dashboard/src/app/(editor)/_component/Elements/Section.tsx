@@ -78,15 +78,26 @@ const Section: React.FC<SectionProps> = ({
     const newLeft = e.clientX - dragOffsetX;
     const newTop = e.clientY - dragOffsetY;
 
+    sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
+    sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
+    // setSectionStyle((prev) => ({
+    //   ...prev,
+    //   left: newLeft,
+    //   top: newTop,
+    // }));
+  };
+
+  const handleMouseUp = (e: MouseEvent) => {
+    const newLeft = e.clientX - dragOffsetX;
+    const newTop = e.clientY - dragOffsetY;
+    console.log(newLeft)
+    console.log(newTop)
+    setIsDragging(false);
     setSectionStyle((prev) => ({
       ...prev,
       left: newLeft,
       top: newTop,
     }));
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
   };
 
   const onEdit = () => {
@@ -108,6 +119,7 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setRmSection(() => () => rmSection(section.id))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
+    contextForSection.setSectionRef(sectionRef)
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
@@ -166,7 +178,7 @@ const Section: React.FC<SectionProps> = ({
     <div className="relative">
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, position: "relative" }}
+        style={{ ...sectionStyle }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}

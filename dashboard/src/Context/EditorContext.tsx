@@ -44,8 +44,11 @@ interface SectionContextType {
   currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>,
   setCurrentSectionSetter: React.Dispatch<React.SetStateAction<() => void>>,
   rmSection: () => void,
-  setRmSection: React.Dispatch<React.SetStateAction<() => void>>
+  setRmSection: React.Dispatch<React.SetStateAction<() => void>>,
+  sectionRef: React.RefObject<HTMLElement | null> | null,
+  setSectionRef: React.Dispatch<React.SetStateAction<React.RefObject<HTMLElement | null> | null>>
 }
+
 
 type ContextElementType = {
   setElementSetter: React.Dispatch<React.SetStateAction<any>>;
@@ -117,6 +120,8 @@ function Provider({ children }: { children: ReactNode }) {
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { }); // to set the rm function of the element
   const [currentSection, setCurrentSection] = useState<any>(null)
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
+  const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
+
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
   // images
@@ -146,7 +151,9 @@ function Provider({ children }: { children: ReactNode }) {
     currentSectionSetter,
     setCurrentSectionSetter,
     setRmSection,
-    rmSection
+    rmSection,
+    sectionRef,
+    setSectionRef
   }
 
   const contextElement: ContextElementType = { // element and element setter

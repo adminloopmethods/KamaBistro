@@ -10,15 +10,14 @@ type DimensionToolbarProps = {
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
-    const { currentSection } = useMyContext()
+    const { currentSection, contextForSection } = useMyContext()
     const style = currentSection
+    const { sectionRef } = contextForSection
 
     const applyStyle = (key: keyof StylesState, val: string | number) => {
-        // setStylesState((prev) => ({ ...prev, [key]: val }));
         updateStyles({ [key]: val } as Partial<StylesState>);
     };
 
-    // const handleClick = () => setZIndex(getNextZIndex());
 
     const renderInput = (
         label: string,

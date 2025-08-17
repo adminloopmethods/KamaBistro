@@ -1,8 +1,9 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, useRef } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
 import CustomSelect from '@/app/_common/CustomSelect';
+import { useMyContext } from '@/Context/EditorContext';
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -22,6 +23,8 @@ type StyleToolbarProps = {
 };
 
 const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
+    const { contextForSection } = useMyContext()
+    const { sectionRef } = contextForSection
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
     const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
     const [gradientDirection, setGradientDirection] = useState<string>('to right');
@@ -251,8 +254,16 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                             <input
                                 type="number"
                                 min="0"
-                                value={parseInt(flexGap)}
-                                onChange={(e) => { setFlexGap(`${e.target.value}px`); updateStyles({ gap: `${e.target.value}px` }); }}
+                                // value={parseInt(flexGap)}
+                                onChange={(e) => {
+                                    if (sectionRef?.current) {
+
+                                        sectionRef.current.style.setProperty("gap", `${e.target.value}px`, "important");
+
+                                        console.log(sectionRef.current.style.gap)
+                                    }
+                                }}
+                                onBlur={(e) => { setFlexGap(`${e.target.value}px`); updateStyles({ gap: `${e.target.value}px` }); }}
                                 className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                             />
                         )}

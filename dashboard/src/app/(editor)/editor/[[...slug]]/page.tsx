@@ -230,7 +230,7 @@ const Editor = () => {
     return (
         <div style={{ position: "relative", display: "flex", height: "100vh" }}>
             {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll" }}>
+            <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
 
                 <div ref={containerRef} style={{ position: "relative", flex: 1, width: pageWidth, margin: "0 auto", minHeight: "100vh", transition: ".1s linear all" }} className="bg-stone-200">
                     {webpage?.contents?.map((section: any, i: number, a: any[]) => {
