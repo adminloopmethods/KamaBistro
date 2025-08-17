@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, MouseEvent } from "react";
 import { CreateElement, mapElement } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
+import { SectionElementType } from "../../_functionality/createSection";
 
 type ElementType = {
   id: string;
@@ -27,7 +28,9 @@ type SectionProps = {
     id: string;
     [key: string]: any;
   };
-  finalUpdate?: (id: string, element: any, lS: Boolean) => void
+  finalUpdate?: (id: string, element: any, lS: Boolean) => void,
+  createSection?: any,
+  parentIsSection?: Boolean
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -39,7 +42,9 @@ const Section: React.FC<SectionProps> = ({
   setUpdateData,
   lastSection,
   section,
-  finalUpdate
+  finalUpdate,
+  createSection,
+  parentIsSection
 }) => {
   const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
@@ -52,6 +57,7 @@ const Section: React.FC<SectionProps> = ({
     websiteContent,
     SubmissionObject,
   } = useMyContext();
+  console.log(style)
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
@@ -100,8 +106,8 @@ const Section: React.FC<SectionProps> = ({
     }));
   };
 
-  const onEdit = () => {
-
+  const onEdit = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
@@ -112,7 +118,8 @@ const Section: React.FC<SectionProps> = ({
     setOnAddElement(!onAddElement);
   };
 
-  const onStyleEdit = () => {
+  const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
+    e.stopPropagation()
     onEditing();
     // contextElement.setElementSetter(() => setSectionStyle);
     // contextElement.setElement(sectionStyle)
@@ -123,7 +130,13 @@ const Section: React.FC<SectionProps> = ({
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
-    const element = CreateElement[elementToAdd]();
+    let element: any;
+    console.log(elementToAdd)
+    if (elementToAdd === "section") {
+      element = createSection["section"]();
+    } else {
+      element = CreateElement[elementToAdd]();
+    }
     setElements((prev) => [...prev, element]);
     setOpenToolBar(false);
   };
@@ -144,18 +157,31 @@ const Section: React.FC<SectionProps> = ({
     );
   };
 
+  const updateForSection = (id: string, element: SectionElementType, lastSection?: Boolean) => {
+    setElements((prev: any | null) => {
+      if (!prev) return null
+      const newContent = prev?.map((e: any) => {
+        if (e.id === id) { return element }
+        else { return e }
+      })
+      return newContent
+    })
+
+    if (lastSection) setUpdateData(false)
+  }
+
   useEffect(() => {
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove as any);
-      window.addEventListener("mouseup", handleMouseUp);
+      window.addEventListener("mouseup", handleMouseUp as any);
     } else {
       window.removeEventListener("mousemove", handleMouseMove as any);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseUp as any);
     }
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove as any);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseUp as any);
     };
   }, [isDragging]);
 
@@ -174,6 +200,16 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
 
+  useEffect(() => {
+    setSectionStyle((prev) => {
+      if (JSON.stringify(prev) !== JSON.stringify(style)) {
+        return style;
+      }
+      return prev;
+    });
+  }, [style]);
+
+
   return (
     <div className="relative">
       <section
@@ -183,23 +219,46 @@ const Section: React.FC<SectionProps> = ({
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
       >
-        {elements.map((Element, i) => {
-          const Component = mapElement[Element.name];
-          return (
-            <Component
+        {elements?.map((Element, i, a) => {
+          const lastSection = i === a.length - 1
+          if (Element.name === "section") {
+            // <Section />
+            // const Component = mapElement[Element.name];
+
+            return <Section
               key={i}
-              element={Element}
-              updateContent={updateTheDataOfElement}
-              updateElement={updateElement}
-              style={Element.style?.[activeScreen]}
-              currentWidth={activeScreen}
-              rmElement={rmElement}
-              activeScreen={activeScreen}
+              element={Element.elements}
+              section={Element}
+              style={Element.style?.[activeScreen] || {}}
+              rmSection={rmElement}
+              onEditing={() => {
+                contextRef.setContextRef(null);
+              }}
+              updateData={updateData}
+              setUpdateData={setUpdateData}
+              finalUpdate={updateForSection}
+              lastSection={lastSection}
+              parentIsSection={true}
             />
-          );
+
+          } else {
+            const Component = mapElement[Element.name];
+            return (
+              <Component
+                key={i}
+                element={Element}
+                updateContent={updateTheDataOfElement}
+                updateElement={updateElement}
+                style={Element.style?.[activeScreen]}
+                currentWidth={activeScreen}
+                rmElement={rmElement}
+                activeScreen={activeScreen}
+              />
+            );
+          }
         })}
       </section>
-      {onAddElement && <AddElement controller={addElement} />}
+      {onAddElement && <AddElement controller={addElement} canAddSection={!parentIsSection} />}
     </div>
   );
 };

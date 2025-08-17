@@ -37,9 +37,9 @@ const baseStyle: StyleObject = {
 
 const styles: ResponsiveStyles = {
     xl: baseStyle,
-    lg: {},
-    md: {},
-    sm: {},
+    lg: baseStyle,
+    md: baseStyle,
+    sm: baseStyle,
 };
 
 class SectionElement implements SectionElementType {

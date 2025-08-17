@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { useMyContext } from '@/Context/EditorContext';
+import CustomSelect from '@/app/_common/CustomSelect';
 
 export type StylesState = React.CSSProperties | Record<string, any>
 
@@ -60,7 +61,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 </h3>
             </div>
 
-            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 overflow-hidden ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
                 {renderInput('Width', 'width')}
                 {renderInput('Height', 'height')}
 
@@ -78,23 +79,26 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                     )}
                 </div>
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 my-1">
                     <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Position</label>
-                    <select
-                        value={style?.position}
-                        onChange={(e) => applyStyle('position', e.target.value)}
-                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                    >
-                        <option value="static">static</option>
-                        <option value="absolute">absolute</option>
-                        <option value="relative">relative</option>
-                        <option value="fixed">fixed</option>
-                    </select>
+                    <CustomSelect
+                        options={[
+                            { label: "Static", value: "static" },
+                            { label: "Absolute", value: "absolute" },
+                            { label: "Relative", value: "relative" },
+                            { label: "Fixed", value: "fixed" }
+                        ]}
+                        firstOption='position'
+                        disableFirstValue={true}
+                        onChange={(value: string) => { applyStyle('position', value) }}
+                        baseClasses={`dark:bg-stone-100 relative rounded-2xl h-full flex-[1]`}
+                    />
                 </div>
 
                 {renderInput('Z-Index', 'zIndex', 'number')}
                 {renderInput('Border Radius', 'borderRadius', 'number', 'px')}
             </div>
+
         </div>
     );
 

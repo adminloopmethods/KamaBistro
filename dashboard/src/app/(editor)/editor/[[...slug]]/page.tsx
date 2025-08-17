@@ -159,18 +159,19 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-            try {
-                const response = await toastWithUpdate(() => page ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {
-                    loading: "Logging in...",
-                    success: "Login Successful!",
-                    error: (err: any) => err?.message || "Login failed",
-                })
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                console.log("Successfully sent content:", response);
-            } catch (error) {
-            }
+            console.log(bodyPayload)
+            // try {
+            //     const response = await toastWithUpdate(() => page ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {
+            //         loading: page ? "Updating content..." : "Saving Content...",
+            //         success: "Successful saved the content!",
+            //         error: (err: any) => err?.message || "Failed to create the content",
+            //     })
+            //     if (!response.ok) {
+            //         throw new Error(`HTTP error! status: ${response.status}`);
+            //     }
+            //     console.log("Successfully sent content:", response);
+            // } catch (error) {
+            // }
         }
 
         if (saveData) {
@@ -250,6 +251,7 @@ const Editor = () => {
                                 setUpdateData={setSaveData}
                                 finalUpdate={finalUpdate}
                                 lastSection={lastSection}
+                                createSection={CreateSection}
                             />
                         );
                     })}

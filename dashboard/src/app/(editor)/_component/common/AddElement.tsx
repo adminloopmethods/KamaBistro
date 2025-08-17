@@ -3,6 +3,7 @@ import { useState } from "react";
 
 interface AddElementProps {
     controller: (value: string) => void;
+    canAddSection?: Boolean
 }
 
 interface Option {
@@ -22,7 +23,7 @@ const styleClasses = `
   justify-between focus:outline-none
 `;
 
-const AddElement: React.FC<AddElementProps> = ({ controller }) => {
+const AddElement: React.FC<AddElementProps> = ({ controller, canAddSection }) => {
     const [selectedValue, setSelectedValue] = useState<string>("");
 
     const handleChange = (value: string) => {
@@ -35,6 +36,7 @@ const AddElement: React.FC<AddElementProps> = ({ controller }) => {
     };
 
     const elementTypeOptions: Option[] = [
+        ...(canAddSection ? [{ label: "Section", value: "section" }] : []),
         { label: "Heading", value: "heading" },
         { label: "Paragraph", value: "paragraph" },
         { label: "Image", value: "image" },
