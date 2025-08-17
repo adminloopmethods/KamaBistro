@@ -38,22 +38,28 @@
 // }
 
 model User {
-  id               String         @id @default(cuid())
-  name             String
-  image            String         @default("")
-  email            String         @unique
-  password         String
-  isSuperUser      Boolean        @default(false)
-  status           Status         @default(ACTIVE)
-  phone            String         @default("")
-  pageRoles        PageUserRole[]
-  auditLog         UserAuditLog[]
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  location         location?      @relation(fields: [locationId], references: [id])
-  locationId       String?
-  editedWebpages   Webpage[]      @relation("WebpageEditor")
-  verifiedWebpages Webpage[]      @relation("WebpageVerifier")
+  id          String         @id @default(cuid())
+  name        String
+  image       String         @default("")
+  email       String         @unique
+  password    String
+  isSuperUser Boolean        @default(false)
+  status      Status         @default(ACTIVE)
+  phone       String         @default("")
+  pageRoles   PageUserRole[]
+  auditLog    UserAuditLog[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  location    location?      @relation(fields: [locationId], references: [id])
+  locationId  String?
+
+  editedWebpages   Webpage[] @relation("WebpageEditor")
+  verifiedWebpages Webpage[] @relation("WebpageVerifier")
+
+  draft draft[]
+
+  proposedEdits   proposedVersion[] @relation("ProposedVersionEditor")
+  proposedReviews proposedVersion[] @relation("ProposedVersionVerifier")
 
   @@index([email])
   @@index([id])

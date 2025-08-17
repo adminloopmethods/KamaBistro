@@ -9,8 +9,8 @@ import {
 export const createWebpage = async (req, res) => {
   console.log("at create page")
   try {
-    const { name, content, route } = req.body;
-    const { webpage } = await createWebpageService({ name, content, route });
+    const { name, contents, route } = req.body;
+    const { webpage } = await createWebpageService({ name, contents, route });
     res.json(webpage);
   } catch (error) {
     logger.error(`Error creating webpage: ${error.message}`, { error });

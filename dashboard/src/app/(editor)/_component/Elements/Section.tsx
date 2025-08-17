@@ -225,21 +225,22 @@ const Section: React.FC<SectionProps> = ({
             // <Section />
             // const Component = mapElement[Element.name];
 
-            return <Section
-              key={i}
-              element={Element.elements}
-              section={Element}
-              style={Element.style?.[activeScreen] || {}}
-              rmSection={rmElement}
-              onEditing={() => {
-                contextRef.setContextRef(null);
-              }}
-              updateData={updateData}
-              setUpdateData={setUpdateData}
-              finalUpdate={updateForSection}
-              lastSection={lastSection}
-              parentIsSection={true}
-            />
+            return (
+              <Section
+                key={i}
+                element={Element.elements}
+                section={Element}
+                style={Element.style?.[activeScreen] || {}}
+                rmSection={rmElement}
+                onEditing={() => {
+                  contextRef.setContextRef(null);
+                }}
+                updateData={updateData}
+                setUpdateData={setUpdateData}
+                finalUpdate={updateForSection}
+                lastSection={lastSection}
+                parentIsSection={true}
+              />)
 
           } else {
             const Component = mapElement[Element.name];
