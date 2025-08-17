@@ -135,13 +135,12 @@ const Editor = () => {
     };
 
     const updateSectionStyles = (newStyle: CSSProperties) => {
-        console.log(newStyle)
         sectionStyleSetter((prev: CSSProperties) => {
             return { ...prev, ...newStyle };
         });
     };
 
-    const finalUpdate = (id: string, element: SectionElementType, lastSection: Boolean) => {
+    const finalUpdate = (id: string, element: SectionElementType, lastSection?: Boolean) => {
         setWebpage((prev: webpageType | null) => {
             if (!prev) return null
             const newContent = prev.contents?.map((e: SectionElementType) => {
@@ -160,7 +159,6 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-
             try {
                 const response = await toastWithUpdate(() => page ? saveContentReq(bodyPayload) : createContentReq(bodyPayload), {
                     loading: "Logging in...",
@@ -177,6 +175,7 @@ const Editor = () => {
 
         if (saveData) {
             updateData();
+            setSaveData(false)
         }
     }, [saveData]);
 

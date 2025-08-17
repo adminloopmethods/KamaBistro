@@ -12,7 +12,6 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const { currentSection } = useMyContext()
     const style = currentSection
-    console.log(style)
 
     const applyStyle = (key: keyof StylesState, val: string | number) => {
         // setStylesState((prev) => ({ ...prev, [key]: val }));
@@ -41,7 +40,6 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                     onChange={(e) => {
                         const val = type === 'number' ? Number(e.target.value) : e.target.value;
                         applyStyle(key, val); // store just the number
-                        console.log(val)
                     }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />

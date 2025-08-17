@@ -149,12 +149,16 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (finalUpdate) {
+      console.log(section)
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
-  }, [elements, sectionStyle, activeScreen]);
+  }, [elements, activeScreen]);
 
 
   useEffect(() => {
+    if (finalUpdate) {
+      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle } }, lastSection)
+    }
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
 
