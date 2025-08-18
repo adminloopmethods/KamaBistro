@@ -173,200 +173,141 @@ export const getWebpageByIdService = async (id) => {
   };
 };
 
-export const updateWebpageByIdService = async (id, { name, contents, route }) => {
+export const updateWebpageByIdService = async (id, { name, contents }) => {
   // Step 1: Update webpage basic info
   const updatedWebpage = await prismaClient.webpage.update({
     where: { id },
-    data: { name, route },
+    data: { name },
   });
 
-  // Step 2: Sync top-level contents
+  // Step 2: Fetch existing contents with elements and children
   const existingContents = await prismaClient.content.findMany({
     where: { webpageId: id },
-    include: { elements: true, children: true },
+    include: {
+      elements: { include: { style: true } },
+      children: { include: { elements: { include: { style: true } }, style: true } },
+      style: true,
+    },
   });
 
-  const existingContentMap = new Map(existingContents.map(c => [c.id, c]));
-  const incomingContentIds = new Set(contents.map(c => c.id));
+  // Build a flat map of all existing elements (including nested)
+  const existingElementMap = new Map();
 
-  // Delete missing contents
-  const contentsToDelete = existingContents.filter(c => !incomingContentIds.has(c.id));
-  if (contentsToDelete.length) {
-    await prismaClient.content.deleteMany({
-      where: { id: { in: contentsToDelete.map(c => c.id) } },
+  function flattenExisting(contentsArray) {
+    for (const content of contentsArray) {
+      if (content.elements) {
+        for (const el of content.elements) {
+          existingElementMap.set(el.id, el);
+
+          if (el.name === "section" && el.elements) {
+            flattenExisting([{ ...el, elements: el.elements }]);
+          }
+        }
+      }
+
+      if (content.children) {
+        flattenExisting(content.children);
+      }
+    }
+  }
+  flattenExisting(existingContents);
+
+  // Collect all incoming element IDs (including nested)
+  const incomingElementIds = new Set();
+  function collectIncomingIds(elementsArray) {
+    for (const el of elementsArray) {
+      incomingElementIds.add(el.id);
+
+      if (el.name === "section" && el.elements) {
+        collectIncomingIds(el.elements);
+      }
+    }
+  }
+  collectIncomingIds(contents.flatMap(c => c.elements || []));
+
+  // Delete missing elements
+  const elementsToDelete = Array.from(existingElementMap.values()).filter(
+    e => !incomingElementIds.has(e.id)
+  );
+
+  if (elementsToDelete.length) {
+    await prismaClient.element.deleteMany({
+      where: { id: { in: elementsToDelete.map(e => e.id) } },
     });
   }
 
-  // Upsert each section
-  for (let sectionIndex = 0; sectionIndex < contents.length; sectionIndex++) {
-    const section = contents[sectionIndex];
-
-    await prismaClient.content.upsert({
-      where: { id: section.id },
-      update: {
-        name: section.name,
-        order: sectionIndex,
-        style: {
-          update: {
-            xl: section.style?.xl,
-            lg: section.style?.lg,
-            md: section.style?.md,
-            sm: section.style?.sm,
-          },
-        },
-      },
-      create: {
-        id: section.id,
-        name: section.name,
-        order: sectionIndex,
-        webpage: { connect: { id } }, // ✅ FIX
-        style: {
-          create: {
-            id: section.style?.id || undefined,
-            xl: section.style?.xl,
-            lg: section.style?.lg,
-            md: section.style?.md,
-            sm: section.style?.sm,
-          },
-        },
-      },
-    });
-
-    // --- Elements sync ---
-    const existingEls = existingContentMap.get(section.id)?.elements ?? [];
-    const existingElMap = new Map(existingEls.map(e => [e.id, e]));
-    const incomingElIds = new Set(section.elements.map(e => e.id));
-
-    // Delete missing elements
-    const elsToDelete = existingEls.filter(e => !incomingElIds.has(e.id));
-    if (elsToDelete.length) {
-      await prismaClient.element.deleteMany({
-        where: { id: { in: elsToDelete.map(e => e.id) } },
-      });
-    }
-
-    // Upsert each element
-    for (let elIndex = 0; elIndex < section.elements.length; elIndex++) {
-      const el = section.elements[elIndex];
+  // Recursive upsert for content + elements
+  async function upsertElements(parentId, elementsArray) {
+    for (let i = 0; i < elementsArray.length; i++) {
+      const el = elementsArray[i];
 
       if (el.name === "section") {
-        // Nested section (only 1 level deep per your schema)
+        // Nested section
         await prismaClient.content.upsert({
           where: { id: el.id },
           update: {
             name: el.name,
-            order: elIndex,
-            parent: { connect: { id: section.id } }, // ✅ FIX
-            style: {
-              update: {
-                xl: el.style?.xl,
-                lg: el.style?.lg,
-                md: el.style?.md,
-                sm: el.style?.sm,
-              },
-            },
+            order: i,
+            parent: { connect: { id: parentId } },
+            style: { update: el.style || {} },
           },
           create: {
             id: el.id,
             name: el.name,
-            order: elIndex,
-            parent: { connect: { id: section.id } }, // ✅ FIX
-            style: {
-              create: {
-                id: el.style?.id || undefined,
-                xl: el.style?.xl,
-                lg: el.style?.lg,
-                md: el.style?.md,
-                sm: el.style?.sm,
-              },
-            },
+            order: i,
+            parent: { connect: { id: parentId } },
+            style: { create: el.style || {} },
           },
         });
 
-        // Now sync its child elements
-        const existingChildren = existingContentMap.get(el.id)?.elements ?? [];
-        const existingChildMap = new Map(existingChildren.map(c => [c.id, c]));
-        const incomingChildIds = new Set(el.elements.map(c => c.id));
-
-        // Delete children not in payload
-        const childrenToDelete = existingChildren.filter(c => !incomingChildIds.has(c.id));
-        if (childrenToDelete.length) {
-          await prismaClient.element.deleteMany({
-            where: { id: { in: childrenToDelete.map(c => c.id) } },
-          });
-        }
-
-        // Upsert children
-        for (let childIndex = 0; childIndex < el.elements.length; childIndex++) {
-          const child = el.elements[childIndex];
-          await prismaClient.element.upsert({
-            where: { id: child.id },
-            update: {
-              name: child.name,
-              content: child.content,
-              order: childIndex,
-              style: {
-                update: {
-                  xl: child.style?.xl,
-                  lg: child.style?.lg,
-                  md: child.style?.md,
-                  sm: child.style?.sm,
-                },
-              },
-            },
-            create: {
-              id: child.id,
-              name: child.name,
-              content: child.content,
-              order: childIndex,
-              contentRef: { connect: { id: el.id } }, // ✅ FIX
-              style: {
-                create: {
-                  id: child.style?.id || undefined,
-                  xl: child.style?.xl,
-                  lg: child.style?.lg,
-                  md: child.style?.md,
-                  sm: child.style?.sm,
-                },
-              },
-            },
-          });
+        if (el.elements?.length) {
+          await upsertElements(el.id, el.elements);
         }
       } else {
-        // Normal element (h1, p, etc.)
+        // Normal element
         await prismaClient.element.upsert({
           where: { id: el.id },
           update: {
             name: el.name,
             content: el.content,
-            order: elIndex,
-            style: {
-              update: {
-                xl: el.style?.xl,
-                lg: el.style?.lg,
-                md: el.style?.md,
-                sm: el.style?.sm,
-              },
-            },
+            order: i,
+            style: { update: el.style || {} },
           },
           create: {
             id: el.id,
             name: el.name,
             content: el.content,
-            order: elIndex,
-            contentRef: { connect: { id: section.id } }, // ✅ FIX
-            style: {
-              create: {
-                id: el.style?.id || undefined,
-                xl: el.style?.xl,
-                lg: el.style?.lg,
-                md: el.style?.md,
-                sm: el.style?.sm,
-              },
-            },
+            order: i,
+            contentRef: { connect: { id: parentId } },
+            style: { create: el.style || {} },
           },
         });
       }
+    }
+  }
+
+  // Upsert top-level contents and their elements
+  for (let i = 0; i < contents.length; i++) {
+    const section = contents[i];
+
+    await prismaClient.content.upsert({
+      where: { id: section.id },
+      update: {
+        name: section.name,
+        order: i,
+        style: { update: section.style || {} },
+      },
+      create: {
+        id: section.id,
+        name: section.name,
+        order: i,
+        webpage: { connect: { id } },
+        style: { create: section.style || {} },
+      },
+    });
+
+    if (section.elements?.length) {
+      await upsertElements(section.id, section.elements);
     }
   }
 
@@ -378,13 +319,10 @@ export const updateWebpageByIdService = async (id, { name, contents, route }) =>
         orderBy: { order: "asc" },
         include: {
           style: true,
+          elements: { orderBy: { order: "asc" }, include: { style: true } },
           children: {
             orderBy: { order: "asc" },
-            include: { style: true },
-          },
-          elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            include: { style: true, elements: { orderBy: { order: "asc" }, include: { style: true } } },
           },
         },
       },
