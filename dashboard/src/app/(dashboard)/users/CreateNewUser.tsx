@@ -4,7 +4,7 @@ import {createUserReq, getLocationsReq} from "@/functionality/fetch";
 // import {toast} from "react-toastify";
 import { toast } from "sonner";
 
-interface Location {
+export interface LocationType {
   id: string;
   name: string;
 }
@@ -25,7 +25,7 @@ const AddUserModal = ({
     phone: "",
     locationId: "",
   });
-  const [locations, setLocations] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<LocationType[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 

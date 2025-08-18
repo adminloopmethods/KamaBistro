@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState, ChangeEvent, useRef } from 're
 // import { useMyContext } from '../../../Context/ContextApi';
 import {
     AlignLeft, AlignCenter, AlignRight, AlignJustify,
-    ChevronDown, ChevronUp
 } from 'lucide-react';
 import { debounce } from 'lodash';
 import { useMyContext } from '@/Context/EditorContext';

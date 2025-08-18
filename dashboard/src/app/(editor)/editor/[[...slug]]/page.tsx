@@ -3,7 +3,7 @@
 import React, { useRef, useEffect, useState, CSSProperties } from "react";
 import { useMyContext, webpageType } from "@/Context/EditorContext";
 import { useParams } from "next/navigation";
-import { createContentReq, getWebpageReq, saveContentReq } from "@/functionality/fetch";
+import { createContentReq, getLocationsReq, getWebpageReq, saveContentReq } from "@/functionality/fetch";
 import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
 import Section from "../../_component/Elements/Section";
 import { CreateSection, SectionElementType } from "../../_functionality/createSection";
@@ -17,6 +17,8 @@ import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
 import { CiLaptop } from "react-icons/ci";
 import { CiDesktop } from "react-icons/ci";
+import { toast } from "sonner";
+import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
 
 const renderInput = (
     label: string,
@@ -49,6 +51,7 @@ const Editor = () => {
     const page = params.slug ? params.slug[0] : "" // hold the id from param to bring the content from backend
     const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
     const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
+    const [locations, setLocations] = useState<LocationType[] | null>(null)
 
     const {
         width, // {currentWidth, setCurrentWidth}
@@ -155,7 +158,24 @@ const Editor = () => {
 
         if (lastSection) setSaveData(false)
     }
+    //////////////////////////////////////////////////////Effects///////////////////
+    useEffect(() => {
+        const fetchLocations = async () => {
+            try {
+                const response = await getLocationsReq();
 
+                console.log("reslocation", response.location);
+                if (response.ok && Array.isArray(response?.location)) {
+                    setLocations(response?.location);
+                } else {
+                    toast.error("Failed to load locations");
+                }
+            } catch (error) {
+                toast.error("Error fetching locations");
+            }
+        };
+        fetchLocations();
+    }, []);
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
