@@ -1,17 +1,16 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Section from "./_elements/Section";
+import Section from "../_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 
 const Editor = () => {
+  const params = useParams()
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter()
-  const nav = usePathname()
-  const navigationArray = nav.split("/")
-  const page = navigationArray[2]
+  const page: string = params.slug ? params.slug[0] : ""
 
   const {
     width,
@@ -46,21 +45,21 @@ const Editor = () => {
 
   useEffect(() => {
     // if (page) {
-      async function getContentfromServer() {
-        try {
-          const response: any = await getContentReq("84fdd1eb-4d09-45d4-8db3-3d0e09616048")
-              // console.log(response)
-          if (response.ok) {
-            websiteContent.setContent(response.contents)
-          } else {
-            throw new Error("error while fetch the page")
-          }
-        } catch (err) {
-          console.error(err)
+    async function getContentfromServer() {
+      try {
+        const response: any = await getContentReq(page)
+        console.log(response)
+        if (response.ok) {
+          websiteContent.setWebpage(response.webpage)
+        } else {
+          throw new Error("error while fetch the page")
         }
+      } catch (err) {
+        console.error(err)
       }
+    }
 
-      getContentfromServer()
+    getContentfromServer()
     // }
   }, [page])
 
@@ -68,7 +67,7 @@ const Editor = () => {
     <div ref={containerRef} style={{ position: "relative", display: "flex", height: "100vh" }}>
       {/* website */}
       <div style={{ position: "relative", flex: 1, overflowY: "scroll" }} className="scroll-one">
-        {websiteContent?.contents?.map((section: any, i: number, a: any[]) => {
+        {websiteContent?.webpage?.contents?.map((section: any, i: number, a: any[]) => {
           const lastSection = i === a.length - 1;
           return (
             <Section
@@ -77,6 +76,7 @@ const Editor = () => {
               section={section}
               style={section.style[currentWidth]}
               lastSection={lastSection}
+              currentWidth={currentWidth}
             />
           );
         })}

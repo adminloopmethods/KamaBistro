@@ -30,8 +30,8 @@ type WidthType = {
 };
 
 type WebsiteContentType = {
-  contents: any[];
-  setContent: React.Dispatch<React.SetStateAction<any[]>>;
+  webpage: any;
+  setWebpage: React.Dispatch<React.SetStateAction<any>>;
 };
 
 type FinalSubmitType = {
@@ -68,7 +68,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [element, setElement] = useState<any>(null);
   const [currentWidth, setWidth] = useState<string>('');
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { });
-  const [contents, setContent] = useState<any[]>([]);
+  const [webpage, setWebpage] = useState<any[]>([]);
   const [finalSubmit, setFinalSubmit] = useState<FinalSubmitType[]>([]);
 
   const toolbarRef = useRef<HTMLElement | null>(null);
@@ -93,14 +93,14 @@ function Provider({ children }: { children: ReactNode }) {
   };
 
   const websiteContent: WebsiteContentType = {
-    contents,
-    setContent
+    webpage,
+    setWebpage
   };
 
   const SubmissionObject: SubmissionObjectType = {
     finalSubmit,
     setFinalSubmit,
-    setContent
+    setContent: setWebpage
   };
 
   return (

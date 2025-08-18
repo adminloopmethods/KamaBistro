@@ -19,9 +19,10 @@ type SectionProps = {
   style: React.CSSProperties;
   lastSection: boolean;
   section: {
-    id: string;
+    id?: string;
     [key: string]: any;
   };
+  currentWidth: string
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -43,6 +44,19 @@ const Section: React.FC<SectionProps> = ({
         style={style}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}
+          if (Element.name === "section") {
+
+            return (
+              <Section
+                key={i}
+                element={Element.elements}
+                style={Element?.style?.[currentWidth] || {}}
+                currentWidth={currentWidth}
+                lastSection={lastSection}
+                section={Element}
+              />
+            )
+          }
           const Component = mapElement[Element.name]; // mapElement.h1
           return (
             <Component
