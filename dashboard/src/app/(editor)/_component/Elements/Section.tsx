@@ -56,8 +56,6 @@ const Section: React.FC<SectionProps> = ({
     contextForSection,
   } = useMyContext();
 
-  console.log(parentIsSection ? "childSection" : "section")
-
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
   // const [allowUpdate, setAllowUpdate] = useState(true);
@@ -186,7 +184,7 @@ const Section: React.FC<SectionProps> = ({
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
 
-  }, [updateData]);
+  }, [updateData, elements]);
 
   useEffect(() => {
     if (updateParentElement) {
