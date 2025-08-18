@@ -46,18 +46,13 @@ const Section: React.FC<SectionProps> = ({
   createSection,
   parentIsSection
 }) => {
-  const [openToolBar, setOpenToolBar] = useState(false);
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
   const {
     contextRef,
     activeScreen,
-    // contextElement,
     contextForSection,
-    websiteContent,
-    SubmissionObject,
   } = useMyContext();
-  console.log(style)
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
@@ -86,18 +81,13 @@ const Section: React.FC<SectionProps> = ({
 
     sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
     sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
-    // setSectionStyle((prev) => ({
-    //   ...prev,
-    //   left: newLeft,
-    //   top: newTop,
-    // }));
+
   };
 
   const handleMouseUp = (e: MouseEvent) => {
     const newLeft = e.clientX - dragOffsetX;
     const newTop = e.clientY - dragOffsetY;
-    console.log(newLeft)
-    console.log(newTop)
+
     setIsDragging(false);
     setSectionStyle((prev) => ({
       ...prev,
@@ -121,8 +111,6 @@ const Section: React.FC<SectionProps> = ({
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     onEditing();
-    // contextElement.setElementSetter(() => setSectionStyle);
-    // contextElement.setElement(sectionStyle)
     contextForSection.setRmSection(() => () => rmSection(section.id))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
@@ -131,14 +119,12 @@ const Section: React.FC<SectionProps> = ({
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
     let element: any;
-    console.log(elementToAdd)
     if (elementToAdd === "section") {
       element = createSection["section"]();
     } else {
       element = CreateElement[elementToAdd]();
     }
     setElements((prev) => [...prev, element]);
-    setOpenToolBar(false);
   };
 
   const rmElement = (elementID: string) => {
@@ -187,7 +173,6 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (finalUpdate) {
-      console.log(section)
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
   }, [updateData, activeScreen]);
@@ -222,8 +207,6 @@ const Section: React.FC<SectionProps> = ({
         {elements?.map((Element, i, a) => {
           const lastSection = i === a.length - 1
           if (Element.name === "section") {
-            // <Section />
-            // const Component = mapElement[Element.name];
 
             return (
               <Section

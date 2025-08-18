@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import React from 'react';
 import { useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 
@@ -10,10 +9,9 @@ type DimensionToolbarProps = {
 };
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
-    const [isOpen, setIsOpen] = useState<boolean>(true);
-    const { currentSection, contextForSection } = useMyContext()
+    const { currentSection } = useMyContext() //contextForSection
     const style = currentSection
-    const { sectionRef } = contextForSection
+    // const { sectionRef } = contextForSection
 
     const applyStyle = (key: keyof StylesState, val: string | number) => {
         updateStyles({ [key]: val } as Partial<StylesState>);
@@ -41,18 +39,11 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                         const val = type === 'number' ? Number(e.target.value) : e.target.value;
                         applyStyle(key, val); // store just the number
                     }}
-                    // onChange={(e) => {
-                    //     const val = e.target.value;
-                    //     sectionRef?.current?.style.setProperty(key, val, "important")
-                    // }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
         )
     };
-
-
-
 
     return (
         <div
@@ -64,7 +55,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 </h3>
             </div>
 
-            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 max-h-[1000px] opacity-100`}>
                 {renderInput('Width', 'width')}
                 {renderInput('Height', 'height')}
 

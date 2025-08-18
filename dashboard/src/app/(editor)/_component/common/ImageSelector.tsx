@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, ChangeEvent, MouseEvent } from "react";
+import React, { useEffect, useRef, useState, ChangeEvent, MouseEvent } from "react";
 import { Upload, X } from "lucide-react";
 import { cloudinaryApiPoint } from "@/utils/endpoints";
 import { Toaster, toast } from "sonner";
@@ -157,7 +157,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
                 // !imagesByResource ||
                 //  (imagesByResource && resourceId)
                 true
-                ) {
+            ) {
                 setLoadingImages(true);
                 try {
                     const payload = imagesByResource
@@ -359,27 +359,13 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
                                             htmlFor="altEn"
                                             className="flex sm:flex-col xl:flex-row text-sm justify-between xl:items-center"
                                         >
-                                            Alt Text English
+                                            Alt Text
                                             <input
                                                 onChange={handleAltText}
                                                 type="text"
                                                 name="en"
                                                 id="altEn"
                                                 className="rounded-sm p-2 text-xs xl:w-[15vw] sm:w-full"
-                                            />
-                                        </label>
-                                        <label
-                                            htmlFor="altAr"
-                                            className="flex sm:flex-col xl:flex-row text-sm justify-between xl:items-center"
-                                        >
-                                            Alt Text Arabic
-                                            <input
-                                                onChange={handleAltText}
-                                                type="text"
-                                                name="ar"
-                                                id="altAr"
-                                                className="rounded-sm p-2 text-xs xl:w-[15vw] sm:w-full"
-                                                dir="rtl"
                                             />
                                         </label>
                                     </div>
@@ -449,4 +435,4 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
     );
 };
 
-export default ImageSelector;
+export default React.memo(ImageSelector);
