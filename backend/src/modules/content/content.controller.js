@@ -7,7 +7,6 @@ import {
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
-  console.log("at create page")
   try {
     const { name, contents, route } = req.body;
     const { webpage } = await createWebpageService({ name, contents, route });
@@ -19,8 +18,6 @@ export const createWebpage = async (req, res) => {
 };
 
 export const getAllWebpages = async (req, res) => {
-  console.log("at get all webpages")
-  
   try {
     const webpages = await getAllWebpagesService();
     res.json({webpages});
@@ -31,7 +28,6 @@ export const getAllWebpages = async (req, res) => {
 };
 
 export const getWebpageById = async (req, res) => {
-  console.log("at create page")
   try {
     const { id } = req.params;
     const webpage = await getWebpageByIdService(id);
