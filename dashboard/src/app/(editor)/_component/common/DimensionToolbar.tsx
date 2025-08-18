@@ -24,7 +24,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         label: string,
         key: keyof StylesState,
         type: 'text' | 'number' = 'text',
-        suffix = ''
+        suffix?: string
     ) => {
         let value: string | number | undefined = style?.[key];
         if (type === 'number' && typeof value === 'string') {
@@ -56,7 +56,6 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
 
     return (
         <div
-            // onClick={handleClick}
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
