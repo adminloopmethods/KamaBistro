@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Edit,
   UserPlus,
@@ -13,10 +13,11 @@ import {
   ArrowRight,
   Plus,
 } from "lucide-react";
-import { getAllWebpagesReq, getWebpageReq } from "@/functionality/fetch";
+import {getAllWebpagesReq, getWebpageReq} from "@/functionality/fetch";
 import WebpageCard from "./_component/WebpageCard";
 import AssignUserModal from "./_component/AssignUserModal";
 import Link from "next/link";
+import {Skeleton} from "@/components/ui/skeleton";
 
 // Types
 interface User {
@@ -39,118 +40,115 @@ interface Webpage {
 }
 
 const icons: Record<any, any> = {
-  "home": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "about": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "career": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "services": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "contact": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "blog": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  "products": <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-}
+  home: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  about: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  career: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  services: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  contact: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  blog: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  products: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+};
 
 const CMSDashboard = () => {
-
+  const [isLoading, setIsLoading] = useState(true);
   const [users] = useState<User[]>([
-    { id: "1", name: "Alex Johnson", role: "editor", avatar: "/user1.jpg" },
-    { id: "2", name: "Maria Garcia", role: "verifier", avatar: "/user2.jpg" },
-    { id: "3", name: "Sam Wilson", role: "editor", avatar: "/user3.jpg" },
-    { id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg" },
+    // { id: "1", name: "Alex Johnson", role: "editor", avatar: "/user1.jpg" },
+    // { id: "2", name: "Maria Garcia", role: "verifier", avatar: "/user2.jpg" },
+    // { id: "3", name: "Sam Wilson", role: "editor", avatar: "/user3.jpg" },
+    // { id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg" },
   ]);
 
   const [webpages, setWebpages] = useState<Webpage[]>([
-    {
-      id: "home",
-      title: "Home Page",
-      description: "Main landing page with featured content",
-      icon: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-      lastEdited: "2023-10-15",
-      editor: {
-        id: "1",
-        name: "Alex Johnson",
-        role: "editor",
-        avatar: "/user1.jpg",
-      },
-      verifier: {
-        id: "2",
-        name: "Maria Garcia",
-        role: "verifier",
-        avatar: "/user2.jpg",
-      },
-      status: "published",
-      route: "/home",
-    },
-    {
-      id: "about",
-      title: "About Us",
-      description: "Company history and team information",
-      icon: <Users className="w-6 h-6 text-blue-500" />,
-      lastEdited: "2023-10-18",
-      verifier: {
-        id: "4",
-        name: "Priya Patel",
-        role: "verifier",
-        avatar: "/user4.jpg",
-      },
-      route: "/home",
-      status: "published",
-    },
-    {
-      id: "services",
-      title: "Services",
-      description: "Overview of services we provide",
-      icon: <Settings className="w-6 h-6 text-amber-500" />,
-      lastEdited: "2023-10-12",
-      editor: {
-        id: "3",
-        name: "Sam Wilson",
-        role: "editor",
-        avatar: "/user3.jpg",
-      },
-      status: "needs-review",
-      route: "/home",
-
-    },
-    {
-      id: "contact",
-      title: "Contact",
-      description: "Contact information and inquiry form",
-      icon: <Contact className="w-6 h-6 text-emerald-500" />,
-      lastEdited: "2023-10-10",
-      status: "published",
-      route: "/home",
-
-    },
-    {
-      id: "blog",
-      title: "Blog",
-      description: "Latest articles and company updates",
-      icon: <FileText className="w-6 h-6 text-rose-500" />,
-      lastEdited: "2023-10-05",
-      editor: {
-        id: "1",
-        name: "Alex Johnson",
-        role: "editor",
-        avatar: "/user1.jpg",
-      },
-      verifier: {
-        id: "4",
-        name: "Priya Patel",
-        role: "verifier",
-        avatar: "/user4.jpg",
-      },
-      status: "draft",
-      route: "/home",
-
-    },
-    {
-      id: "products",
-      title: "Products",
-      description: "Our product catalog and descriptions",
-      icon: <ShoppingCart className="w-6 h-6 text-violet-500" />,
-      lastEdited: "2023-10-20",
-      status: "published",
-      route: "/home",
-    },
+    // {
+    //   id: "home",
+    //   title: "Home Page",
+    //   description: "Main landing page with featured content",
+    //   icon: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+    //   lastEdited: "2023-10-15",
+    //   editor: {
+    //     id: "1",
+    //     name: "Alex Johnson",
+    //     role: "editor",
+    //     avatar: "/user1.jpg",
+    //   },
+    //   verifier: {
+    //     id: "2",
+    //     name: "Maria Garcia",
+    //     role: "verifier",
+    //     avatar: "/user2.jpg",
+    //   },
+    //   status: "published",
+    //   route: "/home",
+    // },
+    // {
+    //   id: "about",
+    //   title: "About Us",
+    //   description: "Company history and team information",
+    //   icon: <Users className="w-6 h-6 text-blue-500" />,
+    //   lastEdited: "2023-10-18",
+    //   verifier: {
+    //     id: "4",
+    //     name: "Priya Patel",
+    //     role: "verifier",
+    //     avatar: "/user4.jpg",
+    //   },
+    //   route: "/home",
+    //   status: "published",
+    // },
+    // {
+    //   id: "services",
+    //   title: "Services",
+    //   description: "Overview of services we provide",
+    //   icon: <Settings className="w-6 h-6 text-amber-500" />,
+    //   lastEdited: "2023-10-12",
+    //   editor: {
+    //     id: "3",
+    //     name: "Sam Wilson",
+    //     role: "editor",
+    //     avatar: "/user3.jpg",
+    //   },
+    //   status: "needs-review",
+    //   route: "/home",
+    // },
+    // {
+    //   id: "contact",
+    //   title: "Contact",
+    //   description: "Contact information and inquiry form",
+    //   icon: <Contact className="w-6 h-6 text-emerald-500" />,
+    //   lastEdited: "2023-10-10",
+    //   status: "published",
+    //   route: "/home",
+    // },
+    // {
+    //   id: "blog",
+    //   title: "Blog",
+    //   description: "Latest articles and company updates",
+    //   icon: <FileText className="w-6 h-6 text-rose-500" />,
+    //   lastEdited: "2023-10-05",
+    //   editor: {
+    //     id: "1",
+    //     name: "Alex Johnson",
+    //     role: "editor",
+    //     avatar: "/user1.jpg",
+    //   },
+    //   verifier: {
+    //     id: "4",
+    //     name: "Priya Patel",
+    //     role: "verifier",
+    //     avatar: "/user4.jpg",
+    //   },
+    //   status: "draft",
+    //   route: "/home",
+    // },
+    // {
+    //   id: "products",
+    //   title: "Products",
+    //   description: "Our product catalog and descriptions",
+    //   icon: <ShoppingCart className="w-6 h-6 text-violet-500" />,
+    //   lastEdited: "2023-10-20",
+    //   status: "published",
+    //   route: "/home",
+    // },
   ]);
 
   const [showAssignModal, setShowAssignModal] = useState(false);
@@ -226,6 +224,7 @@ const CMSDashboard = () => {
   useEffect(() => {
     async function getAllpages() {
       try {
+        setIsLoading(true);
         const response = await getAllWebpagesReq();
         // console.log(response)
         if (response.ok) {
@@ -240,16 +239,73 @@ const CMSDashboard = () => {
                 editor: e?.editor,
                 verifier: e?.verifier,
                 status: e.status,
-                route: e.route
-              }
-            })
-          })
+                route: e.route,
+              };
+            });
+          });
         }
       } catch (err) {
+        console.error("Failed to fetch webpages:", err);
+      } finally {
+        setIsLoading(false);
       }
     }
-    getAllpages()
-  }, [])
+    getAllpages();
+  }, []);
+
+  //skeleton loader
+  const SkeletonCard = () => (
+    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300">
+      <div className="p-6">
+        <div className="flex justify-between items-start">
+          <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-xl">
+            <Skeleton className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600" />
+          </div>
+          <Skeleton className="w-20 h-6 rounded-full bg-gray-300 dark:bg-gray-600" />
+        </div>
+
+        <div className="mt-4">
+          <Skeleton className="w-3/4 h-6 mb-2 bg-gray-300 dark:bg-gray-600" />
+          <Skeleton className="w-1/2 h-4 bg-gray-200 dark:bg-gray-700" />
+        </div>
+
+        <div className="mt-6">
+          {/* Editor Assignment Skeleton */}
+          <div className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <Skeleton className="w-16 h-4 bg-gray-300 dark:bg-gray-600" />
+              <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center w-full bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-lg">
+                <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
+                <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
+              </div>
+            </div>
+          </div>
+
+          {/* Verifier Assignment Skeleton */}
+          <div className="mb-4">
+            <div className="flex justify-between items-center mb-2">
+              <Skeleton className="w-16 h-4 bg-gray-300 dark:bg-gray-600" />
+              <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <div className="flex items-center w-full bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-lg">
+                <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
+                <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-6 flex space-x-3">
+          <Skeleton className="flex-1 h-10 rounded-xl bg-gray-300 dark:bg-gray-600" />
+          <Skeleton className="w-10 h-10 rounded-xl bg-gray-300 dark:bg-gray-600" />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br dark:bg-gray-800 p-6">
@@ -289,7 +345,10 @@ const CMSDashboard = () => {
               <BarChart2 className="w-5 h-5 mr-2" />
               Analytics
             </button>
-            <Link href={"/editor"} className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center">
+            <Link
+              href={"/editor"}
+              className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center"
+            >
               <Plus className="w-5 h-5 mr-2" />
               Create Page
             </Link>
@@ -298,17 +357,21 @@ const CMSDashboard = () => {
       </div>
 
       {/* Webpage Cards Grid */}
-      <div className=" mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {webpages.map((page) => (
-          <WebpageCard
-            key={page.id}
-            page={page}
-            formatDate={formatDate}
-            getStatusStyle={getStatusStyle}
-            openAssignModal={openAssignModal}
-            removeUser={removeUser}
-          />
-        ))}
+      <div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {isLoading
+          ? Array.from({length: 3}).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          : webpages.map((page) => (
+              <WebpageCard
+                key={page.id}
+                page={page}
+                formatDate={formatDate}
+                getStatusStyle={getStatusStyle}
+                openAssignModal={openAssignModal}
+                removeUser={removeUser}
+              />
+            ))}
       </div>
       {/* </div> */}
 
