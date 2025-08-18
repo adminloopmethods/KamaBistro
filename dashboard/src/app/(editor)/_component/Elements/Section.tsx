@@ -30,7 +30,8 @@ type SectionProps = {
   };
   finalUpdate?: (id: string, element: any, lS: Boolean) => void,
   createSection?: any,
-  parentIsSection?: Boolean
+  parentIsSection?: Boolean,
+  updateParentElement?: (id: string, element: any, lS: Boolean) => void,
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -44,7 +45,8 @@ const Section: React.FC<SectionProps> = ({
   section,
   finalUpdate,
   createSection,
-  parentIsSection
+  parentIsSection,
+  updateParentElement
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
@@ -53,6 +55,8 @@ const Section: React.FC<SectionProps> = ({
     activeScreen,
     contextForSection,
   } = useMyContext();
+
+  console.log(parentIsSection ? "childSection" : "section")
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
@@ -131,17 +135,23 @@ const Section: React.FC<SectionProps> = ({
     setElements((prev) => prev.filter((el) => el.id !== elementID));
   };
 
+  const updateElement = (id: string, value: ElementType) => {
+    console.log("qwer")
+    setElements((prev) =>
+      prev.map((e) => (e.id === id ? { ...value } : e))
+    );
+  };
+
+
   const updateTheDataOfElement = (id: string, property: string, value: any) => {
+    console.log("writing")
     setElements((prev) =>
       prev.map((e) => (e.id === id ? { ...e, [property]: value } : e))
     );
   };
 
-  const updateElement = (id: string, value: ElementType) => {
-    setElements((prev) =>
-      prev.map((e) => (e.id === id ? { ...value } : e))
-    );
-  };
+  console.log(parentIsSection ? "sectionChild" : "section", elements)
+
 
   const updateForSection = (id: string, element: SectionElementType, lastSection?: Boolean) => {
     setElements((prev: any | null) => {
@@ -153,7 +163,7 @@ const Section: React.FC<SectionProps> = ({
       return newContent
     })
 
-    if (lastSection) setUpdateData(false)
+    // if (lastSection) setUpdateData(false)
   }
 
   useEffect(() => {
@@ -175,12 +185,22 @@ const Section: React.FC<SectionProps> = ({
     if (finalUpdate) {
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
-  }, [updateData, activeScreen]);
 
+  }, [updateData, elements, activeScreen]);
+
+  useEffect(() => {
+    if (updateParentElement) {
+      updateParentElement(section.id, { ...section, elements: elements }, lastSection)
+    }
+  }, [elements])
 
   useEffect(() => {
     if (finalUpdate) {
       finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle } }, lastSection)
+    }
+
+    if (updateParentElement) {
+      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle } }, lastSection)
     }
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
@@ -220,7 +240,7 @@ const Section: React.FC<SectionProps> = ({
                 }}
                 updateData={updateData}
                 setUpdateData={setUpdateData}
-                finalUpdate={updateForSection}
+                updateParentElement={updateForSection}
                 lastSection={lastSection}
                 parentIsSection={true}
               />)
