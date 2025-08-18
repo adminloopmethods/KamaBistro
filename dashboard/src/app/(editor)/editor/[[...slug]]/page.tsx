@@ -160,18 +160,18 @@ const Editor = () => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
             console.log(bodyPayload)
-            // try {
-            //     const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
-            //         loading: page ? "Updating content..." : "Saving Content...",
-            //         success: "Successful saved the content!",
-            //         error: (err: any) => err?.message || "Failed to create the content",
-            //     })
-            //     if (!response.ok) {
-            //         throw new Error(`HTTP error! status: ${response.status}`);
-            //     }
-            //     console.log("Successfully sent content:", response);
-            // } catch (error) {
-            // }
+            try {
+                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
+                    loading: page ? "Updating content..." : "Saving Content...",
+                    success: "Successful saved the content!",
+                    error: (err: any) => err?.message || "Failed to create the content",
+                })
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                console.log("Successfully sent content:", response);
+            } catch (error) {
+            }
         }
 
         if (saveData) {

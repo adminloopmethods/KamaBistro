@@ -186,7 +186,7 @@ const Section: React.FC<SectionProps> = ({
       finalUpdate(section.id, { ...section, elements: elements }, lastSection)
     }
 
-  }, [updateData, elements, activeScreen]);
+  }, [updateData]);
 
   useEffect(() => {
     if (updateParentElement) {
