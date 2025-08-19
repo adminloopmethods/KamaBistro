@@ -19,6 +19,8 @@ import { CiLaptop } from "react-icons/ci";
 import { CiDesktop } from "react-icons/ci";
 import { toast } from "sonner";
 import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
+import CustomSelect from "@/app/_common/CustomSelect";
+import { preSection } from "@/assets/preSection.js"
 
 const renderInput = (
     label: string,
@@ -51,7 +53,7 @@ const Editor = () => {
     const page = params.slug ? params.slug[0] : "" // hold the id from param to bring the content from backend
     const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
     const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
-    const [locations, setLocations] = useState<LocationType[] | null>(null)
+    const [locations, setLocations] = useState<LocationType[]>([{ id: "", name: "" }])
 
     const {
         width, // {currentWidth, setCurrentWidth}
@@ -158,7 +160,7 @@ const Editor = () => {
 
         if (lastSection) setSaveData(false)
     }
-    //////////////////////////////////////////////////////Effects///////////////////
+    /////////////////////////////////////////Effects//////////////////////////////////////////
     useEffect(() => {
         const fetchLocations = async () => {
             try {
@@ -179,19 +181,19 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-            console.log(bodyPayload)
-            try {
-                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
-                    loading: page ? "Updating content..." : "Saving Content...",
-                    success: "Successful saved the content!",
-                    error: (err: any) => err?.message || "Failed to create the content",
-                })
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                console.log("Successfully sent content:", response);
-            } catch (error) {
-            }
+            console.log(JSON.stringify(bodyPayload))
+            // try {
+            //     const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
+            //         loading: page ? "Updating content..." : "Saving Content...",
+            //         success: "Successful saved the content!",
+            //         error: (err: any) => err?.message || "Failed to create the content",
+            //     })
+            //     if (!response.ok) {
+            //         throw new Error(`HTTP error! status: ${response.status}`);
+            //     }
+            //     console.log("Successfully sent content:", response);
+            // } catch (error) {
+            // }
         }
 
         if (saveData) {
@@ -224,7 +226,7 @@ const Editor = () => {
                 route: "",
                 locationId: "",
                 name: "",
-                contents: [],
+                contents: preSection.contents,
                 createdAt: "",
                 updatedAt: "",
             })
@@ -253,7 +255,24 @@ const Editor = () => {
             {/* website */}
             <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
 
-                <div ref={containerRef} style={{ position: "relative", flex: 1, width: pageWidth, margin: "0 auto", minHeight: "100vh", transition: ".1s linear all" }} className="bg-stone-200">
+                <div
+                    ref={containerRef}
+                    style={{
+                        position: "relative",
+                        flex: 1,
+                        width: pageWidth,
+                        margin: "0 auto",
+                        minHeight: "100vh",
+                        transition: ".1s linear all",
+                        backgroundColor: "#e7e5e4", // stone-200
+                        backgroundImage: `
+                                          linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                                          linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+                                        `,
+                        backgroundSize: "15px 15px", // size of grid squares
+                    }}
+                    className="bg-stone-200"
+                >
                     {webpage?.contents?.map((section: any, i: number, a: any[]) => {
                         const lastSection = i === a.length - 1;
 
@@ -262,7 +281,10 @@ const Editor = () => {
                                 key={i}
                                 element={section.elements}
                                 section={section}
-                                style={section.style[activeScreen]}
+                                style={{
+                                    ...section.style[activeScreen],
+                                    border: "1px dashed gray"
+                                }}
                                 rmSection={rmSection}
                                 onEditing={() => {
                                     contextRef.setContextRef(null);
@@ -277,6 +299,7 @@ const Editor = () => {
                     })}
                     <AddSection controller={addSection} />
                 </div>
+
 
             </div>
             {/* Sidebar/toolbars */}
@@ -304,9 +327,22 @@ const Editor = () => {
                     <button onClick={() => applySMScreen()} className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"}`}><CiMobile1 /></button>
                 </div>
 
-                <div className="p-2 w-[240px] px-4 flex gap-1 flex-col">
+                <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
                     {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
                     {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
+                    <CustomSelect
+                        options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
+                        firstOption="Set Location"
+                        disableFirstValue={true}
+                        onChange={(value) => {
+                            setWebpage((prev: webpageType | null) => {
+                                if (!prev) return null
+                                return {
+                                    ...prev, locationId: value
+                                }
+                            })
+                        }}
+                    />
                 </div>
                 {/* toolbars */}
                 {

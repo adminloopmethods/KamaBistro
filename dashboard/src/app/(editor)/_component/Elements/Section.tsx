@@ -103,7 +103,7 @@ const Section: React.FC<SectionProps> = ({
     if (!onAddElement) {
       if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
-      if (sectionRef.current) sectionRef.current.style.border = "";
+      if (sectionRef.current) sectionRef.current.style.border = "1px dashed gray";
       setOnAddElement(false);
       return;
     }
@@ -231,7 +231,7 @@ const Section: React.FC<SectionProps> = ({
                 key={i}
                 element={Element.elements}
                 section={Element}
-                style={Element.style?.[activeScreen] || {}}
+                style={{ ...Element.style?.[activeScreen], border: "1px dashed gray" }}
                 rmSection={rmElement}
                 onEditing={() => {
                   contextRef.setContextRef(null);
