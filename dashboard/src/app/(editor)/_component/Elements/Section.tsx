@@ -148,9 +148,6 @@ const Section: React.FC<SectionProps> = ({
     );
   };
 
-  console.log(parentIsSection ? "sectionChild" : "section", elements)
-
-
   const updateForSection = (id: string, element: SectionElementType, lastSection?: Boolean) => {
     setElements((prev: any | null) => {
       if (!prev) return null

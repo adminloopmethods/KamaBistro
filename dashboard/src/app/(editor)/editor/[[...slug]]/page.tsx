@@ -141,6 +141,8 @@ const Editor = () => {
 
     const updateSectionStyles = (newStyle: CSSProperties) => {
         sectionStyleSetter((prev: CSSProperties) => {
+            console.log(prev)
+            console.log(newStyle)
             return { ...prev, ...newStyle };
         });
     };

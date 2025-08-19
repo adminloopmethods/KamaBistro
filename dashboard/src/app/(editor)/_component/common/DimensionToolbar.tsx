@@ -1,22 +1,41 @@
-import React from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
+import { debounce } from 'lodash';
 
-export type StylesState = React.CSSProperties | Record<string, any>
+export type StylesState = React.CSSProperties | Record<string, any>;
 
 type DimensionToolbarProps = {
     updateStyles: (styles: Partial<StylesState>) => void;
 };
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
-    const { currentSection } = useMyContext() //contextForSection
-    const style = currentSection
-    // const { sectionRef } = contextForSection
+    const { currentSection, contextForSection } = useMyContext(); // contextForSection
+    const style = currentSection || {};
+    const sectionRef = contextForSection.sectionRef
 
-    const applyStyle = (key: keyof StylesState, val: string | number) => {
-        updateStyles({ [key]: val } as Partial<StylesState>);
-    };
+    // Local state to hold temporary inputs before debounce
+    const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(style);
 
+    // Debounced updater
+    const debouncedUpdate = useMemo(
+        () =>
+            debounce((styles: Partial<StylesState>) => {
+                updateStyles(styles);
+            }, 200),
+        [updateStyles]
+    );
+
+    const applyStyle = useCallback(
+        (key: keyof StylesState, val: string | number) => {
+            if (localStyle[key] === val) return; // avoid redundant update
+
+            const newStyle = { ...localStyle, [key]: val };
+            setLocalStyle(newStyle);
+            debouncedUpdate({ [key]: val });
+        },
+        [localStyle, debouncedUpdate]
+    );
 
     const renderInput = (
         label: string,
@@ -24,9 +43,9 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         type: 'text' | 'number' = 'text',
         suffix?: string
     ) => {
-        let value: string | number | undefined = style?.[key];
+        let value: string | number | undefined = currentSection?.[key];
         if (type === 'number' && typeof value === 'string') {
-            value = parseFloat(value); // convert "20px" → 20
+            value = parseFloat(value);
         }
 
         return (
@@ -34,40 +53,44 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
                 <input
                     type={type}
-                    value={value || ""}
+                    defaultValue={value || ""}
                     onChange={(e) => {
-                        const val = type === 'number' ? Number(e.target.value) : e.target.value;
-                        applyStyle(key, val); // store just the number
+                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
+                        if (sectionRef?.current) {
+                            (sectionRef.current as HTMLElement).style[key as any] = val; // 👈 live apply
+                        }
+                    }}
+                    onBlur={(e) => {
+                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
+                        applyStyle(key, val); // 👈 save to context/state
                     }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
-        )
+        );
     };
 
     return (
-        <div
-            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
-        >
+        <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                     Dimension Controls
                 </h3>
             </div>
 
-            <div className={`transition-all duration-300 grid grid-cols-1 gap-3 max-h-[1000px] opacity-100`}>
+            <div className="transition-all duration-300 grid grid-cols-1 gap-3 max-h-[1000px] opacity-100">
                 {renderInput('Width', 'width')}
                 {renderInput('Height', 'height')}
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Padding (px)</h4>
-                <div className='grid grid-cols-2 gap-x-2'>
+                <div className="grid grid-cols-2 gap-x-2">
                     {(['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'] as (keyof StylesState)[]).map((key) =>
                         renderInput(key.replace('padding', ''), key, 'number', 'px')
                     )}
                 </div>
 
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2">Margin (px)</h4>
-                <div className='grid grid-cols-2 gap-x-2'>
+                <div className="grid grid-cols-2 gap-x-2">
                     {(['marginTop', 'marginBottom', 'marginLeft', 'marginRight'] as (keyof StylesState)[]).map((key) =>
                         renderInput(key.replace('margin', ''), key, 'number', 'px')
                     )}
@@ -82,20 +105,18 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                             { label: "Relative", value: "relative" },
                             { label: "Fixed", value: "fixed" }
                         ]}
-                        firstOption='position'
+                        firstOption="position"
                         disableFirstValue={true}
-                        onChange={(value: string) => { applyStyle('position', value) }}
-                        baseClasses={`dark:bg-stone-100 relative rounded-2xl h-full flex-[1]`}
+                        onChange={(value: string) => applyStyle('position', value)}
+                        baseClasses="dark:bg-stone-100 relative rounded-2xl h-full flex-[1]"
                     />
                 </div>
 
                 {renderInput('Z-Index', 'zIndex', 'number')}
-                {renderInput('Border Radius', 'borderRadius', 'number', 'px')}
+                {renderInput('Border Radius', 'borderRadius', 'text', 'px')}
             </div>
-
         </div>
     );
-
 };
 
-export default DimensionToolbar
+export default DimensionToolbar;
