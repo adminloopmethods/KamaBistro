@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 import { debounce } from 'lodash';
@@ -37,13 +37,19 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         [localStyle, debouncedUpdate]
     );
 
+    // Update effect: whenever currentSection changes, reset localStyle
+    useEffect(() => {
+        setLocalStyle(currentSection || {});
+    }, [currentSection]);
+
     const renderInput = (
         label: string,
         key: keyof StylesState,
         type: 'text' | 'number' = 'text',
         suffix?: string
     ) => {
-        let value: string | number | undefined = currentSection?.[key];
+        let value: string | number | undefined = localStyle?.[key];
+
         if (type === 'number' && typeof value === 'string') {
             value = parseFloat(value);
         }
@@ -53,22 +59,34 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
                 <input
                     type={type}
-                    defaultValue={value || ""}
+                    value={value || ""}  // controlled input ✅
                     onChange={(e) => {
-                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
+                        const val = type === 'number'
+                            ? `${e.target.value}${suffix || ''}`
+                            : e.target.value;
+
+                        // live apply
                         if (sectionRef?.current) {
-                            (sectionRef.current as HTMLElement).style[key as any] = val; // 👈 live apply
+                            (sectionRef.current as HTMLElement).style[key as any] = val;
                         }
+
+                        // update local state immediately
+                        setLocalStyle((prev) => ({ ...prev, [key]: val }));
                     }}
                     onBlur={(e) => {
-                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
-                        applyStyle(key, val); // 👈 save to context/state
+                        const val = type === 'number'
+                            ? `${e.target.value}${suffix || ''}`
+                            : e.target.value;
+                        applyStyle(key, val);
                     }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
         );
     };
+
+
+
 
     return (
         <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
