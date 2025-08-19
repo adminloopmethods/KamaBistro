@@ -258,8 +258,8 @@ const CMSDashboard = () => {
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300">
       <div className="p-6">
         <div className="flex justify-between items-start">
-          <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-xl">
-            <Skeleton className="w-6 h-6 rounded-full bg-gray-300 dark:bg-gray-600" />
+          <div className=" py-3 rounded-xl">
+            <Skeleton className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600" />
           </div>
           <Skeleton className="w-20 h-6 rounded-full bg-gray-300 dark:bg-gray-600" />
         </div>
@@ -277,7 +277,7 @@ const CMSDashboard = () => {
               <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
             </div>
             <div className="flex flex-wrap gap-2">
-              <div className="flex items-center w-full bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-lg">
+              <div className="flex items-center w-full  px-3 py-1.5 rounded-lg">
                 <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
                 <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
               </div>
@@ -291,7 +291,7 @@ const CMSDashboard = () => {
               <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
             </div>
             <div className="flex flex-wrap gap-2">
-              <div className="flex items-center w-full bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-lg">
+              <div className="flex items-center w-full px-3 py-1.5 rounded-lg">
                 <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
                 <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
               </div>
