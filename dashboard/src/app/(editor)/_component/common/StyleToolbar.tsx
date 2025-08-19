@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
 import CustomSelect from '@/app/_common/CustomSelect';
 import { useMyContext } from '@/Context/EditorContext';
+import { debounce } from "lodash";
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -30,11 +31,17 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [gradientDirection, setGradientDirection] = useState<string>('to right');
     const [gradient, setGradient] = useState<string>('');
     const [bgImage, setBgImage] = useState<string>('');
-
     const [boxShadow, setBoxShadow] = useState<string>(currentSection?.boxShadow || 'none');
-
     const toolbarRef = useRef<HTMLDivElement>(null);
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
+
+    // ===== Debounced Handlers =====
+    const debouncedUpdateStyles = useCallback(
+        debounce((styles: Record<string, any>) => {
+            updateStyles(styles);
+        }, 150),
+        [updateStyles]
+    );
 
     const updateBackground = (url?: string) => {
         let combined = '';
@@ -45,12 +52,12 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         } else if (bgImage || url) {
             combined = `url(${url || bgImage})`;
         }
-        updateStyles({ backgroundImage: combined });
+        debouncedUpdateStyles({ backgroundImage: combined });
     };
 
     const handleShadowChange = (value: string) => {
         setBoxShadow(shadowPresets[value]);
-        updateStyles({ boxShadow: shadowPresets[value] });
+        debouncedUpdateStyles({ boxShadow: shadowPresets[value] });
     };
 
     const handleGradientUpdate = (newColor1?: string, newColor2?: string, newDir?: string) => {
@@ -72,7 +79,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     return (
         <div
             ref={toolbarRef}
-            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[0px_0px_4px_4px]  shadow-md flex flex-col gap-4"
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[0px_0px_4px_4px] shadow-md flex flex-col gap-4"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
@@ -107,7 +114,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 Default={currentSection?.backgroundRepeat || undefined}
                 firstOption='Background Repeat'
                 disableFirstValue={true}
-                onChange={(val) => { updateStyles({ backgroundRepeat: val }); }}
+                onChange={(val) => { debouncedUpdateStyles({ backgroundRepeat: val }); }}
             />
 
             {/* Background Attachment */}
@@ -120,7 +127,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 Default={currentSection?.backgroundAttachment}
                 firstOption='BG - Attachment'
                 disableFirstValue={true}
-                onChange={(val) => { updateStyles({ backgroundAttachment: val }); }}
+                onChange={(val) => { debouncedUpdateStyles({ backgroundAttachment: val }); }}
             />
 
             {/* Background Size */}
@@ -130,10 +137,9 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     { label: "Cover", value: "cover" },
                     { label: "Contain", value: "contain" },
                 ]}
-                // Default={String(currentSection?.backgroundPosition)}
                 firstOption='Background Size'
                 disableFirstValue={true}
-                onChange={(val) => { updateStyles({ backgroundSize: val }); }}
+                onChange={(val) => { debouncedUpdateStyles({ backgroundSize: val }); }}
             />
 
             {/* Background Position */}
@@ -148,7 +154,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 Default={currentSection?.position}
                 firstOption='Background Position'
                 disableFirstValue={true}
-                onChange={(val) => { updateStyles({ backgroundPosition: val }); }}
+                onChange={(val) => { debouncedUpdateStyles({ backgroundPosition: val }); }}
             />
 
             {/* Gradient Colors */}
@@ -195,7 +201,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         { label: "Top Right", value: "to top right" },
                         { label: "Bottom Left", value: "to bottom left" },
                     ]}
-                    // Default={gradientDirection}
                     firstOption='Gradient Direction'
                     disableFirstValue={true}
                     onChange={(val) => {
@@ -219,7 +224,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     <input
                         type="checkbox"
                         checked={currentSection?.display === "flex"}
-                        onChange={(e) => { updateStyles({ display: e.target.checked ? 'flex' : 'block' }); }}
+                        onChange={(e) => { debouncedUpdateStyles({ display: e.target.checked ? 'flex' : 'block' }); }}
                     />
                     <span className="text-sm">Enable Layout</span>
                 </div>
@@ -236,7 +241,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                                     { label: "Column Reverse", value: "column-reverse" },
                                 ]}
                                 Default={currentSection?.flexDirection}
-                                onChange={(val) => { updateStyles({ flexDirection: val }); }}
+                                onChange={(val) => { debouncedUpdateStyles({ flexDirection: val }); }}
                             />
                         )}
 
@@ -245,13 +250,12 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                             <input
                                 type="number"
                                 min="0"
-                                // value={parseInt(flexGap)}
                                 onChange={(e) => {
                                     if (sectionRef?.current) {
                                         sectionRef.current.style.setProperty("gap", `${e.target.value}px`, "important");
                                     }
+                                    debouncedUpdateStyles({ gap: `${e.target.value}px` });
                                 }}
-                                onBlur={(e) => { updateStyles({ gap: `${e.target.value}px` }); }}
                                 className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                             />
                         )}
@@ -268,7 +272,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                                     { label: "Space Evenly", value: "space-evenly" },
                                 ]}
                                 Default={currentSection?.justifyContent}
-                                onChange={(val) => { updateStyles({ justifyContent: val }); }}
+                                onChange={(val) => { debouncedUpdateStyles({ justifyContent: val }); }}
                             />
                         )}
 
@@ -283,7 +287,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                                     { label: "Baseline", value: "baseline" },
                                 ]}
                                 Default={currentSection?.alignItems}
-                                onChange={(val) => { updateStyles({ alignItems: val }); }}
+                                onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
                             />
                         )}
                     </>
@@ -315,7 +319,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         { label: "Orange Red", value: "#FF4500" },
                     ]}
                     Default={currentSection?.color}
-                    onChange={(val) => { updateStyles({ color: val }); }}
+                    onChange={(val) => { debouncedUpdateStyles({ color: val }); }}
                 />
             )}
 
