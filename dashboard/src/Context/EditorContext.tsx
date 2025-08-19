@@ -1,7 +1,7 @@
 "use client"
 
 import { BaseElement, StyleObject } from '@/app/(editor)/_functionality/createElement';
-import { ResponsiveStyles, SectionElementType } from '@/app/(editor)/_functionality/createSection';
+// import { ResponsiveStyles, SectionElementType } from '@/app/(editor)/_functionality/createSection';
 import React, {
   createContext,
   useContext,
@@ -15,6 +15,8 @@ import React, {
 
 type RefType = HTMLElement | null;
 
+export type screenType = "xl" | "lg" | "md" | "sm";
+
 export type webpageType = {
   id: string,
   locationId?: string | null,
@@ -22,7 +24,8 @@ export type webpageType = {
   route: string,
   contents: any[],
   createdAt: string,
-  updatedAt: string
+  updatedAt: string,
+  editedWidth: string,
 }
 
 type ContextRefType = {
@@ -58,8 +61,10 @@ type ContextElementType = {
 };
 
 type WidthType = {
+  widthValue: string;
+  setWidthValue: React.Dispatch<React.SetStateAction<string>>;
   activeScreen: string;
-  setActiveScreen: React.Dispatch<React.SetStateAction<string>>;
+  setActiveScreen: React.Dispatch<React.SetStateAction<screenType>>;
 };
 
 type FinalSubmitType = {
@@ -92,6 +97,7 @@ type MyContextType = {
   rmElementFunc: (id: string) => void;
   width: WidthType;
   activeScreen: string;
+  widthValue: string;
   toolbarRef: any;
   websiteContent: WebsiteContentType;
   SubmissionObject: SubmissionObjectType;
@@ -109,7 +115,7 @@ const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
 
 function Provider({ children }: { children: ReactNode }) {
   // set the active screen
-  const [activeScreen, setActiveScreen] = useState<string>('');
+  const [activeScreen, setActiveScreen] = useState<screenType>("xl");
   // global content
   const [webpage, setWebpage] = useState<webpageType | null>(null);
 
@@ -121,6 +127,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [currentSection, setCurrentSection] = useState<any>(null)
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
+  const [widthValue, setWidthValue] = useState<string>("")
 
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
@@ -134,6 +141,8 @@ function Provider({ children }: { children: ReactNode }) {
   const toolbarRef = useRef<HTMLElement | null>(null);
 
   const width: WidthType = {
+    widthValue,
+    setWidthValue,
     activeScreen,
     setActiveScreen
   };
@@ -185,6 +194,7 @@ function Provider({ children }: { children: ReactNode }) {
         rmElementFunc,
         width,
         activeScreen,
+        widthValue,
         toolbarRef,
         websiteContent,
         SubmissionObject,

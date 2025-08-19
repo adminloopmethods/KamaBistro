@@ -57,6 +57,7 @@ const Section: React.FC<SectionProps> = ({
   } = useMyContext();
 
   const sectionRef = useRef<HTMLElement | null>(null);
+  const divRef = useRef<HTMLDivElement | null>(null)
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
@@ -83,6 +84,8 @@ const Section: React.FC<SectionProps> = ({
 
     sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
     sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
+    divRef.current?.style.setProperty("top", `${newTop}px`, "important")
+    divRef.current?.style.setProperty("left", `${newLeft}px`, "important")
 
   };
 
@@ -101,9 +104,9 @@ const Section: React.FC<SectionProps> = ({
   const onEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     if (!onAddElement) {
-      if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
+      // if (sectionRef.current) sectionRef.current.style.border = "1px solid black";
     } else {
-      if (sectionRef.current) sectionRef.current.style.border = "1px dashed gray";
+      // if (sectionRef.current) sectionRef.current.style.border = "1px dashed gray";
       setOnAddElement(false);
       return;
     }
@@ -134,7 +137,6 @@ const Section: React.FC<SectionProps> = ({
   };
 
   const updateElement = (id: string, value: ElementType) => {
-    console.log("qwer")
     setElements((prev) =>
       prev.map((e) => (e.id === id ? { ...value } : e))
     );
@@ -142,7 +144,6 @@ const Section: React.FC<SectionProps> = ({
 
 
   const updateTheDataOfElement = (id: string, property: string, value: any) => {
-    console.log("writing")
     setElements((prev) =>
       prev.map((e) => (e.id === id ? { ...e, [property]: value } : e))
     );
@@ -209,12 +210,19 @@ const Section: React.FC<SectionProps> = ({
     });
   }, [style]);
 
-
+  useEffect(() => {
+    if (divRef.current?.style) {
+      divRef.current.style.border = "1px dashed black";
+    }
+  }, [])
   return (
-    <div className="relative">
+    <div className="relative"
+      ref={divRef}
+      style={{ left: sectionStyle?.left, top: sectionStyle?.top, position: sectionStyle?.position }}
+    >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle }}
+        style={{ ...sectionStyle, top: 0, left: 0, position: "static" }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
@@ -228,7 +236,7 @@ const Section: React.FC<SectionProps> = ({
                 key={i}
                 element={Element.elements}
                 section={Element}
-                style={{ ...Element.style?.[activeScreen], border: "1px dashed gray" }}
+                style={Element.style?.[activeScreen] || {}}
                 rmSection={rmElement}
                 onEditing={() => {
                   contextRef.setContextRef(null);

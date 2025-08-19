@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
-import { debounce } from 'lodash';
 
 export type StylesState = React.CSSProperties | Record<string, any>;
 
@@ -10,37 +9,26 @@ type DimensionToolbarProps = {
 };
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
-    const { currentSection, contextForSection } = useMyContext(); // contextForSection
+    const { currentSection, contextForSection } = useMyContext();
     const style = currentSection || {};
-    const sectionRef = contextForSection.sectionRef
+    const sectionRef = contextForSection.sectionRef;
 
-    // Local state to hold temporary inputs before debounce
+    // Local state to hold temporary inputs
     const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(style);
-
-    // Debounced updater
-    const debouncedUpdate = useMemo(
-        () =>
-            debounce((styles: Partial<StylesState>) => {
-                updateStyles(styles);
-            }, 200),
-        [updateStyles]
-    );
 
     const applyStyle = useCallback(
         (key: keyof StylesState, val: string | number) => {
-            if (localStyle[key] === val) return; // avoid redundant update
-
             const newStyle = { ...localStyle, [key]: val };
             setLocalStyle(newStyle);
-            debouncedUpdate({ [key]: val });
+            updateStyles({ [key]: val }); // directly call updateStyles
         },
-        [localStyle, debouncedUpdate]
+        [localStyle, updateStyles]
     );
 
     // Update effect: whenever currentSection changes, reset localStyle
     useEffect(() => {
         setLocalStyle(currentSection || {});
-    }, [currentSection]);
+    }, [sectionRef]);
 
     const renderInput = (
         label: string,
@@ -59,13 +47,13 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
                 <input
                     type={type}
-                    value={value || ""}  // controlled input ✅
+                    value={value || ""}
                     onChange={(e) => {
                         const val = type === 'number'
                             ? `${e.target.value}${suffix || ''}`
                             : e.target.value;
 
-                        // live apply
+                        // live apply to element
                         if (sectionRef?.current) {
                             (sectionRef.current as HTMLElement).style[key as any] = val;
                         }
@@ -84,9 +72,6 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
             </div>
         );
     };
-
-
-
 
     return (
         <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]">

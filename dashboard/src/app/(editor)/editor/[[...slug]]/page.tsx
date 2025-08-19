@@ -54,6 +54,7 @@ const Editor = () => {
     const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
     const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
     const [locations, setLocations] = useState<LocationType[]>([{ id: "", name: "" }])
+    const [currentWidth, setCurrentWidth] = useState<string>("")
 
     const {
         width, // {currentWidth, setCurrentWidth}
@@ -108,6 +109,8 @@ const Editor = () => {
         const observer = new ResizeObserver((entries) => {
             for (let entry of entries) {
                 const newWidth = entry.contentRect.width;
+                width.setWidthValue(classifyWidth(newWidth) === "xl" ? `${newWidth}px` : "1280px")
+                setCurrentWidth(classifyWidth(newWidth) === "xl" ? `${newWidth}px` : "1280px")
                 width.setActiveScreen(classifyWidth(newWidth));
             }
         });
@@ -140,9 +143,8 @@ const Editor = () => {
     };
 
     const updateSectionStyles = (newStyle: CSSProperties) => {
+        console.log(newStyle, activeScreen)
         sectionStyleSetter((prev: CSSProperties) => {
-            console.log(prev)
-            console.log(newStyle)
             return { ...prev, ...newStyle };
         });
     };
@@ -168,7 +170,6 @@ const Editor = () => {
             try {
                 const response = await getLocationsReq();
 
-                console.log("reslocation", response.location);
                 if (response.ok && Array.isArray(response?.location)) {
                     setLocations(response?.location);
                 } else {
@@ -184,18 +185,18 @@ const Editor = () => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
             console.log(JSON.stringify(bodyPayload))
-            // try {
-            //     const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
-            //         loading: page ? "Updating content..." : "Saving Content...",
-            //         success: "Successful saved the content!",
-            //         error: (err: any) => err?.message || "Failed to create the content",
-            //     })
-            //     if (!response.ok) {
-            //         throw new Error(`HTTP error! status: ${response.status}`);
-            //     }
-            //     console.log("Successfully sent content:", response);
-            // } catch (error) {
-            // }
+            try {
+                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
+                    loading: page ? "Updating content..." : "Saving Content...",
+                    success: "Successful saved the content!",
+                    error: (err: any) => err?.message || "Failed to create the content",
+                })
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                console.log("Successfully sent content:", response);
+            } catch (error) {
+            }
         }
 
         if (saveData) {
@@ -231,6 +232,7 @@ const Editor = () => {
                 contents: preSection.contents,
                 createdAt: "",
                 updatedAt: "",
+                editedWidth: currentWidth ? currentWidth : "1280px"
             })
         }
     }, [page])
@@ -245,6 +247,7 @@ const Editor = () => {
                 contents: [],
                 createdAt: "",
                 updatedAt: "",
+                editedWidth: currentWidth ? currentWidth : "1280px",
                 [name]: value
             }
 
@@ -283,10 +286,7 @@ const Editor = () => {
                                 key={i}
                                 element={section.elements}
                                 section={section}
-                                style={{
-                                    ...section.style[activeScreen],
-                                    border: "1px dashed gray"
-                                }}
+                                style={section.style[activeScreen]}
                                 rmSection={rmSection}
                                 onEditing={() => {
                                     contextRef.setContextRef(null);

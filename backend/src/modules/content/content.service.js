@@ -2,7 +2,7 @@ import prismaClient from "../../config/dbConfig.js";
 import crypto from "node:crypto";
 
 // ---------------- CREATE WEBPAGE ----------------
-export const createWebpageService = async ({ name, contents, route }) => {
+export const createWebpageService = async ({ name, contents, route, editedWidth }) => {
   const id = crypto.randomUUID();
 
   const webpage = await prismaClient.webpage.create({
@@ -10,11 +10,12 @@ export const createWebpageService = async ({ name, contents, route }) => {
       id,
       name,
       route,
+      editedWidth,
       contents: {
         create: contents.map((section, sectionIndex) => ({
           id: section.id,
           name: section.name,
-          givenName: section.givenName || null, 
+          givenName: section.givenName || null,
           order: sectionIndex,
           style: {
             create: {
@@ -31,7 +32,7 @@ export const createWebpageService = async ({ name, contents, route }) => {
               .map((nested, nestedIndex) => ({
                 id: nested.id,
                 name: nested.name,
-                givenName: nested.givenName || null, 
+                givenName: nested.givenName || null,
                 order: nestedIndex,
                 style: {
                   create: {
@@ -179,11 +180,14 @@ export const getWebpageByIdService = async (id) => {
 };
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
-export const updateWebpageByIdService = async (id, { name, contents }) => {
+export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
     where: { id },
-    data: { name },
+    data: {
+      name,
+      ...(editedWidth !== undefined && { editedWidth }),
+    },
   });
 
   // Step 2: Fetch existing contents
@@ -295,14 +299,14 @@ export const updateWebpageByIdService = async (id, { name, contents }) => {
       where: { id: section.id },
       update: {
         name: section.name,
-        givenName: section.givenName || null, 
+        givenName: section.givenName || null,
         order: i,
         style: { update: section.style || {} },
       },
       create: {
         id: section.id,
         name: section.name,
-        givenName: section.givenName || null, 
+        givenName: section.givenName || null,
         order: i,
         webpage: { connect: { id } },
         style: { create: section.style || {} },

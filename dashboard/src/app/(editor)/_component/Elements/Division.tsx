@@ -24,7 +24,6 @@ const Division = ({
     const [divStyle, setDivStyle] = useState<React.CSSProperties>(style);
     const { contextElement, toolbarRef, contextForSection, activeScreen } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
-    console.log("div", divStyle)
 
     // Set innerHTML when content updates
     useEffect(() => {

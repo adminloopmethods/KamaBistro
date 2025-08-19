@@ -22,7 +22,8 @@ type SectionProps = {
     id?: string;
     [key: string]: any;
   };
-  currentWidth: string
+  currentWidth: string;
+  sectionIsParent?: Boolean
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -30,6 +31,7 @@ const Section: React.FC<SectionProps> = ({
   style,
   lastSection,
   section,
+  sectionIsParent
 }) => {
   const {
     currentWidth,
@@ -37,11 +39,22 @@ const Section: React.FC<SectionProps> = ({
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
+
   return (
-    <div className="relative">
+    <div className="relative"
+      style={{
+        position: style.position,
+        left: style.left,
+        top: style.top,
+        overflow: !sectionIsParent ? "hidden" : ""
+      }}
+    >
       <section
         ref={sectionRef}
-        style={style}
+        style={{
+          ...style,
+          position: "static",
+        }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}
           if (Element.name === "section") {
@@ -54,6 +67,7 @@ const Section: React.FC<SectionProps> = ({
                 currentWidth={currentWidth}
                 lastSection={lastSection}
                 section={Element}
+                sectionIsParent={true}
               />
             )
           }
