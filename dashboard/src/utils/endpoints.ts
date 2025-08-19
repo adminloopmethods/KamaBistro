@@ -13,6 +13,9 @@ const media = "media";
 
 const endpointMap = {
   login: `${auth}/login`,
+  forgotPassword: `${auth}/forgotPassword`,
+  forgotPasswordVerify: `${auth}/forgotPassword/verify`,
+  forgotPasswordUpdate: `${auth}/forgotPassword/updatePassword`,
 
   // user
   getUsers: `${users}/getAllUsers`,
