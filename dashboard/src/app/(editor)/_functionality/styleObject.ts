@@ -121,6 +121,22 @@ export const onColorChange = (
     }));
 };
 
+// BG COLOR
+
+export const onBgColorChange = (
+    value: string,
+    element: ElementType,
+    Setter: SetterType,
+    currentWidth: string
+) => {
+    const currentStyle = { ...element.style[currentWidth] };
+    currentStyle.backgroundColor = value;
+    Setter((prev: any) => ({
+        ...prev,
+        style: { ...prev.style, [currentWidth]: currentStyle }
+    }));
+};
+
 // TEXT ALIGN
 export const onAlignChange = (
     alignment: string,

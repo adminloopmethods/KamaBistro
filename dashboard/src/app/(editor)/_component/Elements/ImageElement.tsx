@@ -97,7 +97,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      thisElement.style?.[activeScreen]?.position !== "relative"
+      (thisElement.style?.[activeScreen]?.position !== "relative" &&
+        thisElement.style?.[activeScreen]?.position !== "absolute")
     ) {
       return;
     }
@@ -176,10 +177,11 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
           // display: "inline-block",
           top: thisElement.style?.[activeScreen]?.top,
           left: thisElement.style?.[activeScreen]?.left,
-          
+          width: thisElement.style?.[activeScreen]?.width
         }}
         onClick={handleContainerClick}
         onDoubleClick={handleDoubleClick}
+        className="border"
       >
         <img
           src={previewSrc || undefined}
@@ -199,7 +201,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             ...thisElement.style?.[activeScreen],
             top: 0,
             left: 0,
-            position: thisElement.style?.[activeScreen]?.position,
+            position: "static",
           }}
         />
       </div>

@@ -17,7 +17,7 @@ import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
 import { CiLaptop } from "react-icons/ci";
 import { CiDesktop } from "react-icons/ci";
-import { toast } from "sonner";
+import { toast, Toaster } from "sonner";
 import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
 import CustomSelect from "@/app/_common/CustomSelect";
 import { preSection } from "@/assets/preSection.js"
@@ -184,7 +184,11 @@ const Editor = () => {
     useEffect(() => {
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-            console.log(JSON.stringify(bodyPayload))
+            // console.log(JSON.stringify(bodyPayload))
+            if (!bodyPayload.name) return toast.error("Webpage name is required");
+            if (!bodyPayload.route) return toast.error("Webpage route is required");
+            if (!bodyPayload.locationId) return toast.error("Location ID is required");
+
             try {
                 const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
                     loading: page ? "Updating content..." : "Saving Content...",
@@ -360,6 +364,7 @@ const Editor = () => {
                     )
                 }
             </div>
+            <Toaster position="top-right" />
         </div >
     );
 };
