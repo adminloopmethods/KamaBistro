@@ -26,6 +26,7 @@ model Webpage {
 model Content {
   id        String   @id
   name      String
+  givenName String?
   order     Int      @default(0)
   // For top-level sections
   webpageId String?
@@ -85,8 +86,7 @@ model proposedVersion {
   editor    User    @relation("ProposedVersionEditor", fields: [editorId], references: [id])
 
   verifierId String
-  verifier   User    @relation("ProposedVersionVerifier", fields: [verifierId], references: [id])
-
+  verifier   User   @relation("ProposedVersionVerifier", fields: [verifierId], references: [id])
 
   @@index([webpageId])
   @@index([editorId])
