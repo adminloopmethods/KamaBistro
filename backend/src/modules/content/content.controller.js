@@ -4,6 +4,7 @@ import {
   getAllWebpagesService,
   getWebpageByIdService,
   updateWebpageByIdService,
+  findWebpageIdByRouteService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -60,5 +61,28 @@ export const updateWebpageById = async (req, res) => {
   } catch (error) {
     logger.error(`Error updating webpage: ${error.message}`, { error });
     res.status(500).json({ error: "Failed to update webpage." });
+  }
+};
+
+// ---------------- GET WEBPAGE BY ROUTE ----------------
+export const getWebpageByRoute = async (req, res) => {
+  try {
+    const { route } = req.params;
+    console.log(route)
+    // Get the ID from route
+    const id = await findWebpageIdByRouteService(route === "home" ? "/" : `/${route}`);
+
+    if (!id) {
+      logger.warn(`Webpage with route '${route}' not found.`);
+      return res.status(404).json({ error: "Webpage not found." });
+    }
+
+    // Reuse existing ID-based service
+    const webpage = await getWebpageByIdService(id);
+
+    res.json({ webpage });
+  } catch (error) {
+    logger.error(`Error fetching webpage by route: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to fetch webpage by route." });
   }
 };

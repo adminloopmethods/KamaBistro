@@ -13,9 +13,13 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
 export const metadata: Metadata = {
-  title: "CMS",
-  description: "CMS",
+  title: "Kama Bistro",
+  description: "Kama - description",
+  icons: {
+    icon: "/favicon.png", // path from /public
+  },
 };
 
 export default function RootLayout({

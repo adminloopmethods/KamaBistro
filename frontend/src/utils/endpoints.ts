@@ -7,7 +7,7 @@ const content = "/content";
 
 const endpointMap = {
     // content
-    content: `${content}/`,
+    content: `${content}/route/`,
 } as const;
 
 type EndpointKey = keyof typeof endpointMap;

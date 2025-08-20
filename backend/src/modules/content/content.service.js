@@ -369,3 +369,14 @@ export const getWebpageVersionsService = async (webpageId) => {
     orderBy: { id: "desc" },
   });
 };
+
+// ---------------- FIND WEBPAGE ID BY ROUTE ----------------
+export const findWebpageIdByRouteService = async (route) => {
+  console.log(route)
+  const page = await prismaClient.webpage.findUnique({
+    where: { route },
+    select: { id: true },
+  });
+
+  return page ? page.id : null;
+};
