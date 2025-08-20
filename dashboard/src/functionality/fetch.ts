@@ -240,6 +240,24 @@ export async function getAuditLogsReq(): Promise<
   return await makerequest(endpoint.route("getAuditLogs"), "GET");
 }
 
+export async function activateUserReq(id: string): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("activateUser"),
+    "PUT",
+    JSON.stringify({id}),
+    ContentType.json
+  );
+}
+
+export async function deactivateUserReq(id: string): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("deactivateUser"),
+    "PUT",
+    JSON.stringify({id}),
+    ContentType.json
+  );
+}
+
 // Create a new user
 export async function createUserReq(
   data: Record<string, any>

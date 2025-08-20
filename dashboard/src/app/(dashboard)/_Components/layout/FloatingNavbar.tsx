@@ -14,13 +14,13 @@ import {
 import {ExpandedTabs} from "@/components/ui/expanded-tabs";
 const tabs = [
   {title: "Dashboard", path: "/", icon: LayoutDashboard},
-  {title: "Overview", path: "overview", icon: BarChart3},
+  // {title: "Overview", path: "overview", icon: BarChart3},
   // {type: "separator" as const},
-  {title: "Analytics", path: "/analytics", icon: Activity},
+  // {title: "Analytics", path: "/analytics", icon: Activity},
   {title: "Users", path: "/users", icon: Users},
   {title: "Pages", path: "/pages", icon: FileText},
   {title: "Logs", path: "/logs", icon: Logs},
-  {title: "Settings", path: "/settings", icon: Settings},
+  // {title: "Settings", path: "/settings", icon: Settings},
 ];
 
 const FloatingNavbar = () => {
