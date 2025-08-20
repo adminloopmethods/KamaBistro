@@ -212,16 +212,16 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (divRef.current?.style) {
-      divRef.current.style.border = "1px dashed black";
+      divRef.current.style.border = "1px dashed gray";
     }
   }, [])
 
-  const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
+  // const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
   return (
     <div className="relative"
       ref={divRef}
       style={{
-        position: setPosition,
+        position: sectionStyle?.position,
         left: sectionStyle?.left,
         top: sectionStyle?.top,
       }}

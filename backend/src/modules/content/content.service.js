@@ -12,42 +12,31 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
       route,
       editedWidth,
       contents: {
-        create: contents.map((section, sectionIndex) => ({
-          id: section.id,
-          name: section.name,
-          givenName: section.givenName || null,
-          order: sectionIndex,
-          style: {
-            create: {
-              xl: section.style?.xl,
-              lg: section.style?.lg,
-              md: section.style?.md,
-              sm: section.style?.sm,
-            },
-          },
-          // Children (nested sections)
-          children: {
-            create: section.elements
-              .filter((el) => el.name === "section")
-              .map((nested, nestedIndex) => ({
-                id: nested.id,
-                name: nested.name,
-                givenName: nested.givenName || null,
-                order: nestedIndex,
+        create: contents.map((section, sectionIndex) => {
+          const childrenCreate = [];
+          const elementsCreate = [];
+
+          section.elements.forEach((el, index) => {
+            if (el.name === "section") {
+              childrenCreate.push({
+                id: el.id,
+                name: el.name,
+                givenName: el.givenName || null,
+                order: index, // 👈 use original index
                 style: {
                   create: {
-                    xl: nested.style?.xl,
-                    lg: nested.style?.lg,
-                    md: nested.style?.md,
-                    sm: nested.style?.sm,
+                    xl: el.style?.xl,
+                    lg: el.style?.lg,
+                    md: el.style?.md,
+                    sm: el.style?.sm,
                   },
                 },
                 elements: {
-                  create: nested.elements.map((childEl, childIndex) => ({
+                  create: el.elements.map((childEl, childIndex) => ({
                     id: childEl.id,
                     name: childEl.name,
                     content: childEl.content,
-                    order: childIndex,
+                    order: childIndex, // within its own section
                     style: {
                       create: {
                         xl: childEl.style?.xl,
@@ -58,17 +47,13 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                     },
                   })),
                 },
-              })),
-          },
-          // Elements (non-section)
-          elements: {
-            create: section.elements
-              .filter((el) => el.name !== "section")
-              .map((el, elIndex) => ({
+              });
+            } else {
+              elementsCreate.push({
                 id: el.id,
                 name: el.name,
                 content: el.content,
-                order: elIndex,
+                order: index, // 👈 use original index
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -77,9 +62,27 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                     sm: el.style?.sm,
                   },
                 },
-              })),
-          },
-        })),
+              });
+            }
+          });
+
+          return {
+            id: section.id,
+            name: section.name,
+            givenName: section.givenName || null,
+            order: sectionIndex,
+            style: {
+              create: {
+                xl: section.style?.xl,
+                lg: section.style?.lg,
+                md: section.style?.md,
+                sm: section.style?.sm,
+              },
+            },
+            children: { create: childrenCreate },
+            elements: { create: elementsCreate },
+          };
+        }),
       },
     },
     include: {

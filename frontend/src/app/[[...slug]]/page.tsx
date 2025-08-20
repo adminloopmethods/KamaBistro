@@ -11,6 +11,7 @@ const Editor = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter()
   const page: string = params.slug ? params.slug[0] : ""
+  // const [widthSize, setWidthSize] = useState<number>(0)
 
   const {
     width,
@@ -33,6 +34,7 @@ const Editor = () => {
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const newWidth = entry.contentRect.width;
+        width.setWidthSize(newWidth)
         width.setWidth(classifyWidth(newWidth));
         // console.log(`Width: ${newWidth}, Size: ${classifyWidth(newWidth)}`);
       }
@@ -50,8 +52,8 @@ const Editor = () => {
         const response: any = await getContentReq(page)
         console.log(response)
         if (response.ok) {
-          console.log(response.webpage.editedWidth)
           websiteContent.setWebpage(response.webpage)
+          width.setEditedWidth(response.webpage.editedWidth)
         } else {
           throw new Error("error while fetch the page")
         }
@@ -68,9 +70,10 @@ const Editor = () => {
     <div
       ref={containerRef}
       style={{ position: "relative", display: "flex", height: "100vh" }}
+      className=""
     >
       {/* website */}
-      <div style={{ position: "relative", flex: 1, overflowY: "scroll" }} className="scroll-one">
+      <div style={{ position: "relative", flex: 1, overflowY: "scroll", overflowX: "hidden" }} className="scroll-one">
         {websiteContent?.webpage?.contents?.map((section: any, i: number, a: any[]) => {
           const lastSection = i === a.length - 1;
           return (

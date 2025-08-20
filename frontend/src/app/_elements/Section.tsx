@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, MouseEvent } from "react";
+import React, { useRef } from "react";
 import { useMyContext } from "@/Context/ApiContext";
 import { mapElement } from "@/functionalities/createElement";
 
@@ -26,37 +26,49 @@ type SectionProps = {
   sectionIsParent?: Boolean
 };
 
-const Section: React.FC<SectionProps> = ({
+const Section: React.FC<SectionProps> = ({ //Props
   element,
   style,
   lastSection,
   section,
-  sectionIsParent
-}) => {
-  const {
+  sectionIsParent,
+}) => { // function starts here
+
+  const { //////////// Context variable
     currentWidth,
-  } = useMyContext();
+    widthSize,
+    editedWidth,
+  } = useMyContext(); ////////////////////////////Context is here
 
   const thisStyle = section?.style?.[currentWidth]
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const setPosition = thisStyle?.position === "absolute" ? sectionIsParent ? "absolute" : "fixed" : "static";
+  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "absolute") : "static";
+  
+  console.log("thisStyle", thisStyle.position)
+  console.log("setPosition", setPosition)
+
+  const widthIsRatio = String(style.width).slice(-1) === "%"
 
   return (
-    <div className="relative"
+    <div className="relative border w-full"
       style={{
-        position: style.position,
-        left: style.left,
-        top: style.top,
+        position: setPosition,
+        left: (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
+        top: (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         overflow: !sectionIsParent ? "hidden" : ""
       }}
     >
       <section
+      className="border"
         ref={sectionRef}
         style={{
           ...style,
-          position: setPosition,
+          position: "static",
+          top: 0,
+          left: 0
+          // ...((widthIsRatio && !sectionIsParent) ? { width: ((parseInt(String(style.width)) / 100) * editedWidth) } : {})
         }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}

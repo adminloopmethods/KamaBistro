@@ -27,6 +27,10 @@ type ContextElementType = {
 type WidthType = {
   currentWidth: string;
   setWidth: React.Dispatch<React.SetStateAction<string>>;
+  widthSize: number;
+  setWidthSize: React.Dispatch<React.SetStateAction<number>>;
+  editedWidth: number;
+  setEditedWidth: React.Dispatch<React.SetStateAction<number>>;
 };
 
 type WebsiteContentType = {
@@ -58,6 +62,8 @@ type MyContextType = {
   websiteContent: WebsiteContentType;
   SubmissionObject: SubmissionObjectType;
   finalSubmit: FinalSubmitType[];
+  widthSize: number;
+  editedWidth: number;
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -70,12 +76,19 @@ function Provider({ children }: { children: ReactNode }) {
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { });
   const [webpage, setWebpage] = useState<any[]>([]);
   const [finalSubmit, setFinalSubmit] = useState<FinalSubmitType[]>([]);
+  const [widthSize, setWidthSize] = useState<number>(0)
+  const [editedWidth, setEditedWidth] = useState<number>(0)
+
 
   const toolbarRef = useRef<HTMLElement | null>(null);
 
   const width: WidthType = {
     currentWidth,
-    setWidth
+    setWidth,
+    widthSize,
+    setWidthSize,
+    editedWidth,
+    setEditedWidth,
   };
 
   const contextRef: ContextRefType = {
@@ -117,7 +130,9 @@ function Provider({ children }: { children: ReactNode }) {
         toolbarRef,
         websiteContent,
         SubmissionObject,
-        finalSubmit
+        finalSubmit,
+        widthSize,
+        editedWidth
       }}
     >
       {children}
