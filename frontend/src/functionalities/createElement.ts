@@ -1,6 +1,7 @@
 import Heading from "@/app/_elements/Heading";
 import Paragraph from "@/app/_elements/Paragraph";
 import ImageElemComponent from "@/app/_elements/ImageComponentElement";
+import Division from "@/app/_elements/Division";
 
 // Define screen sizes for style keys
 type ScreenSize = "xl" | "lg" | "md" | "sm";
@@ -76,4 +77,5 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
     h1: Heading,
     p: Paragraph,
     img: ImageElemComponent,
+    division: Division
 };

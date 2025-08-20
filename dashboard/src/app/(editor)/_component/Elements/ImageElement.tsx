@@ -185,7 +185,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         }}
         onClick={handleContainerClick}
         onDoubleClick={handleDoubleClick}
-        className="border"
+        className=""
       >
         <img
           src={(cloudinaryApiPoint + previewSrc) || undefined}

@@ -156,7 +156,7 @@ export function generateElementData(
     case "p":
       return new ParagraphElementClass(content);
     case "division":
-      return new DivisionClass(name, content)
+      return new DivisionClass(name, "cotent")
     default:
       return new Element(name, content);
   }

@@ -26,11 +26,11 @@ const Division = ({
     const [isEditing, setEditing] = useState<boolean>(false);
 
     // Set innerHTML when content updates
-    useEffect(() => {
-        if (elementRef.current && (element.content || element.content === "")) {
-            elementRef.current.innerHTML = element.content;
-        }
-    }, [element.content]);
+    // useEffect(() => {
+    //     if (elementRef.current && (element.content || element.content === "")) {
+    //         elementRef.current.innerHTML = element.content;
+    //     }
+    // }, [element.content]);
 
     const activateTheEditing = (e: any) => {
         e.stopPropagation()
@@ -73,7 +73,7 @@ const Division = ({
 
     // Sync content changes
     useEffect(() => {
-        updateContent(element.id, "content", divStyle.content);
+        updateContent(element.id, "content", "null");
     }, [divStyle.content]);
 
     return (

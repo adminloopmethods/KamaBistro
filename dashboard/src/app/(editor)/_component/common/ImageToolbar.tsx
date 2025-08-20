@@ -44,7 +44,7 @@ const ImageStyleToolbar: React.FC = () => {
     step?: string
   ) => (
     <div className="flex flex-col">
-      <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">{label}</label>
+      <label className="text-xs font-medium mb-1 text-stone-700 dark:text-stone-300">{label}</label>
       <input
         type={type}
         value={value}
@@ -211,10 +211,26 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Height:", style?.[activeScreen]?.height, "text", handleInputStyles("height"))}
 
-      {renderInputRow("Margin Top:", style?.[activeScreen]?.marginTop, "text", handleInputStyles("marginTop"))}
-      {renderInputRow("Margin Bottom:", style?.[activeScreen]?.marginBottom, "text", handleInputStyles("marginBottom"))}
-      {renderInputRow("Margin Left:", style?.[activeScreen]?.marginLeft, "text", handleInputStyles("marginLeft"))}
-      {renderInputRow("Margin Right:", style?.[activeScreen]?.marginRight, "text", handleInputStyles("marginRight"))}
+      <div>
+        <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Margin</label>
+        <div className="grid grid-cols-2 gap-2">
+
+          {renderInputRow("Top:", style?.[activeScreen]?.marginTop, "text", handleInputStyles("marginTop"))}
+          {renderInputRow("Bottom:", style?.[activeScreen]?.marginBottom, "text", handleInputStyles("marginBottom"))}
+          {renderInputRow("Left:", style?.[activeScreen]?.marginLeft, "text", handleInputStyles("marginLeft"))}
+          {renderInputRow("Right:", style?.[activeScreen]?.marginRight, "text", handleInputStyles("marginRight"))}
+        </div>
+      </div>
+
+      <div>
+        <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Padding</label>
+        <div className="grid grid-cols-2 gap-2">
+          {renderInputRow("Top:", style?.[activeScreen]?.paddingTop, "text", handleInputStyles("paddingTop"))}
+          {renderInputRow("Bottom:", style?.[activeScreen]?.paddingBottom, "text", handleInputStyles("paddingBottom"))}
+          {renderInputRow("Left:", style?.[activeScreen]?.paddingLeft, "text", handleInputStyles("paddingLeft"))}
+          {renderInputRow("Right:", style?.[activeScreen]?.paddingRight, "text", handleInputStyles("paddingRight"))}
+        </div>
+      </div>
 
 
       {renderInputRow("Radius:", style?.[activeScreen]?.borderRadius, "text", handleInputStyles("borderRadius"))}
