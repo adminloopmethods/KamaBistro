@@ -3,6 +3,50 @@ import endpoint from "@/utils/endpoints";
 type methods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OTPTIONS";
 
 // Interface for generic response
+
+export interface AuditLog {
+  id: string;
+  action_performed: string;
+  actionType: string;
+  entity: string;
+  entityId: string;
+  oldValue: any;
+  newValue: any;
+  ipAddress: string;
+  browserInfo: string;
+  outcome: string;
+  timestamp: string;
+  metadata: any;
+  user: {
+    auditLogId: string;
+    userId: string;
+    createdAt: string;
+    user: {
+      id: string;
+      name: string;
+      image: string;
+      email: string;
+      password: string;
+      isSuperUser: boolean;
+      status: string;
+      phone: string;
+      createdAt: string;
+      updatedAt: string;
+      locationId: string | null;
+    };
+  };
+}
+
+export interface AuditLogsResponse {
+  logs: AuditLog[];
+  pagination: {
+    totalLogs: number;
+    totalPages: number;
+    currentPage: number;
+    limitNum: number;
+  };
+}
+
 interface ApiResponse<T = any> {
   ok: boolean;
   error?: string;
@@ -187,6 +231,13 @@ export async function getUserProfileReq(): Promise<ApiResponse> {
 
 export async function getLocationsReq(): Promise<ApiResponse> {
   return await makerequest(endpoint.route("getLocations"), "GET");
+}
+
+//get audit logs
+export async function getAuditLogsReq(): Promise<
+  ApiResponse<AuditLogsResponse>
+> {
+  return await makerequest(endpoint.route("getAuditLogs"), "GET");
 }
 
 // Create a new user

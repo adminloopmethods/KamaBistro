@@ -18,25 +18,25 @@ const Login = async (req, res) => {
   const {email, password} = req.body;
   const response = await login(email, password);
   //Create and save the audit log
-  // await prismaClient.auditLog.create({
-  //   data: {
-  //     actionType: "LOGIN",
-  //     action_performed: response.message,
-  //     entity: req.baseUrl.split("/").pop(),
-  //     entityId: response.user.id,
-  //     oldValue: null,
-  //     newValue: null,
-  //     ipAddress: req.ip,
-  //     browserInfo: req.headers["user-agent"],
-  //     outcome: "Success",
-  //     timestamp: new Date(),
-  //     user: {
-  //       create: {
-  //         userId: response.user.id,
-  //       },
-  //     },
-  //   },
-  // });
+  await prismaClient.auditLog.create({
+    data: {
+      actionType: "LOGIN",
+      action_performed: response.message,
+      entity: req.baseUrl.split("/").pop(),
+      entityId: response.user.id,
+      oldValue: null,
+      newValue: null,
+      ipAddress: req.ip,
+      browserInfo: req.headers["user-agent"],
+      outcome: "Success",
+      timestamp: new Date(),
+      user: {
+        create: {
+          userId: response.user.id,
+        },
+      },
+    },
+  });
   res.status(200).json(response);
 };
 

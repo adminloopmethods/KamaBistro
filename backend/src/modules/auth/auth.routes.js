@@ -15,6 +15,7 @@ import {
   generateOtpRateLimiter,
 } from "../../helper/rateLimiter.js";
 import {checkPermission} from "../../helper/roleBasedAccess.js";
+import auditLogger from "../../helper/auditLogger.js";
 
 const router = Router();
 
@@ -23,23 +24,24 @@ const router = Router();
 router.post(
   "/login",
   // validator(loginSchema),
+
   tryCatchWrap(AuthController.Login)
 );
 
 // takes email and generates otp
-router.post(
-  "/mfa/login",
-  generateOtpRateLimiter,
-  validator(generateOtpSchema),
-  tryCatchWrap(AuthController.MFALogin)
-);
+// router.post(
+//   "/mfa/login",
+//   generateOtpRateLimiter,
+//   validator(generateOtpSchema),
+//   tryCatchWrap(AuthController.MFALogin)
+// );
 
 // takes otp and verifies it to login
-router.post(
-  "/mfa/verify",
-  validator(verifyOtpSchema),
-  tryCatchWrap(AuthController.VerifyMFALogin)
-);
+// router.post(
+//   "/mfa/verify",
+//   validator(verifyOtpSchema),
+//   tryCatchWrap(AuthController.VerifyMFALogin)
+// );
 
 router.post("/logout", authenticateUser, tryCatchWrap(AuthController.Logout));
 

@@ -20,7 +20,8 @@ import {assignPageRole} from "../../repository/user.repository.js";
 const CreateUserHandler = async (req, res) => {
   const {name, email, password, phone, locationId} = req.body;
   const user = await createUser(name, email, password, phone, locationId);
-  // res.locals.entityId = user.user.id;
+  console.log(user, "--------------------------------user");
+  res.locals.entityId = user?.user?.id;
   res.status(201).json(user);
   // Notification: user created
   // const io = req.app.locals.io;
@@ -120,9 +121,10 @@ const ActivateUser = async (req, res) => {
 const DeactivateUser = async (req, res) => {
   const {id} = req.body;
   const result = await deactivateUsers(id);
-  const io = req.app.locals.io;
-  const socketIdOfUpdatedUser = getSocketId(id);
-  io.to(socketIdOfUpdatedUser).emit("userUpdated", {result});
+  res.locals.entityId = id;
+  // const io = req.app.locals.io;
+  // const socketIdOfUpdatedUser = getSocketId(id);
+  // io.to(socketIdOfUpdatedUser).emit("userUpdated", {result});
   res.status(200).json(result);
 };
 

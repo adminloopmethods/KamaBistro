@@ -19,7 +19,7 @@ router.post(
   "/create",
   // checkPermission(requiredPermissionsForUser),
   validate(userSchema),
-  // auditLogger,
+  auditLogger,
   tryCatchWrap(UserController.CreateUserHandler)
 );
 
@@ -57,7 +57,7 @@ router.put(
   "/updateUser/:id",
   // checkPermission(requiredPermissionsForUser),
   validate(updateUserSchema),
-  // auditLogger,
+  auditLogger,
   tryCatchWrap(UserController.EditUserDetails)
 );
 

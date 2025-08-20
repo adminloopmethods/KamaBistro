@@ -9,6 +9,7 @@ import {
   Users,
   Settings,
   ScrollText,
+  Logs,
 } from "lucide-react";
 import {ExpandedTabs} from "@/components/ui/expanded-tabs";
 const tabs = [
@@ -18,6 +19,7 @@ const tabs = [
   {title: "Analytics", path: "/analytics", icon: Activity},
   {title: "Users", path: "/users", icon: Users},
   {title: "Pages", path: "/pages", icon: FileText},
+  {title: "Logs", path: "/logs", icon: Logs},
   {title: "Settings", path: "/settings", icon: Settings},
 ];
 
