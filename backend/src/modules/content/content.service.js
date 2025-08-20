@@ -12,42 +12,31 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
       route,
       editedWidth,
       contents: {
-        create: contents.map((section, sectionIndex) => ({
-          id: section.id,
-          name: section.name,
-          givenName: section.givenName || null,
-          order: sectionIndex,
-          style: {
-            create: {
-              xl: section.style?.xl,
-              lg: section.style?.lg,
-              md: section.style?.md,
-              sm: section.style?.sm,
-            },
-          },
-          // Children (nested sections)
-          children: {
-            create: section.elements
-              .filter((el) => el.name === "section")
-              .map((nested, nestedIndex) => ({
-                id: nested.id,
-                name: nested.name,
-                givenName: nested.givenName || null,
-                order: nestedIndex,
+        create: contents.map((section, sectionIndex) => {
+          const childrenCreate = [];
+          const elementsCreate = [];
+
+          section.elements.forEach((el, index) => {
+            if (el.name === "section") {
+              childrenCreate.push({
+                id: el.id,
+                name: el.name,
+                givenName: el.givenName || null,
+                order: index, // 👈 use original index
                 style: {
                   create: {
-                    xl: nested.style?.xl,
-                    lg: nested.style?.lg,
-                    md: nested.style?.md,
-                    sm: nested.style?.sm,
+                    xl: el.style?.xl,
+                    lg: el.style?.lg,
+                    md: el.style?.md,
+                    sm: el.style?.sm,
                   },
                 },
                 elements: {
-                  create: nested.elements.map((childEl, childIndex) => ({
+                  create: el.elements.map((childEl, childIndex) => ({
                     id: childEl.id,
                     name: childEl.name,
                     content: childEl.content,
-                    order: childIndex,
+                    order: childIndex, // within its own section
                     style: {
                       create: {
                         xl: childEl.style?.xl,
@@ -58,17 +47,13 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                     },
                   })),
                 },
-              })),
-          },
-          // Elements (non-section)
-          elements: {
-            create: section.elements
-              .filter((el) => el.name !== "section")
-              .map((el, elIndex) => ({
+              });
+            } else {
+              elementsCreate.push({
                 id: el.id,
                 name: el.name,
                 content: el.content,
-                order: elIndex,
+                order: index, // 👈 use original index
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -77,9 +62,27 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                     sm: el.style?.sm,
                   },
                 },
-              })),
-          },
-        })),
+              });
+            }
+          });
+
+          return {
+            id: section.id,
+            name: section.name,
+            givenName: section.givenName || null,
+            order: sectionIndex,
+            style: {
+              create: {
+                xl: section.style?.xl,
+                lg: section.style?.lg,
+                md: section.style?.md,
+                sm: section.style?.sm,
+              },
+            },
+            children: { create: childrenCreate },
+            elements: { create: elementsCreate },
+          };
+        }),
       },
     },
     include: {
@@ -132,9 +135,7 @@ export const getWebpageByIdService = async (id) => {
           style: true,
           elements: {
             orderBy: { order: "asc" },
-            include: {
-              style: true,
-            },
+            include: { style: true },
           },
           children: {
             orderBy: { order: "asc" },
@@ -142,9 +143,7 @@ export const getWebpageByIdService = async (id) => {
               style: true,
               elements: {
                 orderBy: { order: "asc" },
-                include: {
-                  style: true,
-                },
+                include: { style: true },
               },
             },
           },
@@ -156,20 +155,36 @@ export const getWebpageByIdService = async (id) => {
   if (!webpage) return null;
 
   const transformSection = (section) => {
+    // merge children + elements into one list with order preserved
+    const merged = [
+      ...(section.children?.map((child) => ({
+        id: child.id,
+        name: child.name,
+        givenName: child.givenName,
+        style: child.style,
+        order: child.order, // keep order for sorting
+        type: "section",
+        elements: transformSection(child).elements, // recurse
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: el.id,
+        name: el.name,
+        style: el.style,
+        content: el.content,
+        order: el.order,
+        type: "element",
+      })) || []),
+    ];
+
+    // sort by order before returning
+    merged.sort((a, b) => a.order - b.order);
+
     return {
       id: section.id,
       name: section.name,
       givenName: section.givenName,
       style: section.style,
-      elements: [
-        ...(section.children?.map((child) => transformSection(child)) || []),
-        ...(section.elements?.map((el) => ({
-          id: el.id,
-          name: el.name,
-          style: el.style,
-          content: el.content,
-        })) || []),
-      ],
+      elements: merged.map(({ order, type, ...rest }) => rest), // remove order/type before returning
     };
   };
 
@@ -178,6 +193,7 @@ export const getWebpageByIdService = async (id) => {
     contents: webpage.contents.map(transformSection),
   };
 };
+
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {

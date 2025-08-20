@@ -158,8 +158,6 @@ const Section: React.FC<SectionProps> = ({
       })
       return newContent
     })
-
-    // if (lastSection) setUpdateData(false)
   }
 
   useEffect(() => {
@@ -212,16 +210,38 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (divRef.current?.style) {
-      divRef.current.style.border = "1px dashed black";
+      console.log(divRef.current.style.width)
+      divRef.current.style.border = "1px dashed gray";
     }
   }, [])
 
-  const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
+  useEffect(() => {
+  if (!sectionRef.current) return;
+
+  const observer = new ResizeObserver((entries) => {
+    for (let entry of entries) {
+      if (sectionStyle.position === "absolute" || sectionStyle.position === "fixed") {
+        const width = entry.contentRect.width;
+        setSectionStyle((prev) => ({
+          ...prev,
+          width: `${Math.round(width)}px`,
+        }));
+      }
+    }
+  });
+
+  observer.observe(sectionRef.current);
+
+  return () => observer.disconnect();
+}, [sectionStyle.position]);
+
+
+  // const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
   return (
-    <div className="relative"
+    <div className=""
       ref={divRef}
       style={{
-        position: setPosition,
+        position: sectionStyle?.position,
         left: sectionStyle?.left,
         top: sectionStyle?.top,
       }}
