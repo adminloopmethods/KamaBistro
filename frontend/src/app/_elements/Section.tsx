@@ -46,8 +46,9 @@ const Section: React.FC<SectionProps> = ({ //Props
 
   const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle?.position;
 
-
+  console.log((parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize)
   const widthIsRatio = String(style.width).slice(-1) === "%"
+
 
   return (
     <div className=""
@@ -65,7 +66,7 @@ const Section: React.FC<SectionProps> = ({ //Props
           position: "static",
           top: 0,
           left: 0,
-          ...((widthIsRatio && !sectionIsParent) ? { width: ((parseInt(String(style.width)) / 100) * editedWidth) } : {})
+          width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
         }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}

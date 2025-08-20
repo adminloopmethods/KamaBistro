@@ -85,7 +85,6 @@ const Editor = () => {
             minHeight: "100vh",
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
-
             backgroundSize: "15px 15px", // size of grid squares
           }}
           className="bg-stone-200"

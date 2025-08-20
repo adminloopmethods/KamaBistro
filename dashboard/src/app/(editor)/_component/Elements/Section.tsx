@@ -66,7 +66,7 @@ const Section: React.FC<SectionProps> = ({
   const [dragOffsetY, setDragOffsetY] = useState(0);
 
   const handleMouseDown = (e: MouseEvent) => {
-    if (sectionStyle.position !== "absolute") return;
+    if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed" && sectionStyle.position !== "relative" ) return;
 
     const rect = sectionRef.current?.getBoundingClientRect();
     if (!rect) return;
@@ -216,24 +216,32 @@ const Section: React.FC<SectionProps> = ({
   }, [])
 
   useEffect(() => {
-  if (!sectionRef.current) return;
+    if (!sectionRef.current) return;
+    if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed") return;
 
-  const observer = new ResizeObserver((entries) => {
-    for (let entry of entries) {
-      if (sectionStyle.position === "absolute" || sectionStyle.position === "fixed") {
-        const width = entry.contentRect.width;
-        setSectionStyle((prev) => ({
-          ...prev,
-          width: `${Math.round(width)}px`,
-        }));
+    const observer = new ResizeObserver((entries) => {
+      for (let entry of entries) {
+        const width = Math.round(entry.contentRect.width);
+
+        setSectionStyle((prev) => {
+          if (prev.width !== `${width}px`) {
+            return { ...prev, width: `${width}px` };
+          }
+          return prev;
+        });
+
+        // ✅ disconnect after first lock to avoid flicker
+        observer.disconnect();
       }
-    }
-  });
+    });
 
-  observer.observe(sectionRef.current);
+    observer.observe(sectionRef.current);
+    observer.disconnect();
 
-  return () => observer.disconnect();
-}, [sectionStyle.position]);
+
+    return () => observer.disconnect();
+  }, [sectionStyle.position]);
+
 
 
   // const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
