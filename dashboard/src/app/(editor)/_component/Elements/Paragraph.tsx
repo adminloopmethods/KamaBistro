@@ -49,7 +49,6 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
     const value = elementRef.current?.innerHTML ?? "";
     setThisElement((prev: BaseElement) => {
-      console.log(prev)
       return ({
         ...prev,
         content: value.trim(),

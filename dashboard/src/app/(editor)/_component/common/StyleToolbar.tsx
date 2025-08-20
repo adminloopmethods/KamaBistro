@@ -26,7 +26,6 @@ type StyleToolbarProps = {
 const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
     const { contextForSection } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
-    console.log(currentSection)
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
     const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
     const [gradientDirection, setGradientDirection] = useState<string>('to right');

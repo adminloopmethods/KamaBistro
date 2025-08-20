@@ -32,6 +32,7 @@ type SectionProps = {
   createSection?: any,
   parentIsSection?: Boolean,
   updateParentElement?: (id: string, element: any, lS: Boolean) => void,
+  setGivenName: (id: string, value: string) => void
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -46,7 +47,8 @@ const Section: React.FC<SectionProps> = ({
   finalUpdate,
   createSection,
   parentIsSection,
-  updateParentElement
+  updateParentElement,
+  setGivenName
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
@@ -120,6 +122,7 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     contextForSection.setSectionRef(sectionRef)
+    contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
@@ -210,7 +213,6 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (divRef.current?.style) {
-      console.log(divRef.current.style.width)
       divRef.current.style.border = "1px dashed gray";
     }
   }, [])
@@ -280,6 +282,7 @@ const Section: React.FC<SectionProps> = ({
                 updateParentElement={updateForSection}
                 lastSection={lastSection}
                 parentIsSection={true}
+                setGivenName={setGivenName}
               />)
 
           } else {

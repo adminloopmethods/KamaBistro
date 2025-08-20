@@ -135,6 +135,20 @@ const Editor = () => {
         });
     };
 
+    const setGivenName = (id: string, name: string) => {
+        setWebpage((prev: webpageType | null) => {
+            if (!prev) return null
+            const newArray = prev.contents.map((e: any) => {
+                if (e.id === id) {
+                    return { ...e, givenName: name }
+                } else {
+                    return e
+                }
+            })
+            return { ...prev, contents: newArray }
+        })
+    }
+
     const rmSection = (sectionId: string) => {
         setWebpage((prev: webpageType | null) => {
             if (!prev) return null
@@ -144,7 +158,6 @@ const Editor = () => {
     };
 
     const updateSectionStyles = (newStyle: CSSProperties) => {
-        console.log(newStyle, activeScreen)
         sectionStyleSetter((prev: CSSProperties) => {
             return { ...prev, ...newStyle };
         });
@@ -311,6 +324,7 @@ const Editor = () => {
                                 finalUpdate={finalUpdate}
                                 lastSection={lastSection}
                                 createSection={CreateSection}
+                                setGivenName={setGivenName}
                             />
                         );
                     })}

@@ -42,7 +42,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const { setImageContext, setImageEdit, contextRef } = useMyContext();
   const [thisElement, setThisElement] = useState<ElementType>(element);
-  console.log(thisElement)
   const [divleft, setDivLeft] = useState<number | string>(0);
   const [divTop, setDivTop] = useState<number | string>(0);
 

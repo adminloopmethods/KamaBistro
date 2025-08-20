@@ -50,6 +50,8 @@ interface SectionContextType {
   setRmSection: React.Dispatch<React.SetStateAction<() => void>>,
   sectionRef: React.RefObject<HTMLElement | null> | null,
   setSectionRef: React.Dispatch<React.SetStateAction<React.RefObject<HTMLElement | null> | null>>
+  sectionGivenNameFn: (value: string) => void,
+  setSectionGivenName: React.Dispatch<React.SetStateAction<(value: string) => void>>
 }
 
 
@@ -128,6 +130,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
   const [widthValue, setWidthValue] = useState<string>("")
+  const [sectionGivenNameFn, setSectionGivenName] = useState<(id: string) => void>((id: string) => { });
 
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
@@ -162,7 +165,9 @@ function Provider({ children }: { children: ReactNode }) {
     setRmSection,
     rmSection,
     sectionRef,
-    setSectionRef
+    setSectionRef,
+    sectionGivenNameFn,
+    setSectionGivenName
   }
 
   const contextElement: ContextElementType = { // element and element setter

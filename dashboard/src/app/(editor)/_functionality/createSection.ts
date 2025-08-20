@@ -14,6 +14,7 @@ export interface SectionElementType {
     elements: any[];
     style: ResponsiveStyles;
     id: string;
+    givenName: string
 }
 
 const baseStyle: StyleObject = {
@@ -54,6 +55,7 @@ class SectionElement implements SectionElementType {
     constructor(name: string) {
         this.name = name;
     }
+    givenName: string = ""
 }
 
 function generateElementData(name: string): SectionElement {

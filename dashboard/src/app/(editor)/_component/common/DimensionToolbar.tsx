@@ -11,8 +11,7 @@ type DimensionToolbarProps = {
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
     const { currentSection, contextForSection } = useMyContext();
     const style = currentSection || {};
-    const { sectionRef, rmSection } = contextForSection;
-
+    const { sectionRef, rmSection, sectionGivenNameFn } = contextForSection;
     // Local state to hold temporary inputs
     const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(style);
 
@@ -75,14 +74,22 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
 
     return (
         <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
+            <input
+                type="text"
+                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                onChange={(e) => {
+                    sectionGivenNameFn(e.target.value)
+                }}
+            />
             {/* Remove Button */}
             <button
                 className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100"
                 onClick={() => rmSection()}
-                title="Remove Element"
+                title="Remove Section"
             >
-                Remove This Element
+                Remove Section
             </button>
+
             <div className="flex justify-between items-center border-b pb-2 mb-2">
                 <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100">
                     Dimension Controls

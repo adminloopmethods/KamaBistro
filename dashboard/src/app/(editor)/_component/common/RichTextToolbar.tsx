@@ -44,6 +44,7 @@ const RichTextToolBar: React.FC = () => {
     const Setter = elementSetter;
 
     const [style, setStyle] = useState<Style>(element?.style?.[activeScreen] || {});
+    const [letterSpacing, setLetterSpacing] = useState<number>(parseFloat(element?.style?.[activeScreen].letterSpacing) || 0)
     const [textColor, setTextColor] = useState<string>('#000000');
     const [bgColor, setBgColor] = useState<string>('#000000');
     const [isBold, setIsBold] = useState(false);
@@ -124,7 +125,11 @@ const RichTextToolBar: React.FC = () => {
     return (
         <div ref={toolbarRef} className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[240px] max-w-[20vw] shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
             {/* Remove */}
-            <button onClick={() => rmElementFunc(element.id)} className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100">Remove This Element</button>
+            <button
+                onClick={() => rmElementFunc(element.id)}
+                className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100"
+            >Remove Element
+            </button>
 
             <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Style</h3>
 
@@ -134,6 +139,23 @@ const RichTextToolBar: React.FC = () => {
                 <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && 'bg-stone-600 text-white'}`} onClick={() => onItalic(element, Setter, activeScreen)}>I</button>
                 <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && 'bg-stone-600 text-white'}`} onClick={() => onUnderline(element, Setter, activeScreen)}>U</button>
             </div>
+            <input
+                type="number"
+                placeholder="Letter spacing"
+                value={letterSpacing}
+                onChange={e => {
+                    const val = e.target.value
+                    if (parseFloat(val) < 1 || parseFloat(val) > 8) return
+                    setLetterSpacing(parseFloat(val))
+                    activeRef.style.setProperty("letter-spacing", `${val}px`, "important")
+                }}
+                onBlur={(e) => {
+                    setStyle((prev) => {
+                        return { ...prev, letterSpacing: e.target.value }
+                    })
+                }}
+                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
+
 
             {/* Font & Size */}
             <CustomSelect options={fontFamilyOptions} Default={style.fontFamily?.toString()} firstOption="fonts" disableFirstValue onChange={(val) => onFamilyFontChange(val, element, Setter, activeScreen)} />
