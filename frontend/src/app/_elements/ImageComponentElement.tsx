@@ -38,19 +38,37 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
     return (
         <div
-            style={{ position: "relative", display: "inline-block" }}
+            style={{
+                position: "relative",
+                // display: "inline-block",
+                top: element.style?.[currentWidth]?.top,
+                left: element.style?.[currentWidth]?.left,
+                width: element.style?.[currentWidth]?.width,
+                paddingTop: element.style?.[currentWidth]?.paddingTop,
+                paddingBottom: element.style?.[currentWidth]?.paddingBottom,
+                paddingLeft: element.style?.[currentWidth]?.paddingLeft,
+                paddingRight: element.style?.[currentWidth]?.paddingRight
+            }}
         >
             <img
                 src={
                     // normalizeImagePath(element.content)
-                   element.content
+                    element.content
                 }
                 alt={element.alt || "Selected"}
                 ref={imageRef}
                 style={{
-                    maxWidth: "100%",
                     cursor: editable ? "pointer" : "default",
                     ...element?.style?.[currentWidth],
+
+                    top: 0,
+                    left: 0,
+                    position: "static",
+                    backgroundColor: "transparent",
+                    paddingTop: 0,
+                    paddingBottom: 0,
+                    paddingLeft: 0,
+                    paddingRight: 0
                 }}
             />
         </div>

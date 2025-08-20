@@ -177,20 +177,23 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
           // display: "inline-block",
           top: thisElement.style?.[activeScreen]?.top,
           left: thisElement.style?.[activeScreen]?.left,
-          width: thisElement.style?.[activeScreen]?.width
+          width: thisElement.style?.[activeScreen]?.width,
+          paddingTop: thisElement.style?.[activeScreen]?.paddingTop,
+          paddingBottom: thisElement.style?.[activeScreen]?.paddingBottom,
+          paddingLeft: thisElement.style?.[activeScreen]?.paddingLeft,
+          paddingRight: thisElement.style?.[activeScreen]?.paddingRight
         }}
         onClick={handleContainerClick}
         onDoubleClick={handleDoubleClick}
         className="border"
       >
         <img
-          src={previewSrc || undefined}
+          src={(cloudinaryApiPoint + previewSrc) || undefined}
           alt={element.alt || "Selected Image"}
           ref={imageRef}
           onClick={handleImageClick}
           onMouseDown={handleMouseDown} // DRAG INITIATOR
           style={{
-            // maxWidth: "100%",
             cursor:
               editable &&
                 cursorCondition
@@ -202,6 +205,11 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             top: 0,
             left: 0,
             position: "static",
+            backgroundColor: "transparent",
+            paddingTop: 0,
+            paddingBottom: 0,
+            paddingLeft: 0,
+            paddingRight: 0
           }}
         />
       </div>
@@ -217,7 +225,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 : fileInfo.join("");
             setThisElement((prev) => ({
               ...prev,
-              content: `${cloudinaryApiPoint}/${src}`,
+              content: `/${src}`,
               alt: altText?.en || prev.alt,
             }));
             setShowImageSelector(false);
