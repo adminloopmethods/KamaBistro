@@ -231,7 +231,7 @@ const Login: React.FC = () => {
               </button>
             </form>
 
-            <div className="mt-8 pt-5 border-t border-gray-100">
+            {/* <div className="mt-8 pt-5 border-t border-gray-100">
               <p className="text-center text-sm text-gray-600">
                 Don't have an account?{" "}
                 <button
@@ -243,7 +243,7 @@ const Login: React.FC = () => {
                   Request access
                 </button>
               </p>
-            </div>
+            </div> */}
           </div>
         )}
       </div>
