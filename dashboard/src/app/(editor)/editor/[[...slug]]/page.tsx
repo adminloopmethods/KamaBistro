@@ -218,17 +218,17 @@ const Editor = () => {
                     const response: any = await getWebpageReq(id) // bringing the content from backend 
 
                     if (response.ok) { // if successfull
-                        // setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
-                        setWebpage({
-                            id: crypto.randomUUID(),
-                            route: testObj.route,
-                            locationId: testObj.locationId,
-                            name: testObj.name,
-                            contents: testObj.contents,
-                            createdAt: "",
-                            updatedAt: "",
-                            editedWidth: currentWidth ? currentWidth : "1280px"
-                        })
+                        setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
+                        // setWebpage({
+                        //     id: crypto.randomUUID(),
+                        //     route: testObj.route,
+                        //     locationId: testObj.locationId,
+                        //     name: testObj.name,
+                        //     contents: testObj.contents,
+                        //     createdAt: "",
+                        //     updatedAt: "",
+                        //     editedWidth: currentWidth ? currentWidth : "1280px"
+                        // })
                     } else {
                         throw new Error("error while fetch the page")
                     }

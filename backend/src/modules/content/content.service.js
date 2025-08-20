@@ -135,9 +135,7 @@ export const getWebpageByIdService = async (id) => {
           style: true,
           elements: {
             orderBy: { order: "asc" },
-            include: {
-              style: true,
-            },
+            include: { style: true },
           },
           children: {
             orderBy: { order: "asc" },
@@ -145,9 +143,7 @@ export const getWebpageByIdService = async (id) => {
               style: true,
               elements: {
                 orderBy: { order: "asc" },
-                include: {
-                  style: true,
-                },
+                include: { style: true },
               },
             },
           },
@@ -159,20 +155,36 @@ export const getWebpageByIdService = async (id) => {
   if (!webpage) return null;
 
   const transformSection = (section) => {
+    // merge children + elements into one list with order preserved
+    const merged = [
+      ...(section.children?.map((child) => ({
+        id: child.id,
+        name: child.name,
+        givenName: child.givenName,
+        style: child.style,
+        order: child.order, // keep order for sorting
+        type: "section",
+        elements: transformSection(child).elements, // recurse
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: el.id,
+        name: el.name,
+        style: el.style,
+        content: el.content,
+        order: el.order,
+        type: "element",
+      })) || []),
+    ];
+
+    // sort by order before returning
+    merged.sort((a, b) => a.order - b.order);
+
     return {
       id: section.id,
       name: section.name,
       givenName: section.givenName,
       style: section.style,
-      elements: [
-        ...(section.children?.map((child) => transformSection(child)) || []),
-        ...(section.elements?.map((el) => ({
-          id: el.id,
-          name: el.name,
-          style: el.style,
-          content: el.content,
-        })) || []),
-      ],
+      elements: merged.map(({ order, type, ...rest }) => rest), // remove order/type before returning
     };
   };
 
@@ -181,6 +193,7 @@ export const getWebpageByIdService = async (id) => {
     contents: webpage.contents.map(transformSection),
   };
 };
+
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {

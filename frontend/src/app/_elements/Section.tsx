@@ -44,15 +44,13 @@ const Section: React.FC<SectionProps> = ({ //Props
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "absolute") : "static";
-  
-  console.log("thisStyle", thisStyle.position)
-  console.log("setPosition", setPosition)
+  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle?.position;
+
 
   const widthIsRatio = String(style.width).slice(-1) === "%"
 
   return (
-    <div className="relative border w-full"
+    <div className=""
       style={{
         position: setPosition,
         left: (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
@@ -61,14 +59,13 @@ const Section: React.FC<SectionProps> = ({ //Props
       }}
     >
       <section
-      className="border"
         ref={sectionRef}
         style={{
           ...style,
           position: "static",
           top: 0,
-          left: 0
-          // ...((widthIsRatio && !sectionIsParent) ? { width: ((parseInt(String(style.width)) / 100) * editedWidth) } : {})
+          left: 0,
+          ...((widthIsRatio && !sectionIsParent) ? { width: ((parseInt(String(style.width)) / 100) * editedWidth) } : {})
         }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}
