@@ -64,7 +64,10 @@ const Editor = () => {
   }, [page])
 
   return (
-    <div ref={containerRef} style={{ position: "relative", display: "flex", height: "100vh" }}>
+    <div
+      ref={containerRef}
+      style={{ position: "relative", display: "flex", height: "100vh" }}
+    >
       {/* website */}
       <div style={{ position: "relative", flex: 1, overflowY: "scroll" }} className="scroll-one">
         {websiteContent?.webpage?.contents?.map((section: any, i: number, a: any[]) => {

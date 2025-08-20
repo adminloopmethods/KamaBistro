@@ -40,6 +40,7 @@ const AddElement: React.FC<AddElementProps> = ({ controller, canAddSection }) =>
         { label: "Heading", value: "heading" },
         { label: "Paragraph", value: "paragraph" },
         { label: "Image", value: "image" },
+        { label: "Line", value: "line" }
         // { label: "Image", value: "image" },
         // { label: "Image", value: "image" },
     ];

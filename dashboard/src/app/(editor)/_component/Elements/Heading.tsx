@@ -41,7 +41,7 @@ const Heading: React.FC<HeadingProps> = ({
     contextElement.setElement(thisElement);
     contextElement?.setRmElementFunc(() => () => rmElement(element.id));
     if (elementRef.current) {
-      elementRef.current.style.outline = "1px solid black";
+      elementRef.current.style.outline = "1px dashed black";
     }
     contextRef.setReference(elementRef.current);
   };
@@ -69,7 +69,7 @@ const Heading: React.FC<HeadingProps> = ({
         elementRef.current?.contains(e.target as Node) ?? false;
 
       if (!clickedToolbar && !clickedElement) {
-        elementRef.current.style.outline = "none";
+        elementRef.current.style.outline = "";
         setEditing(false);
       }
     };
@@ -95,6 +95,7 @@ const Heading: React.FC<HeadingProps> = ({
 
   return (
     <h1
+      className=""
       id={element.id}
       ref={elementRef}
       onBlur={handleBlur}

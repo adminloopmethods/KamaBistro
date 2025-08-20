@@ -2,6 +2,7 @@ import Heading from "../_component/Elements/Heading";
 import ImageElemComponent from "../_component/Elements/ImageElement";
 import Paragraph from "../_component/Elements/Paragraph";
 import placeHolderImage from "@/assets/placeholderImage.png"
+import Division from "../_component/Elements/Division";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -52,6 +53,13 @@ const defaultStyles: StyleObject = {
   sm: {},
 };
 
+const divisionBaseStyle: React.CSSProperties = {
+  "width": "20px",
+  "height": "5px",
+  "backgroundColor": "transparent",
+  "background": "linear-gradient(to right, red, blue)"
+}
+
 // Base Element class
 class Element implements BaseElement {
   id: string;
@@ -63,6 +71,19 @@ class Element implements BaseElement {
     this.name = name;
     this.content = content;
     this.id = crypto.randomUUID ? crypto.randomUUID() : Date.now().toString();
+  }
+}
+
+class DivisionClass extends Element {
+
+  constructor(name: string, content: string) {
+    super(name, content)
+    this.style = {
+      xl: divisionBaseStyle,
+      lg: divisionBaseStyle,
+      md: divisionBaseStyle,
+      sm: divisionBaseStyle
+    }
   }
 }
 
@@ -134,6 +155,8 @@ export function generateElementData(
       return new LinkElementClass(content, altOrHrefOrAction || "#");
     case "p":
       return new ParagraphElementClass(content);
+    case "division":
+      return new DivisionClass(name, content)
     default:
       return new Element(name, content);
   }
@@ -151,6 +174,7 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   ol: () => gED("ol", "", undefined, ["First", "Second"]),
   button: () => gED("button", "Click me", "doSomething"),
   link: () => gED("a", "Link text", "https://example.com"),
+  line: () => gED("division", "")
 };
 
 export default {
@@ -164,4 +188,5 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   h1: Heading,
   p: Paragraph,
   img: ImageElemComponent,
+  division: Division
 };

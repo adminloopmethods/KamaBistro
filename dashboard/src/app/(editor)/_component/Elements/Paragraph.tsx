@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
 
-type ParagraphProp = {
+type ParagraphProps = {
   element: BaseElement;
   editable?: boolean;
   style?: React.CSSProperties;
@@ -13,7 +13,7 @@ type ParagraphProp = {
   rmElement: (id: string) => void;
 };
 
-const Heading: React.FC<ParagraphProp> = ({
+const Paragraph: React.FC<ParagraphProps> = ({
   element,
   editable = true,
   style,
@@ -41,7 +41,7 @@ const Heading: React.FC<ParagraphProp> = ({
     contextElement.setElement(thisElement);
     contextElement?.setRmElementFunc(() => () => rmElement(element.id));
     if (elementRef.current) {
-      elementRef.current.style.outline = "1px solid black";
+      elementRef.current.style.outline = "1px dashed black";
     }
     contextRef.setReference(elementRef.current);
   };
@@ -69,7 +69,7 @@ const Heading: React.FC<ParagraphProp> = ({
         elementRef.current?.contains(e.target as Node) ?? false;
 
       if (!clickedToolbar && !clickedElement) {
-        elementRef.current.style.outline = "none";
+        elementRef.current.style.outline = "";
         setEditing(false);
       }
     };
@@ -95,6 +95,7 @@ const Heading: React.FC<ParagraphProp> = ({
 
   return (
     <p
+      className="hover:outline-dashed hover:outline"
       id={element.id}
       ref={elementRef}
       onBlur={handleBlur}
@@ -108,4 +109,4 @@ const Heading: React.FC<ParagraphProp> = ({
   );
 };
 
-export default React.memo(Heading);
+export default React.memo(Paragraph);
