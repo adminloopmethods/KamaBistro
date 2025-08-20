@@ -37,8 +37,11 @@ const Section: React.FC<SectionProps> = ({
     currentWidth,
   } = useMyContext();
 
+  const thisStyle = section?.style?.[currentWidth]
+
   const sectionRef = useRef<HTMLElement | null>(null);
 
+  const setPosition = thisStyle?.position === "absolute" ? sectionIsParent ? "absolute" : "fixed" : "static";
 
   return (
     <div className="relative"
@@ -53,7 +56,7 @@ const Section: React.FC<SectionProps> = ({
         ref={sectionRef}
         style={{
           ...style,
-          position: "static",
+          position: setPosition,
         }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}

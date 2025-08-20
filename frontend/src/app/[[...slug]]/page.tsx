@@ -50,6 +50,7 @@ const Editor = () => {
         const response: any = await getContentReq(page)
         console.log(response)
         if (response.ok) {
+          console.log(response.webpage.editedWidth)
           websiteContent.setWebpage(response.webpage)
         } else {
           throw new Error("error while fetch the page")

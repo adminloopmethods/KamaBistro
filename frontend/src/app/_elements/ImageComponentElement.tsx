@@ -53,7 +53,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
             <img
                 src={
                     // normalizeImagePath(element.content)
-                    element.content
+                    cloudinaryApiPoint + element.content
                 }
                 alt={element.alt || "Selected"}
                 ref={imageRef}
