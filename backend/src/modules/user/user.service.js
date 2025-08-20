@@ -91,7 +91,17 @@ const activateUsers = async (id) => {
   const user = await userActivation(id);
   assert(user, "USER_INVALID", "user not found");
   // logger.info({response: `user ${id} is active now`});
-  return {message: "User activated successfully", ok: true}; // if everything goes fine
+  return {
+    message: "User activated successfully",
+    ok: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.status,
+      location: user.location,
+    },
+  }; // if everything goes fine
 };
 
 const deactivateUsers = async (id) => {
@@ -103,6 +113,13 @@ const deactivateUsers = async (id) => {
     message: "User deactivated successfully",
     ok: true,
     status: user.status,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      status: user.status,
+      location: user.location,
+    },
   }; // if everything goes fine
 };
 

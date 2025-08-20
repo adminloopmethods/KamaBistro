@@ -44,9 +44,9 @@ export const createUserHandler = async (
   });
 
   // Use dynamic payload
-  addEmailJob(
-    userAccountCreationPayload({name, email, password, dashboardUrl})
-  );
+  // addEmailJob(
+  //   userAccountCreationPayload({name, email, password, dashboardUrl})
+  // );
 
   return newUser;
 };
@@ -443,7 +443,7 @@ export const findUserById = async (id) => {
     //   },
     // },
   });
-  console.log(user)
+  console.log(user);
   return user;
 };
 
@@ -632,6 +632,14 @@ export const userDeactivation = async (id) => {
     },
     data: {
       status: "INACTIVE",
+    },
+    include: {
+      location: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
     },
   });
 

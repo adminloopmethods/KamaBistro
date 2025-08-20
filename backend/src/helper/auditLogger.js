@@ -4,7 +4,7 @@ import {
   fetchVersionContent,
 } from "../repository/content.repository.js";
 // import {createNotification} from "../repository/notification.repository.js";
-import { handleEntityCreationNotification } from "./notificationHelper.js";
+import {handleEntityCreationNotification} from "./notificationHelper.js";
 import transformContentForAudit from "./transformContentForAudit.js";
 
 // --- Action Type/Performed Resolver ---
@@ -87,11 +87,11 @@ function resolveAction(req, method, entity) {
       };
     case "PUT":
     case "PATCH":
-      return { actionType: "UPDATE", action_performed: `${entity} updated` };
+      return {actionType: "UPDATE", action_performed: `${entity} updated`};
     case "DELETE":
-      return { actionType: "DELETE", action_performed: `${entity} deleted` };
+      return {actionType: "DELETE", action_performed: `${entity} deleted`};
     default:
-      return { actionType: "ACCESS", action_performed: `${entity} accessed` };
+      return {actionType: "ACCESS", action_performed: `${entity} accessed`};
   }
 }
 
@@ -125,17 +125,17 @@ async function getResourceAssignments(resourceId) {
       liveVersionNumber: null,
       editVersionNumber: null,
       roles: [
-        { role: "MANAGER", users: [] },
-        { role: "EDITOR", users: [] },
-        { role: "PUBLISHER", users: [] },
-        { role: "VERIFIER", users: [] },
+        {role: "MANAGER", users: []},
+        {role: "EDITOR", users: []},
+        {role: "PUBLISHER", users: []},
+        {role: "VERIFIER", users: []},
       ],
     };
   }
-  const roleMap = { MANAGER: [], EDITOR: [], PUBLISHER: [] };
+  const roleMap = {MANAGER: [], EDITOR: [], PUBLISHER: []};
   for (const r of resource.roles) {
     if (!roleMap[r.role]) roleMap[r.role] = [];
-    roleMap[r.role].push({ name: r.user?.name, status: r.status });
+    roleMap[r.role].push({name: r.user?.name, status: r.status});
   }
   const verifiers = resource.verifiers.map((v) => ({
     name: v.user?.name,
@@ -147,10 +147,10 @@ async function getResourceAssignments(resourceId) {
     liveVersionNumber: resource.liveVersion?.versionNumber || null,
     editVersionNumber: resource.newVersionEditMode?.versionNumber || null,
     roles: [
-      { role: "MANAGER", users: roleMap.MANAGER },
-      { role: "EDITOR", users: roleMap.EDITOR },
-      { role: "PUBLISHER", users: roleMap.PUBLISHER },
-      { role: "VERIFIER", users: verifiers },
+      {role: "MANAGER", users: roleMap.MANAGER},
+      {role: "EDITOR", users: roleMap.EDITOR},
+      {role: "PUBLISHER", users: roleMap.PUBLISHER},
+      {role: "VERIFIER", users: verifiers},
     ],
   };
 }
@@ -177,35 +177,45 @@ const entityAuditHandlers = {
     };
   },
   user: async (id) => {
-    // const userRecord = await prismaClient.user.findUnique({
-    //   where: { id },
-    //   include: {
-    //     roles: {
-    //       include: {
-    //         role: {
-    //           include: {
-    //             permissions: {
-    //               include: {
-    //                 permission: {
-    //                   select: { name: true },
-    //                 },
-    //               },
-    //             },
-    //             roleType: true,
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // });
+    const userRecord = await prismaClient.user.findUnique({
+      where: {id},
+      include: {
+        // roles: {
+        //   include: {
+        //     role: {
+        //       include: {
+        //         permissions: {
+        //           include: {
+        //             permission: {
+        //               select: { name: true },
+        //             },
+        //           },
+        //         },
+        //         roleType: true,
+        //       },
+        //     },
+        //   },
+        // },
+        location: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
     if (!userRecord) return null;
     return {
       name: userRecord.name,
+      email: userRecord.email,
       status: userRecord.status,
-      roles: userRecord.roles.map((r) => ({
-        name: r.role.name,
-        permissions: r.role.permissions.map((p) => p.permission.name),
-      })),
+      isSuperUser: userRecord.isSuperUser,
+      phone: userRecord.phone,
+      location: userRecord.location,
+      // roles: userRecord.roles.map((r) => ({
+      //   name: r.role.name,
+      //   permissions: r.role.permissions.map((p) => p.permission.name),
+      // })),
     };
   },
   resource: getResourceAssignments,
@@ -276,7 +286,7 @@ const formatScheduleDate = (dateString) => {
 
 // Middleware to log user actions in the database
 const auditLogger = async (req, res, responseBodyOrNext) => {
-  const { user, method } = req; // User info from authentication middleware
+  const {user, method} = req; // User info from authentication middleware
   const endPoint = req.baseUrl.split("/").pop(); // Extract entity name from route
   let entity = endPoint === "content" ? "resource" : endPoint;
   let entityId =
@@ -287,7 +297,10 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
     req.body.resourceId ||
     res?.user?.id ||
     responseBodyOrNext.id ||
-    req.body.id || req.body.slug || req.body.parentId || null;
+    req.body.id ||
+    req.body.slug ||
+    req.body.parentId ||
+    null;
   const ipAddress = req.ip;
   const browserInfo = req.headers["user-agent"];
 
@@ -295,12 +308,28 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
   let newValue = null;
 
   // Centralized actionType/action_performed
-  let { actionType, action_performed } = resolveAction(req, method, entity);
+  let {actionType, action_performed} = resolveAction(req, method, entity);
 
   // Handler for fetching audit values
   // const fetchAuditValue =
   //   entityAuditHandlers[entity] ||
   //   (async (id) => await prismaClient[entity]?.findUnique({ where: { id } }));
+
+  const fetchAuditValue =
+    entityAuditHandlers[entity] ||
+    (async (id) => {
+      try {
+        if (
+          prismaClient[entity] &&
+          typeof prismaClient[entity].findUnique === "function"
+        ) {
+          return await prismaClient[entity].findUnique({where: {id}});
+        }
+      } catch (error) {
+        console.error(`Error fetching ${entity} with id ${id}:`, error);
+      }
+      return null;
+    });
 
   // Special DRAFT (updateContent), DIRECT PUBLISH (directPublishContent), REQUEST GENERATED (generateRequest), REJECT, APPROVE, SCHEDULE cases
   if (
@@ -328,7 +357,7 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         });
       }
       // New value: transform incoming payload
-      const { resourceId, ...bodyWithoutResourceId } = req.body;
+      const {resourceId, ...bodyWithoutResourceId} = req.body;
       newValue = await transformContentForAudit(bodyWithoutResourceId);
     } else if (actionType === "DIRECT PUBLISH") {
       // Old value: live version only
@@ -340,7 +369,7 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         });
       }
       // New value: transform incoming payload
-      const { resourceId, ...bodyWithoutResourceId } = req.body;
+      const {resourceId, ...bodyWithoutResourceId} = req.body;
       newValue = await transformContentForAudit(bodyWithoutResourceId);
     } else if (actionType === "REQUEST GENERATED") {
       let oldVersion =
@@ -353,7 +382,7 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         });
       }
       // New value: content from body + new request details (if generated)
-      const { resourceId: rid, ...bodyWithoutResourceId } = req.body;
+      const {resourceId: rid, ...bodyWithoutResourceId} = req.body;
       newValue = await transformContentForAudit({
         ...bodyWithoutResourceId,
       });
@@ -414,11 +443,11 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         // }
       }
       if (isPublisherPublication) {
-        oldValue = { ...approvalAudit, ...(versionContentObj || {}) };
+        oldValue = {...approvalAudit, ...(versionContentObj || {})};
       } else {
         oldValue = approvalAudit;
       }
-    } 
+    }
   } else if (
     ["UPDATE", "DELETE", "ASSIGN", "REMOVE"].includes(actionType) &&
     entityId
@@ -452,11 +481,9 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
       (actionType === "REQUEST GENERATED" && entity === "resource" && entityId)
     ) {
       // Already set above
-    }  
-    else if (actionType === "CREATE RESOURCE") {
+    } else if (actionType === "CREATE RESOURCE") {
       newValue = req.body;
-    }
-    else if (
+    } else if (
       (actionType === "REJECT" ||
         actionType === "APPROVE" ||
         actionType === "PUBLISH" ||
@@ -519,7 +546,7 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
         // }
       }
       if (isPublisherPublication) {
-        newValue = { ...approvalAudit, ...(versionContentObj || {}) };
+        newValue = {...approvalAudit, ...(versionContentObj || {})};
         // For SCHEDULE, add the formatted scheduled date
         if (actionType === "SCHEDULE" && req.body?.date) {
           newValue.scheduledDate = formatScheduleDate(req.body.date);
@@ -553,8 +580,7 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
               : "Failure",
           timestamp: new Date(),
           user: {
-            create:
-              entity === "auth" ? { userId: entityId } : { userId: user?.id },
+            create: entity === "auth" ? {userId: entityId} : {userId: user?.id},
           },
         },
       });
