@@ -55,7 +55,8 @@ const Section: React.FC<SectionProps> = ({ //Props
       style={{
         position: setPosition,
         left: (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
-        top: (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
+        top: style.top,
+        // (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         overflow: !sectionIsParent ? "hidden" : ""
       }}
     >
