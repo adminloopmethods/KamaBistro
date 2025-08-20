@@ -24,6 +24,8 @@ const endpointMap = {
   updateUser: `${users}/updateUser/`,
   changeStatus: `${users}/switchStatus/`,
   getAuditLogs: `${auth}/logs`,
+  activateUser: `${users}/activate`,
+  deactivateUser: `${users}/deactivate`,
 
   //location
   getLocations: `${users}/locations`,

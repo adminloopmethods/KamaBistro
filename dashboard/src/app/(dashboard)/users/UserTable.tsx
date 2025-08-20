@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import EditUserModal from "./EditUserForm";
+import {toast} from "sonner";
+import {activateUserReq, deactivateUserReq} from "@/functionality/fetch";
 
 interface Location {
   id: string;
@@ -37,14 +39,6 @@ interface UserTableProps {
   refreshUsers: () => void;
 }
 
-// interface UsersData {
-//   message: string;
-//   users: {
-//     allUsers: User[];
-//     pagination: Pagination;
-//   };
-// }
-
 const UserTable: React.FC<UserTableProps> = ({
   data,
   onPageChange,
@@ -60,12 +54,52 @@ const UserTable: React.FC<UserTableProps> = ({
   };
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
-
-  // console.log("data", data?.users?.allUsers);
+  const [updatingUsers, setUpdatingUsers] = useState<Set<string>>(new Set());
 
   const handleEditClick = (user: User) => {
     setEditingUser(user);
     setIsEditModalOpen(true);
+  };
+
+  const toggleUserStatus = async (user: User) => {
+    const userId = user.id;
+    const isCurrentlyActive = user.status === "ACTIVE";
+
+    setUpdatingUsers((prev) => new Set(prev).add(userId));
+
+    try {
+      let response;
+      if (isCurrentlyActive) {
+        response = await deactivateUserReq(userId);
+      } else {
+        response = await activateUserReq(userId);
+      }
+
+      if (response.ok) {
+        toast.success(
+          `User ${isCurrentlyActive ? "deactivated" : "activated"} successfully`
+        );
+        refreshUsers();
+      } else {
+        toast.error(
+          response.error ||
+            `Failed to ${isCurrentlyActive ? "deactivate" : "activate"} user`
+        );
+      }
+    } catch (error) {
+      toast.error(
+        `An error occurred while ${
+          isCurrentlyActive ? "deactivating" : "activating"
+        } the user`
+      );
+      console.error("Error toggling user status:", error);
+    } finally {
+      setUpdatingUsers((prev) => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+    }
   };
 
   return (
@@ -74,9 +108,6 @@ const UserTable: React.FC<UserTableProps> = ({
         <h2 className="text-xl font-semibold text-gray-800 dark:text-white">
           Users
         </h2>
-        {/* <div className="text-sm text-gray-600 dark:text-gray-400">
-          Showing {data?.allUsers.length} of {data?.pagination.totalUser} users
-        </div> */}
         <button
           onClick={onCreateUser}
           className="flex items-center bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition-colors"
@@ -200,13 +231,47 @@ const UserTable: React.FC<UserTableProps> = ({
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <button
                     onClick={() => handleEditClick(user)}
-                    className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-3"
+                    className="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 mr-4 p-1 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900 transition-colors"
+                    disabled={updatingUsers.has(user.id)}
+                    title="Edit user"
                   >
-                    Edit
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
+                    </svg>
                   </button>
-                  <button className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
-                    Delete
-                  </button>
+
+                  {/* Toggle Switch */}
+                  <label className="relative inline-flex items-center cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={user.status === "ACTIVE"}
+                      onChange={() => toggleUserStatus(user)}
+                      className="sr-only peer"
+                      disabled={updatingUsers.has(user.id)}
+                    />
+                    <div
+                      className={`w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer 
+                      ${
+                        user.status === "ACTIVE"
+                          ? "peer-checked:bg-green-600"
+                          : ""
+                      } 
+                      peer-checked:after:translate-x-full peer-checked:after:border-white 
+                      after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                      after:bg-white after:border-gray-300 after:border after:rounded-full 
+                      after:h-5 after:w-5 after:transition-all 
+                      ${
+                        updatingUsers.has(user.id)
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
+                      }`}
+                    ></div>
+                  </label>
                 </td>
               </tr>
             ))}
