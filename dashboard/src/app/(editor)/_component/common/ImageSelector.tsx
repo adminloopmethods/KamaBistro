@@ -201,7 +201,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
     }, [onClose]);
 
     return (
-        <div className="fixed inset-0 bg-black/70 bg-opacity-10 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/70 bg-opacity-10 flex items-center justify-center z-[1001]">
             {/* Main Modal */}
             <div
                 ref={modalRef}

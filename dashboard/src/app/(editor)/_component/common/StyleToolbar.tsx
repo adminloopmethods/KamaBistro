@@ -51,6 +51,9 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
             combined = gradient;
         } else if (bgImage || url) {
             combined = `url(${url || bgImage})`;
+        } else if (!url) {
+            console.log("wer")
+            combined = `${gradient}`;
         }
         debouncedUpdateStyles({ backgroundImage: combined });
     };
@@ -98,7 +101,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
             <button
                 onClick={() => { setBgImage(''); updateBackground(); }}
                 className="px-2 py-1 bg-red-500 text-white text-xs rounded-md"
-                disabled={Boolean(currentSection?.backgroundImage)}
+                disabled={Boolean(!currentSection?.backgroundImage)}
             >
                 Remove Background Image
             </button>

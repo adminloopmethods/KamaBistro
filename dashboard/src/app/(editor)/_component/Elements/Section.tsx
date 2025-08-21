@@ -232,7 +232,6 @@ const Section: React.FC<SectionProps> = ({
   //         return prev;
   //       });
 
-  //       // ✅ disconnect after first lock to avoid flicker
   //       observer.disconnect();
   //     }
   //   });
@@ -246,19 +245,19 @@ const Section: React.FC<SectionProps> = ({
 
 
 
-  // const setPosition = sectionStyle?.position === "absolute" ? parentIsSection ? "absolute" : "fixed" : "static";
+  const setPosition = sectionStyle?.position === "absolute" ? (parentIsSection ? "absolute" : "fixed") : sectionStyle.position;
   return (
-    <div className="relative"
+    <div className=""
       ref={divRef}
       style={{
-        position: sectionStyle?.position,
+        position: setPosition,
         left: sectionStyle?.left,
         top: sectionStyle?.top,
       }}
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, top: 0, left: 0, position: "static" }}
+        style={{ ...sectionStyle, top: 0, left: 0 }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}

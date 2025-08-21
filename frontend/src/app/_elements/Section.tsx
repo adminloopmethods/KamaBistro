@@ -44,30 +44,31 @@ const Section: React.FC<SectionProps> = ({ //Props
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle?.position;
+  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle.position;
 
-  console.log((parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize)
-  const widthIsRatio = String(style.width).slice(-1) === "%"
+  // const widthIsRatio = String(style?.width).slice(-1) === "%"
 
 
   return (
     <div className=""
       style={{
         position: setPosition,
-        left: (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
+        left: style.left,
+        // (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         top: style.top,
+        zIndex: setPosition === "relative" ? 1 : ""
         // (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
-        overflow: !sectionIsParent ? "hidden" : ""
+        // overflow: !sectionIsParent ? "" : ""
       }}
     >
       <section
         ref={sectionRef}
         style={{
           ...style,
-          position: "static",
+          // position: "",
           top: 0,
           left: 0,
-          width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
+          // width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
         }}
       >
         {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}

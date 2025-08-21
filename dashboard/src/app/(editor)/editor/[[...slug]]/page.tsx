@@ -12,7 +12,7 @@ import RichTextToolBar from "../../_component/common/RichTextToolbar";
 import StyleToolbar from "../../_component/common/StyleToolbar";
 import DimensionToolbar from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
-import { testObj } from "@/assets/test"
+// import { testObj } from "@/assets/test"
 
 import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
@@ -22,6 +22,7 @@ import { toast, Toaster } from "sonner";
 import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
 import CustomSelect from "@/app/_common/CustomSelect";
 import { preSection } from "@/assets/preSection.js"
+import { useDraggable } from "../../_component/common/useDraggable";
 
 const renderInput = (
     label: string,
@@ -56,6 +57,8 @@ const Editor = () => {
     const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
     const [locations, setLocations] = useState<LocationType[]>([{ id: "", name: "" }])
     const [currentWidth, setCurrentWidth] = useState<string>("")
+
+    const toolbarRef = useDraggable()
 
     const {
         width, // {currentWidth, setCurrentWidth}
@@ -334,7 +337,11 @@ const Editor = () => {
 
             </div>
             {/* Sidebar/toolbars */}
-            <div style={{ minWidth: "240px", backgroundColor: "#393E46", height: "100%", overflowY: "scroll" }} className="scroll-one">
+            <div
+                style={{ width: "250px", backgroundColor: "#393E46", height: "100%", overflowY: "scroll", zIndex: 1000 }}
+                className="scroll-one fixed top-0 right-0"
+                ref={toolbarRef}
+            >
                 <button
                     style={{
                         backgroundColor: "#007bff",

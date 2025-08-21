@@ -196,6 +196,7 @@ export const getWebpageByIdService = async (id) => {
 
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
+// ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
@@ -206,7 +207,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
     },
   });
 
-  // Step 2: Fetch existing contents
+  // Step 2: Fetch existing contents (sections)
   const existingContents = await prismaClient.content.findMany({
     where: { webpageId: id },
     include: {
@@ -216,7 +217,19 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
     },
   });
 
-  // Build flat element map
+  // ---------------- DELETE MISSING SECTIONS ----------------
+  const incomingSectionIds = new Set(contents.map((c) => c.id));
+  const sectionsToDelete = existingContents.filter(
+    (c) => !incomingSectionIds.has(c.id)
+  );
+
+  if (sectionsToDelete.length) {
+    await prismaClient.content.deleteMany({
+      where: { id: { in: sectionsToDelete.map((c) => c.id) } },
+    });
+  }
+
+  // ---------------- DELETE MISSING ELEMENTS ----------------
   const existingElementMap = new Map();
 
   function flattenExisting(contentsArray) {
@@ -236,7 +249,6 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   }
   flattenExisting(existingContents);
 
-  // Collect incoming element IDs
   const incomingElementIds = new Set();
   function collectIncomingIds(elementsArray) {
     for (const el of elementsArray) {
@@ -248,7 +260,6 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   }
   collectIncomingIds(contents.flatMap((c) => c.elements || []));
 
-  // Delete missing elements
   const elementsToDelete = Array.from(existingElementMap.values()).filter(
     (e) => !incomingElementIds.has(e.id)
   );
@@ -258,12 +269,11 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
     });
   }
 
-  // Recursive upsert
+  // ---------------- UPSERT ELEMENTS ----------------
   async function upsertElements(parentId, elementsArray) {
     for (let i = 0; i < elementsArray.length; i++) {
       const el = elementsArray[i];
       if (el.name === "section") {
-        // Nested section
         await prismaClient.content.upsert({
           where: { id: el.id },
           update: {
@@ -286,7 +296,6 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
           await upsertElements(el.id, el.elements);
         }
       } else {
-        // Normal element
         await prismaClient.element.upsert({
           where: { id: el.id },
           update: {
@@ -308,7 +317,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
     }
   }
 
-  // Upsert top-level contents
+  // ---------------- UPSERT SECTIONS ----------------
   for (let i = 0; i < contents.length; i++) {
     const section = contents[i];
     await prismaClient.content.upsert({
@@ -361,6 +370,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
 
   return finalWebpage;
 };
+
 
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {

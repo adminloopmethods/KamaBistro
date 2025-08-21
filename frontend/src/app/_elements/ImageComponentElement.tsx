@@ -39,7 +39,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     return (
         <div
             style={{
-                position: "relative",
+                position: element.style?.[currentWidth]?.position,
                 // display: "inline-block",
                 top: element.style?.[currentWidth]?.top,
                 left: element.style?.[currentWidth]?.left,
