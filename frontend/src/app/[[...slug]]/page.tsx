@@ -69,16 +69,16 @@ const Editor = () => {
   return (
     <div
       ref={containerRef}
-      style={{ position: "relative", display: "flex", height: "100vh" }}
+      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1 }}
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
 
         <div
           ref={containerRef}
           style={{
-            position: "relative",
+            // position: "relative",
             flex: 1,
             // width: pageWidth,
             margin: "0 auto",

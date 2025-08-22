@@ -430,7 +430,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
                     confirmationFunction={handleImageDelete}
                 />
             </div>
-            <Toaster />
+            {/* <Toaster /> */}
         </div>
     );
 };

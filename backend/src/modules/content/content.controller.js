@@ -5,6 +5,8 @@ import {
   getWebpageByIdService,
   updateWebpageByIdService,
   findWebpageIdByRouteService,
+  getAllContentsService,
+  getContentByIdService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -84,5 +86,33 @@ export const getWebpageByRoute = async (req, res) => {
   } catch (error) {
     logger.error(`Error fetching webpage by route: ${error.message}`, { error });
     res.status(500).json({ error: "Failed to fetch webpage by route." });
+  }
+};
+
+// ---------------- GET ALL CONTENTS ----------------
+export const getAllContentsController = async (req, res) => {
+console.log("on controller")
+
+  try {
+    const contents = await getAllContentsService();
+    res.json(contents);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch contents" });
+  }
+};
+
+// ---------------- GET CONTENT BY ID ----------------
+export const getContentByIdController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const content = await getContentByIdService(id);
+    if (!content) {
+      return res.status(404).json({ error: "Content not found" });
+    }
+    res.json(content);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch content" });
   }
 };

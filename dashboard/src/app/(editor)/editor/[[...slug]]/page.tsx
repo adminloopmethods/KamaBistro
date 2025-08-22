@@ -204,7 +204,7 @@ const Editor = () => {
             // console.log(JSON.stringify(bodyPayload))
             if (!bodyPayload.name) return toast.error("Webpage name is required");
             if (!bodyPayload.route) return toast.error("Webpage route is required");
-            if (!bodyPayload.locationId) return toast.error("Location ID is required");
+            // if (!bodyPayload.locationId) return toast.error("Location ID is required");
 
             try {
                 const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
@@ -287,14 +287,13 @@ const Editor = () => {
     }
 
     return (
-        <div style={{ position: "relative", display: "flex", height: "100vh" }}>
+        <div style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1, overflow:"hidden" }}>
             {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ position: "relative", flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
+            <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden",  }}>
 
                 <div
                     ref={containerRef}
                     style={{
-                        position: "relative",
                         flex: 1,
                         width: pageWidth,
                         margin: "0 auto",
@@ -302,10 +301,12 @@ const Editor = () => {
                         transition: ".1s linear all",
                         backgroundColor: "#e7e5e4", // stone-200
                         backgroundImage: `
-                                          linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
-                                          linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
-                                        `,
+                        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+                        `,
                         backgroundSize: "15px 15px", // size of grid squares
+                        // position: "relative",
+                        // zIndex: 1
                     }}
                     className="bg-stone-200"
                 >

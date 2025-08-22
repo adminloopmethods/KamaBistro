@@ -3,6 +3,7 @@
 import React, { useRef, ChangeEvent, useEffect } from "react";
 import { useMyContext } from "@/Context/EditorContext";
 import CustomSelect from "@/app/_common/CustomSelect";
+import ImageSelector from "./ImageSelector";
 
 type StyleObject = React.CSSProperties;
 
@@ -31,7 +32,7 @@ const ImageStyleToolbar: React.FC = () => {
 
   if (!imageContext || !("element" in imageContext)) return null;
 
-  const { element, style = {}, setElement, onClose, rmElement, imageRef } = imageContext;
+  const { element, style = {}, setElement, onClose, rmElement, imageRef, setSrcFn, openSelector } = imageContext;
 
   // Unified input row with Tailwind styling
   const renderInputRow = (
@@ -134,11 +135,43 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
+  const handleObjectFit = (value: string) => {
+    setElement((prev: any) => ({
+      ...prev,
+      style: {
+        ...prev.style,
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
+          objectFit: value
+        },
+      },
+    }));
+  }
+
+  const handleObjectSize = (value: string) => {
+    setElement((prev: any) => ({
+      ...prev,
+      style: {
+        ...prev.style,
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
+          objectFit: value
+        },
+      },
+    }));
+  }
+
   const removeElement = () => {
     setImageEdit(false)
     setImageContext(null)
     contextRef.setReference(null)
     rmElement()
+  }
+
+  const closeSelector = () => {
+    setImageContext((prev) => {
+      return ({ ...prev, openSelector: false })
+    })
   }
 
   const handleShadowChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -211,6 +244,29 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Height:", style?.[activeScreen]?.height, "text", handleInputStyles("height"))}
 
+      <CustomSelect
+        options={[
+          { value: "cover", label: "Cover" },
+          { value: "contain", label: "Contain" },
+          { value: "fill", label: "Fill" },
+        ]}
+        Default={style?.[activeScreen]?.position}
+        onChange={(value) => handleObjectFit(value)}
+        firstOption="Default"
+        firstValue="auto"
+      />
+
+      <CustomSelect
+        options={[
+          // { value: "relative", label: "Just Stack" },
+          { value: "absolute", label: "Drag" }
+        ]}
+        Default={style?.[activeScreen]?.position}
+        onChange={(value) => handleObjectSize(value)}
+        firstOption="No Drag"
+        firstValue="static"
+      />
+
       <div>
         <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Margin</label>
         <div className="grid grid-cols-2 gap-2">
@@ -236,7 +292,9 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow("Radius:", style?.[activeScreen]?.borderRadius, "text", handleInputStyles("borderRadius"))}
 
       <div className="flex flex-col">
-        <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label>
+        {/* <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label> */}
+        <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Box Shadow</h4>
+
         <select
           className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={
@@ -284,21 +342,30 @@ const ImageStyleToolbar: React.FC = () => {
         "0.1"
       )}
 
+      <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Position</h4>
+
       <CustomSelect
         options={[
-          { value: "relative", label: "Soft Drag" },
-          { value: "absolute", label: "Hard Drag" }
+          // { value: "relative", label: "Just Stack" },
+          { value: "absolute", label: "Drag" }
         ]}
         Default={style?.[activeScreen]?.position}
         onChange={(value) => handlePositionChange(value)}
-        firstOption="No"
+        firstOption="No Drag"
         firstValue="static"
       />
       {renderInputRow("Stack Index:", style?.[activeScreen]?.zIndex, "number", handleInputStyles("zIndex"))}
       {renderInputRow("top:", style?.[activeScreen]?.top, "text", handleInputStyles("top"))}
       {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
 
-
+      {/* Image Selector Modal */}
+      {openSelector && (
+        <ImageSelector
+          onSelectImage={setSrcFn}
+          onClose={() => closeSelector()}
+          type="IMAGE"
+        />
+      )}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
-import { createWebpage, getAllWebpages, getWebpageById, getWebpageByRoute, updateWebpageById } from "./content.controller.js";
+import { createWebpage, getAllContentsController, getAllWebpages, getContentByIdController, getWebpageById, getWebpageByRoute, updateWebpageById } from "./content.controller.js";
 // import ContentController from "./content.controller.js";
 // import validator from "../../validation/validator.js";
 // import {ContentSchema} from "../../validation/contentSchema.js";
@@ -9,12 +9,15 @@ import { createWebpage, getAllWebpages, getWebpageById, getWebpageByRoute, updat
 
 
 const router = Router();
+router.get("/", tryCatchWrap(getAllWebpages));
+router.get("/route/:route", getWebpageByRoute);
+router.get("/section", getAllContentsController);
+router.get("/section/:id", getContentByIdController);
 
-router.get("/", tryCatchWrap(getAllWebpages))
 router.get("/:id", tryCatchWrap(getWebpageById));
 router.post("/", tryCatchWrap(createWebpage));
-router.get("/route/:route", getWebpageByRoute);
 router.put("/:id", tryCatchWrap(updateWebpageById));
+
 
 // router.post(
 //   "/addResource",

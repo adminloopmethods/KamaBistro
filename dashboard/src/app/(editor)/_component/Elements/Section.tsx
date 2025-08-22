@@ -84,8 +84,8 @@ const Section: React.FC<SectionProps> = ({
     const newLeft = e.clientX - dragOffsetX;
     const newTop = e.clientY - dragOffsetY;
 
-    sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
-    sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
+    // sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
+    // sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
     divRef.current?.style.setProperty("top", `${newTop}px`, "important")
     divRef.current?.style.setProperty("left", `${newLeft}px`, "important")
 
@@ -217,47 +217,21 @@ const Section: React.FC<SectionProps> = ({
     }
   }, [])
 
-  // useEffect(() => {
-  //   if (!sectionRef.current) return;
-  //   if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed") return;
+  const positionIsAbsolute = sectionStyle?.position === "absolute"
 
-  //   const observer = new ResizeObserver((entries) => {
-  //     for (let entry of entries) {
-  //       const width = Math.round(entry.contentRect.width);
-
-  //       setSectionStyle((prev) => {
-  //         if (prev.width !== `${width}px`) {
-  //           return { ...prev, width: `${width}px` };
-  //         }
-  //         return prev;
-  //       });
-
-  //       observer.disconnect();
-  //     }
-  //   });
-
-  //   observer.observe(sectionRef.current);
-  //   observer.disconnect();
-
-
-  //   return () => observer.disconnect();
-  // }, [sectionStyle.position]);
-
-
-
-  const setPosition = sectionStyle?.position === "absolute" ? (parentIsSection ? "absolute" : "fixed") : sectionStyle.position;
   return (
     <div className=""
       ref={divRef}
       style={{
-        position: setPosition,
+        position: sectionStyle?.position,
         left: sectionStyle?.left,
         top: sectionStyle?.top,
+        overflow: ""
       }}
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, top: 0, left: 0 }}
+        style={{ ...sectionStyle, top: 0, left: 0, position: "relative", overflow: "section" }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}

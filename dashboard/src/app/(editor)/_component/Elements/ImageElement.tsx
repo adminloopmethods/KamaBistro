@@ -42,10 +42,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
   const { setImageContext, setImageEdit, contextRef } = useMyContext();
   const [thisElement, setThisElement] = useState<ElementType>(element);
-  const [divleft, setDivLeft] = useState<number | string>(0);
-  const [divTop, setDivTop] = useState<number | string>(0);
 
-  // New state for ImageSelector modal
+  // For ImageSelector modal
   const [showImageSelector, setShowImageSelector] = useState(false);
 
   // For drag
@@ -53,18 +51,9 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const elementStartPos = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const isDragging = useRef(false);
 
-  const handleDoubleClick = (e: React.MouseEvent<HTMLImageElement>) => {
-    e.stopPropagation();
-    if (editable) {
-      setShowImageSelector(true); // open selector instead of file picker
-    }
-  };
+
 
   const handleContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    // e.stopPropagation()
-    if (imageRef.current && imageRef.current.contains(e.target as Node)) {
-      return;
-    }
     if (clickTimer.current) return;
     clickTimer.current = setTimeout(() => {
       setToolbarIsOpen((prev) => !prev);
@@ -72,8 +61,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     }, 250);
   };
 
-  const handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
+  const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
+    e.stopPropagation();
     contextRef.setReference(imageRef.current);
     setImageContext({
       element: thisElement,
@@ -93,17 +82,21 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   };
 
   // ==== Drag Handlers ====
+  // ==== Drag Handlers ====
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      (thisElement.style?.[activeScreen]?.position !== "relative" &&
+      (
+        // thisElement.style?.[activeScreen]?.position !== "relative" &&
         thisElement.style?.[activeScreen]?.position !== "absolute")
     ) {
       return;
     }
     e.preventDefault();
+
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
+
     const currentLeft =
       parseFloat(thisElement.style?.[activeScreen]?.left as string) || 0;
     const currentTop =
@@ -116,8 +109,11 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging.current) return;
+
     const dx = e.clientX - dragStartPos.current.x;
     const dy = e.clientY - dragStartPos.current.y;
+
+    // Update React state directly (no direct DOM updates)
     setThisElement((prev) => ({
       ...prev,
       style: {
@@ -129,16 +125,32 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         },
       },
     }));
-    setDivTop(() => Number(divTop) + dy + "px");
-    setDivLeft(() => Number(divleft) + dx + "px");
   };
 
+
   const handleMouseUp = () => {
-    if (!isDragging.current) return;
+    if (!isDragging.current || !imageRef.current) return;
+
+    const finalLeft = imageRef.current.style.left;
+    const finalTop = imageRef.current.style.top;
+
+    setThisElement((prev) => ({
+      ...prev,
+      style: {
+        ...prev.style,
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
+          left: finalLeft,
+          top: finalTop,
+        },
+      },
+    }));
+
     isDragging.current = false;
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
   };
+
 
   // ==== Effects ====
   useEffect(() => {
@@ -163,76 +175,62 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       element: thisElement,
       style: thisElement.style,
     }));
-    updateElement(element.id, thisElement)
+    updateElement(element.id, thisElement);
   }, [thisElement.style]);
 
-  const cursorCondition = thisElement.style?.[activeScreen]?.position === "relative" || thisElement.style?.[activeScreen]?.position === "absolute"
+  const cursorCondition =
+    // thisElement.style?.[activeScreen]?.position === "relative" ||
+    thisElement.style?.[activeScreen]?.position === "absolute";
+
+  const onImageSelect = (fileInfo: any, altText: any) => {
+    const src =
+      typeof fileInfo === "string"
+        ? fileInfo
+        : fileInfo.join("");
+    setThisElement((prev) => ({
+      ...prev,
+      content: `/${src}`,
+      alt: altText?.en || prev.alt,
+    }));
+    setShowImageSelector(false);
+    setImageContext((prev) => ({ ...prev, openSelector: false }))
+  }
+
+  const handleDoubleClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    if (editable) {
+      setImageContext((prev) => {
+        return {
+          ...prev,
+          setSrcFn: onImageSelect,
+          openSelector: true
+        }
+      }); // open selector instead of file picker
+    }
+  };
 
   return (
     <>
-      <div
-        style={{
-          position: thisElement.style?.[activeScreen]?.position,
-          // display: "inline-block",
-          top: thisElement.style?.[activeScreen]?.top,
-          left: thisElement.style?.[activeScreen]?.left,
-          width: thisElement.style?.[activeScreen]?.width,
-          paddingTop: thisElement.style?.[activeScreen]?.paddingTop,
-          paddingBottom: thisElement.style?.[activeScreen]?.paddingBottom,
-          paddingLeft: thisElement.style?.[activeScreen]?.paddingLeft,
-          paddingRight: thisElement.style?.[activeScreen]?.paddingRight
-        }}
-        onClick={handleContainerClick}
-        onDoubleClick={handleDoubleClick}
-        className=""
-      >
-        <img
-          src={(cloudinaryApiPoint + previewSrc) || undefined}
-          alt={element.alt || "Selected Image"}
-          ref={imageRef}
-          onClick={handleImageClick}
-          onMouseDown={handleMouseDown} // DRAG INITIATOR
-          style={{
-            cursor:
-              editable &&
-                cursorCondition
-                ? "move"
-                : editable
-                  ? "pointer"
-                  : "default",
-            ...thisElement.style?.[activeScreen],
-            top: 0,
-            left: 0,
-            position: "static",
-            backgroundColor: "transparent",
-            paddingTop: 0,
-            paddingBottom: 0,
-            paddingLeft: 0,
-            paddingRight: 0
-          }}
-        />
-      </div>
 
-      {/* Image Selector Modal */}
-      {showImageSelector && (
-        <ImageSelector
-          onSelectImage={(fileInfo: any, altText: any) => {
-            // fileInfo can be string[] or string — normalize to string
-            const src =
-              typeof fileInfo === "string"
-                ? fileInfo
-                : fileInfo.join("");
-            setThisElement((prev) => ({
-              ...prev,
-              content: `/${src}`,
-              alt: altText?.en || prev.alt,
-            }));
-            setShowImageSelector(false);
-          }}
-          onClose={() => setShowImageSelector(false)}
-          type="IMAGE"
-        />
-      )}
+      <img
+        ref={imageRef}
+        onMouseDown={handleMouseDown} // DRAG INITIATOR
+        src={(cloudinaryApiPoint + previewSrc) || undefined}
+        alt={element.alt || "Selected Image"}
+        onClick={handleImageClick}
+        onDoubleClick={handleDoubleClick}
+        style={{
+          ...thisElement.style?.[activeScreen],
+          cursor:
+            editable && cursorCondition
+              ? "move"
+              : editable
+                ? "pointer"
+                : "default",
+          backgroundColor: "transparent",
+        }}
+
+      />
     </>
   );
 };

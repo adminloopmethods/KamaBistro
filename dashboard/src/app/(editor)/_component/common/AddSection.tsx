@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomSelect from "@/app/_common/CustomSelect";
+import { getSectionNamesReq } from "@/functionality/fetch";
 
 interface Option {
   label: string;
@@ -13,7 +14,7 @@ interface AddSectionProps {
 
 const baseClasses = `
   dark:bg-stone-100 select-none
-  fixed bottom-[2px] right-[258px] rounded-[4px] 
+  fixed z-[500] bottom-[2px] right-[10px] rounded-[4px] 
   p-[0px] w-[20%] h-max min-w-[120px] 
   rounded-3xl h-full flex-[1]
 `;
@@ -26,18 +27,32 @@ const styleClasses = `
 `;
 
 const sectionsOptions: Option[] = [
-  { label: "Single Section Modal", value: "section" },
+  { label: "Section", value: "section" },
   // { label: "Two Section Modal", value: "section-d" },
   // { label: "Three Section Modal", value: "section-t" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
   const [selectedValue, setSelectedValue] = useState<string>("");
+  const [oldSections, setOldSections] = useState<{ id: string, givenName: string }[]>([{ id: "", givenName: "" }])
 
   const handleChange = (value: string) => {
     setSelectedValue("");
     if (value) controller(value);
   };
+
+  useEffect(() => {
+    async function getAllSectionNames() {
+      const response = await getSectionNamesReq()
+
+      if (response.ok) {
+        console.log(response)
+        // setOldSections()
+      }
+    }
+
+    getAllSectionNames()
+  }, [])
 
   return (
     <CustomSelect

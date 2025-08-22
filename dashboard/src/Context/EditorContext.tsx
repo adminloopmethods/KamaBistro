@@ -87,7 +87,9 @@ interface ImageStyleToolbarProps {
   setElement: any;
   imageRef: RefObject<HTMLImageElement | null>;
   onClose: () => void;
-  rmElement?: () => void
+  rmElement?: () => void;
+  setSrcFn: (fileInfo: any, altText?: any) => void;
+  openSelector: Boolean
 }
 
 type MyContextType = {
