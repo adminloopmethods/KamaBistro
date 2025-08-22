@@ -194,7 +194,6 @@ export const getWebpageByIdService = async (id) => {
   };
 };
 
-
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
   // Step 1: Update webpage info
@@ -372,7 +371,6 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   return finalWebpage;
 };
 
-
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {
   return await prismaClient.version.findMany({
@@ -392,7 +390,7 @@ export const findWebpageIdByRouteService = async (route) => {
   return page ? page.id : null;
 };
 
-// get services
+// get sections
 // ---------------- GET ALL CONTENTS ----------------
 export const getAllContentsService = async () => {
   const contents = await prismaClient.content.findMany({
@@ -412,8 +410,6 @@ export const getAllContentsService = async () => {
   }));
 };
 
-
-// ---------------- GET CONTENT BY ID ----------------
 // ---------------- GET CONTENT BY ID (regenerate IDs) ----------------
 export const getContentByIdService = async (id) => {
   const section = await prismaClient.content.findUnique({

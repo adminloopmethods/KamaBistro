@@ -20,6 +20,7 @@ export interface BaseElement {
   content: string;
   style: StyleObject;
   [key: string]: any;
+  hover: string;
 }
 
 // Specific element interfaces extending BaseElement
@@ -66,6 +67,7 @@ class Element implements BaseElement {
   name: string;
   content: string;
   style: StyleObject = defaultStyles;
+  hover: string = "";
 
   constructor(name: string, content: string) {
     this.name = name;
