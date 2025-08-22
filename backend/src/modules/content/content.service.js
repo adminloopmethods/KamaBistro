@@ -196,7 +196,6 @@ export const getWebpageByIdService = async (id) => {
 
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
-// ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
@@ -224,10 +223,12 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   );
 
   if (sectionsToDelete.length) {
-    await prismaClient.content.deleteMany({
-      where: { id: { in: sectionsToDelete.map((c) => c.id) } },
-    });
+    for (const section of sectionsToDelete) {
+      await prismaClient.content.deleteMany({ where: { parentId: section.id } }); // delete children
+      await prismaClient.content.delete({ where: { id: section.id } }); // delete parent
+    }
   }
+
 
   // ---------------- DELETE MISSING ELEMENTS ----------------
   const existingElementMap = new Map();
@@ -393,57 +394,6 @@ export const findWebpageIdByRouteService = async (route) => {
 
 // get services
 // ---------------- GET ALL CONTENTS ----------------
-// export const getAllContentsService = async () => {
-//   const contents = await prismaClient.content.findMany({
-//     where: { parentId: null }, // only top-level sections
-//     orderBy: { order: "asc" },
-//     include: {
-//       style: true,
-//       elements: {
-//         orderBy: { order: "asc" },
-//         include: { style: true },
-//       },
-//       children: {
-//         orderBy: { order: "asc" },
-//         include: {
-//           style: true,
-//           elements: { orderBy: { order: "asc" }, include: { style: true } },
-//         },
-//       },
-//     },
-//   });
-
-//   const transformSection = (section) => {
-//     const merged = [
-//       ...(section.children?.map((child) => ({
-//         id: crypto.randomUUID(), // new ID
-//         name: child.name,
-//         givenName: child.givenName,
-//         style: child.style,
-//         elements: transformSection(child).elements,
-//       })) || []),
-//       ...(section.elements?.map((el) => ({
-//         id: crypto.randomUUID(), // new ID
-//         name: el.name,
-//         style: el.style,
-//         content: el.content,
-//       })) || []),
-//     ];
-
-//     return {
-//       id: crypto.randomUUID(), // new ID
-//       name: section.name,
-//       givenName: section.givenName,
-//       style: section.style,
-//       elements: merged,
-//     };
-//   };
-
-//   return contents.map(transformSection);
-// };
-
-
-
 export const getAllContentsService = async () => {
   const contents = await prismaClient.content.findMany({
     select: {
@@ -464,6 +414,7 @@ export const getAllContentsService = async () => {
 
 
 // ---------------- GET CONTENT BY ID ----------------
+// ---------------- GET CONTENT BY ID (regenerate IDs) ----------------
 export const getContentByIdService = async (id) => {
   const section = await prismaClient.content.findUnique({
     where: { id },
@@ -488,26 +439,38 @@ export const getContentByIdService = async (id) => {
   const transformSection = (section) => {
     const merged = [
       ...(section.children?.map((child) => ({
-        id: crypto.randomUUID(),
+        id: crypto.randomUUID(), // new id for child
         name: child.name,
         givenName: child.givenName,
-        style: child.style,
+        style: child.style
+          ? { ...child.style, id: crypto.randomUUID() } // new style id
+          : null,
+        order: child.order,
+        type: "section",
         elements: transformSection(child).elements,
       })) || []),
       ...(section.elements?.map((el) => ({
-        id: crypto.randomUUID(),
+        id: crypto.randomUUID(), // new id for element
         name: el.name,
-        style: el.style,
+        style: el.style
+          ? { ...el.style, id: crypto.randomUUID() } // new style id
+          : null,
         content: el.content,
+        order: el.order,
+        type: "element",
       })) || []),
     ];
 
+    merged.sort((a, b) => a.order - b.order);
+
     return {
-      id: crypto.randomUUID(),
+      id: crypto.randomUUID(), // new id for parent section
       name: section.name,
       givenName: section.givenName,
-      style: section.style,
-      elements: merged,
+      style: section.style
+        ? { ...section.style, id: crypto.randomUUID() } // new style id
+        : null,
+      elements: merged.map(({ order, type, ...rest }) => rest), // drop order/type
     };
   };
 

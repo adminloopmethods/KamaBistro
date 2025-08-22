@@ -206,7 +206,6 @@ const Editor = () => {
             // console.log(JSON.stringify(bodyPayload))
             if (!bodyPayload.name) return toast.error("Webpage name is required");
             if (!bodyPayload.route) return toast.error("Webpage route is required");
-            // if (!bodyPayload.locationId) return toast.error("Location ID is required");
 
             try {
                 const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
@@ -236,17 +235,17 @@ const Editor = () => {
                     const response: any = await getWebpageReq(id) // bringing the content from backend 
 
                     if (response.ok) { // if successfull
-                        // setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
-                        setWebpage({
-                            id: crypto.randomUUID(),
-                            route: test.route,
-                            locationId: test.locationId,
-                            name: test.name,
-                            contents: test.contents,
-                            createdAt: "",
-                            updatedAt: "",
-                            editedWidth: currentWidth ? currentWidth : "1280px"
-                        })
+                        setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
+                        // setWebpage({
+                        //     id: crypto.randomUUID(),
+                        //     route: test.route,
+                        //     locationId: test.locationId,
+                        //     name: test.name,
+                        //     contents: test.contents,
+                        //     createdAt: "",
+                        //     updatedAt: "",
+                        //     editedWidth: currentWidth ? currentWidth : "1280px"
+                        // })
                     } else {
                         throw new Error("error while fetch the page")
                     }

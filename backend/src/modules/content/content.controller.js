@@ -91,11 +91,11 @@ export const getWebpageByRoute = async (req, res) => {
 
 // ---------------- GET ALL CONTENTS ----------------
 export const getAllContentsController = async (req, res) => {
-console.log("on controller")
+  console.log("on controller")
 
   try {
     const contents = await getAllContentsService();
-    res.json(contents);
+    res.json({ contents });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch contents" });
@@ -110,7 +110,7 @@ export const getContentByIdController = async (req, res) => {
     if (!content) {
       return res.status(404).json({ error: "Content not found" });
     }
-    res.json(content);
+    res.json({ section: content });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch content" });

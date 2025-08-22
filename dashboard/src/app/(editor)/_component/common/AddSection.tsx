@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import CustomSelect from "@/app/_common/CustomSelect";
-import { getSectionNamesReq } from "@/functionality/fetch";
+import { getSectionNamesReq, getSectionReq } from "@/functionality/fetch";
+import { useMyContext, webpageType } from "@/Context/EditorContext";
+import { toast } from "sonner";
 
 interface Option {
   label: string;
   value: string;
   disabled?: boolean;
+  onClick?: () => Promise<void>
 }
 
 interface AddSectionProps {
@@ -34,7 +37,40 @@ const sectionsOptions: Option[] = [
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
   const [selectedValue, setSelectedValue] = useState<string>("");
-  const [oldSections, setOldSections] = useState<{ id: string, givenName: string }[]>([{ id: "", givenName: "" }])
+  const [oldSections, setOldSections] = useState<Option[]>([{ value: "", label: "" }])
+  const {
+    websiteContent, // website object that has {name, id, route, createdAt, updatedAt, content: []} // where content is each section
+  } = useMyContext();
+
+  const addSection = (section: Record<string, any>) => {
+    websiteContent.setWebpage((prev: webpageType | null) => {
+      if (!prev) return null
+      return ({
+        ...prev,
+        contents: [
+          ...prev.contents,
+          section
+        ]
+      })
+    });
+  };
+
+  const onClick = (id: string) => (async () => {
+    const response = await getSectionReq(id);
+
+    if (response.ok) {
+      toast.success("Section fetched successfully!");
+
+      addSection(response.section)
+    } else {
+      toast.error("Failed to fetched.")
+    }
+  })
+
+  const finalOptionsForSection: Option[] = oldSections.map((e: { value: string, label: string }) => {
+
+    return { value: e.value, label: e.label, onClick: onClick(e.value) }
+  })
 
   const handleChange = (value: string) => {
     setSelectedValue("");
@@ -46,8 +82,17 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
       const response = await getSectionNamesReq()
 
       if (response.ok) {
-        console.log(response)
-        // setOldSections()
+        setOldSections(() => {
+          return response.contents.map((e: any, i: number) => {
+            const lastThreeChar = String(e.givenName).slice(-3).split("")
+            const isDuplicate = lastThreeChar[0] === "(" && typeof (lastThreeChar[1]) === "number" && lastThreeChar[2] === ")"
+            const postsuffix = isDuplicate ? `(${lastThreeChar[1] + 1})` : "(1)"
+            const givenName: string = e.givenName ? `${e.givenName} duplicate${postsuffix}` : ("random" + (i + 1))
+            return {
+              value: e.id, label: givenName
+            }
+          })
+        })
       }
     }
 
@@ -56,7 +101,7 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
 
   return (
     <CustomSelect
-      options={sectionsOptions}
+      options={[...sectionsOptions, ...finalOptionsForSection]}
       baseClasses={baseClasses}
       styleClasses={styleClasses}
       onChange={handleChange}
