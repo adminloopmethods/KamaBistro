@@ -19,7 +19,7 @@ type FormData = {
 };
 
 const Login: React.FC = () => {
-  const router = useRouter(); // replaces useNavigate
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [formData, setFormData] = useState<FormData>({
@@ -60,7 +60,7 @@ const Login: React.FC = () => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("user", JSON.stringify(response.user));
         setTimeout(() => {
-          router.push("/"); // Next.js navigation
+          router.push("/");
         }, 1000);
       } else {
         console.error("Unexpected login response:", response);
@@ -82,14 +82,14 @@ const Login: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      router.push("/"); // Next.js navigation
+      router.push("/");
     }
   }, [router]);
 
   return (
     <div className="min-h-screen h-screen bg-base-200 flex items-center justify-center bg-[#AE9060] ">
       <BackroundImage />
-      {/* Form Section - Center aligned */}
+      {/* Form Section */}
       <div className=" w-[40%] flex items-center justify-center p-4 lg:p-8">
         {showForgotPassword ? (
           <ForgotPassword
