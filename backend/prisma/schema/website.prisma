@@ -10,6 +10,7 @@ model Webpage {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   editedWidth String?
+  Status      Boolean        @default(true)
 
   editorId String?
   editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
@@ -59,6 +60,8 @@ model Element {
   contentRef Content  @relation(fields: [contentId], references: [id])
   style      Style    @relation("ElementStyle", fields: [styleId], references: [id])
   styleId    String   @unique
+  hover      String?
+  url        String?
 
   // timestamps
   createdAt DateTime @default(now())

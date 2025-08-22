@@ -12,7 +12,7 @@ import RichTextToolBar from "../../_component/common/RichTextToolbar";
 import StyleToolbar from "../../_component/common/StyleToolbar";
 import DimensionToolbar from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
-// import { testObj } from "@/assets/test"
+import { test } from "@/assets/test"
 
 import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
@@ -182,7 +182,7 @@ const Editor = () => {
         if (lastSection) setSaveData(false)
     }
     /////////////////////////////////////////Effects//////////////////////////////////////////
-    useEffect(() => {
+    useEffect(() => { //// get Locations
         const fetchLocations = async () => {
             try {
                 const response = await getLocationsReq();
@@ -198,7 +198,9 @@ const Editor = () => {
         };
         fetchLocations();
     }, []);
-    useEffect(() => {
+
+
+    useEffect(() => { ///// update and save logic
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
             // console.log(JSON.stringify(bodyPayload))
@@ -226,7 +228,7 @@ const Editor = () => {
         }
     }, [saveData]);
 
-    useEffect(() => {
+    useEffect(() => { ///// get the Website page
         if (page) {
             const id: string = page;
             async function getContentfromServer(): Promise<void> {
@@ -234,17 +236,17 @@ const Editor = () => {
                     const response: any = await getWebpageReq(id) // bringing the content from backend 
 
                     if (response.ok) { // if successfull
-                        setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
-                        // setWebpage({
-                        //     id: crypto.randomUUID(),
-                        //     route: testObj.route,
-                        //     locationId: testObj.locationId,
-                        //     name: testObj.name,
-                        //     contents: testObj.contents,
-                        //     createdAt: "",
-                        //     updatedAt: "",
-                        //     editedWidth: currentWidth ? currentWidth : "1280px"
-                        // })
+                        // setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
+                        setWebpage({
+                            id: crypto.randomUUID(),
+                            route: test.route,
+                            locationId: test.locationId,
+                            name: test.name,
+                            contents: test.contents,
+                            createdAt: "",
+                            updatedAt: "",
+                            editedWidth: currentWidth ? currentWidth : "1280px"
+                        })
                     } else {
                         throw new Error("error while fetch the page")
                     }
@@ -287,9 +289,9 @@ const Editor = () => {
     }
 
     return (
-        <div style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1, overflow:"hidden" }}>
+        <div style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
             {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden",  }}>
+            <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", }}>
 
                 <div
                     ref={containerRef}
