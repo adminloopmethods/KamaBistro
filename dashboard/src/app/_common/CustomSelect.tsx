@@ -11,6 +11,8 @@ import { ChevronDown } from "lucide-react";
 type Option = {
     label: string;
     value: string;
+    disabele?: Boolean
+    onClick?: () => Promise<void>
 };
 
 type CustomSelectProps = {
@@ -48,10 +50,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         setSelected(Default || firstValue);
     }, [Default, firstValue]);
 
-    const handleSelect = (value: string) => {
-        setSelected(value);
+    const handleSelect = (value: string, onClick?: () => void, both?: Boolean) => {
+        if (both) {
+            setSelected(value);
+            onClick?.()
+            if (onChange) onChange(value);
+        } else if (onClick) {
+            onClick?.()
+        } else {
+            setSelected(value);
+            if (onChange) onChange(value);
+        }
+
+
         setOpen(false);
-        if (onChange) onChange(value);
     };
 
     useEffect(() => {
@@ -153,7 +165,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                         {options.map((opt) => (
                             <li
                                 key={opt.value}
-                                onClick={() => handleSelect(opt.value)}
+                                onClick={() => handleSelect(opt.value, opt.onClick)}
                                 className={`px-3 py-2 hover:bg-gray-100 cursor-pointer dark:text-[black] ${selected === opt.value ? "bg-gray-100 font-medium" : ""
                                     }`}
                             >

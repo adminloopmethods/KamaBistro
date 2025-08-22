@@ -12,7 +12,7 @@ interface Option {
     disabled?: boolean;
 }
 
-const baseClasses = `dark:bg-stone-100 z-[3]
+const baseClasses = `dark:bg-stone-100 z-[700]
 rounded-[4px] h-[fit] flex-[1] absolute right-0 
 max-w-[340px] min-w-[200px] top-[1px] select-none`;
 

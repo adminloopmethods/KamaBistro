@@ -10,6 +10,7 @@ model Webpage {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
   editedWidth String?
+  Status      Boolean        @default(true)
 
   editorId String?
   editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
@@ -25,23 +26,24 @@ model Webpage {
 }
 
 model Content {
-  id        String   @id
+  id        String   @id @default(uuid())
   name      String
   givenName String?
   order     Int      @default(0)
+
   // For top-level sections
   webpageId String?
   webpage   Webpage? @relation(fields: [webpageId], references: [id])
 
-  // For nested sections
+  // Self-relation
   parentId String?
   parent   Content?  @relation("SectionChildren", fields: [parentId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   children Content[] @relation("SectionChildren")
+
   elements Element[]
-  style    Style     @relation("ContentStyle", fields: [styleId], references: [id])
+  style    Style     @relation("ContentStyle", fields: [styleId], references: [id], onDelete: Cascade)
   styleId  String    @unique
 
-  // timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -49,18 +51,23 @@ model Content {
   @@index([parentId])
 }
 
+
 model Element {
-  id         String   @id
+  id         String   @id @default(uuid())
   name       String
   content    String
   items      String[] @default([]) // for list
   order      Int      @default(0)
+
   contentId  String
-  contentRef Content  @relation(fields: [contentId], references: [id])
-  style      Style    @relation("ElementStyle", fields: [styleId], references: [id])
+  contentRef Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  style      Style    @relation("ElementStyle", fields: [styleId], references: [id], onDelete: Cascade)
   styleId    String   @unique
 
-  // timestamps
+  hover      String?
+  url        String?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -83,7 +90,6 @@ model version {
   webpageId String
   webpage   Webpage @relation(fields: [webpageId], references: [id])
 
-  // timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -101,7 +107,6 @@ model proposedVersion {
   verifierId String
   verifier   User   @relation("ProposedVersionVerifier", fields: [verifierId], references: [id])
 
-  // timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -118,13 +123,13 @@ model draft {
   userId    String
   user      User    @relation(fields: [userId], references: [id])
 
-  // timestamps
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([webpageId])
   @@index([userId])
 }
+
 
 // A user can be an editor on one page and a verifier on another.
 // A webpage has exactly one editor and one verifier at a time.

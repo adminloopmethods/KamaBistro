@@ -341,10 +341,10 @@ const CMSDashboard = () => {
                 />
               </svg>
             </div>
-            <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center">
+            {/* <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center">
               <BarChart2 className="w-5 h-5 mr-2" />
               Analytics
-            </button>
+            </button> */}
             <Link
               href={"/editor"}
               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center"
