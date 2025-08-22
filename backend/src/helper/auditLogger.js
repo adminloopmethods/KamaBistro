@@ -373,7 +373,8 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
             browserInfo,
             outcome,
             timestamp: new Date(),
-            user: entityId ? {connect: {id: entityId}} : undefined,
+            // user: entityId ? {connect: {id: entityId}} : undefined,
+            user: entityId ? {create: {userId: entityId}} : undefined,
           },
         });
       } catch (err) {

@@ -56,18 +56,23 @@ router.post(
   "/forgotPassword",
   generateOtpRateLimiter,
   validator(generateOtpSchema),
+  auditLogger,
   tryCatchWrap(AuthController.ForgotPassword)
 );
 
 router.post(
   "/forgotPassword/verify",
   validator(verifyOtpSchema),
+  auditLogger,
+
   tryCatchWrap(AuthController.ForgotPasswordVerify)
 );
 
 router.post(
   "/forgotPassword/updatePassword",
   validator(updatePasswordSchema),
+  auditLogger,
+
   tryCatchWrap(AuthController.UpdatePassword)
 );
 
