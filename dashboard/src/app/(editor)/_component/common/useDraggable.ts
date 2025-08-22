@@ -13,6 +13,14 @@ export const useDraggable = () => {
         let offsetY = 0;
 
         const onMouseDown = (e: MouseEvent) => {
+            // ⛔ Prevent dragging if clicking inside form controls
+            if (
+                e.target instanceof HTMLElement &&
+                ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(e.target.tagName)
+            ) {
+                return;
+            }
+
             isDragging = true;
             offsetX = e.clientX - el.offsetLeft;
             offsetY = e.clientY - el.offsetTop;

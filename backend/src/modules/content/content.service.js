@@ -1,6 +1,6 @@
 import prismaClient from "../../config/dbConfig.js";
 import crypto from "node:crypto";
- 
+
 // ---------------- CREATE WEBPAGE ----------------
 export const createWebpageService = async ({ name, contents, route, editedWidth }) => {
   const id = crypto.randomUUID();
@@ -389,4 +389,127 @@ export const findWebpageIdByRouteService = async (route) => {
   });
 
   return page ? page.id : null;
+};
+
+// get services
+// ---------------- GET ALL CONTENTS ----------------
+// export const getAllContentsService = async () => {
+//   const contents = await prismaClient.content.findMany({
+//     where: { parentId: null }, // only top-level sections
+//     orderBy: { order: "asc" },
+//     include: {
+//       style: true,
+//       elements: {
+//         orderBy: { order: "asc" },
+//         include: { style: true },
+//       },
+//       children: {
+//         orderBy: { order: "asc" },
+//         include: {
+//           style: true,
+//           elements: { orderBy: { order: "asc" }, include: { style: true } },
+//         },
+//       },
+//     },
+//   });
+
+//   const transformSection = (section) => {
+//     const merged = [
+//       ...(section.children?.map((child) => ({
+//         id: crypto.randomUUID(), // new ID
+//         name: child.name,
+//         givenName: child.givenName,
+//         style: child.style,
+//         elements: transformSection(child).elements,
+//       })) || []),
+//       ...(section.elements?.map((el) => ({
+//         id: crypto.randomUUID(), // new ID
+//         name: el.name,
+//         style: el.style,
+//         content: el.content,
+//       })) || []),
+//     ];
+
+//     return {
+//       id: crypto.randomUUID(), // new ID
+//       name: section.name,
+//       givenName: section.givenName,
+//       style: section.style,
+//       elements: merged,
+//     };
+//   };
+
+//   return contents.map(transformSection);
+// };
+
+
+
+export const getAllContentsService = async () => {
+  const contents = await prismaClient.content.findMany({
+    select: {
+      id: true,
+      givenName: true,
+    },
+    // orderBy: {
+    //   createdAt: "asc", // optional: keep ordering consistent
+    // },
+  });
+
+  // Normalize to always return string (avoid nulls if you prefer empty string)
+  return contents.map(c => ({
+    id: c.id,
+    givenName: c.givenName ?? "",
+  }));
+};
+
+
+// ---------------- GET CONTENT BY ID ----------------
+export const getContentByIdService = async (id) => {
+  const section = await prismaClient.content.findUnique({
+    where: { id },
+    include: {
+      style: true,
+      elements: {
+        orderBy: { order: "asc" },
+        include: { style: true },
+      },
+      children: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: { orderBy: { order: "asc" }, include: { style: true } },
+        },
+      },
+    },
+  });
+
+  if (!section) return null;
+
+  const transformSection = (section) => {
+    const merged = [
+      ...(section.children?.map((child) => ({
+        id: crypto.randomUUID(),
+        name: child.name,
+        givenName: child.givenName,
+        style: child.style,
+        elements: transformSection(child).elements,
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: crypto.randomUUID(),
+        name: el.name,
+        style: el.style,
+        content: el.content,
+      })) || []),
+    ];
+
+    return {
+      id: crypto.randomUUID(),
+      name: section.name,
+      givenName: section.givenName,
+      style: section.style,
+      elements: merged,
+    };
+  };
+
+  return transformSection(section);
 };

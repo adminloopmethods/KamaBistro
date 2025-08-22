@@ -44,7 +44,7 @@ const Section: React.FC<SectionProps> = ({ //Props
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle.position;
+  // const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle.position;
 
   // const widthIsRatio = String(style?.width).slice(-1) === "%"
 
@@ -52,11 +52,11 @@ const Section: React.FC<SectionProps> = ({ //Props
   return (
     <div className=""
       style={{
-        position: setPosition,
+        position: thisStyle?.position,
         left: style.left,
-        // (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         top: style.top,
-        zIndex: setPosition === "relative" ? 1 : ""
+        // zIndex: 1,
+        // (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         // (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         // overflow: !sectionIsParent ? "" : ""
       }}
@@ -65,9 +65,10 @@ const Section: React.FC<SectionProps> = ({ //Props
         ref={sectionRef}
         style={{
           ...style,
-          // position: "",
+          position: "relative",
           top: 0,
           left: 0,
+          overflow: "hidden"
           // width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
         }}
       >

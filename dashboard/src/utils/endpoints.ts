@@ -31,6 +31,7 @@ const endpointMap = {
 
   // content
   createContent: `${content}/`,
+  getSection: `${content}/section`,
 
   // Media
   uploadMedia: `${media}/upload`,

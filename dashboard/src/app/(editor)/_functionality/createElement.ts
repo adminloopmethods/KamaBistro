@@ -169,7 +169,7 @@ const gED = generateElementData;
 export const CreateElement: Record<string, () => BaseElement | ImageElementType> = {
   heading: () => gED("h1", "New Heading"),
   paragraph: () => gED("p", "New Paragraph"),
-  image: () => gED("img", placeHolderImage.src, "Placeholder Image"),
+  image: () => gED("img", "", "Placeholder Image"),
   ul: () => gED("ul", "", undefined, ["List item 1", "List item 2"]),
   ol: () => gED("ol", "", undefined, ["First", "Second"]),
   button: () => gED("button", "Click me", "doSomething"),
