@@ -26,14 +26,16 @@ type StyleToolbarProps = {
 const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
     const { contextForSection } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
+
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
     const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
     const [gradientDirection, setGradientDirection] = useState<string>('to right');
     const [gradient, setGradient] = useState<string>('');
     const [bgImage, setBgImage] = useState<string>('');
     const [boxShadow, setBoxShadow] = useState<string>(currentSection?.boxShadow || 'none');
-    const toolbarRef = useRef<HTMLDivElement>(null);
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
+    
+    const toolbarRef = useRef<HTMLDivElement>(null);
 
     // ===== Debounced Handlers =====
     const debouncedUpdateStyles = useCallback(
@@ -354,14 +356,14 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
 export default StyleToolbar;
 
 // === Helper Functions ===
-function rgbaToHex(rgba: string): string {
+export function rgbaToHex(rgba: string): string {
     const match = rgba.match(/\d+(\.\d+)?/g);
     if (!match) return 'ffffff';
     const [r, g, b] = match.map((v, i) => i < 3 ? Number(v).toString(16).padStart(2, '0') : null);
     return `${r}${g}${b}`;
 }
 
-function hexToRgba(hex: string, alpha = 1): string {
+export function hexToRgba(hex: string, alpha = 1): string {
     const parsed = hex.replace('#', '');
     const bigint = parseInt(parsed, 16);
     const r = (bigint >> 16) & 255;

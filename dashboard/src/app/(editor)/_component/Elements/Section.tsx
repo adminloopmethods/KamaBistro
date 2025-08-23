@@ -61,6 +61,7 @@ const Section: React.FC<SectionProps> = ({
   const sectionRef = useRef<HTMLElement | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null)
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
+  const [hover, setHover] = useState<string>(section.hover || "")
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -180,16 +181,18 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, elements: elements }, lastSection)
+      finalUpdate(section.id, { ...section, elements: elements, hover }, lastSection)
     }
 
-  }, [updateData, elements]);
+  }, [updateData, elements, hover]);
+
+
 
   useEffect(() => {
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, elements: elements }, lastSection)
+      updateParentElement(section.id, { ...section, elements: elements, hover: hover }, lastSection)
     }
-  }, [elements])
+  }, [elements, hover])
 
   useEffect(() => {
     if (finalUpdate) {

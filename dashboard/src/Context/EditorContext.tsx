@@ -12,6 +12,7 @@ import React, {
   ElementType,
   RefObject
 } from 'react';
+import { stringFunctionType } from './ContextTypes';
 
 type RefType = HTMLElement | null;
 
@@ -92,11 +93,11 @@ interface ImageStyleToolbarProps {
   openSelector: Boolean
 }
 
-interface hoverEditType {
+interface hoverEditType { /////// HOVER CONTEXT TYPE
   hoverContext: string;
   setHoverContext: React.Dispatch<React.SetStateAction<string>>;
-  hoverContextSetter: (() => void) | null; // <-- this should be the VALUE type
-  setHoverContextSetter: React.Dispatch<React.SetStateAction<(() => void) | null>>; // <-- updater matches useState
+  hoverContextSetter: stringFunctionType; // <-- this should be the VALUE type
+  setHoverContextSetter: React.Dispatch<React.SetStateAction<stringFunctionType>>; // <-- updater matches useState
 }
 
 type MyContextType = {
@@ -119,7 +120,8 @@ type MyContextType = {
   setImageEdit: React.Dispatch<React.SetStateAction<Boolean>>;
   contextForSection: SectionContextType;
   currentSection: React.CSSProperties,
-  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>> | null;
+  currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
+  hover: hoverEditType
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -139,9 +141,9 @@ function Provider({ children }: { children: ReactNode }) {
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
   const [widthValue, setWidthValue] = useState<string>("")
-  const [sectionGivenNameFn, setSectionGivenName] = useState<(id: string) => void>((id: string) => { });
+  const [sectionGivenNameFn, setSectionGivenName] = useState<stringFunctionType>((id: string) => { });
   const [hoverContext, setHoverContext] = useState<string>("");
-  const [hoverContextSetter, setHoverContextSetter] = useState<(() => void) | null>(null)
+  const [hoverContextSetter, setHoverContextSetter] = useState<stringFunctionType>((value: string) => { });
 
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
@@ -188,7 +190,7 @@ function Provider({ children }: { children: ReactNode }) {
     setRmElementFunc
   };
 
-  const hover: hoverEditType = {
+  const hover: hoverEditType = {  //////// HOVER CONTEXT
     hoverContext, setHoverContext,
     hoverContextSetter, setHoverContextSetter
   }
@@ -207,26 +209,32 @@ function Provider({ children }: { children: ReactNode }) {
   return (
     <MyFunctionContext.Provider
       value={{
-        contextRef,
+        websiteContent, // the base of the elements
+        SubmissionObject,
+        finalSubmit,
+
+        width, // context for width
+        activeScreen,
+        widthValue,
+
+        contextRef, // context for elements and their refs
         activeRef,
         contextElement,
         element,
         elementSetter,
         rmElementFunc,
-        width,
-        activeScreen,
-        widthValue,
+
         toolbarRef,
-        websiteContent,
-        SubmissionObject,
-        finalSubmit,
-        imageContext,
+        imageContext, // context for the image
         setImageContext,
         imageEdit,
         setImageEdit,
-        contextForSection,
+
+        contextForSection, // context for the section style only
         currentSection,
         currentSectionSetter,
+
+        hover,
       }}
     >
       {children}
