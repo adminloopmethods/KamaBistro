@@ -1,6 +1,6 @@
 "use client"
 
-import { BaseElement, StyleObject } from '@/app/(editor)/_functionality/createElement';
+import { StyleObject } from '@/app/(editor)/_functionality/createElement';
 // import { ResponsiveStyles, SectionElementType } from '@/app/(editor)/_functionality/createSection';
 import React, {
   createContext,
@@ -92,6 +92,13 @@ interface ImageStyleToolbarProps {
   openSelector: Boolean
 }
 
+interface hoverEditType {
+  hoverContext: string;
+  setHoverContext: React.Dispatch<React.SetStateAction<string>>;
+  hoverContextSetter: (() => void) | null; // <-- this should be the VALUE type
+  setHoverContextSetter: React.Dispatch<React.SetStateAction<(() => void) | null>>; // <-- updater matches useState
+}
+
 type MyContextType = {
   contextRef: ContextRefType;
   activeRef: RefType | any;
@@ -133,6 +140,8 @@ function Provider({ children }: { children: ReactNode }) {
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
   const [widthValue, setWidthValue] = useState<string>("")
   const [sectionGivenNameFn, setSectionGivenName] = useState<(id: string) => void>((id: string) => { });
+  const [hoverContext, setHoverContext] = useState<string>("");
+  const [hoverContextSetter, setHoverContextSetter] = useState<(() => void) | null>(null)
 
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
 
@@ -178,6 +187,11 @@ function Provider({ children }: { children: ReactNode }) {
     clearElementSetter: () => setElementSetter({}),
     setRmElementFunc
   };
+
+  const hover: hoverEditType = {
+    hoverContext, setHoverContext,
+    hoverContextSetter, setHoverContextSetter
+  }
 
   const websiteContent: WebsiteContentType = { // the whole website
     webpage,
