@@ -15,7 +15,7 @@ export interface SectionElementType {
     style: ResponsiveStyles;
     id: string;
     givenName: string;
-    hover: React.CSSProperties;
+    hover: ResponsiveStyles;
 }
 
 const baseStyle: StyleObject = {
@@ -57,7 +57,9 @@ class SectionElement implements SectionElementType {
         this.name = name;
     }
     givenName: string = "";
-    hover: React.CSSProperties = {}
+    hover: ResponsiveStyles = {
+        xl: {}, lg: {}, md: {}, sm: {}
+    }
 }
 
 function generateElementData(name: string): SectionElement {

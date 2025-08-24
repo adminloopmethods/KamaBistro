@@ -5,6 +5,9 @@ import ImageSelector from "./ImageSelector";
 import CustomSelect from "@/app/_common/CustomSelect";
 import { cloudinaryApiPoint } from "@/utils/endpoints";
 import { rgbaToHex, hexToRgba } from "./StyleToolbar";
+import dimensionStyle from "./dimensionToolbar.module.css";
+import SectionChilds from "../Elements/SectionChilds";
+
 
 // ===== Shadow Presets =====
 const shadowPresets: Record<string, string> = {
@@ -20,7 +23,7 @@ const shadowPresets: Record<string, string> = {
 };
 
 function HoverToolbar() {
-    const { hoverObject } = useMyContext();
+    const { hoverObject, sectionChilds } = useMyContext();
     const { hoverContext, hoverContextSetter } = hoverObject;
 
     const [hoverText, setHoverText] = useState<string>(
@@ -47,8 +50,10 @@ function HoverToolbar() {
     // ===== Debounced update =====
     const debouncedUpdateStyles = useCallback(
         debounce((styles: Record<string, any>) => {
-            hoverContextSetter({ ...hoverContext, ...styles });
-        }, 150),
+            if (hoverContextSetter) {
+                hoverContextSetter({ ...hoverContext, ...styles });
+            }
+        }, 250),
         [hoverContext, hoverContextSetter]
     );
 
@@ -69,9 +74,8 @@ function HoverToolbar() {
         newColor2?: string,
         newDir?: string
     ) => {
-        const g = `linear-gradient(${newDir || gradientDirection}, ${
-            newColor1 || color1
-        }, ${newColor2 || color2})`;
+        const g = `linear-gradient(${newDir || gradientDirection}, ${newColor1 || color1
+            }, ${newColor2 || color2})`;
         setGradient(g);
         updateBackground();
     };
@@ -137,7 +141,7 @@ function HoverToolbar() {
                         setHoverText(e.target.value);
                         debouncedUpdateStyles({ color: e.target.value });
                     }}
-                    className="w-12 h-8 rounded cursor-pointer border"
+                    className={`w-12 h-8 rounded cursor-pointer border ${dimensionStyle.colorInput}`}
                 />
                 <input
                     type="text"
@@ -205,7 +209,7 @@ function HoverToolbar() {
                                         handleGradientUpdate(newColor, undefined, undefined);
                                     else handleGradientUpdate(undefined, newColor, undefined);
                                 }}
-                                className="w-12 h-8 rounded cursor-pointer border"
+                                className={`w-12 h-8 rounded cursor-pointer border ${dimensionStyle.colorInput}`}
                             />
                             <input
                                 type="text"
@@ -252,6 +256,8 @@ function HoverToolbar() {
                     Clear Gradient
                 </button>
             </div>
+
+            <SectionChilds />
         </div>
     );
 }

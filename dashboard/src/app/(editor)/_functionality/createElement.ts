@@ -8,7 +8,7 @@ import Division from "../_component/Elements/Division";
 // elements.ts
 
 // Define screen sizes for style keys
-type ScreenSize = "xl" | "lg" | "md" | "sm";
+export type ScreenSize = "xl" | "lg" | "md" | "sm";
 
 // Style object for each screen size
 export type StyleObject = Partial<Record<ScreenSize, React.CSSProperties>>;
@@ -20,7 +20,7 @@ export interface BaseElement {
   content: string;
   style: StyleObject;
   [key: string]: any;
-  hover: string;
+  hover: StyleObject;
 }
 
 // Specific element interfaces extending BaseElement
@@ -67,7 +67,7 @@ class Element implements BaseElement {
   name: string;
   content: string;
   style: StyleObject = defaultStyles;
-  hover: string = "";
+  hover: StyleObject = defaultStyles;
 
   constructor(name: string, content: string) {
     this.name = name;

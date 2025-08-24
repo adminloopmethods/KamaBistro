@@ -14,6 +14,7 @@ import React, {
   CSSProperties
 } from 'react';
 import { stringFunctionType } from './ContextTypes';
+import { ElementTypeCustom } from '@/app/(editor)/_component/Elements/Section';
 
 type RefType = HTMLElement | null;
 
@@ -67,7 +68,7 @@ type ContextElementType = {
 type WidthType = {
   widthValue: string;
   setWidthValue: React.Dispatch<React.SetStateAction<string>>;
-  activeScreen: string;
+  activeScreen: screenType;
   setActiveScreen: React.Dispatch<React.SetStateAction<screenType>>;
 };
 
@@ -101,6 +102,11 @@ interface hoverEditType { /////// HOVER CONTEXT TYPE
   setHoverContextSetter: React.Dispatch<React.SetStateAction<(css: CSSProperties) => void>>; // <-- updater matches useState
 }
 
+interface screenStyleObjType {
+  screenStyles: StyleObject | null,
+  setScreenStyle: React.Dispatch<React.SetStateAction<StyleObject | null>>;
+}
+
 type MyContextType = {
   contextRef: ContextRefType;
   activeRef: RefType | any;
@@ -109,7 +115,7 @@ type MyContextType = {
   elementSetter: any;
   rmElementFunc: (id: string) => void;
   width: WidthType;
-  activeScreen: string;
+  activeScreen: screenType;
   widthValue: string;
   toolbarRef: any;
   websiteContent: WebsiteContentType;
@@ -122,7 +128,14 @@ type MyContextType = {
   contextForSection: SectionContextType;
   currentSection: React.CSSProperties,
   currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
-  hoverObject: hoverEditType
+  hoverObject: hoverEditType;
+  screenStyleObj: screenStyleObjType;
+  sectionChilds: () => any;
+  setSectionChildsComponent: React.Dispatch<React.SetStateAction<() => any>>
+  sectionChildElements: ElementTypeCustom[];
+  setSectionChildElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>;
+  sectionChildElementsSetter: (id: string, checked: boolean) => void,
+  setSectionChildElementsSetter: React.Dispatch<React.SetStateAction<(id: string, checked: boolean) => void>>;
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -140,15 +153,20 @@ function Provider({ children }: { children: ReactNode }) {
   const [elementSetter, setElementSetter] = useState<any>(null);  // to set the setter of the element to work with
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { }); // to set the rm function of the element
 
+  // sections
   const [currentSection, setCurrentSection] = useState<any>(null)
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
   const [sectionGivenNameFn, setSectionGivenName] = useState<stringFunctionType>((id: string) => { });
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
+  const [screenStyles, setScreenStyle] = useState<StyleObject | null>(null)
+  const [sectionChildElements, setSectionChildElements] = useState<ElementTypeCustom[]>([])
+  const [sectionChildElementsSetter, setSectionChildElementsSetter] = useState<(id: string, check: boolean) => void>(() => { })
 
   // hover related state
   const [hoverContext, setHoverContext] = useState<React.CSSProperties>({});
   const [hoverContextSetter, setHoverContextSetter] = useState<(css: CSSProperties) => void>((css: CSSProperties) => { });
+  const [sectionChildsComponent, setSectionChilds] = useState<() => any>(() => { })
 
   // images
   const [imageContext, setImageContext] = useState<ImageStyleToolbarProps | Record<string, any> | null>(null)
@@ -193,6 +211,10 @@ function Provider({ children }: { children: ReactNode }) {
     setRmElementFunc
   };
 
+  const screenStyleObj: screenStyleObjType = {
+    screenStyles, setScreenStyle
+  }
+
   const hoverObject: hoverEditType = {  //////// HOVER CONTEXT
     hoverContext, setHoverContext,
     hoverContextSetter, setHoverContextSetter
@@ -226,6 +248,7 @@ function Provider({ children }: { children: ReactNode }) {
         element,
         elementSetter,
         rmElementFunc,
+        screenStyleObj,
 
         toolbarRef,
         imageContext, // context for the image
@@ -238,6 +261,12 @@ function Provider({ children }: { children: ReactNode }) {
         currentSectionSetter,
 
         hoverObject, // hover context
+        sectionChilds: sectionChildsComponent,
+        setSectionChildsComponent: setSectionChilds,
+        sectionChildElements,
+        sectionChildElementsSetter,
+        setSectionChildElements,
+        setSectionChildElementsSetter
       }}
     >
       {children}

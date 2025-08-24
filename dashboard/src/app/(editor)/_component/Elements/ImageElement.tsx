@@ -213,6 +213,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     <>
 
       <img
+        id={element.id}
         ref={imageRef}
         onMouseDown={handleMouseDown} // DRAG INITIATOR
         src={(cloudinaryApiPoint + previewSrc) || undefined}

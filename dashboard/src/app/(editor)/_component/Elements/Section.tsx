@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useEffect, useRef, useState, MouseEvent, CSSProperties } from "react";
-import { CreateElement, mapElement } from "../../_functionality/createElement";
+import { CreateElement, mapElement, ScreenSize } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
-import { SectionElementType } from "../../_functionality/createSection";
+import { SectionElementType, StyleObject } from "../../_functionality/createSection";
 
-type ElementType = {
+export type ElementTypeCustom = {
   id: string;
   name: keyof typeof mapElement;
   content?: any;
@@ -14,10 +14,11 @@ type ElementType = {
     [key: string]: React.CSSProperties;
   };
   [key: string]: any;
+  hover: { [screen in ScreenSize]?: StyleObject }
 };
 
 type SectionProps = {
-  element: ElementType[];
+  element: ElementTypeCustom[];
   rmSection: (id: string) => void;
   onEditing: () => void;
   style: React.CSSProperties;
@@ -51,22 +52,30 @@ const Section: React.FC<SectionProps> = ({
   setGivenName
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
-  const [elements, setElements] = useState<ElementType[]>(element);
-  const [hoverEffect, setHoverEffect] = useState<boolean>(false)
+  const [elements, setElements] = useState<ElementTypeCustom[]>(element);
+  const [hoverEffect, setHoverEffect] = useState<boolean>(false);
+  const [clickEffect, setClickEffect] = useState<boolean>(false);
   const {
     contextRef,
     activeScreen,
     contextForSection,
-    hoverObject
-  } = useMyContext();
+    hoverObject,
+    screenStyleObj,
+    setSectionChildElements,
+    setSectionChildElementsSetter
+  } = useMyContext(); ////////////////////// Context /////////////////////////
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null)
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
-  const [hover, setHover] = useState<React.CSSProperties>(section.hover || {})
+  const [hover, setHover] = useState<React.CSSProperties>(section.hover?.[activeScreen] || {})
+  const [hiddenChildlist, setHiddenChildList] = useState<string[]>([])
   const cleanHover = Object.fromEntries(
     Object.entries(hover).filter(([_, value]) => Boolean(value))
   );
+
+  const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
+  console.log(childsAreHidden)
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -132,9 +141,29 @@ const Section: React.FC<SectionProps> = ({
 
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
-      console.log("qwerq")
       setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
+
+    screenStyleObj.setScreenStyle(section.styles)
+    setSectionChildElements(elements)
+    setSectionChildElementsSetter(() =>
+      (id: string, checked: boolean) =>
+        setElements((prev: ElementTypeCustom[]) =>
+          prev.map((e: ElementTypeCustom) =>
+            e.id === id
+              ? {
+                ...e,
+                style: {
+                  ...e.style,
+                  [activeScreen]: {
+                    ...e.style?.[activeScreen],
+                    display: checked ? "none" : "block",
+                  },
+                },
+              }
+              : e
+          )
+        ))
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
@@ -151,7 +180,7 @@ const Section: React.FC<SectionProps> = ({
     setElements((prev) => prev.filter((el) => el.id !== elementID));
   };
 
-  const updateElement = (id: string, value: ElementType) => {
+  const updateElement = (id: string, value: ElementTypeCustom) => {
     setElements((prev) =>
       prev.map((e) => (e.id === id ? { ...value } : e))
     );
@@ -193,27 +222,32 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, elements: elements, hover }, lastSection)
+      finalUpdate(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
     }
+
 
   }, [updateData, elements, hover]);
 
+  useEffect(() => {
+
+    // setSectionChilds(() => SectionChilds(elements, setElements, activeScreen))
+  }, [elements])
 
 
   useEffect(() => {
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, elements: elements, hover: hover }, lastSection)
+      updateParentElement(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
     }
     hoverObject.setHoverContext(hover)
   }, [elements, hover])
 
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover }, lastSection)
+      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
     }
 
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover }, lastSection)
+      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
     }
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
@@ -232,7 +266,55 @@ const Section: React.FC<SectionProps> = ({
       divRef.current.style.border = "1px dashed gray";
     }
   }, [])
-  console.log(hover)
+
+  const showAllChildren = () => {
+    console.log("mouseEnter")
+    // if (childsAreHidden) {
+    setElements((prev: ElementTypeCustom[]) =>
+      prev.map((e: ElementTypeCustom) => {
+        if (e.style?.[activeScreen]?.display === "none") {
+          setHiddenChildList((prev: string[]) => {
+            return [...prev, e.id]
+          })
+        }
+        return (
+          {
+            ...e,
+            style: {
+              ...e.style,
+              [activeScreen]: {
+                ...e.style?.[activeScreen],
+                display: "block", // toggle
+              },
+            },
+          }
+        )
+      })
+    )
+    // }
+  }
+
+  const hideBackHiddenChildrens = () => {
+    console.log("mouseleave")
+    // if (childsAreHidden) {
+    setElements((prev: ElementTypeCustom[]) =>
+      prev.map((e: ElementTypeCustom) => {
+        return (
+          {
+            ...e,
+            style: {
+              ...e.style,
+              [activeScreen]: {
+                ...e.style?.[activeScreen],
+                display: hiddenChildlist.includes(e.id) ? "none" : "block", // toggle
+              },
+            },
+          }
+        )
+      })
+    )
+    // }
+  }
 
   return (
     <div className=""
@@ -250,8 +332,8 @@ const Section: React.FC<SectionProps> = ({
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
-        onMouseEnter={() => setHoverEffect(true)}
-        onMouseLeave={() => setHoverEffect(false)}
+        onMouseEnter={() => { setHoverEffect(true); showAllChildren() }}
+        onMouseLeave={() => { setHoverEffect(false); hideBackHiddenChildrens() }}
       // className={hover}
       >
         {elements?.map((Element, i, a) => {
@@ -294,7 +376,7 @@ const Section: React.FC<SectionProps> = ({
         })}
       </section>
       {onAddElement && <AddElement controller={addElement} canAddSection={!parentIsSection} />}
-    </div>
+    </div >
   );
 };
 
