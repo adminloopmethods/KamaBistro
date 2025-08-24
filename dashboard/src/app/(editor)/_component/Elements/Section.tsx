@@ -52,10 +52,12 @@ const Section: React.FC<SectionProps> = ({
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
+  const [hoverEffect, setHoverEffect] = useState<boolean>(false)
   const {
     contextRef,
     activeScreen,
     contextForSection,
+    hoverObject
   } = useMyContext();
 
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -124,6 +126,12 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     contextForSection.setSectionRef(sectionRef)
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
+
+    hoverObject.setHoverContext(hover) // set the contexts for hover
+    hoverObject.setHoverContextSetter(() => ((newValue: string) => {
+      // console.log(newValue, section.id)
+      setHover(newValue)
+    }))
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
@@ -192,15 +200,16 @@ const Section: React.FC<SectionProps> = ({
     if (updateParentElement) {
       updateParentElement(section.id, { ...section, elements: elements, hover: hover }, lastSection)
     }
+    hoverObject.setHoverContext(hover)
   }, [elements, hover])
 
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle } }, lastSection)
+      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover }, lastSection)
     }
 
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle } }, lastSection)
+      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover }, lastSection)
     }
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
@@ -219,8 +228,7 @@ const Section: React.FC<SectionProps> = ({
       divRef.current.style.border = "1px dashed gray";
     }
   }, [])
-
-  const positionIsAbsolute = sectionStyle?.position === "absolute"
+  console.log(hover)
 
   return (
     <div className=""
@@ -234,10 +242,13 @@ const Section: React.FC<SectionProps> = ({
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, top: 0, left: 0, position: "relative", overflow: "section" }}
+        style={{ ...sectionStyle, top: 0, left: 0, position: "relative", overflow: "section", ...(hoverEffect ? { backgroundImage: "linear-gradient(to left, blue, red)" } : {}) }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
+        onMouseEnter={() => setHoverEffect(true)}
+        onMouseLeave={() => setHoverEffect(false)}
+        className={hover}
       >
         {elements?.map((Element, i, a) => {
           const lastSection = i === a.length - 1

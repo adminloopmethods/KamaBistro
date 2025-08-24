@@ -121,7 +121,7 @@ type MyContextType = {
   contextForSection: SectionContextType;
   currentSection: React.CSSProperties,
   currentSectionSetter: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
-  hover: hoverEditType
+  hoverObject: hoverEditType
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -190,7 +190,7 @@ function Provider({ children }: { children: ReactNode }) {
     setRmElementFunc
   };
 
-  const hover: hoverEditType = {  //////// HOVER CONTEXT
+  const hoverObject: hoverEditType = {  //////// HOVER CONTEXT
     hoverContext, setHoverContext,
     hoverContextSetter, setHoverContextSetter
   }
@@ -234,7 +234,7 @@ function Provider({ children }: { children: ReactNode }) {
         currentSection,
         currentSectionSetter,
 
-        hover,
+        hoverObject, // hover context
       }}
     >
       {children}

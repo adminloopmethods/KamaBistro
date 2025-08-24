@@ -3,14 +3,14 @@ import { useMyContext } from "@/Context/EditorContext";
 import { rgbaToHex, hexToRgba } from "./StyleToolbar";
 
 function HoverTailwindEditor() {
-    const { hover } = useMyContext();
-    const { hoverContext = "", hoverContextSetter } = hover;
+    const { hoverObject } = useMyContext();
+    const { hoverContext, hoverContextSetter } = hoverObject;
 
+    // Store only values (not full classes)
     const [hoverWidth, setHoverWidth] = useState("");
     const [hoverHeight, setHoverHeight] = useState("");
     const [hoverText, setHoverText] = useState("");
     const [hoverBg, setHoverBg] = useState("");
-    const [hoverGradient, setHoverGradient] = useState("");
     const [hoverShadow, setHoverShadow] = useState("");
     const [hoverChild, setHoverChild] = useState("");
 
@@ -18,44 +18,64 @@ function HoverTailwindEditor() {
     const [color1, setColor1] = useState<string>("rgba(255,0,0,1)");
     const [color2, setColor2] = useState<string>("rgba(0,0,255,1)");
     const [gradientDir, setGradientDir] = useState<string>("right");
+    const [hoverGradient, setHoverGradient] = useState("");
 
-    // Convert incoming string → array of classes
+    // Extract hover classes
     const getHoverClasses = (str: string) =>
         str.trim().length > 0 ? str.trim().split(/\s+/) : [];
 
-    // Extract hover classes into state
+    // Parse Tailwind class → value
+    const extractValue = (cls: string | undefined, prefix: string) => {
+        if (!cls) return "";
+        const raw = cls.replace(prefix, "");
+        if (raw.startsWith("[") && raw.endsWith("]")) {
+            return raw.slice(1, -1); // remove []
+        }
+        return raw;
+    };
+
+    // Build class from value
+    const buildClass = (prefix: string, value: string) => {
+        if (!value) return "";
+        if (value.startsWith("#") || value.startsWith("rgb")) {
+            return `${prefix}[${value}]`; // ✅ wrap colors
+        }
+        if (/^\d+(\w+)?$/.test(value) || value.includes("px") || value.includes("%")) {
+            return `${prefix}[${value}]`; // ✅ custom px/em/%
+        }
+        return `${prefix}${value}`;
+    };
+
+    // Extract values when hoverContext changes
     useEffect(() => {
         const classes = getHoverClasses(hoverContext);
 
-        setHoverWidth(classes.find(c => c.startsWith("hover:w-")) || "");
-        setHoverHeight(classes.find(c => c.startsWith("hover:h-")) || "");
-        setHoverText(classes.find(c => c.startsWith("hover:text-")) || "");
-        setHoverBg(
-            classes.find(c => c.startsWith("hover:bg-") && !c.includes("gradient")) || ""
-        );
-        setHoverGradient(
-            classes.filter(
-                c =>
-                    c.startsWith("hover:bg-gradient-to-") ||
-                    c.startsWith("hover:from-") ||
-                    c.startsWith("hover:via-") ||
-                    c.startsWith("hover:to-")
-            ).join(" ")
-        );
-        setHoverShadow(classes.find(c => c.startsWith("hover:shadow")) || "");
-        setHoverChild(classes.find(c => c.startsWith("group-hover:")) || "");
+        const w = classes.find(c => c.startsWith("hover:!w-"));
+        const h = classes.find(c => c.startsWith("hover:!h-"));
+        const txt = classes.find(c => c.startsWith("hover:!text-"));
+        const bg = classes.find(c => c.startsWith("hover:!bg-") && !c.includes("gradient"));
+        const shadow = classes.find(c => c.startsWith("hover:!shadow"));
+        const child = classes.find(c => c.startsWith("group-hover:"));
+
+        setHoverWidth(extractValue(w, "hover:!w-"));
+        setHoverHeight(extractValue(h, "hover:!h-"));
+        setHoverText(extractValue(txt, "hover:!text-"));
+        setHoverBg(extractValue(bg, "hover:!bg-"));
+        setHoverShadow(extractValue(shadow, "hover:!shadow-"));
+        setHoverChild(extractValue(child, "group-hover:"));
     }, [hoverContext]);
 
-    // Rebuild string whenever state changes
+    // Rebuild hover string
     useEffect(() => {
         const hoverClasses = [
-            hoverWidth,
-            hoverHeight,
-            hoverText,
-            hoverBg,
-            hoverGradient,
-            hoverShadow,
-            hoverChild
+            buildClass("hover:!w-", hoverWidth),
+            buildClass("hover:!h-", hoverHeight),
+            buildClass("hover:!text-", hoverText),
+            // ✅ only add solid bg if no gradient
+            !hoverGradient ? buildClass("hover:!bg-", hoverBg) : "",
+            buildClass("hover:!shadow-", hoverShadow),
+            buildClass("group-hover:", hoverChild),
+            hoverGradient // ✅ gradient always last
         ]
             .filter(Boolean)
             .join(" ");
@@ -63,14 +83,15 @@ function HoverTailwindEditor() {
         if (hoverContextSetter) {
             hoverContextSetter(hoverClasses.trim());
         }
-    }, [hoverWidth, hoverHeight, hoverText, hoverBg, hoverGradient, hoverShadow, hoverChild]);
+    }, [hoverWidth, hoverHeight, hoverText, hoverBg, hoverShadow, hoverChild, hoverGradient]);
 
     // 🎨 Update gradient when colors or direction change
     useEffect(() => {
-        const gradient = `hover:bg-gradient-to-${gradientDir} hover:from-[${color1}] hover:to-[${color2}]`;
+        const gradient = `hover:!bg-gradient-to-${gradientDir} hover:!from-[${color1}] hover:!to-[${color2}]`;
         setHoverGradient(gradient);
     }, [color1, color2, gradientDir]);
 
+    // Small helper for non-color inputs
     const renderInput = (
         label: string,
         value: string,
@@ -91,18 +112,55 @@ function HoverTailwindEditor() {
     );
 
     return (
-        <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[260px] max-w-[20vw] rounded-md shadow-md flex flex-col gap-4">
+        <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[22vw] rounded-md shadow-md flex flex-col gap-4">
             <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 border-b pb-2 mb-2">
                 Hover Classes
             </h3>
 
             <div className="grid grid-cols-1 gap-3">
-                {renderInput("Width", hoverWidth, setHoverWidth, "hover:w-*")}
-                {renderInput("Height", hoverHeight, setHoverHeight, "hover:h-*")}
-                {renderInput("Text Color", hoverText, setHoverText, "hover:text-*")}
-                {renderInput("Background", hoverBg, setHoverBg, "hover:bg-*")}
-                {renderInput("Shadow", hoverShadow, setHoverShadow, "hover:shadow-*")}
-                {renderInput("Child Appear", hoverChild, setHoverChild, "group-hover:*")}
+                {renderInput("Width", hoverWidth, setHoverWidth, "10px / sm / lg")}
+                {renderInput("Height", hoverHeight, setHoverHeight, "10px / sm / lg")}
+
+                {/* 🎨 Text Color with color picker */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium">Text Color</label>
+                    <input
+                        type="color"
+                        value={hoverText || "#000000"}
+                        onChange={e => setHoverText(e.target.value)}
+                        className="w-12 h-8 rounded cursor-pointer border"
+                    />
+                    <input
+                        type="text"
+                        value={hoverText}
+                        onChange={e => setHoverText(e.target.value)}
+                        placeholder="#hex or rgba(...)"
+                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                    />
+                </div>
+
+                {/* 🎨 Background Color with color picker */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium">Background Color</label>
+                    <input
+                        type="color"
+                        value={hoverBg || "#ffffff"}
+                        onChange={e => setHoverBg(e.target.value)}
+                        className="w-12 h-8 rounded cursor-pointer border"
+                        disabled={!!hoverGradient} // ✅ disable if gradient is active
+                    />
+                    <input
+                        type="text"
+                        value={hoverBg}
+                        onChange={e => setHoverBg(e.target.value)}
+                        placeholder="#hex or rgba(...)"
+                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                        disabled={!!hoverGradient}
+                    />
+                </div>
+
+                {renderInput("Shadow", hoverShadow, setHoverShadow, "md / lg")}
+                {renderInput("Child Appear", hoverChild, setHoverChild, "block / flex")}
             </div>
 
             {/* 🎨 Gradient Colors Section */}
