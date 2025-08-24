@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState, MouseEvent } from "react";
+import React, { useEffect, useRef, useState, MouseEvent, CSSProperties } from "react";
 import { CreateElement, mapElement } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
@@ -63,7 +63,10 @@ const Section: React.FC<SectionProps> = ({
   const sectionRef = useRef<HTMLElement | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null)
   const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
-  const [hover, setHover] = useState<string>(section.hover || "")
+  const [hover, setHover] = useState<React.CSSProperties>(section.hover || {})
+  const cleanHover = Object.fromEntries(
+    Object.entries(hover).filter(([_, value]) => Boolean(value))
+  );
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -128,9 +131,9 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
 
     hoverObject.setHoverContext(hover) // set the contexts for hover
-    hoverObject.setHoverContextSetter(() => ((newValue: string) => {
-      // console.log(newValue, section.id)
-      setHover(newValue)
+    hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
+      console.log("qwerq")
+      setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
   }
 
@@ -171,6 +174,7 @@ const Section: React.FC<SectionProps> = ({
       return newContent
     })
   }
+
 
   useEffect(() => {
     if (isDragging) {
@@ -242,13 +246,13 @@ const Section: React.FC<SectionProps> = ({
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, top: 0, left: 0, position: "relative", overflow: "section", ...(hoverEffect ? { backgroundImage: "linear-gradient(to left, blue, red)" } : {}) }}
+        style={{ ...sectionStyle, transition: ".3s all linear", top: 0, left: 0, position: "relative", ...(hoverEffect ? cleanHover : {}) }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
         onMouseEnter={() => setHoverEffect(true)}
         onMouseLeave={() => setHoverEffect(false)}
-        className={hover}
+      // className={hover}
       >
         {elements?.map((Element, i, a) => {
           const lastSection = i === a.length - 1

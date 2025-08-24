@@ -23,7 +23,7 @@ import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
 import CustomSelect from "@/app/_common/CustomSelect";
 import { preSection } from "@/assets/preSection.js"
 import { useDraggable } from "../../_component/common/useDraggable";
-import HoverTailwindEditor from "../../_component/common/HoverToolbar";
+import HoverToolbar from "../../_component/common/HoverToolbar";
 
 const renderInput = (
     label: string,
@@ -389,7 +389,7 @@ const Editor = () => {
                 {
                     !contextRef.activeRef ? (
                         <>
-                            <HoverTailwindEditor />
+                            <HoverToolbar />
                             {/* <DimensionToolbar updateStyles={updateSectionStyles} />
                             <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} /> */}
                         </>

@@ -10,7 +10,8 @@ import React, {
   ReactNode,
   MutableRefObject,
   ElementType,
-  RefObject
+  RefObject,
+  CSSProperties
 } from 'react';
 import { stringFunctionType } from './ContextTypes';
 
@@ -94,10 +95,10 @@ interface ImageStyleToolbarProps {
 }
 
 interface hoverEditType { /////// HOVER CONTEXT TYPE
-  hoverContext: string;
-  setHoverContext: React.Dispatch<React.SetStateAction<string>>;
-  hoverContextSetter: stringFunctionType; // <-- this should be the VALUE type
-  setHoverContextSetter: React.Dispatch<React.SetStateAction<stringFunctionType>>; // <-- updater matches useState
+  hoverContext: React.CSSProperties;
+  setHoverContext: React.Dispatch<React.SetStateAction<React.CSSProperties>>;
+  hoverContextSetter: (css: CSSProperties) => void; // <-- this should be the VALUE type
+  setHoverContextSetter: React.Dispatch<React.SetStateAction<(css: CSSProperties) => void>>; // <-- updater matches useState
 }
 
 type MyContextType = {
@@ -129,6 +130,7 @@ const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
 function Provider({ children }: { children: ReactNode }) {
   // set the active screen
   const [activeScreen, setActiveScreen] = useState<screenType>("xl");
+  const [widthValue, setWidthValue] = useState<string>("")
   // global content
   const [webpage, setWebpage] = useState<webpageType | null>(null);
 
@@ -137,15 +139,16 @@ function Provider({ children }: { children: ReactNode }) {
   const [element, setElement] = useState<any>(null); // to see what element is it right now
   const [elementSetter, setElementSetter] = useState<any>(null);  // to set the setter of the element to work with
   const [rmElementFunc, setRmElementFunc] = useState<() => void>(() => { }); // to set the rm function of the element
+
   const [currentSection, setCurrentSection] = useState<any>(null)
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
-  const [widthValue, setWidthValue] = useState<string>("")
   const [sectionGivenNameFn, setSectionGivenName] = useState<stringFunctionType>((id: string) => { });
-  const [hoverContext, setHoverContext] = useState<string>("");
-  const [hoverContextSetter, setHoverContextSetter] = useState<stringFunctionType>((value: string) => { });
-
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
+
+  // hover related state
+  const [hoverContext, setHoverContext] = useState<React.CSSProperties>({});
+  const [hoverContextSetter, setHoverContextSetter] = useState<(css: CSSProperties) => void>((css: CSSProperties) => { });
 
   // images
   const [imageContext, setImageContext] = useState<ImageStyleToolbarProps | Record<string, any> | null>(null)

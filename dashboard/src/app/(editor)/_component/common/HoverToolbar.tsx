@@ -1,216 +1,259 @@
-import { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
+import { debounce } from "lodash";
 import { useMyContext } from "@/Context/EditorContext";
+import ImageSelector from "./ImageSelector";
+import CustomSelect from "@/app/_common/CustomSelect";
+import { cloudinaryApiPoint } from "@/utils/endpoints";
 import { rgbaToHex, hexToRgba } from "./StyleToolbar";
 
-function HoverTailwindEditor() {
+// ===== Shadow Presets =====
+const shadowPresets: Record<string, string> = {
+    none: "none",
+    sm: "0 1px 3px rgba(0,0,0,0.1)",
+    md: "0 4px 6px rgba(0,0,0,0.2)",
+    lg: "0 10px 15px rgba(0,0,0,0.3)",
+    xl: "0 20px 25px rgba(0,0,0,0.4)",
+    "dark-sm": "0 1px 3px rgba(0,0,0,0.5)",
+    "dark-md": "0 4px 6px rgba(0,0,0,0.6)",
+    "dark-lg": "0 10px 15px rgba(0,0,0,0.7)",
+    "dark-xl": "0 20px 25px rgba(0,0,0,0.85)",
+};
+
+function HoverToolbar() {
     const { hoverObject } = useMyContext();
     const { hoverContext, hoverContextSetter } = hoverObject;
 
-    // Store only values (not full classes)
-    const [hoverWidth, setHoverWidth] = useState("");
-    const [hoverHeight, setHoverHeight] = useState("");
-    const [hoverText, setHoverText] = useState("");
-    const [hoverBg, setHoverBg] = useState("");
-    const [hoverShadow, setHoverShadow] = useState("");
-    const [hoverChild, setHoverChild] = useState("");
+    const [hoverText, setHoverText] = useState<string>(
+        hoverContext?.color?.toString() || ""
+    );
+    const [hoverShadow, setHoverShadow] = useState<string>(
+        hoverContext?.boxShadow?.toString() || "none"
+    );
+    const [hoverWidth, setHoverWidth] = useState<string>(
+        hoverContext?.width?.toString() || ""
+    );
+    const [hoverHeight, setHoverHeight] = useState<string>(
+        hoverContext?.height?.toString() || ""
+    );
 
-    // 🎨 Gradient colors
+    // Background states
     const [color1, setColor1] = useState<string>("rgba(255,0,0,1)");
     const [color2, setColor2] = useState<string>("rgba(0,0,255,1)");
-    const [gradientDir, setGradientDir] = useState<string>("right");
-    const [hoverGradient, setHoverGradient] = useState("");
+    const [gradientDirection, setGradientDirection] = useState<string>("to right");
+    const [gradient, setGradient] = useState<string>("");
+    const [bgImage, setBgImage] = useState<string>("");
+    const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
 
-    // Extract hover classes
-    const getHoverClasses = (str: string) =>
-        str.trim().length > 0 ? str.trim().split(/\s+/) : [];
-
-    // Parse Tailwind class → value
-    const extractValue = (cls: string | undefined, prefix: string) => {
-        if (!cls) return "";
-        const raw = cls.replace(prefix, "");
-        if (raw.startsWith("[") && raw.endsWith("]")) {
-            return raw.slice(1, -1); // remove []
-        }
-        return raw;
-    };
-
-    // Build class from value
-    const buildClass = (prefix: string, value: string) => {
-        if (!value) return "";
-        if (value.startsWith("#") || value.startsWith("rgb")) {
-            return `${prefix}[${value}]`; // ✅ wrap colors
-        }
-        if (/^\d+(\w+)?$/.test(value) || value.includes("px") || value.includes("%")) {
-            return `${prefix}[${value}]`; // ✅ custom px/em/%
-        }
-        return `${prefix}${value}`;
-    };
-
-    // Extract values when hoverContext changes
-    useEffect(() => {
-        const classes = getHoverClasses(hoverContext);
-
-        const w = classes.find(c => c.startsWith("hover:!w-"));
-        const h = classes.find(c => c.startsWith("hover:!h-"));
-        const txt = classes.find(c => c.startsWith("hover:!text-"));
-        const bg = classes.find(c => c.startsWith("hover:!bg-") && !c.includes("gradient"));
-        const shadow = classes.find(c => c.startsWith("hover:!shadow"));
-        const child = classes.find(c => c.startsWith("group-hover:"));
-
-        setHoverWidth(extractValue(w, "hover:!w-"));
-        setHoverHeight(extractValue(h, "hover:!h-"));
-        setHoverText(extractValue(txt, "hover:!text-"));
-        setHoverBg(extractValue(bg, "hover:!bg-"));
-        setHoverShadow(extractValue(shadow, "hover:!shadow-"));
-        setHoverChild(extractValue(child, "group-hover:"));
-    }, [hoverContext]);
-
-    // Rebuild hover string
-    useEffect(() => {
-        const hoverClasses = [
-            buildClass("hover:!w-", hoverWidth),
-            buildClass("hover:!h-", hoverHeight),
-            buildClass("hover:!text-", hoverText),
-            // ✅ only add solid bg if no gradient
-            !hoverGradient ? buildClass("hover:!bg-", hoverBg) : "",
-            buildClass("hover:!shadow-", hoverShadow),
-            buildClass("group-hover:", hoverChild),
-            hoverGradient // ✅ gradient always last
-        ]
-            .filter(Boolean)
-            .join(" ");
-
-        if (hoverContextSetter) {
-            hoverContextSetter(hoverClasses.trim());
-        }
-    }, [hoverWidth, hoverHeight, hoverText, hoverBg, hoverShadow, hoverChild, hoverGradient]);
-
-    // 🎨 Update gradient when colors or direction change
-    useEffect(() => {
-        const gradient = `hover:!bg-gradient-to-${gradientDir} hover:!from-[${color1}] hover:!to-[${color2}]`;
-        setHoverGradient(gradient);
-    }, [color1, color2, gradientDir]);
-
-    // Small helper for non-color inputs
-    const renderInput = (
-        label: string,
-        value: string,
-        setValue: (val: string) => void,
-        placeholder: string
-    ) => (
-        <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
-                {label}
-            </label>
-            <input
-                value={value}
-                onChange={e => setValue(e.target.value)}
-                placeholder={placeholder}
-                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-            />
-        </div>
+    // ===== Debounced update =====
+    const debouncedUpdateStyles = useCallback(
+        debounce((styles: Record<string, any>) => {
+            hoverContextSetter({ ...hoverContext, ...styles });
+        }, 150),
+        [hoverContext, hoverContextSetter]
     );
+
+    const updateBackground = (url?: string) => {
+        let combined = "";
+        if (gradient && (bgImage || url)) {
+            combined = `${gradient}, url(${url || bgImage})`;
+        } else if (gradient) {
+            combined = gradient;
+        } else if (bgImage || url) {
+            combined = `url(${url || bgImage})`;
+        }
+        debouncedUpdateStyles({ backgroundImage: combined });
+    };
+
+    const handleGradientUpdate = (
+        newColor1?: string,
+        newColor2?: string,
+        newDir?: string
+    ) => {
+        const g = `linear-gradient(${newDir || gradientDirection}, ${
+            newColor1 || color1
+        }, ${newColor2 || color2})`;
+        setGradient(g);
+        updateBackground();
+    };
 
     return (
         <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[22vw] rounded-md shadow-md flex flex-col gap-4">
             <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 border-b pb-2 mb-2">
-                Hover Classes
+                Hover Styles
             </h3>
 
-            <div className="grid grid-cols-1 gap-3">
-                {renderInput("Width", hoverWidth, setHoverWidth, "10px / sm / lg")}
-                {renderInput("Height", hoverHeight, setHoverHeight, "10px / sm / lg")}
+            {/* Width & Height */}
+            <input
+                type="text"
+                placeholder="Width (e.g. 200px / 50%)"
+                value={hoverWidth}
+                onChange={(e) => {
+                    setHoverWidth(e.target.value);
+                    debouncedUpdateStyles({ width: e.target.value });
+                }}
+                className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
+            />
+            <input
+                type="text"
+                placeholder="Height (e.g. 100px / auto)"
+                value={hoverHeight}
+                onChange={(e) => {
+                    setHoverHeight(e.target.value);
+                    debouncedUpdateStyles({ height: e.target.value });
+                }}
+                className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
+            />
 
-                {/* 🎨 Text Color with color picker */}
-                <div className="flex flex-col gap-1">
-                    <label className="text-xs font-medium">Text Color</label>
-                    <input
-                        type="color"
-                        value={hoverText || "#000000"}
-                        onChange={e => setHoverText(e.target.value)}
-                        className="w-12 h-8 rounded cursor-pointer border"
-                    />
-                    <input
-                        type="text"
-                        value={hoverText}
-                        onChange={e => setHoverText(e.target.value)}
-                        placeholder="#hex or rgba(...)"
-                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                    />
-                </div>
+            {/* Box Shadow */}
+            <CustomSelect
+                options={Object.entries(shadowPresets).map(([k]) => ({
+                    label: k,
+                    value: k,
+                }))}
+                Default={
+                    Object.entries(shadowPresets).find(
+                        ([, v]) => v === hoverShadow
+                    )?.[0] || "none"
+                }
+                firstOption="Box Shadow"
+                disableFirstValue={true}
+                onChange={(val) => {
+                    setHoverShadow(shadowPresets[val]);
+                    debouncedUpdateStyles({ boxShadow: shadowPresets[val] });
+                }}
+            />
 
-                {/* 🎨 Background Color with color picker */}
-                <div className="flex flex-col gap-1">
-                    <label className="text-xs font-medium">Background Color</label>
-                    <input
-                        type="color"
-                        value={hoverBg || "#ffffff"}
-                        onChange={e => setHoverBg(e.target.value)}
-                        className="w-12 h-8 rounded cursor-pointer border"
-                        disabled={!!hoverGradient} // ✅ disable if gradient is active
-                    />
-                    <input
-                        type="text"
-                        value={hoverBg}
-                        onChange={e => setHoverBg(e.target.value)}
-                        placeholder="#hex or rgba(...)"
-                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                        disabled={!!hoverGradient}
-                    />
-                </div>
-
-                {renderInput("Shadow", hoverShadow, setHoverShadow, "md / lg")}
-                {renderInput("Child Appear", hoverChild, setHoverChild, "block / flex")}
+            {/* Text Color */}
+            <div className="flex flex-col gap-2 border-t pt-3">
+                <label className="text-xs font-medium">Text Color</label>
+                <input
+                    type="color"
+                    value={
+                        hoverText && hoverText.startsWith("#")
+                            ? hoverText
+                            : "#000000"
+                    }
+                    onChange={(e) => {
+                        setHoverText(e.target.value);
+                        debouncedUpdateStyles({ color: e.target.value });
+                    }}
+                    className="w-12 h-8 rounded cursor-pointer border"
+                />
+                <input
+                    type="text"
+                    value={hoverText}
+                    onChange={(e) => {
+                        setHoverText(e.target.value);
+                        debouncedUpdateStyles({ color: e.target.value });
+                    }}
+                    placeholder="#hex or rgba(...)"
+                    className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
+                />
             </div>
 
-            {/* 🎨 Gradient Colors Section */}
+            {/* Image Background */}
             <div className="flex flex-col gap-2 border-t pt-3">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
-                    Gradient Colors:
-                </label>
+                <label className="text-xs font-medium">Image Background</label>
+                <button
+                    className="text-xs font-medium border p-3 rounded-md"
+                    onClick={() => setShowImageSelector(true)}
+                >
+                    {bgImage ? "Change Background Image" : "Set Background Image"}
+                </button>
+
+                <button
+                    onClick={() => {
+                        setBgImage("");
+                        updateBackground("");
+                    }}
+                    className="px-2 py-1 bg-red-500 text-white text-xs rounded-md"
+                >
+                    Clear Image
+                </button>
+
+                {showImageSelector && (
+                    <ImageSelector
+                        onSelectImage={(fileInfo: any) => {
+                            const url = cloudinaryApiPoint + fileInfo[0];
+                            setBgImage(url);
+                            updateBackground(url);
+                            setShowImageSelector(false);
+                        }}
+                        onClose={() => setShowImageSelector(false)}
+                        type="IMAGE"
+                    />
+                )}
+            </div>
+
+            {/* Gradient Background */}
+            <div className="flex flex-col gap-2 border-t pt-3">
+                <label className="text-xs font-medium">Gradient</label>
+
                 {[{ color: color1, setColor: setColor1, label: "Color 1" }, { color: color2, setColor: setColor2, label: "Color 2" }].map(
                     ({ color, setColor, label }, idx) => (
                         <div key={idx} className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold">{label}</span>
+                            <span className="text-xs font-semibold">
+                                {label}
+                            </span>
                             <input
                                 type="color"
                                 value={"#" + rgbaToHex(color)}
-                                onChange={e => {
+                                onChange={(e) => {
                                     const newColor = hexToRgba(e.target.value, 1);
                                     setColor(newColor);
+                                    if (label === "Color 1")
+                                        handleGradientUpdate(newColor, undefined, undefined);
+                                    else handleGradientUpdate(undefined, newColor, undefined);
                                 }}
                                 className="w-12 h-8 rounded cursor-pointer border"
                             />
                             <input
                                 type="text"
                                 value={color}
-                                onChange={e => setColor(e.target.value)}
+                                onChange={(e) => {
+                                    const newColor = e.target.value;
+                                    setColor(newColor);
+                                    if (label === "Color 1")
+                                        handleGradientUpdate(newColor, undefined, undefined);
+                                    else handleGradientUpdate(undefined, newColor, undefined);
+                                }}
                                 placeholder="rgba(...)"
-                                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                                className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
                             />
                         </div>
                     )
                 )}
 
-                {/* Gradient Direction */}
-                <div className="flex flex-col gap-1 mt-2">
-                    <label className="text-xs font-medium">Gradient Direction</label>
-                    <select
-                        value={gradientDir}
-                        onChange={e => setGradientDir(e.target.value)}
-                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                    >
-                        <option value="right">to right</option>
-                        <option value="left">to left</option>
-                        <option value="top">to top</option>
-                        <option value="bottom">to bottom</option>
-                        <option value="top-right">to top right</option>
-                        <option value="bottom-left">to bottom left</option>
-                    </select>
-                </div>
+                <CustomSelect
+                    options={[
+                        { label: "Top", value: "to top" },
+                        { label: "Right", value: "to right" },
+                        { label: "Bottom", value: "to bottom" },
+                        { label: "Left", value: "to left" },
+                        { label: "Top Right", value: "to top right" },
+                        { label: "Bottom Left", value: "to bottom left" },
+                    ]}
+                    firstOption="Gradient Direction"
+                    disableFirstValue={true}
+                    Default={gradientDirection}
+                    onChange={(val) => {
+                        setGradientDirection(val);
+                        handleGradientUpdate(undefined, undefined, val);
+                    }}
+                />
+
+                <button
+                    onClick={() => {
+                        setGradient("");
+                        updateBackground();
+                    }}
+                    className="px-2 py-1 bg-red-500 text-white text-xs rounded-md"
+                >
+                    Clear Gradient
+                </button>
             </div>
         </div>
     );
 }
 
-export default HoverTailwindEditor;
+export default HoverToolbar;
