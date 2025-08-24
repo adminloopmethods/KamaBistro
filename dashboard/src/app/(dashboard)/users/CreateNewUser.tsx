@@ -1,8 +1,6 @@
-// components/UserManagement/AddUserModal.tsx
 import React, {useState, useEffect} from "react";
 import {createUserReq, getLocationsReq} from "@/functionality/fetch";
-// import {toast} from "react-toastify";
-import { toast } from "sonner";
+import {toast} from "sonner";
 
 export interface LocationType {
   id: string;
@@ -28,20 +26,25 @@ const AddUserModal = ({
   const [locations, setLocations] = useState<LocationType[]>([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-
-  console.log("location", locations);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
       fetchLocations();
+      setFormData({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        locationId: "",
+      });
+      setErrors({});
     }
   }, [isOpen]);
 
   const fetchLocations = async () => {
     try {
       const response = await getLocationsReq();
-
-      console.log("reslocation", response.location);
       if (response.ok && Array.isArray(response?.location)) {
         setLocations(response?.location);
       } else {
@@ -79,7 +82,6 @@ const AddUserModal = ({
     const {name, value} = e.target;
     setFormData((prev) => ({...prev, [name]: value}));
 
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = {...prev};
@@ -103,13 +105,6 @@ const AddUserModal = ({
         toast.success("User created successfully!");
         onUserCreated();
         onClose();
-        setFormData({
-          name: "",
-          email: "",
-          password: "",
-          phone: "",
-          locationId: "",
-        });
       } else {
         toast.error(response.error || "Failed to create user");
       }
@@ -124,20 +119,22 @@ const AddUserModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
-        <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+    <div className="fixed inset-0 backdrop-blur-xs bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl w-full max-w-sm overflow-hidden">
+        <div className="p-5">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-800">
               Create New User
             </h2>
             <button
               onClick={onClose}
-              className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors p-1"
+              disabled={loading}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
+                className="h-5 w-5"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -152,9 +149,9 @@ const AddUserModal = ({
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Full Name
               </label>
               <input
@@ -162,20 +159,34 @@ const AddUserModal = ({
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
+                className={`w-full px-3 py-2 text-black rounded-lg border ${
                   errors.name
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white`}
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                } focus:ring-1 focus:outline-none transition-colors text-sm`}
                 placeholder="John Doe"
               />
               {errors.name && (
-                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+                <p className="mt-1 text-xs text-red-600 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3 w-3 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errors.name}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
               <input
@@ -183,44 +194,109 @@ const AddUserModal = ({
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
+                className={`w-full px-3 py-2 text-black rounded-lg border ${
                   errors.email
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white`}
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                } focus:ring-1 focus:outline-none transition-colors text-sm`}
                 placeholder="john@example.com"
               />
               {errors.email && (
-                <p className="mt-1 text-sm text-red-500">{errors.email}</p>
+                <p className="mt-1 text-xs text-red-600 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3 w-3 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errors.email}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Password
               </label>
-              <input
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.password
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white`}
-                placeholder="••••••••"
-              />
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 text-black rounded-lg border ${
+                    errors.password
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } focus:ring-1 focus:outline-none transition-colors text-sm pr-8`}
+                  placeholder="••••••••"
+                />
+                <button
+                  type="button"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                      <path
+                        fillRule="evenodd"
+                        d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                        clipRule="evenodd"
+                      />
+                      <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
+                    </svg>
+                  )}
+                </button>
+              </div>
               {errors.password && (
-                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+                <p className="mt-1 text-xs text-red-600 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3 w-3 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errors.password}
+                </p>
               )}
-              <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
+              <p className="mt-1 text-xs text-gray-500">
                 Must be at least 8 characters
               </p>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Phone
               </label>
               <input
@@ -228,62 +304,112 @@ const AddUserModal = ({
                 name="phone"
                 value={formData.phone}
                 onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
+                className={`w-full px-3 py-2 text-black rounded-lg border ${
                   errors.phone
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white`}
+                    ? "border-red-500 focus:ring-red-500"
+                    : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                } focus:ring-1 focus:outline-none transition-colors text-sm`}
                 placeholder="(123) 456-7890"
               />
               {errors.phone && (
-                <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+                <p className="mt-1 text-xs text-red-600 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3 w-3 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errors.phone}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Location
               </label>
-              <select
-                name="locationId"
-                value={formData.locationId}
-                onChange={handleChange}
-                className={`w-full px-4 py-2 rounded-lg border ${
-                  errors.locationId
-                    ? "border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                } focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white`}
-              >
-                <option value="">Select a location</option>
-                {locations.map((location) => (
-                  <option key={location.id} value={location.id}>
-                    {location.name}
+              <div className="relative">
+                <select
+                  name="locationId"
+                  value={formData.locationId}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 text-black rounded-lg border appearance-none ${
+                    errors.locationId
+                      ? "border-red-500 focus:ring-red-500"
+                      : "border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  } focus:ring-1 focus:outline-none transition-colors text-sm text-gray-800 bg-white pr-8`}
+                >
+                  <option value="" className="text-gray-500">
+                    Select a location
                   </option>
-                ))}
-              </select>
+                  {locations.map((location) => (
+                    <option
+                      key={location.id}
+                      value={location.id}
+                      className="text-gray-800"
+                    >
+                      {location.name}
+                    </option>
+                  ))}
+                </select>
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                  <svg
+                    className="h-4 w-4"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </div>
               {errors.locationId && (
-                <p className="mt-1 text-sm text-red-500">{errors.locationId}</p>
+                <p className="mt-1 text-xs text-red-600 flex items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-3 w-3 mr-1"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  {errors.locationId}
+                </p>
               )}
             </div>
 
-            <div className="flex justify-end space-x-3 pt-4">
+            <div className="flex justify-end space-x-2 pt-3">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                className="px-3 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors text-sm font-medium"
                 disabled={loading}
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors flex items-center disabled:opacity-70"
+                className="px-3 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors text-sm font-medium flex items-center disabled:opacity-70"
                 disabled={loading}
               >
                 {loading ? (
                   <>
                     <svg
-                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
                       viewBox="0 0 24 24"

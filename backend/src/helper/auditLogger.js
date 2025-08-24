@@ -70,6 +70,21 @@ function resolveAction(req, method, entity) {
       action_performed: "Added a new resource",
     },
     // Add more custom actions here as needed
+    {
+      match: (req) => req.path === "/forgotPassword",
+      actionType: "FORGOT_PASSWORD_REQUEST",
+      action_performed: "Password reset OTP requested",
+    },
+    {
+      match: (req) => req.path === "/forgotPassword/verify",
+      actionType: "FORGOT_PASSWORD_VERIFY",
+      action_performed: "Password reset OTP verified",
+    },
+    {
+      match: (req) => req.path === "/forgotPassword/updatePassword",
+      actionType: "FORGOT_PASSWORD_UPDATE",
+      action_performed: "Password updated via reset flow",
+    },
   ];
   for (const ca of customActions) {
     if (ca.match(req))
@@ -314,6 +329,65 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
   // const fetchAuditValue =
   //   entityAuditHandlers[entity] ||
   //   (async (id) => await prismaClient[entity]?.findUnique({ where: { id } }));
+
+  if (req.baseUrl.includes("auth")) {
+    entity = "auth";
+  }
+
+  if (
+    [
+      "FORGOT_PASSWORD_REQUEST",
+      "FORGOT_PASSWORD_VERIFY",
+      "FORGOT_PASSWORD_UPDATE",
+    ].includes(actionType)
+  ) {
+    // For auth actions, use email to find user ID
+    const {email} = req.body;
+    if (email) {
+      const userRecord = await prismaClient.user.findUnique({
+        where: {email},
+        select: {id: true},
+      });
+      entityId = userRecord?.id || null;
+    }
+
+    // Don't log sensitive information like passwords or OTPs
+    oldValue = null;
+    newValue = {email: req.body.email, deviceId: req.body.deviceId};
+
+    // Set up the finish handler for auth actions
+    res.on("finish", async () => {
+      const outcome =
+        res.statusCode >= 200 && res.statusCode < 300 ? "Success" : "Failure";
+
+      try {
+        await prismaClient.auditLog.create({
+          data: {
+            actionType,
+            action_performed,
+            entity: "auth",
+            entityId,
+            oldValue,
+            newValue,
+            ipAddress,
+            browserInfo,
+            outcome,
+            timestamp: new Date(),
+            // user: entityId ? {connect: {id: entityId}} : undefined,
+            user: entityId ? {create: {userId: entityId}} : undefined,
+          },
+        });
+      } catch (err) {
+        console.error("Auth audit logging failed:", err);
+      }
+    });
+
+    // Continue with the next middleware/controller
+    if (typeof responseBodyOrNext === "function") {
+      return responseBodyOrNext();
+    }
+    return;
+  }
 
   const fetchAuditValue =
     entityAuditHandlers[entity] ||
@@ -600,6 +674,36 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
     } catch (err) {
       console.error("Audit logging failed:", err);
     }
+
+    // Special handling for auth actions
+    // if (
+    //   [
+    //     "FORGOT_PASSWORD_REQUEST",
+    //     "FORGOT_PASSWORD_VERIFY",
+    //     "FORGOT_PASSWORD_UPDATE",
+    //   ].includes(actionType)
+    // ) {
+    //   // For auth actions, the outcome is based on status code
+    //   outcome =
+    //     res.statusCode >= 200 && res.statusCode < 300 ? "Success" : "Failure";
+
+    //   await prismaClient.auditLog.create({
+    //     data: {
+    //       actionType,
+    //       action_performed,
+    //       entity: "auth",
+    //       entityId,
+    //       oldValue: oldValue ? oldValue : null,
+    //       newValue: newValue ? newValue : null,
+    //       ipAddress,
+    //       browserInfo,
+    //       outcome,
+    //       timestamp: new Date(),
+    //       user: entityId ? {connect: {id: entityId}} : undefined,
+    //     },
+    //   });
+    //   return;
+    // }
   });
 
   if (typeof responseBodyOrNext === "function") {
