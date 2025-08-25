@@ -58,6 +58,8 @@ const Editor = () => {
     const [pageWidth, setPageWidth] = useState<number | string>("100%") // decides the width/screen of the page
     const [locations, setLocations] = useState<LocationType[]>([{ id: "", name: "" }])
     const [currentWidth, setCurrentWidth] = useState<string>("")
+    const [onHoverToolbar, setOnHoverToolbar] = useState<boolean>(false);
+    const [showToolbar, setShowToolbar] = useState<boolean>(true)
 
     const toolbarRef = useDraggable()
 
@@ -73,7 +75,7 @@ const Editor = () => {
 
     const { webpage, setWebpage } = websiteContent;
 
-    const sectionStyleSetter = currentSectionSetter ? currentSectionSetter : () => { };
+    const sectionStyleSetter = currentSectionSetter //? currentSectionSetter : () => { };
 
     const saveAllSection = () => {
         if (Array.isArray(finalSubmit)) {
@@ -289,119 +291,156 @@ const Editor = () => {
     }
 
     return (
-        <div style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
-            {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", }}>
-
-                <div
-                    ref={containerRef}
-                    style={{
-                        flex: 1,
-                        width: pageWidth,
-                        margin: "0 auto",
-                        minHeight: "100vh",
-                        transition: ".1s linear all",
-                        backgroundColor: "#e7e5e4", // stone-200
-                        backgroundImage: `
-                        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
-                        `,
-                        backgroundSize: "15px 15px", // size of grid squares
-                        // position: "relative",
-                        // zIndex: 1
-                    }}
-                    className="bg-stone-200"
-                >
-                    {webpage?.contents?.map((section: any, i: number, a: any[]) => {
-                        const lastSection = i === a.length - 1;
-
-                        return (
-                            <Section
-                                key={i}
-                                element={section.elements}
-                                section={section}
-                                style={section.style[activeScreen]}
-                                rmSection={rmSection}
-                                onEditing={() => {
-                                    contextRef.setContextRef(null);
-                                }}
-                                updateData={saveData}
-                                setUpdateData={setSaveData}
-                                finalUpdate={finalUpdate}
-                                lastSection={lastSection}
-                                createSection={CreateSection}
-                                setGivenName={setGivenName}
-                            />
-                        );
-                    })}
-                    <AddSection controller={addSection} />
-                </div>
-
-
-            </div>
-            {/* Sidebar/toolbars */}
-            <div
-                style={{ width: "250px", backgroundColor: "#393E46", height: "100%", overflowY: "scroll", zIndex: 1000 }}
-                className="scroll-one fixed top-0 right-0"
-                ref={toolbarRef}
-            >
-                <button
-                    style={{
-                        backgroundColor: "#007bff",
-                        border: "none",
-                        padding: "10px",
-                        borderRadius: "2px",
-                        color: "white",
-                        width: "100%",
-                        position: "sticky",
-                        top: 0,
-                        zIndex: 1
-                    }}
-                    onClick={(e) => { e.stopPropagation(); saveAllSection(); setSaveData(true); }}
-                >
-                    Save Changes
-                </button>
-                <div className="bg-[#1C352D] text-white text-2xl p-1 py-4 flex justify-evenly">
+        <div className="flex flex-col overflow-hidden">
+            <div className="h-[8vh] bg-slate-700 flex justify-end items-center p-2 gap-8">
+                <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
                     <button onClick={() => applyXLScreen()} className={`${styleForScreenIcons} ${activeScreen === "xl" && "bg-stone-500"}`}><CiDesktop /></button>
                     <button onClick={() => applyLGScreen()} className={`${styleForScreenIcons} ${activeScreen === "lg" && "bg-stone-500"}`}><CiLaptop /></button>
                     <button onClick={() => applyMDScreen()} className={`${styleForScreenIcons} ${activeScreen === "md" && "bg-stone-500"}`}><IoIosTabletPortrait /></button>
                     <button onClick={() => applySMScreen()} className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"}`}><CiMobile1 /></button>
                 </div>
+                <button
+                    className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                    style={{
+                        border: "none",
+                        padding: "6px 8px",
+                        borderRadius: "2px",
+                        color: "white",
+                        top: 0,
+                    }}
+                    onClick={(e) => { e.stopPropagation(); setOnHoverToolbar(!onHoverToolbar) }}
+                >
+                    {onHoverToolbar ? "Styles" : "Hover styles"}
+                </button>
 
-                <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-                    {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
-                    {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
-                    <CustomSelect
-                        options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
-                        firstOption="Set Location"
-                        disableFirstValue={true}
-                        onChange={(value) => {
-                            setWebpage((prev: webpageType | null) => {
-                                if (!prev) return null
-                                return {
-                                    ...prev, locationId: value
-                                }
-                            })
-                        }}
-                    />
-                </div>
-                {/* toolbars */}
-                {
-                    !contextRef.activeRef ? (
-                        <>
-                            <HoverToolbar />
-                            {/* <DimensionToolbar updateStyles={updateSectionStyles} />
-                            <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} /> */}
-                        </>
-                    ) : (
-                        imageEdit ?
-                            <ImageStyleToolbar />
-                            : <RichTextToolBar />
-                    )
-                }
+                <button
+                    className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                    style={{
+                        border: "none",
+                        padding: "6px 8px",
+                        borderRadius: "2px",
+                        color: "white",
+                    }}
+                    onClick={(e) => { e.stopPropagation(); setShowToolbar(!showToolbar) }}
+                >
+                    {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
+                </button>
+                <button
+                    className="text-sm cursor-pointer"
+                    style={{
+                        backgroundColor: "#007bff",
+                        border: "none",
+                        padding: "6px 8px",
+                        borderRadius: "2px",
+                        color: "white",
+                    }}
+                    onClick={(e) => { e.stopPropagation(); saveAllSection(); setSaveData(true); }}
+                >
+                    Save Changes
+                </button>
             </div>
-            <Toaster position="top-right" />
-        </div >
+
+
+            <div style={{ display: "flex", height: "92vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
+                {/* website */}
+                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", }}>
+
+                    <div
+                        ref={containerRef}
+                        style={{
+                            flex: 1,
+                            width: pageWidth,
+                            margin: "0 auto",
+                            minHeight: "100vh",
+                            transition: ".1s linear all",
+                            backgroundColor: "#e7e5e4", // stone-200
+                            backgroundImage: `
+                        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+                        `,
+                            backgroundSize: "15px 15px", // size of grid squares
+                            // position: "relative",
+                            // zIndex: 1
+                        }}
+                        className="bg-stone-200"
+                    >
+                        {webpage?.contents?.map((section: any, i: number, a: any[]) => {
+                            const lastSection = i === a.length - 1;
+
+                            return (
+                                <Section
+                                    key={i}
+                                    element={section.elements}
+                                    section={section}
+                                    style={section.style[activeScreen]}
+                                    rmSection={rmSection}
+                                    onEditing={() => {
+                                        contextRef.setContextRef(null);
+                                    }}
+                                    updateData={saveData}
+                                    setUpdateData={setSaveData}
+                                    finalUpdate={finalUpdate}
+                                    lastSection={lastSection}
+                                    createSection={CreateSection}
+                                    setGivenName={setGivenName}
+                                />
+                            );
+                        })}
+                        {
+                            showToolbar &&
+                            < AddSection controller={addSection} />
+                        }
+                    </div>
+
+
+                </div>
+                {/* Sidebar/toolbars */}
+                {
+                    showToolbar &&
+                    <div
+                        style={{ width: "250px", backgroundColor: "#393E46", height: "92vh", overflowY: "scroll", zIndex: 1000 }}
+                        className="scroll-one fixed top-[8vh] right-0"
+                        ref={toolbarRef}
+                    >
+
+
+
+                        <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
+                            {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
+                            {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
+                            <CustomSelect
+                                options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
+                                firstOption="Set Location"
+                                disableFirstValue={true}
+                                onChange={(value) => {
+                                    setWebpage((prev: webpageType | null) => {
+                                        if (!prev) return null
+                                        return {
+                                            ...prev, locationId: value
+                                        }
+                                    })
+                                }}
+                            />
+                        </div>
+                        {/* toolbars */}
+                        {onHoverToolbar ?
+                            <HoverToolbar /> : (
+                                !contextRef.activeRef ? (
+                                    <>
+                                        <DimensionToolbar updateStyles={updateSectionStyles} />
+                                        <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
+                                    </>
+                                ) : (
+                                    imageEdit ?
+                                        <ImageStyleToolbar />
+                                        : <RichTextToolBar />
+                                ))
+                        }
+                    </div>
+                }
+                <Toaster position="top-right" />
+            </div>
+        </div>
     );
 };
 

@@ -188,6 +188,24 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
+  const handleQuickRotate = (deg: number) => {
+    setElement((prev: any) => {
+      const prevStyle = prev.style?.[activeScreen] || {};
+
+      return {
+        ...prev,
+        style: {
+          ...prev.style,
+          [activeScreen]: {
+            ...prevStyle,
+            transform: `rotate(${deg}deg)`,
+          },
+        },
+      };
+    });
+  };
+
+
   // useEffect(() => {
   //   function handleClickOutside(event: MouseEvent) {
   //     if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node) &&
@@ -244,6 +262,7 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Height:", style?.[activeScreen]?.height, "text", handleInputStyles("height"))}
 
+      <label className="text-xs font-bold text-stone-700 dark:text-stone-300 mb-[-10px]">Image Fit</label>
       <CustomSelect
         options={[
           { value: "cover", label: "Cover" },
@@ -256,7 +275,7 @@ const ImageStyleToolbar: React.FC = () => {
         firstValue="auto"
       />
 
-      <CustomSelect
+      {/* <CustomSelect
         options={[
           // { value: "relative", label: "Just Stack" },
           { value: "absolute", label: "Drag" }
@@ -265,7 +284,7 @@ const ImageStyleToolbar: React.FC = () => {
         onChange={(value) => handleObjectSize(value)}
         firstOption="No Drag"
         firstValue="static"
-      />
+      /> */}
 
       <div>
         <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Margin</label>
@@ -357,6 +376,21 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow("Stack Index:", style?.[activeScreen]?.zIndex, "number", handleInputStyles("zIndex"))}
       {renderInputRow("top:", style?.[activeScreen]?.top, "text", handleInputStyles("top"))}
       {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
+
+      <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Quick Rotate</h4>
+      <div className="flex gap-2">
+        {[45, 90, 135, 180].map((deg) => (
+          <button
+            key={deg}
+            onClick={() => handleQuickRotate(deg)}
+            className="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 
+                 dark:bg-zinc-700 dark:hover:bg-zinc-600 
+                 border text-sm"
+          >
+            {deg}°
+          </button>
+        ))}
+      </div>
 
       {/* Image Selector Modal */}
       {openSelector && (

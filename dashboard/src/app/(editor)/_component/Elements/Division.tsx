@@ -1,4 +1,4 @@
-import React, { FocusEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BaseElement } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 
@@ -19,38 +19,31 @@ const Division = ({
     updateElement,
     rmElement,
 }: HeadingProps) => {
-
-    const elementRef = useRef<HTMLHeadingElement | null>(null);
+    const elementRef = useRef<HTMLDivElement | null>(null);
     const [divStyle, setDivStyle] = useState<React.CSSProperties>(style);
     const { contextElement, toolbarRef, contextForSection, activeScreen } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
 
-    // Set innerHTML when content updates
-    // useEffect(() => {
-    //     if (elementRef.current && (element.content || element.content === "")) {
-    //         elementRef.current.innerHTML = element.content;
-    //     }
-    // }, [element.content]);
+    const isAbsolute = divStyle.position === "absolute";
+    const dragData = useRef<{ offsetX: number; offsetY: number } | null>(null);
 
-    const activateTheEditing = (e: any) => {
-        e.stopPropagation()
-        setEditing(true)
-        contextForSection.setRmSection(() => () => rmElement(element.id))
-        contextForSection.setCurrentSection(divStyle)
-        contextForSection.setCurrentSectionSetter(() => setDivStyle)
-        contextForSection.setSectionRef(elementRef)
+    const activateTheEditing = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setEditing(true);
+        contextForSection.setRmSection(() => () => rmElement(element.id));
+        contextForSection.setCurrentSection(divStyle);
+        contextForSection.setCurrentSectionSetter(() => setDivStyle);
+        contextForSection.setSectionRef(elementRef);
     };
 
-    // Remove outline if clicked outside
+    // click outside
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (!elementRef.current) return;
-
             const clickedToolbar =
                 toolbarRef.current?.contains(e.target as Node) ?? false;
             const clickedElement =
                 elementRef.current?.contains(e.target as Node) ?? false;
-
             if (!clickedToolbar && !clickedElement) {
                 elementRef.current.style.outline = "none";
                 setEditing(false);
@@ -59,16 +52,18 @@ const Division = ({
 
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [toolbarRef, elementRef]); // contextRef not needed
-
+    }, [toolbarRef]);
 
     // Sync style changes
     useEffect(() => {
         if (isEditing) {
             contextElement.setElement(divStyle);
         }
-        contextForSection.setCurrentSection(divStyle)
-        updateElement(element.id, { ...element, style: { ...element.style, [activeScreen]: divStyle } });
+        contextForSection.setCurrentSection(divStyle);
+        updateElement(element.id, {
+            ...element,
+            style: { ...element.style, [activeScreen]: divStyle },
+        });
     }, [divStyle]);
 
     // Sync content changes
@@ -76,15 +71,73 @@ const Division = ({
         updateContent(element.id, "content", "null");
     }, [divStyle.content]);
 
+    // ---- DRAG HANDLERS (outside of useEffect) ----
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+        if (!dragData.current) return;
+
+        const { offsetX, offsetY } = dragData.current;
+
+        setDivStyle((prev) => ({
+            ...prev,
+            left: `${e.clientX - offsetX}px`,
+            top: `${e.clientY - offsetY}px`,
+        }));
+    }, []);
+
+    const handleMouseUp = useCallback(() => {
+        dragData.current = null;
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+    }, [handleMouseMove]);
+
+    const handleMouseDown = useCallback(
+        (e: MouseEvent) => {
+            if (!isAbsolute || !elementRef.current) return;
+
+            let left = parseFloat(divStyle.left?.toString() || "NaN");
+            let top = parseFloat(divStyle.top?.toString() || "NaN");
+
+            // If left/top are not set yet, get them from DOM
+            if (isNaN(left) || isNaN(top)) {
+                const rect = elementRef.current.getBoundingClientRect();
+                left = rect.left;
+                top = rect.top;
+
+                setDivStyle((prev) => ({
+                    ...prev,
+                    left: `${left}px`,
+                    top: `${top}px`,
+                }));
+            }
+
+            dragData.current = {
+                offsetX: e.clientX - left,
+                offsetY: e.clientY - top,
+            };
+
+            document.addEventListener("mousemove", handleMouseMove);
+            document.addEventListener("mouseup", handleMouseUp);
+        },
+        [isAbsolute, divStyle.left, divStyle.top, handleMouseMove, handleMouseUp]
+    );
+
+
+    useEffect(() => {
+        const el = elementRef.current;
+        if (!el) return;
+        el.addEventListener("mousedown", handleMouseDown);
+        return () => el.removeEventListener("mousedown", handleMouseDown);
+    }, [handleMouseDown]);
+
     return (
         <div
-            style={style}
+            style={divStyle}
             id={element.id}
             ref={elementRef}
             onClick={activateTheEditing}
-            onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
+            onDoubleClick={(e) => e.stopPropagation()}
         />
-    )
-}
+    );
+};
 
-export default React.memo(Division)
+export default React.memo(Division);
