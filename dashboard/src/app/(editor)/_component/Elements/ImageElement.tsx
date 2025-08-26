@@ -114,17 +114,20 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     const dy = e.clientY - dragStartPos.current.y;
 
     // Update React state directly (no direct DOM updates)
-    setThisElement((prev) => ({
-      ...prev,
-      style: {
-        ...prev.style,
-        [activeScreen]: {
-          ...prev.style?.[activeScreen],
-          left: elementStartPos.current.x + dx + "px",
-          top: elementStartPos.current.y + dy + "px",
-        },
-      },
-    }));
+    imageRef.current?.style.setProperty("top", elementStartPos.current.y + dy + "px", "important")
+    imageRef.current?.style.setProperty("left", elementStartPos.current.x + dx + "px", "important")
+
+    // setThisElement((prev) => ({
+    //   ...prev,
+    //   style: {
+    //     ...prev.style,
+    //     [activeScreen]: {
+    //       ...prev.style?.[activeScreen],
+    //       left: elementStartPos.current.x + dx + "px",
+    //       top: elementStartPos.current.y + dy + "px",
+    //     },
+    //   },
+    // }));
   };
 
 

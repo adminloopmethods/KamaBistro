@@ -13,7 +13,7 @@ type HeadingProps = {
     rmElement: (id: string) => void;
 };
 
-const Heading: React.FC<HeadingProps> = ({
+const Headingthree: React.FC<HeadingProps> = ({
     element,
     editable = true,
     style,
@@ -94,7 +94,7 @@ const Heading: React.FC<HeadingProps> = ({
 
     console.log(style?.letterSpacing)
     return (
-        <h2
+        <h3
             className=""
             id={element.id}
             ref={elementRef}
@@ -109,4 +109,4 @@ const Heading: React.FC<HeadingProps> = ({
     );
 };
 
-export default React.memo(Heading);
+export default React.memo(Headingthree);
