@@ -26,8 +26,8 @@ router.post(
 router.post(
   "/assign-page-role",
   authenticateUser,
-  requireSuperAdmin,
-  tryCatchWrap(UserController.AssignPageRoleHandler)
+  // requireSuperAdmin,
+  tryCatchWrap(UserController.AssignRoleToWebpage)
 );
 
 router.get("/locations", tryCatchWrap(UserController.GetAllLocations));

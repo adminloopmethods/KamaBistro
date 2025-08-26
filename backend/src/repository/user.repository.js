@@ -827,3 +827,61 @@ export const deleteLogsByDateRange = async (startDate, endDate) => {
 export const fetchAllLocations = async () => {
   return await prismaClient.location.findMany();
 };
+
+export const assignUserToWebpage = async (webpageId, userId, roleId) => {
+  // First, find the role to get its name
+  const role = await prismaClient.role.findUnique({
+    where: {id: roleId},
+  });
+
+  if (!role) {
+    throw new Error(`Role with ID '${roleId}' not found`);
+  }
+
+  // Find the opposite role
+  const oppositeRoleName =
+    role.name.toUpperCase() === "EDITOR" ? "VERIFIER" : "EDITOR";
+  const oppositeRole = await prismaClient.role.findUnique({
+    where: {name: oppositeRoleName},
+  });
+
+  if (!oppositeRole) {
+    throw new Error(`Opposite role '${oppositeRoleName}' not found`);
+  }
+
+  // Execute operations in a transaction
+  return await prismaClient.$transaction(async (tx) => {
+    // Remove existing role associations for this user on this webpage
+    await tx.pageUserRole.deleteMany({
+      where: {
+        webpageId: webpageId,
+        userId: userId,
+        roleId: {
+          in: [roleId, oppositeRole.id],
+        },
+      },
+    });
+
+    // Create new role assignment
+    await tx.pageUserRole.create({
+      data: {
+        userId: userId,
+        webpageId: webpageId,
+        roleId: roleId,
+      },
+    });
+
+    // Update the webpage's editorId or verifierId
+    const updateData = {};
+    if (role.name.toUpperCase() === "EDITOR") {
+      updateData.editorId = userId;
+    } else if (role.name.toUpperCase() === "VERIFIER") {
+      updateData.verifierId = userId;
+    }
+
+    return await tx.webpage.update({
+      where: {id: webpageId},
+      data: updateData,
+    });
+  });
+};

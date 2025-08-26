@@ -1,5 +1,6 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
-export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API as string;
+export const cloudinaryApiPoint = process.env
+  .NEXT_PUBLIC_CLOUDINARY_API as string;
 
 if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
@@ -25,6 +26,10 @@ const endpointMap = {
   getAuditLogs: `${auth}/logs`,
   activateUser: `${users}/activate`,
   deactivateUser: `${users}/deactivate`,
+  assignPageRole: `${users}/assign-page-role`,
+
+  //roles
+  getRoles: `${users}/roles`,
 
   //location
   getLocations: `${users}/locations`,

@@ -20,11 +20,32 @@ import Link from "next/link";
 import {Skeleton} from "@/components/ui/skeleton";
 
 // Types
+// interface User {
+//   id: string;
+//   name: string;
+//   role: "editor" | "verifier";
+//   avatar: string;
+// }
+
+// interface Webpage {
+//   id: string;
+//   title: string;
+//   description?: string;
+//   icon: React.ReactNode;
+//   lastEdited: string;
+//   editor?: User;
+//   verifier?: User;
+//   status: "draft" | "published" | "needs-review";
+//   route: string;
+// }
+
 interface User {
   id: string;
   name: string;
-  role: "editor" | "verifier";
-  avatar: string;
+  email: string;
+  role?: string;
+  image?: string;
+  status: string;
 }
 
 interface Webpage {
@@ -188,37 +209,56 @@ const CMSDashboard = () => {
   };
 
   // Assign a user to the page
-  const assignUser = (user: User) => {
+  const assignUser = async (user: User) => {
     if (!currentPage || !assigningRole) return;
 
-    const updatedPages = webpages.map((page) => {
-      if (page.id === currentPage.id) {
-        return {
-          ...page,
-          [assigningRole]: user,
-        };
-      }
-      return page;
-    });
+    try {
+      // Update the local state optimistically
+      const updatedPages = webpages.map((page) => {
+        if (page.id === currentPage.id) {
+          return {
+            ...page,
+            [assigningRole]: user,
+          };
+        }
+        return page;
+      });
 
-    setWebpages(updatedPages);
-    setShowAssignModal(false);
-    setAssigningRole(null);
+      setWebpages(updatedPages);
+      setShowAssignModal(false);
+      setCurrentPage(null);
+      setAssigningRole(null);
+
+      // Optionally refetch the data to ensure consistency
+      // await getAllpages();
+    } catch (error) {
+      console.error("Error updating local state:", error);
+      // Optionally show an error message to the user
+    }
   };
 
   // Remove assigned user
-  const removeUser = (pageId: string, role: "editor" | "verifier") => {
-    const updatedPages = webpages.map((page) => {
-      if (page.id === pageId) {
-        return {
-          ...page,
-          [role]: undefined,
-        };
-      }
-      return page;
-    });
+  const removeUser = async (pageId: string, role: "editor" | "verifier") => {
+    try {
+      // You might need to implement a remove role API endpoint
+      // For now, just update the local state
+      const updatedPages = webpages.map((page) => {
+        if (page.id === pageId) {
+          return {
+            ...page,
+            [role]: undefined,
+          };
+        }
+        return page;
+      });
 
-    setWebpages(updatedPages);
+      setWebpages(updatedPages);
+
+      // If you have a remove role API endpoint, call it here
+      // await removePageRoleReq({ webpageId: pageId, role });
+    } catch (error) {
+      console.error("Error removing user:", error);
+    }
   };
 
   useEffect(() => {
@@ -380,8 +420,11 @@ const CMSDashboard = () => {
         show={showAssignModal}
         currentPage={currentPage}
         assigningRole={assigningRole}
-        users={users}
-        onClose={() => setShowAssignModal(false)}
+        onClose={() => {
+          setShowAssignModal(false);
+          setCurrentPage(null);
+          setAssigningRole(null);
+        }}
         onAssign={assignUser}
       />
     </div>

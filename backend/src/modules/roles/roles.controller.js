@@ -11,7 +11,7 @@ import {
   deactivateRoles,
   updateRole,
 } from "./roles.service.js";
-import { handleEntityCreationNotification } from "../../helper/notificationHelper.js";
+import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
 
 const GetRoles = async (req, res) => {
   const {search, status, page, limit} = req.query;
@@ -48,7 +48,6 @@ const CreateRole = async (req, res) => {
   });
 };
 
-
 const UpdateRole = async (req, res) => {
   const {id} = req.params;
   const {name, roleTypeId, permissions} = req.body;
@@ -70,7 +69,7 @@ const UpdateRole = async (req, res) => {
       io.to(socketIdOfUpdatedUser).emit("userUpdated", {result: el});
     }
   });
- 
+
   res.status(202).json(result);
 };
 
@@ -102,6 +101,53 @@ const DeactivateRole = async (req, res) => {
   res.status(200).json(result);
 };
 
+const getRole = async (req, res) => {
+  try {
+    const roles = await prisma.role.findMany({
+      where: {status: "ACTIVE"},
+    });
+
+    res.status(200).json({
+      success: true,
+      roles: roles,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const GetRoleByName = async (req, res) => {
+  try {
+    const {name} = req.params;
+    const role = await prisma.role.findFirst({
+      where: {
+        name: name.toUpperCase(),
+        status: "ACTIVE",
+      },
+    });
+
+    if (!role) {
+      return res.status(404).json({
+        success: false,
+        message: `Role '${name}' not found`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      role: role,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   GetRoles,
   GetRoleById,
@@ -110,4 +156,6 @@ export default {
   ActivateRole,
   DeactivateRole,
   UpdateRole,
+  getRole,
+  GetRoleByName,
 };

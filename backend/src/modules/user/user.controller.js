@@ -2,6 +2,7 @@ import {getSocketId} from "../../helper/socketConnectionID.js";
 import {
   activateUsers,
   AssignPageRole,
+  assignRole,
   createUser,
   deactivateUsers,
   editProfile,
@@ -157,6 +158,32 @@ const GetAllLocations = async (req, res) => {
   res.status(201).json(location);
 };
 
+const AssignRoleToWebpage = async (req, res) => {
+  try {
+    const {webpageId, userId, roleId} = req.body;
+
+    if (!userId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and roleId are required",
+      });
+    }
+
+    const result = await assignRole(webpageId, userId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `User successfully assigned to webpage role`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   CreateUserHandler,
   AssignPageRoleHandler,
@@ -172,4 +199,5 @@ export default {
   GetUserProfile,
   EditProfileImage,
   GetAllLocations,
+  AssignRoleToWebpage,
 };
