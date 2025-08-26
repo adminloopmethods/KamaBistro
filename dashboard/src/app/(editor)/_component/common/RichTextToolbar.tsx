@@ -17,7 +17,9 @@ const fontFamilyOptions = [
     { label: 'Serif', value: 'serif' },
     { label: 'System UI', value: 'system-ui' },
     { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Monospace', value: 'monospace' }
+    { label: 'Monospace', value: 'monospace' },
+    { label: 'Poppins', value: 'var(--font-poppins)' },
+    { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
 
 const fontSizeOptions = [
