@@ -22,7 +22,7 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                 id: el.id,
                 name: el.name,
                 givenName: el.givenName || null,
-                order: index, // 👈 use original index
+                order: index,
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -36,7 +36,10 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                     id: childEl.id,
                     name: childEl.name,
                     content: childEl.content,
-                    order: childIndex, // within its own section
+                    hover: childEl.hover,
+                    href: childEl.href,
+                    aria: childEl.aria,
+                    order: childIndex,
                     style: {
                       create: {
                         xl: childEl.style?.xl,
@@ -53,7 +56,10 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                 id: el.id,
                 name: el.name,
                 content: el.content,
-                order: index, // 👈 use original index
+                hover: el.hover,
+                href: el.href,
+                aria: el.aria,
+                order: index,
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -171,6 +177,9 @@ export const getWebpageByIdService = async (id) => {
         name: el.name,
         style: el.style,
         content: el.content,
+        hover: el.hover,
+        href: el.href,
+        aria: el.aria,
         order: el.order,
         type: "element",
       })) || []),
@@ -301,6 +310,9 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
           update: {
             name: el.name,
             content: el.content,
+            hover: el.hover,
+            href: el.href,
+            aria: el.aria,
             order: i,
             style: { update: el.style || {} },
           },
@@ -308,6 +320,9 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
             id: el.id,
             name: el.name,
             content: el.content,
+            hover: el.hover,
+            href: el.href,
+            aria: el.aria,
             order: i,
             contentRef: { connect: { id: parentId } },
             style: { create: el.style || {} },

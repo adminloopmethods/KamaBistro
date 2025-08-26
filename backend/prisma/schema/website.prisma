@@ -65,7 +65,7 @@ model Element {
   styleId String @unique
 
   hover String?
-  url   String?
+  href   String?
   aria  String?
 
   createdAt DateTime @default(now())
