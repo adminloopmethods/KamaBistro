@@ -26,10 +26,10 @@ model Webpage {
 }
 
 model Content {
-  id        String   @id @default(uuid())
+  id        String  @id @default(uuid())
   name      String
   givenName String?
-  order     Int      @default(0)
+  order     Int     @default(0)
 
   // For top-level sections
   webpageId String?
@@ -51,22 +51,22 @@ model Content {
   @@index([parentId])
 }
 
-
 model Element {
-  id         String   @id @default(uuid())
-  name       String
-  content    String
-  items      String[] @default([]) // for list
-  order      Int      @default(0)
+  id      String   @id @default(uuid())
+  name    String
+  content String
+  items   String[] @default([]) // for list
+  order   Int      @default(0)
 
   contentId  String
-  contentRef Content  @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  contentRef Content @relation(fields: [contentId], references: [id], onDelete: Cascade)
 
-  style      Style    @relation("ElementStyle", fields: [styleId], references: [id], onDelete: Cascade)
-  styleId    String   @unique
+  style   Style  @relation("ElementStyle", fields: [styleId], references: [id], onDelete: Cascade)
+  styleId String @unique
 
-  hover      String?
-  url        String?
+  hover String?
+  url   String?
+  aria  String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -129,7 +129,6 @@ model draft {
   @@index([webpageId])
   @@index([userId])
 }
-
 
 // A user can be an editor on one page and a verifier on another.
 // A webpage has exactly one editor and one verifier at a time.

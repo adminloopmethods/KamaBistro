@@ -75,7 +75,6 @@ const Section: React.FC<SectionProps> = ({
   );
 
   const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
-  console.log(childsAreHidden)
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);

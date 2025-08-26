@@ -92,7 +92,6 @@ const Heading: React.FC<HeadingProps> = ({
     updateContent(element.id, "content", thisElement.content);
   }, [thisElement.content]);
 
-console.log(style?.letterSpacing)
   return (
     <h1
       className=""

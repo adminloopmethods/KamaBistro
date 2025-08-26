@@ -23,7 +23,7 @@ const fontFamilyOptions = [
 ];
 
 const fontSizeOptions = [
-    10, 11, 12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
+    12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
 ].map(size => ({ label: `${size}px`, value: `${size}px` }));
 
 const positionOptions = [
