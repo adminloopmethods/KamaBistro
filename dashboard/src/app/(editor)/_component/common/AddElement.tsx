@@ -38,6 +38,7 @@ const AddElement: React.FC<AddElementProps> = ({ controller, canAddSection }) =>
     const elementTypeOptions: Option[] = [
         ...(canAddSection ? [{ label: "Section", value: "section" }] : []),
         { label: "Heading", value: "heading" },
+        { label: "Section Heading", value: "sectionHeading" },
         { label: "Paragraph", value: "paragraph" },
         { label: "Image", value: "image" },
         { label: "Line", value: "line" }

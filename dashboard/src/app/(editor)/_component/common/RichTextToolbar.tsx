@@ -216,9 +216,23 @@ const RichTextToolBar: React.FC = () => {
             {/* Dimensions */}
             <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Dimensions</h3>
             <div className="grid grid-cols-2 gap-2 overflow-hidden">
-                {['width', 'height', 'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom'].map(key => {
+                {[
+                    { "label": "Width", "value": "width" },
+                    { "label": "Height", "value": "height" },
+                    { "label": "Padding Top", "value": "paddingTop" },
+                    { "label": "Padding Bottom", "value": "paddingBottom" },
+                    { "label": "Padding Left", "value": "paddingLeft" },
+                    { "label": "Padding Right", "value": "paddingRight" },
+                    { "label": "Margin Top", "value": "marginTop" },
+                    { "label": "Margin Bottom", "value": "marginBottom" },
+                    { "label": "Margin Left", "value": "marginLeft" },
+                    { "label": "Margin Right", "value": "marginRight" }
+                ].map(({ value: key, label }, i) => {
                     const isHeight = key === 'height';
-                    return <input key={key} type="text" placeholder={key} value={style[key as keyof React.CSSProperties] || ''} onChange={e => handleInputChange(key as keyof React.CSSProperties, e.target.value, isHeight)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
+                    return (<div key={key}>
+                        <label htmlFor={key + i} className='text-xs'>{label}</label>
+                        <input key={key} id={key + i} type="text" placeholder={key} value={style[key as keyof React.CSSProperties] || ''} onChange={e => handleInputChange(key as keyof React.CSSProperties, e.target.value, isHeight)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
+                    </div>)
                 })}
             </div>
         </div>

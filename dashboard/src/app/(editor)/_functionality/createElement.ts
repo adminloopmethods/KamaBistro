@@ -3,6 +3,7 @@ import ImageElemComponent from "../_component/Elements/ImageElement";
 import Paragraph from "../_component/Elements/Paragraph";
 import placeHolderImage from "@/assets/placeholderImage.png"
 import Division from "../_component/Elements/Division";
+import SectionHeading from "../_component/Elements/SectionHeading";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -170,6 +171,7 @@ const gED = generateElementData;
 // CreateElement factory map for default new elements
 export const CreateElement: Record<string, () => BaseElement | ImageElementType> = {
   heading: () => gED("h1", "New Heading"),
+  sectionHeading: () => gED("h1", "New 2nd Heading"),
   paragraph: () => gED("p", "New Paragraph"),
   image: () => gED("img", "", "Placeholder Image"),
   ul: () => gED("ul", "", undefined, ["List item 1", "List item 2"]),
@@ -188,6 +190,7 @@ export default {
 // Component map
 export const mapElement: Record<string, React.ComponentType<any>> = {
   h1: Heading,
+  h2: SectionHeading,
   p: Paragraph,
   img: ImageElemComponent,
   division: Division
