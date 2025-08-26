@@ -92,8 +92,8 @@ const LinkComponent: React.FC<LinkProps> = ({
     // Sync href + ariaLabel
     useEffect(() => {
         updateContent(element.id, "href", thisElement.href);
-        updateContent(element.id, "ariaLabel", thisElement.ariaLabel);
-    }, [thisElement.href, thisElement.ariaLabel]);
+        updateContent(element.id, "aria", thisElement.aria);
+    }, [thisElement.href, thisElement.aria]);
 
     // Check if link is external
     const isExternal = thisElement.href?.startsWith("http");
@@ -103,7 +103,7 @@ const LinkComponent: React.FC<LinkProps> = ({
             {isExternal ? (
                 <a
                     href={thisElement.href || "#"}
-                    aria-label={thisElement.ariaLabel || ""}
+                    aria-label={thisElement.aria || ""}
                     id={element.id}
                     ref={elementRef}
                     onClick={activateTheEditing}
@@ -119,7 +119,7 @@ const LinkComponent: React.FC<LinkProps> = ({
             ) : (
                 <Link
                     href={thisElement.href || "#"}
-                    aria-label={thisElement.ariaLabel || ""}
+                    aria-label={thisElement.aria || ""}
                     id={element.id}
                     ref={elementRef}
                     onClick={activateTheEditing}
@@ -173,9 +173,9 @@ const LinkComponent: React.FC<LinkProps> = ({
                         </label>
                         <textarea
                             placeholder="Describe the purpose of this link"
-                            value={thisElement.ariaLabel || ""}
+                            value={thisElement.aria || ""}
                             onChange={(e) =>
-                                setThisElement((prev) => ({ ...prev, ariaLabel: e.target.value }))
+                                setThisElement((prev) => ({ ...prev, aria: e.target.value }))
                             }
                             className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm shadow-sm 
                                 focus:border-blue-500 focus:ring focus:ring-blue-200 outline-none transition resize-none"

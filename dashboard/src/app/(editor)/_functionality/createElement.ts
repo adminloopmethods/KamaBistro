@@ -24,7 +24,7 @@ export interface BaseElement {
   style: StyleObject;
   [key: string]: any;
   hover: StyleObject;
-  ariaLabel: string;
+  aria: string; // will work as aria label
 }
 
 // Specific element interfaces extending BaseElement
@@ -72,7 +72,7 @@ class Element implements BaseElement {
   content: string;
   style: StyleObject = defaultStyles;
   hover: StyleObject = defaultStyles;
-  ariaLabel: string = "";
+  aria: string = "";
 
   constructor(name: string, content: string) {
     this.name = name;
