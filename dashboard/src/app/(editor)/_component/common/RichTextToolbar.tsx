@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { useMyContext } from '@/Context/EditorContext';
 import {
     onAlignChange, onBgColorChange, onBold, onColorChange, onFamilyFontChange,
-    onItalic, onSizeChange, onUnderline
+    onItalic, onletterSpacingChange, onSizeChange, onUnderline
 } from '../../_functionality/styleObject';
 import CustomSelect from '@/app/_common/CustomSelect';
 
@@ -58,7 +58,7 @@ const RichTextToolBar: React.FC = () => {
     useEffect(() => {
         const st = element?.style?.[activeScreen] || {};
         setStyle(st);
-        setIsBold(st.fontWeight === 'bold');
+        setIsBold(st.fontWeight === 'bold' || st.fontWeight > 500);
         setIsItalic(st.fontStyle === 'italic');
         setIsUnderline(st.textDecoration === 'underline');
         setAlignment((st.textAlign as any) || '');
@@ -152,9 +152,7 @@ const RichTextToolBar: React.FC = () => {
                     activeRef.style.setProperty("letter-spacing", `${val}px`, "important")
                 }}
                 onBlur={(e) => {
-                    setStyle((prev) => {
-                        return { ...prev, letterSpacing: e.target.value }
-                    })
+                    onletterSpacingChange(e.target.value + "px", element, Setter, activeScreen)
                 }}
                 className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
 

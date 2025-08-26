@@ -92,7 +92,7 @@ const Heading: React.FC<HeadingProps> = ({
     updateContent(element.id, "content", thisElement.content);
   }, [thisElement.content]);
 
-
+console.log(style?.letterSpacing)
   return (
     <h1
       className=""
@@ -101,7 +101,7 @@ const Heading: React.FC<HeadingProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={{ ...style, position: "relative", }}
+      style={{ ...style, position: "relative",zIndex: "2"}}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

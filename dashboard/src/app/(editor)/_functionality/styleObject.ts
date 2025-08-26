@@ -11,18 +11,16 @@ export const onBold = (
     Setter: SetterType,
     currentWidth: string
 ) => {
-    console.log(element)
-    console.log(currentWidth)
     const currentStyle = { ...element.style[currentWidth] };
     const boldness = currentStyle.fontWeight;
     if (boldness === "bold" || boldness < 600) {
-        currentStyle.fontWeight = "lighter";
+        currentStyle.fontWeight = "700";
         Setter((prev: any) => ({
             ...prev,
             style: { ...prev.style, [currentWidth]: currentStyle }
         }));
     } else {
-        currentStyle.fontWeight = "bold";
+        currentStyle.fontWeight = "400";
         Setter((prev: any) => ({
             ...prev,
             style: { ...prev.style, [currentWidth]: currentStyle }
@@ -85,6 +83,21 @@ export const onSizeChange = (
 ) => {
     const currentStyle = { ...element.style[currentWidth] };
     currentStyle.fontSize = size;
+    Setter((prev: any) => ({
+        ...prev,
+        style: { ...prev.style, [currentWidth]: currentStyle }
+    }));
+};
+
+export const onletterSpacingChange = (
+    size: string,
+    element: ElementType,
+    Setter: SetterType,
+    currentWidth: string
+) => {
+    console.log(size)
+    const currentStyle = { ...element.style[currentWidth] };
+    currentStyle.letterSpacing = size;
     Setter((prev: any) => ({
         ...prev,
         style: { ...prev.style, [currentWidth]: currentStyle }
