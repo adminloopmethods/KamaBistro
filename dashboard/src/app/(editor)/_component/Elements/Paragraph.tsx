@@ -100,7 +100,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={style}
+      style={{...style, position: "relative", zIndex: "2"}}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

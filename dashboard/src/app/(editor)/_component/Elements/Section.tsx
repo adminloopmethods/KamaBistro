@@ -82,16 +82,20 @@ const Section: React.FC<SectionProps> = ({
   const [dragOffsetX, setDragOffsetX] = useState(0);
   const [dragOffsetY, setDragOffsetY] = useState(0);
 
+
   const handleMouseDown = (e: MouseEvent) => {
     if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed") return;
 
     const rect = sectionRef.current?.getBoundingClientRect();
     if (!rect) return;
 
+    const topBarHeight = window.innerHeight * 0.08; // 8vh in pixels
+
     setDragOffsetX(e.clientX - rect.left);
-    setDragOffsetY(e.clientY - rect.top);
+    setDragOffsetY(e.clientY - rect.top + topBarHeight); // add 8vh offset here
     setIsDragging(true);
   };
+
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
@@ -99,11 +103,8 @@ const Section: React.FC<SectionProps> = ({
     const newLeft = e.clientX - dragOffsetX;
     const newTop = e.clientY - dragOffsetY;
 
-    // sectionRef.current?.style.setProperty("top", `${newTop}px`, "important")
-    // sectionRef.current?.style.setProperty("left", `${newLeft}px`, "important")
-    divRef.current?.style.setProperty("top", `${newTop}px`, "important")
-    divRef.current?.style.setProperty("left", `${newLeft}px`, "important")
-
+    divRef.current?.style.setProperty("top", `${newTop}px`, "important");
+    divRef.current?.style.setProperty("left", `${newLeft}px`, "important");
   };
 
   const handleMouseUp = (e: MouseEvent) => {
@@ -117,6 +118,7 @@ const Section: React.FC<SectionProps> = ({
       top: newTop,
     }));
   };
+
 
   const onEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -147,7 +149,8 @@ const Section: React.FC<SectionProps> = ({
     screenStyleObj.setScreenStyle(section.styles)
     setSectionChildElements(elements)
     setSectionChildElementsSetter(() =>
-      (id: string, checked: boolean) =>
+      (id: string, checked: boolean) => {
+        setHiddenChildList((prev: string[]) => prev.filter((e: string) => e !== id))
         setElements((prev: ElementTypeCustom[]) =>
           prev.map((e: ElementTypeCustom) =>
             e.id === id
@@ -163,7 +166,8 @@ const Section: React.FC<SectionProps> = ({
               }
               : e
           )
-        ))
+        )
+      })
   }
 
   const addElement = (elementToAdd: keyof typeof CreateElement) => {
@@ -268,7 +272,6 @@ const Section: React.FC<SectionProps> = ({
   }, [])
 
   const showAllChildren = () => {
-    console.log("mouseEnter")
     // if (childsAreHidden) {
     setElements((prev: ElementTypeCustom[]) =>
       prev.map((e: ElementTypeCustom) => {
@@ -277,7 +280,7 @@ const Section: React.FC<SectionProps> = ({
             return [...prev, e.id]
           })
         }
-        return (
+        return (e?.style?.[activeScreen]?.display === "none" ?
           {
             ...e,
             style: {
@@ -287,7 +290,7 @@ const Section: React.FC<SectionProps> = ({
                 display: "block", // toggle
               },
             },
-          }
+          } : e
         )
       })
     )
@@ -295,11 +298,10 @@ const Section: React.FC<SectionProps> = ({
   }
 
   const hideBackHiddenChildrens = () => {
-    console.log("mouseleave")
-    // if (childsAreHidden) {
+    if (childsAreHidden) {
     setElements((prev: ElementTypeCustom[]) =>
       prev.map((e: ElementTypeCustom) => {
-        return (
+        return (e?.style?.[activeScreen]?.display === "none" ?
           {
             ...e,
             style: {
@@ -309,11 +311,11 @@ const Section: React.FC<SectionProps> = ({
                 display: hiddenChildlist.includes(e.id) ? "none" : "block", // toggle
               },
             },
-          }
+          } : e
         )
       })
     )
-    // }
+    }
   }
 
   return (

@@ -211,7 +211,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
   return (
     <>
-
       <img
         id={element.id}
         ref={imageRef}
@@ -230,7 +229,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 : "default",
           backgroundColor: "transparent",
         }}
-
       />
     </>
   );

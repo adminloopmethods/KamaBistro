@@ -1,18 +1,18 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-import {serverStatus} from "./other/serverStatus.js";
+import { serverStatus } from "./other/serverStatus.js";
 import * as path from "path";
-import {errorHandler, notFoundHandler} from "./errors/index.js"; // Custom error handler
-import {logger, morganMiddleware} from "./config/index.js";
+import { errorHandler, notFoundHandler } from "./errors/index.js"; // Custom error handler
+import { logger, morganMiddleware } from "./config/index.js";
 import cookieParser from "cookie-parser";
 
 import helmet from "helmet";
 import auditLogger from "./helper/auditLogger.js";
-import {globalRateLimiter} from "./helper/rateLimiter.js";
+import { globalRateLimiter } from "./helper/rateLimiter.js";
 import swaggerSpec from "./config/swaggerConfig.js";
 import swaggerUi from "swagger-ui-express";
-import {fileURLToPath} from "url";
+import { fileURLToPath } from "url";
 export const createApp = () => {
   const app = express();
 
@@ -29,8 +29,10 @@ export const createApp = () => {
   );
 
   // Body parser
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb", extended: true }));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   // Use the Morgan middleware for logging HTTP requests
   app.use(morganMiddleware);

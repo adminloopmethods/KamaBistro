@@ -101,7 +101,7 @@ const Heading: React.FC<HeadingProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={style}
+      style={{ ...style, position: "relative", }}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

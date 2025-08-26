@@ -39,7 +39,7 @@ const Paragraph = ({
             id={element.id}
             ref={elementRef}
             suppressContentEditableWarning={true}
-            style={style}
+            style={{...style, position: "relative", zIndex: "2"}}
         />
     );
 };

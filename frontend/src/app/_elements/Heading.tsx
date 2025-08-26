@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useEffect, useState, FocusEvent } from "react";
- import { BaseElement } from "@/functionalities/createElement";
+import { BaseElement } from "@/functionalities/createElement";
 // import { useMyContext } from "@/Context/ApiContext";
 
 type HeadingProps = {
@@ -28,7 +28,7 @@ const Heading: React.FC<HeadingProps> = ({
       id={element.id}
       ref={elementRef}
       suppressContentEditableWarning={true}
-      style={style}
+      style={{ ...style, position: "relative", zIndex: "2" }}
     />
   );
 };
