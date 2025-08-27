@@ -1,22 +1,3 @@
-import { useMemo } from "react";
-
-/**
- * Custom hook for truncating text to a specified length.
- * @param text - The text to truncate.
- * @param maxLength - The maximum length before truncation.
- * @returns The truncated text with "..." appended if it exceeds maxLength.
- */
-export const useTruncate = (text: string, maxLength: number): string => {
-  const truncatedText = useMemo(() => {
-    if (text.length > maxLength) {
-      return `${text.slice(0, maxLength)}...`;
-    }
-    return text;
-  }, [text, maxLength]);
-
-  return truncatedText;
-};
-
 /**
  * Capitalizes each word in a string.
  * @param str - The input string.

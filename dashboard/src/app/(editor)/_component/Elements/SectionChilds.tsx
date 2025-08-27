@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
-import { screenType, useMyContext } from "@/Context/EditorContext";
+import React, { useEffect, useState } from "react";
+import { useMyContext } from "@/Context/EditorContext";
 import { ElementTypeCustom } from "./Section";
 
 
 const SectionChilds: React.FC<any> = () => {
     const { sectionChildElements, sectionChildElementsSetter, activeScreen } = useMyContext()
     const [stateOfChildElements, setStateOfChildElements] = useState<ElementTypeCustom[]>(sectionChildElements)
+
+    console.log(sectionChildElements)
 
     const handleHideAndSeek = (id: string, checked: boolean) => {
         if (sectionChildElementsSetter) {
@@ -32,6 +34,10 @@ const SectionChilds: React.FC<any> = () => {
             )
         }
     };
+
+    useEffect(() => {
+        setStateOfChildElements(sectionChildElements)
+    }, [sectionChildElements])
 
     return (
         <div className="border-t mt-3">

@@ -32,9 +32,6 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         return path;
     }
 
-    // Usage
-    // <img src={normalizeImagePath(element.content)} alt={element.alt || "Selected"} />
-
 
     return (
         <div
@@ -58,9 +55,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 alt={element.alt || "Selected"}
                 ref={imageRef}
                 style={{
-                    cursor: editable ? "pointer" : "default",
                     ...element?.style?.[currentWidth],
-
                     top: 0,
                     left: 0,
                     position: "static",

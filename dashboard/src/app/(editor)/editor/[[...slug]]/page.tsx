@@ -164,9 +164,11 @@ const Editor = () => {
     };
 
     const updateSectionStyles = (newStyle: CSSProperties) => {
-        sectionStyleSetter((prev: CSSProperties) => {
-            return { ...prev, ...newStyle };
-        });
+        if (sectionStyleSetter) {
+            sectionStyleSetter((prev: CSSProperties) => {
+                return { ...prev, ...newStyle };
+            });
+        }
     };
 
     const finalUpdate = (id: string, element: SectionElementType, lastSection?: Boolean) => {

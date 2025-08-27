@@ -6,7 +6,7 @@ import { debounce } from 'lodash';
 import { useMyContext } from '@/Context/EditorContext';
 import {
     onAlignChange, onBgColorChange, onBold, onColorChange, onFamilyFontChange,
-    onItalic, onSizeChange, onUnderline
+    onItalic, onletterSpacingChange, onSizeChange, onUnderline
 } from '../../_functionality/styleObject';
 import CustomSelect from '@/app/_common/CustomSelect';
 
@@ -17,11 +17,13 @@ const fontFamilyOptions = [
     { label: 'Serif', value: 'serif' },
     { label: 'System UI', value: 'system-ui' },
     { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Monospace', value: 'monospace' }
+    { label: 'Monospace', value: 'monospace' },
+    { label: 'Poppins', value: 'var(--font-poppins)' },
+    { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
 
 const fontSizeOptions = [
-    10, 11, 12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
+    12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
 ].map(size => ({ label: `${size}px`, value: `${size}px` }));
 
 const positionOptions = [
@@ -48,6 +50,9 @@ const RichTextToolBar: React.FC = () => {
     const [textColor, setTextColor] = useState<string>('#000000');
     const [bgColor, setBgColor] = useState<string>('#000000');
     const [isBold, setIsBold] = useState(false);
+    const [fontWeightValue, setFontWeightValue] = useState<number>(
+        parseInt(style.fontWeight?.toString() || "400")
+    );
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [alignment, setAlignment] = useState<'left' | 'center' | 'right' | 'justify' | ''>('');
@@ -56,7 +61,7 @@ const RichTextToolBar: React.FC = () => {
     useEffect(() => {
         const st = element?.style?.[activeScreen] || {};
         setStyle(st);
-        setIsBold(st.fontWeight === 'bold');
+        setIsBold(st.fontWeight === 'bold' || st.fontWeight > 500);
         setIsItalic(st.fontStyle === 'italic');
         setIsUnderline(st.textDecoration === 'underline');
         setAlignment((st.textAlign as any) || '');
@@ -71,6 +76,10 @@ const RichTextToolBar: React.FC = () => {
             style: { ...prev.style, [activeScreen]: style }
         }));
     }, [style, Setter, activeScreen]);
+
+    useEffect(() => {
+        setFontWeightValue(parseInt(style.fontWeight?.toString() || "400"));
+    }, [style.fontWeight]);
 
     // Handle clicks outside toolbar
     useEffect(() => {
@@ -95,6 +104,24 @@ const RichTextToolBar: React.FC = () => {
         }, 500),
         [element, Setter, activeScreen]
     );
+
+    // Add inside your component, next to other debounced functions
+    const debouncedFontWeightChange = useCallback(
+        debounce((val: number) => {
+            Setter((prev: any) => ({
+                ...prev,
+                style: {
+                    ...prev.style,
+                    [activeScreen]: {
+                        ...prev.style[activeScreen],
+                        fontWeight: val
+                    }
+                }
+            }));
+        }, 300), // 300ms debounce
+        [Setter, activeScreen]
+    );
+
 
     // Generic input handler
     const handleInputChange = (key: keyof React.CSSProperties, value: string, isHeight = false) => {
@@ -135,7 +162,46 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Bold/Italic/Underline */}
             <div className="flex gap-2">
-                <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && 'bg-stone-600 text-white'}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button>
+                {/* <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && 'bg-stone-600 text-white'}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button> */}
+                {/* Bold/Italic/Underline */}
+                <div className="flex gap-2 items-center">
+                    {/* Bold Button */}
+                    <button
+                        className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold ? 'bg-stone-600 text-white' : ''}`}
+                        onClick={() => onBold(element, Setter, activeScreen)}
+                    >
+                        B
+                    </button>
+
+                    {/* Font Weight Slider */}
+                    {/* Font Weight Slider */}
+                    <input
+                        type="range"
+                        min="100"
+                        max="900"
+                        step="100"
+                        value={fontWeightValue}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setFontWeightValue(val);
+
+                            // Live preview immediately
+                            if (activeRef) {
+                                activeRef.style.setProperty("font-weight", val.toString(), "important");
+                            }
+
+                            // Highlight bold button correctly
+                            setIsBold(val > 500);
+
+                            // Debounced commit to context state
+                            debouncedFontWeightChange(val);
+                        }}
+                        className="w-[80px]"
+                        title="Font weight"
+                    />
+
+                </div>
+
                 <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && 'bg-stone-600 text-white'}`} onClick={() => onItalic(element, Setter, activeScreen)}>I</button>
                 <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && 'bg-stone-600 text-white'}`} onClick={() => onUnderline(element, Setter, activeScreen)}>U</button>
             </div>
@@ -150,9 +216,7 @@ const RichTextToolBar: React.FC = () => {
                     activeRef.style.setProperty("letter-spacing", `${val}px`, "important")
                 }}
                 onBlur={(e) => {
-                    setStyle((prev) => {
-                        return { ...prev, letterSpacing: e.target.value }
-                    })
+                    onletterSpacingChange(e.target.value + "px", element, Setter, activeScreen)
                 }}
                 className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
 
@@ -216,9 +280,23 @@ const RichTextToolBar: React.FC = () => {
             {/* Dimensions */}
             <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Dimensions</h3>
             <div className="grid grid-cols-2 gap-2 overflow-hidden">
-                {['width', 'height', 'paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'marginLeft', 'marginRight', 'marginTop', 'marginBottom'].map(key => {
+                {[
+                    { "label": "Width", "value": "width" },
+                    { "label": "Height", "value": "height" },
+                    { "label": "Padding Top", "value": "paddingTop" },
+                    { "label": "Padding Bottom", "value": "paddingBottom" },
+                    { "label": "Padding Left", "value": "paddingLeft" },
+                    { "label": "Padding Right", "value": "paddingRight" },
+                    { "label": "Margin Top", "value": "marginTop" },
+                    { "label": "Margin Bottom", "value": "marginBottom" },
+                    { "label": "Margin Left", "value": "marginLeft" },
+                    { "label": "Margin Right", "value": "marginRight" }
+                ].map(({ value: key, label }, i) => {
                     const isHeight = key === 'height';
-                    return <input key={key} type="text" placeholder={key} value={style[key as keyof React.CSSProperties] || ''} onChange={e => handleInputChange(key as keyof React.CSSProperties, e.target.value, isHeight)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
+                    return (<div key={key}>
+                        <label htmlFor={key + i} className='text-xs'>{label}</label>
+                        <input key={key} id={key + i} type="text" placeholder={key} value={style[key as keyof React.CSSProperties] || ''} onChange={e => handleInputChange(key as keyof React.CSSProperties, e.target.value, isHeight)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
+                    </div>)
                 })}
             </div>
         </div>

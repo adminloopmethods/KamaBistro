@@ -3,6 +3,9 @@ import ImageElemComponent from "../_component/Elements/ImageElement";
 import Paragraph from "../_component/Elements/Paragraph";
 import placeHolderImage from "@/assets/placeholderImage.png"
 import Division from "../_component/Elements/Division";
+import HeadingTwo from "../_component/Elements/Headingtwo";
+import HeadingThree from "../_component/Elements/HeadingThree";
+import Anchor from "../_component/Elements/Anchor";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -21,6 +24,7 @@ export interface BaseElement {
   style: StyleObject;
   [key: string]: any;
   hover: StyleObject;
+  aria: string; // will work as aria label
 }
 
 // Specific element interfaces extending BaseElement
@@ -68,6 +72,7 @@ class Element implements BaseElement {
   content: string;
   style: StyleObject = defaultStyles;
   hover: StyleObject = defaultStyles;
+  aria: string = "";
 
   constructor(name: string, content: string) {
     this.name = name;
@@ -170,6 +175,8 @@ const gED = generateElementData;
 // CreateElement factory map for default new elements
 export const CreateElement: Record<string, () => BaseElement | ImageElementType> = {
   heading: () => gED("h1", "New Heading"),
+  headingTwo: () => gED("h2", "New 2nd Heading"),
+  headingThree: () => gED("h3", "New 3rd Heading"),
   paragraph: () => gED("p", "New Paragraph"),
   image: () => gED("img", "", "Placeholder Image"),
   ul: () => gED("ul", "", undefined, ["List item 1", "List item 2"]),
@@ -188,7 +195,10 @@ export default {
 // Component map
 export const mapElement: Record<string, React.ComponentType<any>> = {
   h1: Heading,
+  h2: HeadingTwo,
+  h3: HeadingThree,
   p: Paragraph,
+  a: Anchor,
   img: ImageElemComponent,
   division: Division
 };

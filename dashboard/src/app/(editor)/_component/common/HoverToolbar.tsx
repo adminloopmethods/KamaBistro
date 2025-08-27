@@ -87,6 +87,8 @@ function HoverToolbar() {
             </h3>
 
             {/* Width & Height */}
+            <label className='text-xs'>Width</label>
+
             <input
                 type="text"
                 placeholder="Width (e.g. 200px / 50%)"
@@ -97,6 +99,9 @@ function HoverToolbar() {
                 }}
                 className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
             />
+            <label className='text-xs'>Height</label>
+
+
             <input
                 type="text"
                 placeholder="Height (e.g. 100px / auto)"
@@ -107,6 +112,7 @@ function HoverToolbar() {
                 }}
                 className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
             />
+
 
             {/* Box Shadow */}
             <CustomSelect

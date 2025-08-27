@@ -74,8 +74,7 @@ const Section: React.FC<SectionProps> = ({
     Object.entries(hover).filter(([_, value]) => Boolean(value))
   );
 
-  const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
-  console.log(childsAreHidden)
+  // const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
   const [isDragging, setIsDragging] = useState(false);
@@ -273,48 +272,49 @@ const Section: React.FC<SectionProps> = ({
 
   const showAllChildren = () => {
     // if (childsAreHidden) {
-    setElements((prev: ElementTypeCustom[]) =>
-      prev.map((e: ElementTypeCustom) => {
-        if (e.style?.[activeScreen]?.display === "none") {
-          setHiddenChildList((prev: string[]) => {
-            return [...prev, e.id]
-          })
-        }
-        return (e?.style?.[activeScreen]?.display === "none" ?
-          {
-            ...e,
-            style: {
-              ...e.style,
-              [activeScreen]: {
-                ...e.style?.[activeScreen],
-                display: "block", // toggle
+      setElements((prev: ElementTypeCustom[]) =>
+        prev.map((e: ElementTypeCustom) => {
+          if (e.style?.[activeScreen]?.display === "none") {
+            setHiddenChildList((prev: string[]) => {
+              return [...prev, e.id]
+            })
+          }
+          return (e?.style?.[activeScreen]?.display === "none" ?
+            {
+              ...e,
+              style: {
+                ...e.style,
+                [activeScreen]: {
+                  ...e.style?.[activeScreen],
+                  display: "block", // toggle
+                },
               },
-            },
-          } : e
-        )
-      })
-    )
+            } : e
+          )
+        })
+      )
     // }
   }
 
   const hideBackHiddenChildrens = () => {
-    if (childsAreHidden) {
-    setElements((prev: ElementTypeCustom[]) =>
-      prev.map((e: ElementTypeCustom) => {
-        return (e?.style?.[activeScreen]?.display === "none" ?
-          {
-            ...e,
-            style: {
-              ...e.style,
-              [activeScreen]: {
-                ...e.style?.[activeScreen],
-                display: hiddenChildlist.includes(e.id) ? "none" : "block", // toggle
+    console.log( hiddenChildlist)
+    if (hiddenChildlist.length > 0) {
+      setElements((prev: ElementTypeCustom[]) =>
+        prev.map((e: ElementTypeCustom) => {
+          return (hiddenChildlist.includes(e.id) ?
+            {
+              ...e,
+              style: {
+                ...e.style,
+                [activeScreen]: {
+                  ...e.style?.[activeScreen],
+                  display: "none", // toggle
+                },
               },
-            },
-          } : e
-        )
-      })
-    )
+            } : e
+          )
+        })
+      )
     }
   }
 
