@@ -50,6 +50,9 @@ const RichTextToolBar: React.FC = () => {
     const [textColor, setTextColor] = useState<string>('#000000');
     const [bgColor, setBgColor] = useState<string>('#000000');
     const [isBold, setIsBold] = useState(false);
+    const [fontWeightValue, setFontWeightValue] = useState<number>(
+        parseInt(style.fontWeight?.toString() || "400")
+    );
     const [isItalic, setIsItalic] = useState(false);
     const [isUnderline, setIsUnderline] = useState(false);
     const [alignment, setAlignment] = useState<'left' | 'center' | 'right' | 'justify' | ''>('');
@@ -74,6 +77,10 @@ const RichTextToolBar: React.FC = () => {
         }));
     }, [style, Setter, activeScreen]);
 
+    useEffect(() => {
+        setFontWeightValue(parseInt(style.fontWeight?.toString() || "400"));
+    }, [style.fontWeight]);
+
     // Handle clicks outside toolbar
     useEffect(() => {
         const handlePointerDown = (e: PointerEvent) => {
@@ -97,6 +104,24 @@ const RichTextToolBar: React.FC = () => {
         }, 500),
         [element, Setter, activeScreen]
     );
+
+    // Add inside your component, next to other debounced functions
+    const debouncedFontWeightChange = useCallback(
+        debounce((val: number) => {
+            Setter((prev: any) => ({
+                ...prev,
+                style: {
+                    ...prev.style,
+                    [activeScreen]: {
+                        ...prev.style[activeScreen],
+                        fontWeight: val
+                    }
+                }
+            }));
+        }, 300), // 300ms debounce
+        [Setter, activeScreen]
+    );
+
 
     // Generic input handler
     const handleInputChange = (key: keyof React.CSSProperties, value: string, isHeight = false) => {
@@ -137,7 +162,46 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Bold/Italic/Underline */}
             <div className="flex gap-2">
-                <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && 'bg-stone-600 text-white'}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button>
+                {/* <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && 'bg-stone-600 text-white'}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button> */}
+                {/* Bold/Italic/Underline */}
+                <div className="flex gap-2 items-center">
+                    {/* Bold Button */}
+                    <button
+                        className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold ? 'bg-stone-600 text-white' : ''}`}
+                        onClick={() => onBold(element, Setter, activeScreen)}
+                    >
+                        B
+                    </button>
+
+                    {/* Font Weight Slider */}
+                    {/* Font Weight Slider */}
+                    <input
+                        type="range"
+                        min="100"
+                        max="900"
+                        step="100"
+                        value={fontWeightValue}
+                        onChange={(e) => {
+                            const val = parseInt(e.target.value);
+                            setFontWeightValue(val);
+
+                            // Live preview immediately
+                            if (activeRef) {
+                                activeRef.style.setProperty("font-weight", val.toString(), "important");
+                            }
+
+                            // Highlight bold button correctly
+                            setIsBold(val > 500);
+
+                            // Debounced commit to context state
+                            debouncedFontWeightChange(val);
+                        }}
+                        className="w-[80px]"
+                        title="Font weight"
+                    />
+
+                </div>
+
                 <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && 'bg-stone-600 text-white'}`} onClick={() => onItalic(element, Setter, activeScreen)}>I</button>
                 <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && 'bg-stone-600 text-white'}`} onClick={() => onUnderline(element, Setter, activeScreen)}>U</button>
             </div>
