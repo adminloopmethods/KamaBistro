@@ -378,8 +378,8 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
 
       <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Quick Rotate</h4>
-      <div className="flex gap-2">
-        {[45, 90, 135, 180].map((deg) => (
+      <div className="flex gap-2 flex-wrap">
+        {[0, 45, 90, 135, 180].map((deg) => (
           <button
             key={deg}
             onClick={() => handleQuickRotate(deg)}

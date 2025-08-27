@@ -53,8 +53,8 @@ const Section: React.FC<SectionProps> = ({ //Props
     <div className=""
       style={{
         position: thisStyle?.position,
-        left: style.left,
-        top: style.top,
+        left: style.left || 0,
+        top: style.top || 0,
         // zIndex: 1,
         // (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
         // (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",

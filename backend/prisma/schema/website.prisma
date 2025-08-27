@@ -64,7 +64,7 @@ model Element {
   style   Style  @relation("ElementStyle", fields: [styleId], references: [id], onDelete: Cascade)
   styleId String @unique
 
-  hover String?
+  hover Json?
   href   String?
   aria  String?
 
