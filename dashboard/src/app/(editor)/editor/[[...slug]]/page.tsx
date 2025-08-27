@@ -240,6 +240,7 @@ const Editor = () => {
                     const response: any = await getWebpageReq(id) // bringing the content from backend 
 
                     if (response.ok) { // if successfull
+                        console.log(JSON.stringify(response.webpage, null, 2));
                         setWebpage(response.webpage) // then store in the contextApi. The object structure is similar to related else block
                         // setWebpage({
                         //     id: crypto.randomUUID(),

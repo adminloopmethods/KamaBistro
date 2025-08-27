@@ -155,7 +155,7 @@ const ImageStyleToolbar: React.FC = () => {
         ...prev.style,
         [activeScreen]: {
           ...prev.style?.[activeScreen],
-          objectFit: value
+          objectPosition: value
         },
       },
     }));
@@ -275,16 +275,25 @@ const ImageStyleToolbar: React.FC = () => {
         firstValue="auto"
       />
 
-      {/* <CustomSelect
+      <CustomSelect
         options={[
-          // { value: "relative", label: "Just Stack" },
-          { value: "absolute", label: "Drag" }
+          { value: "left top", label: "left top" },
+          { value: "left center", label: "left center" },
+          { value: "left bottom", label: "left bottom" },
+
+          { value: "center top", label: "center top" },
+          { value: "center center", label: "center center" },
+          { value: "center bottom", label: "center bottom" },
+
+          { value: "right top", label: "right top" },
+          { value: "right center", label: "right center" },
+          { value: "right bottom", label: "right bottom" }
         ]}
         Default={style?.[activeScreen]?.position}
         onChange={(value) => handleObjectSize(value)}
-        firstOption="No Drag"
-        firstValue="static"
-      /> */}
+        firstOption="Default"
+        firstValue="auto"
+      />
 
       <div>
         <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Margin</label>
