@@ -10,6 +10,7 @@ const auth = "auth";
 const users = "user";
 const content = "content";
 const media = "media";
+const role = "role";
 
 const endpointMap = {
   login: `${auth}/login`,
@@ -29,7 +30,7 @@ const endpointMap = {
   assignPageRole: `${users}/assign-page-role`,
 
   //roles
-  getRoles: `${users}/roles`,
+  getRoles: `${role}/allRoles`,
 
   //location
   getLocations: `${users}/locations`,

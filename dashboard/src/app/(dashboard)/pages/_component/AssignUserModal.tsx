@@ -1,6 +1,7 @@
+// AssignUserModal.tsx
 "use client";
 import React, {useState, useEffect} from "react";
-import {getUsersReq, assignPageRoleReq} from "@/functionality/fetch";
+import {getUsersReq, getRolesReq} from "@/functionality/fetch";
 import {assignUserToPageRole} from "@/utils/roleManagement";
 
 interface User {
@@ -17,10 +18,15 @@ interface Webpage {
   title: string;
 }
 
+interface Role {
+  id: string;
+  name: string;
+}
+
 interface AssignUserModalProps {
   show: boolean;
   currentPage: Webpage | null;
-  assigningRole: "editor" | "verifier" | null;
+  assigningRole: "editor" | "verifier" | null; // Match the exact types
   onClose: () => void;
   onAssign: (user: User) => void;
 }
@@ -33,59 +39,116 @@ const AssignUserModal: React.FC<AssignUserModalProps> = ({
   onAssign,
 }) => {
   const [users, setUsers] = useState<User[]>([]);
+  const [roles, setRoles] = useState<Role[]>([]);
   const [loading, setLoading] = useState(false);
   const [assigning, setAssigning] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedUser, setSelectedUser] = useState<string | null>(null);
 
-  // Fetch users when modal opens
+  // Fetch users and roles when modal opens
   useEffect(() => {
     if (show) {
-      fetchUsers();
+      fetchData();
     }
   }, [show]);
 
-  const fetchUsers = async () => {
+  const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await getUsersReq();
 
-      if (response.ok) {
-        // Filter only active users
-        const activeUsers =
-          response.users?.filter((user: User) => user.status === "active") ||
-          [];
+      // Fetch users and roles in parallel
+      const [usersResponse, rolesResponse] = await Promise.all([
+        getUsersReq(),
+        getRolesReq(),
+      ]);
+
+      console.log("Users API response:", usersResponse);
+      console.log("Roles API response:", rolesResponse);
+
+      // Handle users response
+      if (usersResponse.ok) {
+        // Handle different possible response structures
+        let usersData = [];
+
+        if (Array.isArray(usersResponse)) {
+          usersData = usersResponse;
+        } else if (Array.isArray(usersResponse.users)) {
+          usersData = usersResponse.users;
+        } else if (Array.isArray(usersResponse.data)) {
+          usersData = usersResponse.data;
+        } else if (
+          usersResponse.users &&
+          typeof usersResponse.users === "object"
+        ) {
+          // Handle case where users is an object with allUsers property
+          usersData = usersResponse.users.allUsers || [];
+        }
+
+        // Filter only active users (case-insensitive check)
+        const activeUsers = usersData.filter(
+          (user: User) => user.status && user.status.toUpperCase() === "ACTIVE"
+        );
         setUsers(activeUsers);
+
+        if (activeUsers.length === 0) {
+          setError("No active users found");
+        }
       } else {
-        setError(response.error || "Failed to fetch users");
+        setError(usersResponse.error || "Failed to fetch users");
+      }
+
+      // Handle roles response
+      if (rolesResponse.ok) {
+        let rolesData = [];
+
+        if (Array.isArray(rolesResponse)) {
+          rolesData = rolesResponse;
+        } else if (Array.isArray(rolesResponse.roles)) {
+          rolesData = rolesResponse.roles;
+        } else if (Array.isArray(rolesResponse.data)) {
+          rolesData = rolesResponse.data;
+        }
+
+        setRoles(rolesData);
+      } else {
+        console.error("Failed to fetch roles:", rolesResponse.error);
       }
     } catch (err) {
-      console.error("Error fetching users:", err);
-      setError("Failed to fetch users");
+      console.error("Error fetching data:", err);
+      setError("Failed to fetch data");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleAssignUser = async (user: User) => {
-    if (!currentPage || !assigningRole) return;
+  const handleAssignUser = async () => {
+    if (!currentPage || !assigningRole || !selectedUser) return;
 
     try {
       setAssigning(true);
       setError(null);
 
-      // Import the role management utility at the top of your file
-      // import { assignUserToPageRole } from "@/utils/roleManagement";
+      // Convert to uppercase for API
+      const roleName = assigningRole.toUpperCase(); // "EDITOR" or "VERIFIER"
+      const role = roles.find((r) => r.name.toUpperCase() === roleName);
+
+      if (!role) {
+        setError(`Role "${roleName}" not found`);
+        return;
+      }
 
       const response = await assignUserToPageRole({
         webpageId: currentPage.id,
-        userId: user.id,
-        role: assigningRole,
+        userId: selectedUser,
+        roleId: role.id,
       });
 
       if (response.ok) {
-        // Call the parent component's onAssign function
-        onAssign(user);
+        const assignedUser = users.find((user) => user.id === selectedUser);
+        if (assignedUser) {
+          onAssign(assignedUser);
+        }
         onClose();
       } else {
         setError(response.error || "Failed to assign user");
@@ -104,7 +167,7 @@ const AssignUserModal: React.FC<AssignUserModalProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md max-h-[80vh] overflow-hidden">
         <div className="p-6">
-          {/* Modal Header */}
+          {/* Modal Header - Fixed the display logic */}
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white">
               Assign {assigningRole === "editor" ? "Editor" : "Verifier"} to{" "}
@@ -159,14 +222,14 @@ const AssignUserModal: React.FC<AssignUserModalProps> = ({
                 users.map((user) => (
                   <div
                     key={user.id}
-                    className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
-                      assigning
-                        ? "cursor-not-allowed opacity-50"
-                        : "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 border-gray-200 dark:border-gray-600"
+                    className={`flex items-center p-3 rounded-lg border transition-colors ${
+                      selectedUser === user.id
+                        ? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-700"
+                        : "bg-gray-50 dark:bg-gray-700 border-gray-200 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer"
                     }`}
-                    onClick={() => !assigning && handleAssignUser(user)}
+                    onClick={() => !assigning && setSelectedUser(user.id)}
                   >
-                    <div className="flex items-center">
+                    <div className="flex items-center flex-1">
                       <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm font-medium mr-3">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
@@ -179,16 +242,23 @@ const AssignUserModal: React.FC<AssignUserModalProps> = ({
                         </p>
                       </div>
                     </div>
-                    <div className="text-right">
-                      <span className="text-sm text-indigo-600 dark:text-indigo-400 font-medium">
-                        {assigning ? "Assigning..." : "Assign"}
-                      </span>
-                      {assigningRole && (
-                        <p className="text-xs text-gray-400 dark:text-gray-500 capitalize">
-                          as {assigningRole}
-                        </p>
-                      )}
-                    </div>
+                    {selectedUser === user.id && (
+                      <div className="text-indigo-600 dark:text-indigo-400">
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M5 13l4 4L19 7"
+                          />
+                        </svg>
+                      </div>
+                    )}
                   </div>
                 ))
               )}
@@ -204,15 +274,13 @@ const AssignUserModal: React.FC<AssignUserModalProps> = ({
             >
               Cancel
             </button>
-            {error && (
-              <button
-                onClick={fetchUsers}
-                disabled={loading}
-                className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-medium"
-              >
-                {loading ? "Retrying..." : "Retry"}
-              </button>
-            )}
+            <button
+              onClick={handleAssignUser}
+              disabled={!selectedUser || assigning}
+              className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl text-white font-medium"
+            >
+              {assigning ? "Assigning..." : "Assign User"}
+            </button>
           </div>
         </div>
       </div>

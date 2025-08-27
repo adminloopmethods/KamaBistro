@@ -20,32 +20,11 @@ import Link from "next/link";
 import {Skeleton} from "@/components/ui/skeleton";
 
 // Types
-// interface User {
-//   id: string;
-//   name: string;
-//   role: "editor" | "verifier";
-//   avatar: string;
-// }
-
-// interface Webpage {
-//   id: string;
-//   title: string;
-//   description?: string;
-//   icon: React.ReactNode;
-//   lastEdited: string;
-//   editor?: User;
-//   verifier?: User;
-//   status: "draft" | "published" | "needs-review";
-//   route: string;
-// }
-
 interface User {
   id: string;
   name: string;
-  email: string;
-  role?: string;
-  image?: string;
-  status: string;
+  role: "editor" | "verifier";
+  // avatar: string;x
 }
 
 interface Webpage {
@@ -59,6 +38,8 @@ interface Webpage {
   status: "draft" | "published" | "needs-review";
   route: string;
 }
+
+// import { User, Webpage } from "@/types"; // Ensure these types are exported from a shared file
 
 const icons: Record<any, any> = {
   home: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
@@ -79,98 +60,7 @@ const CMSDashboard = () => {
     // { id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg" },
   ]);
 
-  const [webpages, setWebpages] = useState<Webpage[]>([
-    // {
-    //   id: "home",
-    //   title: "Home Page",
-    //   description: "Main landing page with featured content",
-    //   icon: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-    //   lastEdited: "2023-10-15",
-    //   editor: {
-    //     id: "1",
-    //     name: "Alex Johnson",
-    //     role: "editor",
-    //     avatar: "/user1.jpg",
-    //   },
-    //   verifier: {
-    //     id: "2",
-    //     name: "Maria Garcia",
-    //     role: "verifier",
-    //     avatar: "/user2.jpg",
-    //   },
-    //   status: "published",
-    //   route: "/home",
-    // },
-    // {
-    //   id: "about",
-    //   title: "About Us",
-    //   description: "Company history and team information",
-    //   icon: <Users className="w-6 h-6 text-blue-500" />,
-    //   lastEdited: "2023-10-18",
-    //   verifier: {
-    //     id: "4",
-    //     name: "Priya Patel",
-    //     role: "verifier",
-    //     avatar: "/user4.jpg",
-    //   },
-    //   route: "/home",
-    //   status: "published",
-    // },
-    // {
-    //   id: "services",
-    //   title: "Services",
-    //   description: "Overview of services we provide",
-    //   icon: <Settings className="w-6 h-6 text-amber-500" />,
-    //   lastEdited: "2023-10-12",
-    //   editor: {
-    //     id: "3",
-    //     name: "Sam Wilson",
-    //     role: "editor",
-    //     avatar: "/user3.jpg",
-    //   },
-    //   status: "needs-review",
-    //   route: "/home",
-    // },
-    // {
-    //   id: "contact",
-    //   title: "Contact",
-    //   description: "Contact information and inquiry form",
-    //   icon: <Contact className="w-6 h-6 text-emerald-500" />,
-    //   lastEdited: "2023-10-10",
-    //   status: "published",
-    //   route: "/home",
-    // },
-    // {
-    //   id: "blog",
-    //   title: "Blog",
-    //   description: "Latest articles and company updates",
-    //   icon: <FileText className="w-6 h-6 text-rose-500" />,
-    //   lastEdited: "2023-10-05",
-    //   editor: {
-    //     id: "1",
-    //     name: "Alex Johnson",
-    //     role: "editor",
-    //     avatar: "/user1.jpg",
-    //   },
-    //   verifier: {
-    //     id: "4",
-    //     name: "Priya Patel",
-    //     role: "verifier",
-    //     avatar: "/user4.jpg",
-    //   },
-    //   status: "draft",
-    //   route: "/home",
-    // },
-    // {
-    //   id: "products",
-    //   title: "Products",
-    //   description: "Our product catalog and descriptions",
-    //   icon: <ShoppingCart className="w-6 h-6 text-violet-500" />,
-    //   lastEdited: "2023-10-20",
-    //   status: "published",
-    //   route: "/home",
-    // },
-  ]);
+  const [webpages, setWebpages] = useState<Webpage[]>([]);
 
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [currentPage, setCurrentPage] = useState<Webpage | null>(null);
@@ -208,32 +98,75 @@ const CMSDashboard = () => {
     setShowAssignModal(true);
   };
 
+  const refreshWebpages = async () => {
+    try {
+      const response = await getAllWebpagesReq();
+      console.log("Webpages refresh response:", response); // Debug log
+
+      if (response.ok) {
+        setWebpages(() => {
+          return response.webpages.map((e: any) => {
+            // Debug what we're getting from API
+            console.log(`Webpage ${e.name} raw data:`, {
+              editor: e.editor,
+              verifier: e.verifier,
+              editorId: e.editorId,
+              verifierId: e.verifierId,
+            });
+
+            // Handle both user objects and user IDs
+            let editor = null;
+            let verifier = null;
+
+            // If editor/verifier are objects with name/email, use them directly
+            if (e.editor && typeof e.editor === "object" && e.editor.name) {
+              editor = e.editor;
+            } else if (e.editorId) {
+              // If we only have ID, we need to fetch user details or handle differently
+              editor = {id: e.editorId, name: "Loading...", email: ""};
+            }
+
+            if (
+              e.verifier &&
+              typeof e.verifier === "object" &&
+              e.verifier.name
+            ) {
+              verifier = e.verifier;
+            } else if (e.verifierId) {
+              verifier = {id: e.verifierId, name: "Loading...", email: ""};
+            }
+
+            return {
+              id: e.id,
+              title: e.name,
+              icon: icons[e.route] || icons.home,
+              lastEdited: e.updatedAt,
+              editor: editor,
+              verifier: verifier,
+              status: e.status,
+              route: e.route,
+            };
+          });
+        });
+      }
+    } catch (err) {
+      console.error("Failed to refresh webpages:", err);
+    }
+  };
+
   // Assign a user to the page
   const assignUser = async (user: User) => {
     if (!currentPage || !assigningRole) return;
 
     try {
-      // Update the local state optimistically
-      const updatedPages = webpages.map((page) => {
-        if (page.id === currentPage.id) {
-          return {
-            ...page,
-            [assigningRole]: user,
-          };
-        }
-        return page;
-      });
+      // Instead of updating local state optimistically, refresh from backend
+      await refreshWebpages();
 
-      setWebpages(updatedPages);
       setShowAssignModal(false);
       setCurrentPage(null);
       setAssigningRole(null);
-
-      // Optionally refetch the data to ensure consistency
-      // await getAllpages();
     } catch (error) {
-      console.error("Error updating local state:", error);
-      // Optionally show an error message to the user
+      console.error("Error updating user assignment:", error);
     }
   };
 
@@ -266,18 +199,40 @@ const CMSDashboard = () => {
       try {
         setIsLoading(true);
         const response = await getAllWebpagesReq();
-        // console.log(response)
+        console.log("Initial webpages API response:", response);
+
         if (response.ok) {
           setWebpages(() => {
-            return response.webpages.map((e: any, i: number) => {
+            return response.webpages.map((e: any) => {
+              console.log(`Initial load - Webpage ${e.name}:`, e);
+
+              // Same logic as refreshWebpages
+              let editor = null;
+              let verifier = null;
+
+              if (e.editor && typeof e.editor === "object" && e.editor.name) {
+                editor = e.editor;
+              } else if (e.editorId) {
+                editor = {id: e.editorId, name: "Loading...", email: ""};
+              }
+
+              if (
+                e.verifier &&
+                typeof e.verifier === "object" &&
+                e.verifier.name
+              ) {
+                verifier = e.verifier;
+              } else if (e.verifierId) {
+                verifier = {id: e.verifierId, name: "Loading...", email: ""};
+              }
+
               return {
                 id: e.id,
                 title: e.name,
-                // description: "",
-                icon: icons[e.route],
+                icon: icons[e.route] || icons.home,
                 lastEdited: e.updatedAt,
-                editor: e?.editor,
-                verifier: e?.verifier,
+                editor: editor,
+                verifier: verifier,
                 status: e.status,
                 route: e.route,
               };
@@ -425,7 +380,9 @@ const CMSDashboard = () => {
           setCurrentPage(null);
           setAssigningRole(null);
         }}
-        onAssign={assignUser}
+        onAssign={(user) => {
+          assignUser(user);
+        }}
       />
     </div>
   );

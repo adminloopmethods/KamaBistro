@@ -11,7 +11,13 @@ const router = Router();
 
 const requiredPermissionsForRole = ["ROLES_PERMISSION_MANAGEMENT"];
 
-router.get("/roles", tryCatchWrap(RolesController.GetRoles));
+router.get(
+  "/allRoles",
+  authenticateUser,
+  tryCatchWrap(RolesController.getRole)
+);
+
+// router.get("/roles", tryCatchWrap(RolesController.GetRoles));
 
 router.get("/roleType", tryCatchWrap(RolesController.GetRoleType));
 
@@ -50,7 +56,6 @@ router.put(
   tryCatchWrap(RolesController.DeactivateRole)
 );
 
-router.get("/roles", authenticateUser, tryCatchWrap(RolesController.getRole));
 router.get(
   "/role-by-name/:name",
   authenticateUser,

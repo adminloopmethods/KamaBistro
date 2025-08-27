@@ -273,6 +273,17 @@ export async function getRolesReq(): Promise<ApiResponse> {
   return await makerequest(endpoint.route("getRoles"), "GET");
 }
 
+export async function removePageRoleReq(
+  data: Record<string, any>
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("assignPageRole")}/remove`,
+    "DELETE",
+    JSON.stringify(data),
+    ContentType.json
+  );
+}
+
 // Create a new user
 export async function createUserReq(
   data: Record<string, any>

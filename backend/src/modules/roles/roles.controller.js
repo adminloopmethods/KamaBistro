@@ -12,14 +12,15 @@ import {
   updateRole,
 } from "./roles.service.js";
 import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
+import prismaClient from "../../config/dbConfig.js";
 
-const GetRoles = async (req, res) => {
-  const {search, status, page, limit} = req.query;
-  const pageNum = parseInt(page) || 1;
-  const limitNum = parseInt(limit) || 10;
-  const response = await getRoles(search, status, pageNum, limitNum);
-  res.status(200).json(response);
-};
+// const GetRoles = async (req, res) => {
+//   const {search, status, page, limit} = req.query;
+//   const pageNum = parseInt(page) || 1;
+//   const limitNum = parseInt(limit) || 10;
+//   const response = await getRoles(search, status, pageNum, limitNum);
+//   res.status(200).json(response);
+// };
 
 const GetRoleById = async (req, res) => {
   const {id} = req.params;
@@ -103,7 +104,7 @@ const DeactivateRole = async (req, res) => {
 
 const getRole = async (req, res) => {
   try {
-    const roles = await prisma.role.findMany({
+    const roles = await prismaClient.role.findMany({
       where: {status: "ACTIVE"},
     });
 
@@ -122,7 +123,7 @@ const getRole = async (req, res) => {
 const GetRoleByName = async (req, res) => {
   try {
     const {name} = req.params;
-    const role = await prisma.role.findFirst({
+    const role = await prismaClient.role.findFirst({
       where: {
         name: name.toUpperCase(),
         status: "ACTIVE",
@@ -149,7 +150,7 @@ const GetRoleByName = async (req, res) => {
 };
 
 export default {
-  GetRoles,
+  // GetRoles,
   GetRoleById,
   GetRoleType,
   CreateRole,
