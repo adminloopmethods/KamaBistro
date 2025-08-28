@@ -23,6 +23,8 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                 name: el.name,
                 givenName: el.givenName || null,
                 order: index,
+                hover: el.hover || null,   // ✅ now saving
+                aria: el.aria || null,     // ✅ now saving
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -77,6 +79,8 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
             name: section.name,
             givenName: section.givenName || null,
             order: sectionIndex,
+            hover: section.hover || null,   // ✅ now saving
+            aria: section.aria || null,     // ✅ now saving
             style: {
               create: {
                 xl: section.style?.xl,
@@ -168,7 +172,9 @@ export const getWebpageByIdService = async (id) => {
         name: child.name,
         givenName: child.givenName,
         style: child.style,
-        order: child.order, // keep order for sorting
+        hover: child.hover,   // ✅ now included
+        aria: child.aria,     // ✅ now included
+        order: child.order,
         type: "section",
         elements: transformSection(child).elements, // recurse
       })) || []),
@@ -177,9 +183,9 @@ export const getWebpageByIdService = async (id) => {
         name: el.name,
         style: el.style,
         content: el.content,
-        hover: el.hover,
+        hover: el.hover,   // ✅ already included
         href: el.href,
-        aria: el.aria,
+        aria: el.aria,     // ✅ already included
         order: el.order,
         type: "element",
       })) || []),
@@ -193,7 +199,9 @@ export const getWebpageByIdService = async (id) => {
       name: section.name,
       givenName: section.givenName,
       style: section.style,
-      elements: merged.map(({ order, type, ...rest }) => rest), // remove order/type before returning
+      hover: section.hover,   // ✅ added
+      aria: section.aria,     // ✅ added
+      elements: merged.map(({ order, type, ...rest }) => rest), // clean output
     };
   };
 
@@ -202,6 +210,7 @@ export const getWebpageByIdService = async (id) => {
     contents: webpage.contents.map(transformSection),
   };
 };
+
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
@@ -214,7 +223,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
     },
   });
 
-  // Step 2: Fetch existing contents (sections)
+  // Step 2: Fetch existing contents
   const existingContents = await prismaClient.content.findMany({
     where: { webpageId: id },
     include: {
@@ -232,11 +241,10 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
 
   if (sectionsToDelete.length) {
     for (const section of sectionsToDelete) {
-      await prismaClient.content.deleteMany({ where: { parentId: section.id } }); // delete children
-      await prismaClient.content.delete({ where: { id: section.id } }); // delete parent
+      await prismaClient.content.deleteMany({ where: { parentId: section.id } });
+      await prismaClient.content.delete({ where: { id: section.id } });
     }
   }
-
 
   // ---------------- DELETE MISSING ELEMENTS ----------------
   const existingElementMap = new Map();
@@ -288,6 +296,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
           update: {
             name: el.name,
             givenName: el.givenName || null,
+            hover: el.hover || null,   // ✅ now saving
+            aria: el.aria || null,     // ✅ now saving
             order: i,
             parent: { connect: { id: parentId } },
             style: { update: el.style || {} },
@@ -296,6 +306,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
             id: el.id,
             name: el.name,
             givenName: el.givenName || null,
+            hover: el.hover || null,   // ✅ now saving
+            aria: el.aria || null,     // ✅ now saving
             order: i,
             parent: { connect: { id: parentId } },
             style: { create: el.style || {} },
@@ -340,6 +352,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
       update: {
         name: section.name,
         givenName: section.givenName || null,
+        hover: section.hover || null,   // ✅ now saving
+        aria: section.aria || null,     // ✅ now saving
         order: i,
         style: { update: section.style || {} },
       },
@@ -347,6 +361,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
         id: section.id,
         name: section.name,
         givenName: section.givenName || null,
+        hover: section.hover || null,   // ✅ now saving
+        aria: section.aria || null,     // ✅ now saving
         order: i,
         webpage: { connect: { id } },
         style: { create: section.style || {} },
