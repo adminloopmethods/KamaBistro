@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, ChangeEvent, useEffect } from "react";
-import { useMyContext } from "@/Context/EditorContext";
+import { screenType, useMyContext } from "@/Context/EditorContext";
 import CustomSelect from "@/app/_common/CustomSelect";
 import ImageSelector from "./ImageSelector";
 
@@ -28,7 +28,7 @@ const boxShadowPresets: Record<string, string> = {
 
 const ImageStyleToolbar: React.FC = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
-  const { imageContext, setImageEdit, setImageContext, contextRef, activeScreen } = useMyContext();
+  const { imageContext, setImageEdit, setImageContext, contextRef, activeScreen, screenStyleObj } = useMyContext();
 
   if (!imageContext || !("element" in imageContext)) return null;
 
@@ -204,6 +204,20 @@ const ImageStyleToolbar: React.FC = () => {
       };
     });
   };
+
+  const copyTheStyle = (screenSize: screenType) => {
+
+    if (screenStyleObj.screenStyles?.[screenSize]) {
+
+      setElement((prev: any) => ({
+        ...prev,
+        style: {
+          ...prev.style,
+          [activeScreen]: screenStyleObj.screenStyles?.[screenSize]
+        },
+      }));
+    }
+  }
 
 
   // useEffect(() => {
@@ -399,6 +413,24 @@ const ImageStyleToolbar: React.FC = () => {
             {deg}°
           </button>
         ))}
+      </div>
+
+      <div>
+
+        <button className='cursor-pointer border' onClick={() => { copyTheStyle("xl") }}>
+          XL
+        </button>
+
+        <button className='cursor-pointer border' onClick={() => { copyTheStyle("lg") }}>
+          LG
+        </button>
+        <button className='cursor-pointer border' onClick={() => { copyTheStyle("md") }}>
+          MD
+        </button>
+        <button className='cursor-pointer border' onClick={() => { copyTheStyle("sm") }}>
+          SM
+        </button>
+
       </div>
 
       {/* Image Selector Modal */}

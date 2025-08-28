@@ -83,13 +83,10 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const copyTheStyle = (screenSize: screenType) => {
 
         if (screenStyleObj.screenStyles?.[screenSize]) {
-            console.log("fired")
 
             updateStyles(screenStyleObj.screenStyles?.[screenSize])
         }
     }
-console.log(screenStyleObj)
-    console.log(currentSection)
 
     return (
         <div
@@ -306,6 +303,21 @@ console.log(screenStyleObj)
                                 onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
                             />
                         )}
+
+                        {renderInputRow(
+                            'Wrap Items',
+                            <CustomSelect
+                                options={[
+                                    { label: "Stretch", value: "stretch" },
+                                    { label: "Start", value: "flex-start" },
+                                    { label: "Center", value: "center" },
+                                    { label: "End", value: "flex-end" },
+                                    { label: "Baseline", value: "baseline" },
+                                ]}
+                                Default={currentSection?.alignItems}
+                                onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
+                            />
+                        )}
                     </>
                 )}
             </div>
@@ -348,20 +360,23 @@ console.log(screenStyleObj)
                 />
             )}
 
-            <button className='cursor-pointer border' onClick={() => { copyTheStyle("xl") }}>
-                XL
-            </button>
+            <div>
 
-            <button className='cursor-pointer border' onClick={() => { copyTheStyle("lg") }}>
-                LG
-            </button>
-            <button className='cursor-pointer border' onClick={() => { copyTheStyle("md") }}>
-                MD
-            </button>
-            <button className='cursor-pointer border' onClick={() => { copyTheStyle("sm") }}>
-                SM
-            </button>
+                <button className='cursor-pointer border' onClick={() => { copyTheStyle("xl") }}>
+                    XL
+                </button>
 
+                <button className='cursor-pointer border' onClick={() => { copyTheStyle("lg") }}>
+                    LG
+                </button>
+                <button className='cursor-pointer border' onClick={() => { copyTheStyle("md") }}>
+                    MD
+                </button>
+                <button className='cursor-pointer border' onClick={() => { copyTheStyle("sm") }}>
+                    SM
+                </button>
+
+            </div>
 
             {showImageSelector &&
                 <ImageSelector
