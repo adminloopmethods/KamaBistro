@@ -10,7 +10,7 @@ import { CreateSection, SectionElementType } from "../../_functionality/createSe
 import AddSection from "../../_component/common/AddSection";
 import RichTextToolBar from "../../_component/common/RichTextToolbar";
 import StyleToolbar from "../../_component/common/StyleToolbar";
-import DimensionToolbar from "../../_component/common/DimensionToolbar";
+import DimensionToolbar, { updateStylesType } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
 import { test } from "@/assets/test"
 
@@ -163,7 +163,10 @@ const Editor = () => {
         });
     };
 
-    const updateSectionStyles = (newStyle: CSSProperties) => {
+    const updateSectionStyles: updateStylesType = (newStyle, applyAll) => {
+        if (applyAll && sectionStyleSetter) {
+            sectionStyleSetter(newStyle)
+        }
         if (sectionStyleSetter) {
             sectionStyleSetter((prev: CSSProperties) => {
                 return { ...prev, ...newStyle };
@@ -208,22 +211,22 @@ const Editor = () => {
     useEffect(() => { ///// update and save logic
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-            // console.log(JSON.stringify(bodyPayload))
+            console.log(JSON.stringify(bodyPayload))
             if (!bodyPayload.name) return toast.error("Webpage name is required");
             if (!bodyPayload.route) return toast.error("Webpage route is required");
 
-            try {
-                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
-                    loading: page ? "Updating content..." : "Saving Content...",
-                    success: "Successful saved the content!",
-                    error: (err: any) => err?.message || "Failed to create the content",
-                })
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                console.log("Successfully sent content:", response);
-            } catch (error) {
-            }
+            // try {
+            //     const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
+            //         loading: page ? "Updating content..." : "Saving Content...",
+            //         success: "Successful saved the content!",
+            //         error: (err: any) => err?.message || "Failed to create the content",
+            //     })
+            //     if (!response.ok) {
+            //         throw new Error(`HTTP error! status: ${response.status}`);
+            //     }
+            //     console.log("Successfully sent content:", response);
+            // } catch (error) {
+            // }
         }
 
         if (saveData) {
@@ -397,49 +400,57 @@ const Editor = () => {
 
                 </div>
                 {/* Sidebar/toolbars */}
-                {
-                    showToolbar &&
-                    <div
-                        style={{ width: "250px", backgroundColor: "#393E46", height: "92vh", overflowY: "scroll", zIndex: 1000 }}
-                        className="scroll-one fixed top-[8vh] right-0"
-                        ref={toolbarRef}
-                    >
+                {/* {
+                    showToolbar && */}
+                <div
+                    ref={toolbarRef}
+                    style={{
+                        width: "250px",
+                        backgroundColor: "#393E46",
+                        height: "92vh",
+                        overflowY: "scroll",
+                        zIndex: 1000,
+                        display: showToolbar ? "block" : "none", // 👈 hide instead of unmount
+                    }}
+                    className="scroll-one fixed top-[8vh] right-0"
+                >
 
 
 
-                        <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-                            {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
-                            {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
-                            <CustomSelect
-                                options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
-                                firstOption="Set Location"
-                                disableFirstValue={true}
-                                onChange={(value) => {
-                                    setWebpage((prev: webpageType | null) => {
-                                        if (!prev) return null
-                                        return {
-                                            ...prev, locationId: value
-                                        }
-                                    })
-                                }}
-                            />
-                        </div>
-                        {/* toolbars */}
-                        {onHoverToolbar ?
-                            <HoverToolbar /> : (
-                                !contextRef.activeRef ? (
-                                    <>
-                                        <DimensionToolbar updateStyles={updateSectionStyles} />
-                                        <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
-                                    </>
-                                ) : (
-                                    imageEdit ?
-                                        <ImageStyleToolbar />
-                                        : <RichTextToolBar />
-                                ))
-                        }
+
+                    <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
+                        {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
+                        {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
+                        <CustomSelect
+                            options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
+                            firstOption="Set Location"
+                            disableFirstValue={true}
+                            onChange={(value) => {
+                                setWebpage((prev: webpageType | null) => {
+                                    if (!prev) return null
+                                    return {
+                                        ...prev, locationId: value
+                                    }
+                                })
+                            }}
+                        />
                     </div>
-                }
+                    {/* toolbars */}
+                    {onHoverToolbar ?
+                        <HoverToolbar /> : (
+                            !contextRef.activeRef ? (
+                                <>
+                                    <DimensionToolbar updateStyles={updateSectionStyles} />
+                                    <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
+                                </>
+                            ) : (
+                                imageEdit ?
+                                    <ImageStyleToolbar />
+                                    : <RichTextToolBar />
+                            ))
+                    }
+                </div>
+                {/* } */}
                 <Toaster position="top-right" />
             </div>
         </div>
