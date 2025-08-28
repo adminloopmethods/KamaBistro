@@ -49,7 +49,6 @@ const HeadingTwo: React.FC<HeadingProps> = ({
     const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
         const value = elementRef.current?.innerHTML ?? "";
         setThisElement((prev: BaseElement) => {
-            console.log(prev)
             return ({
                 ...prev,
                 content: value.trim(),
@@ -92,7 +91,6 @@ const HeadingTwo: React.FC<HeadingProps> = ({
         updateContent(element.id, "content", thisElement.content);
     }, [thisElement.content]);
 
-    console.log(style?.letterSpacing)
     return (
         <h2
             className=""

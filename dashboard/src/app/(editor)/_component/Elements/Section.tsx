@@ -62,7 +62,7 @@ const Section: React.FC<SectionProps> = ({
     hoverObject,
     screenStyleObj,
     setSectionChildElements,
-    setSectionChildElementsSetter
+    setSectionChildElementsSetter,
   } = useMyContext(); ////////////////////// Context /////////////////////////
 
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -130,6 +130,7 @@ const Section: React.FC<SectionProps> = ({
     }
     setOnAddElement(!onAddElement);
   };
+  console.log(section)
 
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -146,6 +147,7 @@ const Section: React.FC<SectionProps> = ({
     }))
 
     screenStyleObj.setScreenStyle(section.styles)
+
     setSectionChildElements(elements)
     setSectionChildElementsSetter(() =>
       (id: string, checked: boolean) => {
@@ -325,7 +327,8 @@ const Section: React.FC<SectionProps> = ({
         position: sectionStyle?.position,
         left: sectionStyle?.left,
         top: sectionStyle?.top,
-        overflow: ""
+        overflow: "visible",
+        // height: "fit-content"
       }}
     >
       <section
