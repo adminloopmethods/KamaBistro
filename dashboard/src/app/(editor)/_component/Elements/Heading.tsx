@@ -23,7 +23,7 @@ const Heading: React.FC<HeadingProps> = ({
 }) => {
   const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
-  const { contextRef, contextElement, toolbarRef } = useMyContext();
+  const { contextRef, contextElement, toolbarRef, screenStyleObj } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
 
   // Set innerHTML when content updates
@@ -44,6 +44,9 @@ const Heading: React.FC<HeadingProps> = ({
       elementRef.current.style.outline = "1px dashed black";
     }
     contextRef.setReference(elementRef.current);
+
+    screenStyleObj.setScreenStyle(thisElement.style)
+
   };
 
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
@@ -100,7 +103,7 @@ const Heading: React.FC<HeadingProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={{ ...style, position: "relative",zIndex: "2"}}
+      style={{ ...style, position: "relative", zIndex: "2" }}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

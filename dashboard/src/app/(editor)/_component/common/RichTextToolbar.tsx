@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
 import { debounce } from 'lodash';
-import { useMyContext } from '@/Context/EditorContext';
+import { screenType, useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 
 type StylesState = React.CSSProperties | Record<string, any>;
@@ -35,7 +35,7 @@ const alignmentIcons: Record<string, React.FC<any>> = {
 };
 
 const RichTextToolBar: React.FC = () => {
-    const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef } = useMyContext();
+    const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef, screenStyleObj } = useMyContext();
     const Setter = elementSetter;
 
     // Local style state
@@ -64,6 +64,17 @@ const RichTextToolBar: React.FC = () => {
         debounce((key: keyof StylesState, val: string | number) => applyStyle(key, val), 300),
         [applyStyle]
     );
+
+    const copyTheStyle = (screenSize: screenType) => {
+
+        if (screenStyleObj.screenStyles?.[screenSize]) {
+            Setter?.((prev: any) => ({
+                ...prev,
+                style: { ...prev.style, [activeScreen]: screenStyleObj.screenStyles?.[screenSize] },
+            }))
+
+        }
+    }
 
     // Generic input renderer
     const renderInput = (
@@ -134,8 +145,8 @@ const RichTextToolBar: React.FC = () => {
                 <div className="flex gap-2">
                     <button
                         className={`tool-btn font-bold border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontWeight && parseInt(localStyle.fontWeight.toString()) >= 500
-                                ? 'bg-stone-600 text-white'
-                                : ''
+                            ? 'bg-stone-600 text-white'
+                            : ''
                             }`}
                         onClick={() =>
                             applyStyle(
@@ -271,6 +282,23 @@ const RichTextToolBar: React.FC = () => {
                     "cssName": "margin-right"
                 }
             ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
+
+            <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+            <div className="flex gap-2">
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
+                    XL
+                </button>
+
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
+                    LG
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
+                    MD
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
+                    SM
+                </button>
+            </div>
         </div>
     );
 };
