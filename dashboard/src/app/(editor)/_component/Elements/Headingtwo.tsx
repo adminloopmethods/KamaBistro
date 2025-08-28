@@ -44,7 +44,7 @@ const HeadingTwo: React.FC<HeadingProps> = ({
             elementRef.current.style.outline = "1px dashed black";
         }
         contextRef.setReference(elementRef.current);
-    screenStyleObj.setScreenStyle(thisElement.style)
+        screenStyleObj.setScreenStyle(thisElement.style)
 
     };
 

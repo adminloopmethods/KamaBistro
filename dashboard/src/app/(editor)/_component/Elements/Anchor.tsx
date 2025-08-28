@@ -25,7 +25,7 @@ const LinkComponent: React.FC<LinkProps> = ({
     const elementRef = useRef<HTMLAnchorElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
     const [thisElement, setThisElement] = useState<BaseElement>(element);
-    const { contextRef, contextElement, toolbarRef } = useMyContext();
+    const { contextRef, contextElement, toolbarRef, screenStyleObj } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
 
     // Set text from element.content
@@ -47,6 +47,8 @@ const LinkComponent: React.FC<LinkProps> = ({
             elementRef.current.style.outline = "1px dashed black";
         }
         contextRef.setReference(elementRef.current);
+        screenStyleObj.setScreenStyle(thisElement.style)
+
     };
 
     const handleBlur = (e: FocusEvent<HTMLAnchorElement>) => {
