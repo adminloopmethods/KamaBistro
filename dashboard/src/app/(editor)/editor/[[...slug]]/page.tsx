@@ -88,7 +88,7 @@ const Editor = () => {
     ///////////// screen related functionality ///////////////////
     // Function to classify width
     const classifyWidth = (w: number) => {
-        if (w > 1024) return "xl";
+        if (w > 1200) return "xl";
         if (w >= 768) return "lg";
         if (w >= 425) return "md";
         return "sm";
@@ -103,7 +103,7 @@ const Editor = () => {
     }
 
     const applyLGScreen = () => {
-        setPageWidth("1024px")
+        setPageWidth("1200px")
     }
 
     const applyXLScreen = () => {
@@ -211,22 +211,22 @@ const Editor = () => {
     useEffect(() => { ///// update and save logic
         async function updateData() {
             const bodyPayload: Record<string, any> = { ...webpage };
-            console.log(JSON.stringify(bodyPayload))
+            // console.log(JSON.stringify(bodyPayload))
             if (!bodyPayload.name) return toast.error("Webpage name is required");
             if (!bodyPayload.route) return toast.error("Webpage route is required");
 
-            // try {
-            //     const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
-            //         loading: page ? "Updating content..." : "Saving Content...",
-            //         success: "Successful saved the content!",
-            //         error: (err: any) => err?.message || "Failed to create the content",
-            //     })
-            //     if (!response.ok) {
-            //         throw new Error(`HTTP error! status: ${response.status}`);
-            //     }
-            //     console.log("Successfully sent content:", response);
-            // } catch (error) {
-            // }
+            try {
+                const response = await toastWithUpdate(() => page ? saveContentReq(page, bodyPayload) : createContentReq(bodyPayload), {
+                    loading: page ? "Updating content..." : "Saving Content...",
+                    success: "Successful saved the content!",
+                    error: (err: any) => err?.message || "Failed to create the content",
+                })
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                console.log("Successfully sent content:", response);
+            } catch (error) {
+            }
         }
 
         if (saveData) {
@@ -348,7 +348,7 @@ const Editor = () => {
 
             <div style={{ display: "flex", height: "92vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
                 {/* website */}
-                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", }}>
+                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden",  position: "relative", zIndex: 1}}>
 
                     <div
                         ref={containerRef}
@@ -364,8 +364,9 @@ const Editor = () => {
                         linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
                         `,
                             backgroundSize: "15px 15px", // size of grid squares
-                            // position: "relative",
-                            // zIndex: 1
+                            position: "relative",
+                            zIndex: 1,
+                            overflow:"hidden"
                         }}
                         className="bg-stone-200"
                     >

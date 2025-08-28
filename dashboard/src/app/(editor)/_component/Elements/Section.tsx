@@ -130,7 +130,6 @@ const Section: React.FC<SectionProps> = ({
     }
     setOnAddElement(!onAddElement);
   };
-  console.log(section)
 
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -146,8 +145,8 @@ const Section: React.FC<SectionProps> = ({
       setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
 
-    screenStyleObj.setScreenStyle(section.styles)
-
+    screenStyleObj.setScreenStyle(section.style)
+    
     setSectionChildElements(elements)
     setSectionChildElementsSetter(() =>
       (id: string, checked: boolean) => {

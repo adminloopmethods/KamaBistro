@@ -40,7 +40,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const [previewSrc, setPreviewSrc] = useState(element.content || "");
   const imageRef = useRef<HTMLImageElement | null>(null);
   const clickTimer = useRef<NodeJS.Timeout | null>(null);
-  const { setImageContext, setImageEdit, contextRef } = useMyContext();
+  const { setImageContext, setImageEdit, contextRef, screenStyleObj } = useMyContext();
   const [thisElement, setThisElement] = useState<ElementType>(element);
 
   // For ImageSelector modal
@@ -64,6 +64,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const handleImageClick = (e: React.MouseEvent<HTMLImageElement>) => {
     e.stopPropagation();
     contextRef.setReference(imageRef.current);
+    screenStyleObj.setScreenStyle(thisElement.style)
     setImageContext({
       element: thisElement,
       setElement: setThisElement,
