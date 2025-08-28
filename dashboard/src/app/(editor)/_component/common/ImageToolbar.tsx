@@ -406,19 +406,19 @@ const ImageStyleToolbar: React.FC = () => {
         ))}
       </div>
 
-      <div>
-
-        <button className='cursor-pointer border' onClick={() => { copyTheStyle("xl") }}>
+      <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+      <div className="flex gap-2">
+        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
           XL
         </button>
 
-        <button className='cursor-pointer border' onClick={() => { copyTheStyle("lg") }}>
+        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
           LG
         </button>
-        <button className='cursor-pointer border' onClick={() => { copyTheStyle("md") }}>
+        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
           MD
         </button>
-        <button className='cursor-pointer border' onClick={() => { copyTheStyle("sm") }}>
+        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
           SM
         </button>
 

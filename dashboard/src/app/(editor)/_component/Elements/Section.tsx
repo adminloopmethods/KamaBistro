@@ -85,30 +85,48 @@ const Section: React.FC<SectionProps> = ({
   const handleMouseDown = (e: MouseEvent) => {
     if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed") return;
 
-    const rect = sectionRef.current?.getBoundingClientRect();
-    if (!rect) return;
+    const rect = divRef.current?.getBoundingClientRect();
+    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
+    if (!rect || !parentRect) return;
 
-    const topBarHeight = window.innerHeight * 0.08; // 8vh in pixels
-
+    // store where inside the element we clicked (relative to parent space)
     setDragOffsetX(e.clientX - rect.left);
-    setDragOffsetY(e.clientY - rect.top + topBarHeight); // add 8vh offset here
-    setIsDragging(true);
-  };
+    setDragOffsetY(e.clientY - rect.top);
 
+    setIsDragging(true);
+    e.preventDefault();
+  };
 
   const handleMouseMove = (e: MouseEvent) => {
     if (!isDragging) return;
 
-    const newLeft = e.clientX - dragOffsetX;
-    const newTop = e.clientY - dragOffsetY;
+    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
+    console.log(parentRect)
+    if (!parentRect) return;
 
-    divRef.current?.style.setProperty("top", `${newTop}px`, "important");
+    // mouse position inside parent
+    const mouseX = e.clientX - parentRect.left;
+    const mouseY = e.clientY - parentRect.top;
+
+    // new position = mouse inside parent - click offset
+    const newLeft = mouseX - dragOffsetX;
+    const newTop = mouseY - dragOffsetY;
+
     divRef.current?.style.setProperty("left", `${newLeft}px`, "important");
+    divRef.current?.style.setProperty("top", `${newTop}px`, "important");
   };
 
   const handleMouseUp = (e: MouseEvent) => {
-    const newLeft = e.clientX - dragOffsetX;
-    const newTop = e.clientY - dragOffsetY;
+    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
+    if (!parentRect) return;
+    
+    // mouse position inside parent
+    const mouseX = e.clientX - parentRect.left;
+    const mouseY = e.clientY - parentRect.top;
+
+    // new position = mouse inside parent - click offset
+    const newLeft = mouseX - dragOffsetX;
+    const newTop = mouseY - dragOffsetY;
 
     setIsDragging(false);
     setSectionStyle((prev) => ({
@@ -146,7 +164,7 @@ const Section: React.FC<SectionProps> = ({
     }))
 
     screenStyleObj.setScreenStyle(section.style)
-    
+
     setSectionChildElements(elements)
     setSectionChildElementsSetter(() =>
       (id: string, checked: boolean) => {
@@ -273,32 +291,32 @@ const Section: React.FC<SectionProps> = ({
 
   const showAllChildren = () => {
     // if (childsAreHidden) {
-      setElements((prev: ElementTypeCustom[]) =>
-        prev.map((e: ElementTypeCustom) => {
-          if (e.style?.[activeScreen]?.display === "none") {
-            setHiddenChildList((prev: string[]) => {
-              return [...prev, e.id]
-            })
-          }
-          return (e?.style?.[activeScreen]?.display === "none" ?
-            {
-              ...e,
-              style: {
-                ...e.style,
-                [activeScreen]: {
-                  ...e.style?.[activeScreen],
-                  display: "block", // toggle
-                },
+    setElements((prev: ElementTypeCustom[]) =>
+      prev.map((e: ElementTypeCustom) => {
+        if (e.style?.[activeScreen]?.display === "none") {
+          setHiddenChildList((prev: string[]) => {
+            return [...prev, e.id]
+          })
+        }
+        return (e?.style?.[activeScreen]?.display === "none" ?
+          {
+            ...e,
+            style: {
+              ...e.style,
+              [activeScreen]: {
+                ...e.style?.[activeScreen],
+                display: "block", // toggle
               },
-            } : e
-          )
-        })
-      )
+            },
+          } : e
+        )
+      })
+    )
     // }
   }
 
   const hideBackHiddenChildrens = () => {
-    console.log( hiddenChildlist)
+    console.log(hiddenChildlist)
     if (hiddenChildlist.length > 0) {
       setElements((prev: ElementTypeCustom[]) =>
         prev.map((e: ElementTypeCustom) => {
