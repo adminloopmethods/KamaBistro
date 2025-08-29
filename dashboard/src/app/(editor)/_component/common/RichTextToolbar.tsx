@@ -1,16 +1,10 @@
-import React, { useCallback, useEffect, useState, ChangeEvent } from 'react';
-import {
-    AlignLeft, AlignCenter, AlignRight, AlignJustify,
-} from 'lucide-react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
 import { debounce } from 'lodash';
-import { useMyContext } from '@/Context/EditorContext';
-import {
-    onAlignChange, onBgColorChange, onBold, onColorChange, onFamilyFontChange,
-    onItalic, onletterSpacingChange, onSizeChange, onUnderline
-} from '../../_functionality/styleObject';
+import { screenType, useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 
-type Style = Partial<Record<keyof React.CSSProperties, string | number>>;
+type StylesState = React.CSSProperties | Record<string, any>;
 
 const fontFamilyOptions = [
     { label: 'Courier New', value: '"Courier New", monospace' },
@@ -22,9 +16,10 @@ const fontFamilyOptions = [
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
 
-const fontSizeOptions = [
-    12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64
-].map(size => ({ label: `${size}px`, value: `${size}px` }));
+const fontSizeOptions = [12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64].map(size => ({
+    label: `${size}px`,
+    value: `${size}px`
+}));
 
 const positionOptions = [
     { label: 'Static', value: 'static' },
@@ -36,271 +31,276 @@ const alignmentIcons: Record<string, React.FC<any>> = {
     left: AlignLeft,
     center: AlignCenter,
     right: AlignRight,
-    justify: AlignJustify
+    justify: AlignJustify,
 };
 
-
 const RichTextToolBar: React.FC = () => {
-    const { contextRef, activeRef, activeScreen, elementSetter, element, toolbarRef, rmElementFunc } = useMyContext();
-
+    const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef, screenStyleObj } = useMyContext();
     const Setter = elementSetter;
 
-    const [style, setStyle] = useState<Style>(element?.style?.[activeScreen] || {});
-    const [letterSpacing, setLetterSpacing] = useState<number>(parseFloat(element?.style?.[activeScreen].letterSpacing) || 0)
-    const [textColor, setTextColor] = useState<string>('#000000');
-    const [bgColor, setBgColor] = useState<string>('#000000');
-    const [isBold, setIsBold] = useState(false);
-    const [fontWeightValue, setFontWeightValue] = useState<number>(
-        parseInt(style.fontWeight?.toString() || "400")
-    );
-    const [isItalic, setIsItalic] = useState(false);
-    const [isUnderline, setIsUnderline] = useState(false);
-    const [alignment, setAlignment] = useState<'left' | 'center' | 'right' | 'justify' | ''>('');
+    // Local style state
+    const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(element?.style?.[activeScreen] || {});
 
-    // Sync style when element or screen changes
+    // Sync localStyle with context when element or screen changes
     useEffect(() => {
-        const st = element?.style?.[activeScreen] || {};
-        setStyle(st);
-        setIsBold(st.fontWeight === 'bold' || st.fontWeight > 500);
-        setIsItalic(st.fontStyle === 'italic');
-        setIsUnderline(st.textDecoration === 'underline');
-        setAlignment((st.textAlign as any) || '');
-        setTextColor((st.color as string) || '#000000');
-        setBgColor((st.backgroundColor as string) || '#000000');
+        setLocalStyle(element?.style?.[activeScreen] || {});
     }, [element, activeScreen]);
 
-    // Update element style whenever `style` changes
-    useEffect(() => {
-        Setter?.((prev: any) => ({
-            ...prev,
-            style: { ...prev.style, [activeScreen]: style }
-        }));
-    }, [style, Setter, activeScreen]);
-
-    useEffect(() => {
-        setFontWeightValue(parseInt(style.fontWeight?.toString() || "400"));
-    }, [style.fontWeight]);
-
-    // Handle clicks outside toolbar
-    useEffect(() => {
-        const handlePointerDown = (e: PointerEvent) => {
-            if (!toolbarRef.current?.contains(e.target as Node) && !activeRef.current?.contains(e.target as Node)) {
-                contextRef.clearReference();
-                if (activeRef.current) (activeRef.current as HTMLElement).style.outline = 'none';
-            }
-        };
-        document.addEventListener('pointerdown', handlePointerDown);
-        return () => document.removeEventListener('pointerdown', handlePointerDown);
-    }, [contextRef, toolbarRef, activeRef]);
-
-    // Debounced color change
-    const debouncedColorChange = useCallback(
-        debounce((key: string, value: string) => {
-            if (key === "bg") {
-                onBgColorChange(value, element, Setter, activeScreen)
-            } else {
-                onColorChange(value, element, Setter, activeScreen)
-            }
-        }, 500),
-        [element, Setter, activeScreen]
-    );
-
-    // Add inside your component, next to other debounced functions
-    const debouncedFontWeightChange = useCallback(
-        debounce((val: number) => {
-            Setter((prev: any) => ({
+    // Apply style (updates local + context)
+    const applyStyle = useCallback(
+        (key: keyof StylesState, val: string | number) => {
+            const newStyle = { ...localStyle, [key]: val };
+            setLocalStyle(newStyle);
+            Setter?.((prev: any) => ({
                 ...prev,
-                style: {
-                    ...prev.style,
-                    [activeScreen]: {
-                        ...prev.style[activeScreen],
-                        fontWeight: val
-                    }
-                }
+                style: { ...prev.style, [activeScreen]: newStyle },
             }));
-        }, 300), // 300ms debounce
-        [Setter, activeScreen]
+        },
+        [localStyle, Setter, activeScreen]
     );
 
+    // Debounced for heavy inputs (colors, slider)
+    const debouncedApplyStyle = useCallback(
+        debounce((key: keyof StylesState, val: string | number) => applyStyle(key, val), 300),
+        [applyStyle]
+    );
 
-    // Generic input handler
-    const handleInputChange = (key: keyof React.CSSProperties, value: string, isHeight = false) => {
-        if (isHeight && activeRef?.current?.parentElement) {
-            const parentHeight = activeRef.current.parentElement.getBoundingClientRect().height;
-            const match = value.match(/^(\d+(?:\.\d+)?)(px|vh|%)$/);
-            if (match) {
-                const [_, numStr, unit] = match;
-                const num = parseFloat(numStr);
-                const pxValue = unit === 'px' ? num : unit === 'vh' ? (window.innerHeight * num) / 100 : (parentHeight * num) / 100;
-                if (pxValue > parentHeight) return alert(`Height can't exceed parent's height of ${Math.floor(parentHeight)}px.`);
-            }
+    const copyTheStyle = (screenSize: screenType) => {
+
+        if (screenStyleObj.screenStyles?.[screenSize]) {
+            Setter?.((prev: any) => ({
+                ...prev,
+                style: { ...prev.style, [activeScreen]: screenStyleObj.screenStyles?.[screenSize] },
+            }))
+
         }
-        setStyle(prev => ({ ...prev, [key]: value }));
-    };
+    }
 
-    const handlePositionInput = (key: 'top' | 'bottom' | 'left' | 'right', value: string) => {
-        setStyle(prev => {
-            const newStyle = { ...prev, [key]: value };
-            if (key === 'top' && value) newStyle.bottom = '';
-            if (key === 'bottom' && value) newStyle.top = '';
-            if (key === 'left' && value) newStyle.right = '';
-            if (key === 'right' && value) newStyle.left = '';
-            return newStyle;
-        });
+    // Generic input renderer
+    const renderInput = (
+        label: string,
+        key: keyof StylesState,
+        css: string,
+        type: 'text' | 'number' = 'text',
+        suffix?: string
+    ) => {
+        let value: string | number | undefined = localStyle?.[key];
+        if (type === 'number' && typeof value === 'string') value = parseFloat(value);
+
+        return (
+            <div className="flex flex-col gap-1" key={key}>
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+                <input
+                    type={type}
+                    value={value || ""}
+                    onChange={(e) => {
+                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
+                        applyStyle(key, val);
+                        if (activeRef) {
+                            // activeRef.style.setProperty(css, val, "important")
+                        }
+                    }}
+                    onBlur={(e) => {
+                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
+                        // setLocalStyle((prev) => ({ ...prev, [key]: val }));
+                    }}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+            </div>
+        );
     };
 
     return (
-        <div ref={toolbarRef} className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-[0px_0px_1px_1px] w-[240px] max-w-[20vw] shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
+        <div
+            ref={toolbarRef}
+            className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 rounded-md w-[240px] max-w-[20vw] shadow-md flex flex-col gap-4 z-[var(--zIndex)]"
+        >
             {/* Remove */}
             <button
                 onClick={() => rmElementFunc(element.id)}
                 className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100"
-            >Remove Element
+            >
+                Remove Element
             </button>
 
-            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Style</h3>
+            {/* Font Family / Size */}
+            <CustomSelect
+                options={fontFamilyOptions}
+                firstOption="fonts"
+                disableFirstValue
+                Default={localStyle.fontFamily?.toString()}
+                onChange={(val) => applyStyle("fontFamily", val)}
+            />
+            <CustomSelect
+                options={fontSizeOptions}
+                firstOption="text size"
+                disableFirstValue
+                Default={localStyle.fontSize?.toString()}
+                onChange={(val) => applyStyle("fontSize", val)}
+            />
 
-            {/* Bold/Italic/Underline */}
-            <div className="flex gap-2">
-                {/* <button className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold && 'bg-stone-600 text-white'}`} onClick={() => onBold(element, Setter, activeScreen)}>B</button> */}
-                {/* Bold/Italic/Underline */}
-                <div className="flex gap-2 items-center">
-                    {/* Bold Button */}
+            {/* Bold / Italic / Underline */}
+            {/* Bold / Italic / Underline */}
+            <div className="flex flex-col gap-2">
+                <div className="flex gap-2">
                     <button
-                        className={`tool-btn font-bold border p-1 min-w-[30px] rounded-md shadow-sm ${isBold ? 'bg-stone-600 text-white' : ''}`}
-                        onClick={() => onBold(element, Setter, activeScreen)}
+                        className={`tool-btn font-bold border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontWeight && parseInt(localStyle.fontWeight.toString()) >= 500
+                            ? 'bg-stone-600 text-white'
+                            : ''
+                            }`}
+                        onClick={() =>
+                            applyStyle(
+                                "fontWeight",
+                                localStyle.fontWeight && parseInt(localStyle.fontWeight.toString()) >= 500 ? "400" : "700"
+                            )
+                        }
                     >
                         B
                     </button>
-
-                    {/* Font Weight Slider */}
-                    {/* Font Weight Slider */}
-                    <input
-                        type="range"
-                        min="100"
-                        max="900"
-                        step="100"
-                        value={fontWeightValue}
-                        onChange={(e) => {
-                            const val = parseInt(e.target.value);
-                            setFontWeightValue(val);
-
-                            // Live preview immediately
-                            if (activeRef) {
-                                activeRef.style.setProperty("font-weight", val.toString(), "important");
-                            }
-
-                            // Highlight bold button correctly
-                            setIsBold(val > 500);
-
-                            // Debounced commit to context state
-                            debouncedFontWeightChange(val);
-                        }}
-                        className="w-[80px]"
-                        title="Font weight"
-                    />
-
+                    <button
+                        className={`tool-btn italic border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontStyle === "italic" ? 'bg-stone-600 text-white' : ''
+                            }`}
+                        onClick={() => applyStyle("fontStyle", localStyle.fontStyle === "italic" ? "normal" : "italic")}
+                    >
+                        I
+                    </button>
+                    <button
+                        className={`tool-btn underline border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.textDecoration === "underline" ? 'bg-stone-600 text-white' : ''
+                            }`}
+                        onClick={() =>
+                            applyStyle("textDecoration", localStyle.textDecoration === "underline" ? "none" : "underline")
+                        }
+                    >
+                        U
+                    </button>
                 </div>
 
-                <button className={`tool-btn italic border p-1 min-w-[30px] rounded-md shadow-sm ${isItalic && 'bg-stone-600 text-white'}`} onClick={() => onItalic(element, Setter, activeScreen)}>I</button>
-                <button className={`tool-btn underline border p-1 min-w-[30px] rounded-md shadow-sm ${isUnderline && 'bg-stone-600 text-white'}`} onClick={() => onUnderline(element, Setter, activeScreen)}>U</button>
+                {/* Font Weight Slider */}
+                <div className="flex flex-col gap-1">
+                    <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Font Weight</label>
+                    <input
+                        type="range"
+                        min={100}
+                        max={900}
+                        step={100}
+                        value={localStyle.fontWeight ? parseInt(localStyle.fontWeight.toString()) : 400}
+                        onChange={(e) => applyStyle("fontWeight", e.target.value)}
+                        className="w-full accent-stone-600"
+                    />
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                        {localStyle.fontWeight || 400}
+                    </span>
+                </div>
             </div>
-            <input
-                type="number"
-                placeholder="Letter spacing"
-                value={letterSpacing}
-                onChange={e => {
-                    const val = e.target.value
-                    if (parseFloat(val) < 1 || parseFloat(val) > 8) return
-                    setLetterSpacing(parseFloat(val))
-                    activeRef.style.setProperty("letter-spacing", `${val}px`, "important")
-                }}
-                onBlur={(e) => {
-                    onletterSpacingChange(e.target.value + "px", element, Setter, activeScreen)
-                }}
-                className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
 
 
-            {/* Font & Size */}
-            <CustomSelect options={fontFamilyOptions} Default={style.fontFamily?.toString()} firstOption="fonts" disableFirstValue onChange={(val) => onFamilyFontChange(val, element, Setter, activeScreen)} />
-            <CustomSelect options={fontSizeOptions} Default={style.fontSize?.toString()} firstOption="text size" disableFirstValue onChange={(val) => onSizeChange(val, element, Setter, activeScreen)} />
-
-            {/* Color */}
-            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Colors</h3>
-            <div className='flex gap-2 mb-2 pb-4'>
-                <input type="color" value={textColor} onChange={e => { setTextColor(e.target.value); debouncedColorChange("color", e.target.value); activeRef.style.setProperty("color", e.target.value, "important") }} className="w-8 h-8 border border-gray-300 dark:border-gray-700 rounded cursor-pointer" title="Text color" />
-                <input type="color" value={bgColor} onChange={e => { setBgColor(e.target.value); debouncedColorChange("bg", e.target.value); activeRef.style.setProperty("background-color", e.target.value, "important") }} className="w-8 h-8 border border-gray-300 dark:border-gray-700 rounded cursor-pointer" title="Text color" />
-                <button
-                    onClick={() => {
-                        setBgColor("#000000"); // default fallback
-                        if (activeRef.current) activeRef.current.style.removeProperty("background-color");
-                        if (element && Setter) Setter((prev: any) => ({
-                            ...prev,
-                            style: { ...prev.style, [activeScreen]: { ...prev.style[activeScreen], backgroundColor: '' } }
-                        }));
-                    }}
-                    className="px-2 py-1 rounded-md bg-gray-200 dark:bg-gray-700 text-sm"
-                    title="Clear background"
-                >
-                    Clear
-                </button>
-
-            </div>
-            {/* Alignment */}
-            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Alignments</h3>
+            {/* Colors */}
             <div className="flex gap-2">
-                {['left', 'center', 'right', 'justify'].map((align) => {
-                    const Icon = alignmentIcons[align];
-                    return (
-                        <button
-                            key={align}
-                            className={`tool-btn border p-1 rounded-md shadow-sm ${alignment === align ? 'bg-stone-600 text-white' : ''}`}
-                            onClick={() => onAlignChange(align as any, element, Setter, activeScreen)}
-                            title={`Align ${align}`}
-                        >
-                            <Icon />
-                        </button>
-                    );
-                })}
+                <input
+                    type="color"
+                    value={(localStyle.color as string) || "#000000"}
+                    onChange={(e) => debouncedApplyStyle("color", e.target.value)}
+                    className="w-8 h-8 border rounded cursor-pointer"
+                />
+                <input
+                    type="color"
+                    value={(localStyle.backgroundColor as string) || "#000000"}
+                    onChange={(e) => debouncedApplyStyle("backgroundColor", e.target.value)}
+                    className="w-8 h-8 border rounded cursor-pointer"
+                />
             </div>
 
-
-            {/* Position */}
-            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Position</h3>
-            <CustomSelect options={positionOptions} firstOption="position" Default={style.position?.toString()} disableFirstValue onChange={val => setStyle(prev => ({ ...prev, position: val, zIndex: 1, width: val === 'relative' ? 'fit-content' : '' }))} />
-            <input type="number" placeholder="z-index" value={style.zIndex?.toString() || ''} onChange={e => setStyle(prev => ({ ...prev, zIndex: parseInt(e.target.value) || 0 }))} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
-
-            {/* Top/Bottom/Left/Right */}
-            <div className="grid grid-cols-2 gap-2">
-                {['top', 'bottom', 'left', 'right'].map(key =>
-                    <input key={key} type="text" placeholder={key} value={style[key as keyof React.CSSProperties]?.toString() || ''} onChange={e => handlePositionInput(key as any, e.target.value)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm" />
-                )}
-            </div>
+            {/* Alignment */}
+            <div className="flex gap-2">
+                {Object.entries(alignmentIcons).map(([align, Icon]) => (
+                    <button
+                        key={align}
+                        className={`tool-btn border p-1 rounded-md ${localStyle.textAlign === align ? 'bg-stone-600 text-white' : ''}`}
+                        onClick={() => applyStyle("textAlign", align)}
+                    >
+                        <Icon />
+                    </button>
+                ))}
+            </div>{/* Position */}{/* Position */}
+            {/* <CustomSelect
+        options={positionOptions}
+        firstOption="position"
+        disableFirstValue
+        Default={localStyle.position?.toString()}
+        onChange={(val) => applyStyle("position", val)}
+      /> */}
+            {/* {renderInput("Z-Index", "zIndex", "number")}
+      {["top", "bottom", "left", "right"].map((key) => renderInput(key, key as keyof StylesState, "text"))} */}
+            {/* <CustomSelect
+        options={positionOptions}
+        firstOption="position"
+        disableFirstValue
+        Default={localStyle.position?.toString()}
+        onChange={(val) => applyStyle("position", val)}
+      /> */}
+            {/* {renderInput("Z-Index", "zIndex", "number")}
+      {["top", "bottom", "left", "right"].map((key) => renderInput(key, key as keyof StylesState, "text"))} */}
 
             {/* Dimensions */}
-            <h3 className="tool-btn w-full flex items-center justify-between border-t pt-2 font-bold">Dimensions</h3>
-            <div className="grid grid-cols-2 gap-2 overflow-hidden">
-                {[
-                    { "label": "Width", "value": "width" },
-                    { "label": "Height", "value": "height" },
-                    { "label": "Padding Top", "value": "paddingTop" },
-                    { "label": "Padding Bottom", "value": "paddingBottom" },
-                    { "label": "Padding Left", "value": "paddingLeft" },
-                    { "label": "Padding Right", "value": "paddingRight" },
-                    { "label": "Margin Top", "value": "marginTop" },
-                    { "label": "Margin Bottom", "value": "marginBottom" },
-                    { "label": "Margin Left", "value": "marginLeft" },
-                    { "label": "Margin Right", "value": "marginRight" }
-                ].map(({ value: key, label }, i) => {
-                    const isHeight = key === 'height';
-                    return (<div key={key}>
-                        <label htmlFor={key + i} className='text-xs'>{label}</label>
-                        <input key={key} id={key + i} type="text" placeholder={key} value={style[key as keyof React.CSSProperties] || ''} onChange={e => handleInputChange(key as keyof React.CSSProperties, e.target.value, isHeight)} className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm w-full" />
-                    </div>)
-                })}
+            {renderInput("Width", "width", "width")}
+            {renderInput("Height", "height", "height")}
+            <h4 className="text-xs font-semibold">Padding</h4>
+            {[
+                {
+                    "reactName": "paddingTop",
+                    "cssName": "padding-top"
+                },
+                {
+                    "reactName": "paddingBottom",
+                    "cssName": "padding-bottom"
+                },
+                {
+                    "reactName": "paddingLeft",
+                    "cssName": "padding-left"
+                },
+                {
+                    "reactName": "paddingRight",
+                    "cssName": "padding-right"
+                }
+            ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
+            <h4 className="text-xs font-semibold">Margin</h4>
+            {[
+                {
+                    "reactName": "marginTop",
+                    "cssName": "margin-top"
+                },
+                {
+                    "reactName": "marginBottom",
+                    "cssName": "margin-bottom"
+                },
+                {
+                    "reactName": "marginLeft",
+                    "cssName": "margin-left"
+                },
+                {
+                    "reactName": "marginRight",
+                    "cssName": "margin-right"
+                }
+            ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
+
+            <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+            <div className="flex gap-2">
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
+                    XL
+                </button>
+
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
+                    LG
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
+                    MD
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
+                    SM
+                </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default RichTextToolBar;

@@ -30,6 +30,8 @@ model Content {
   name      String
   givenName String?
   order     Int     @default(0)
+  hover     Json?
+  aria      String?
 
   // For top-level sections
   webpageId String?
@@ -65,7 +67,7 @@ model Element {
   styleId String @unique
 
   hover Json?
-  href   String?
+  href  String?
   aria  String?
 
   createdAt DateTime @default(now())

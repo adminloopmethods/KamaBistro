@@ -10,7 +10,7 @@ import { CreateSection, SectionElementType } from "../../_functionality/createSe
 import AddSection from "../../_component/common/AddSection";
 import RichTextToolBar from "../../_component/common/RichTextToolbar";
 import StyleToolbar from "../../_component/common/StyleToolbar";
-import DimensionToolbar from "../../_component/common/DimensionToolbar";
+import DimensionToolbar, { updateStylesType } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
 import { test } from "@/assets/test"
 
@@ -88,7 +88,7 @@ const Editor = () => {
     ///////////// screen related functionality ///////////////////
     // Function to classify width
     const classifyWidth = (w: number) => {
-        if (w > 1024) return "xl";
+        if (w > 1200) return "xl";
         if (w >= 768) return "lg";
         if (w >= 425) return "md";
         return "sm";
@@ -103,7 +103,7 @@ const Editor = () => {
     }
 
     const applyLGScreen = () => {
-        setPageWidth("1024px")
+        setPageWidth("1200px")
     }
 
     const applyXLScreen = () => {
@@ -163,7 +163,10 @@ const Editor = () => {
         });
     };
 
-    const updateSectionStyles = (newStyle: CSSProperties) => {
+    const updateSectionStyles: updateStylesType = (newStyle, applyAll) => {
+        if (applyAll && sectionStyleSetter) {
+            sectionStyleSetter(newStyle)
+        }
         if (sectionStyleSetter) {
             sectionStyleSetter((prev: CSSProperties) => {
                 return { ...prev, ...newStyle };
@@ -345,7 +348,7 @@ const Editor = () => {
 
             <div style={{ display: "flex", height: "92vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
                 {/* website */}
-                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", }}>
+                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden",  position: "relative", zIndex: 1}}>
 
                     <div
                         ref={containerRef}
@@ -361,8 +364,9 @@ const Editor = () => {
                         linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
                         `,
                             backgroundSize: "15px 15px", // size of grid squares
-                            // position: "relative",
-                            // zIndex: 1
+                            position: "relative",
+                            zIndex: 1,
+                            overflow:"hidden"
                         }}
                         className="bg-stone-200"
                     >
@@ -397,49 +401,57 @@ const Editor = () => {
 
                 </div>
                 {/* Sidebar/toolbars */}
-                {
-                    showToolbar &&
-                    <div
-                        style={{ width: "250px", backgroundColor: "#393E46", height: "92vh", overflowY: "scroll", zIndex: 1000 }}
-                        className="scroll-one fixed top-[8vh] right-0"
-                        ref={toolbarRef}
-                    >
+                {/* {
+                    showToolbar && */}
+                <div
+                    ref={toolbarRef}
+                    style={{
+                        width: "250px",
+                        backgroundColor: "#393E46",
+                        height: "92vh",
+                        overflowY: "scroll",
+                        zIndex: 1000,
+                        display: showToolbar ? "block" : "none", // 👈 hide instead of unmount
+                    }}
+                    className="scroll-one fixed top-[8vh] right-0"
+                >
 
 
 
-                        <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-                            {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
-                            {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
-                            <CustomSelect
-                                options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
-                                firstOption="Set Location"
-                                disableFirstValue={true}
-                                onChange={(value) => {
-                                    setWebpage((prev: webpageType | null) => {
-                                        if (!prev) return null
-                                        return {
-                                            ...prev, locationId: value
-                                        }
-                                    })
-                                }}
-                            />
-                        </div>
-                        {/* toolbars */}
-                        {onHoverToolbar ?
-                            <HoverToolbar /> : (
-                                !contextRef.activeRef ? (
-                                    <>
-                                        <DimensionToolbar updateStyles={updateSectionStyles} />
-                                        <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
-                                    </>
-                                ) : (
-                                    imageEdit ?
-                                        <ImageStyleToolbar />
-                                        : <RichTextToolBar />
-                                ))
-                        }
+
+                    <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
+                        {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
+                        {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
+                        <CustomSelect
+                            options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
+                            firstOption="Set Location"
+                            disableFirstValue={true}
+                            onChange={(value) => {
+                                setWebpage((prev: webpageType | null) => {
+                                    if (!prev) return null
+                                    return {
+                                        ...prev, locationId: value
+                                    }
+                                })
+                            }}
+                        />
                     </div>
-                }
+                    {/* toolbars */}
+                    {onHoverToolbar ?
+                        <HoverToolbar /> : (
+                            !contextRef.activeRef ? (
+                                <>
+                                    <DimensionToolbar updateStyles={updateSectionStyles} />
+                                    <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
+                                </>
+                            ) : (
+                                imageEdit ?
+                                    <ImageStyleToolbar />
+                                    : <RichTextToolBar />
+                            ))
+                    }
+                </div>
+                {/* } */}
                 <Toaster position="top-right" />
             </div>
         </div>

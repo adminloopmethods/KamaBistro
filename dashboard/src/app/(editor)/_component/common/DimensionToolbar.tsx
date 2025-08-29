@@ -3,9 +3,10 @@ import { useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 
 export type StylesState = React.CSSProperties | Record<string, any>;
+export type updateStylesType = (styles: Partial<StylesState>, applyAll?: Boolean | undefined) => void;
 
 type DimensionToolbarProps = {
-    updateStyles: (styles: Partial<StylesState>) => void;
+    updateStyles: updateStylesType
 };
 
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {

@@ -3,7 +3,7 @@ import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
 import CustomSelect from '@/app/_common/CustomSelect';
-import { useMyContext } from '@/Context/EditorContext';
+import { screenType, useMyContext } from '@/Context/EditorContext';
 import { debounce } from "lodash";
 
 const shadowPresets: Record<string, string> = {
@@ -19,12 +19,12 @@ const shadowPresets: Record<string, string> = {
 };
 
 type StyleToolbarProps = {
-    updateStyles: (styles: Record<string, any>) => void;
+    updateStyles: (styles: Record<string, any>, applyAll?: boolean) => void;
     rmSection?: (id: string) => void;
 };
 
 const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
-    const { contextForSection } = useMyContext()
+    const { contextForSection, screenStyleObj } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
 
     const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
@@ -34,7 +34,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [bgImage, setBgImage] = useState<string>('');
     const [boxShadow, setBoxShadow] = useState<string>(currentSection?.boxShadow || 'none');
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
-    
+
     const toolbarRef = useRef<HTMLDivElement>(null);
 
     // ===== Debounced Handlers =====
@@ -54,7 +54,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         } else if (bgImage || url) {
             combined = `url(${url || bgImage})`;
         } else if (!url) {
-            console.log("wer")
             combined = `${gradient}`;
         }
         debouncedUpdateStyles({ backgroundImage: combined });
@@ -81,10 +80,18 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         </div>
     );
 
+    const copyTheStyle = (screenSize: screenType) => {
+
+        if (screenStyleObj.screenStyles?.[screenSize]) {
+
+            updateStyles(screenStyleObj.screenStyles?.[screenSize])
+        }
+    }
+
     return (
         <div
             ref={toolbarRef}
-            
+
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[0px_0px_4px_4px] shadow-md flex flex-col gap-4"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
@@ -296,6 +303,21 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                                 onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
                             />
                         )}
+
+                        {renderInputRow(
+                            'Wrap Items',
+                            <CustomSelect
+                                options={[
+                                    { label: "Stretch", value: "stretch" },
+                                    { label: "Start", value: "flex-start" },
+                                    { label: "Center", value: "center" },
+                                    { label: "End", value: "flex-end" },
+                                    { label: "Baseline", value: "baseline" },
+                                ]}
+                                Default={currentSection?.alignItems}
+                                onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
+                            />
+                        )}
                     </>
                 )}
             </div>
@@ -338,6 +360,23 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 />
             )}
 
+            <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+            <div className="flex gap-2">
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
+                    XL
+                </button>
+
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
+                    LG
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
+                    MD
+                </button>
+                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
+                    SM
+                </button>
+            </div>
+
             {showImageSelector &&
                 <ImageSelector
                     onSelectImage={(fileInfo: any) => {
@@ -349,6 +388,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     type="IMAGE"
                 />
             }
+
         </div>
     );
 };
