@@ -885,3 +885,36 @@ export const assignUserToWebpage = async (webpageId, userId, roleId) => {
     });
   });
 };
+
+export const removeUserFromWebpageRole = async (webpageId, roleId) => {
+  const role = await prismaClient.role.findUnique({
+    where: {id: roleId},
+  });
+
+  if (!role) {
+    throw new Error(`Role with ID '${roleId}' not found`);
+  }
+
+  return await prismaClient.$transaction(async (tx) => {
+    // Delete the PageUserRole entry
+    await tx.pageUserRole.deleteMany({
+      where: {
+        webpageId: webpageId,
+        roleId: roleId,
+      },
+    });
+
+    // Update the webpage: set editorId or verifierId to null
+    const updateData = {};
+    if (role.name.toUpperCase() === "EDITOR") {
+      updateData.editorId = null;
+    } else if (role.name.toUpperCase() === "VERIFIER") {
+      updateData.verifierId = null;
+    }
+
+    return await tx.webpage.update({
+      where: {id: webpageId},
+      data: updateData,
+    });
+  });
+};

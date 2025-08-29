@@ -14,6 +14,7 @@ import {
   assignPageRole,
   fetchAllLocations,
   assignUserToWebpage,
+  removeUserFromWebpageRole,
 } from "../../repository/user.repository.js";
 import {assert, assertEvery} from "../../errors/assertError.js";
 import {logger} from "../../config/logConfig.js";
@@ -186,6 +187,28 @@ const assignRole = async (webpageId, userId, roleId) => {
   return await assignUserToWebpage(webpageId, userId, roleId);
 };
 
+const removeRole = async (webpageId, roleId) => {
+  // Check if role exists and is valid
+  const role = await findRoleByID(roleId);
+  if (!role) {
+    throw new Error("Role not found");
+  }
+
+  // Validate role type
+  if (!["EDITOR", "VERIFIER"].includes(role.name.toUpperCase())) {
+    throw new Error("Invalid role. Must be EDITOR or VERIFIER");
+  }
+
+  // Check if webpage exists
+  const webpage = await findWebpageById(webpageId);
+  if (!webpage) {
+    throw new Error("Webpage not found");
+  }
+
+  // Remove the role assignment
+  return await removeUserFromWebpageRole(webpageId, roleId);
+};
+
 export {
   createUser,
   AssignPageRole,
@@ -202,4 +225,5 @@ export {
   editProfileImage,
   getAllLocations,
   assignRole,
+  removeRole,
 };

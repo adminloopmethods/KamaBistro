@@ -13,6 +13,7 @@ import {
   getAllUsers,
   getAllUsersByRoleId,
   getUserById,
+  removeRole,
   userRoleType,
 } from "./user.service.js";
 import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
@@ -184,6 +185,33 @@ const AssignRoleToWebpage = async (req, res) => {
   }
 };
 
+// controllers/UserController.ts
+const RemoveRoleFromWebpage = async (req, res) => {
+  try {
+    const {webpageId, roleId} = req.body;
+
+    if (!webpageId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "webpageId and roleId are required",
+      });
+    }
+
+    const result = await removeRole(webpageId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `Role successfully removed from webpage`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   CreateUserHandler,
   AssignPageRoleHandler,
@@ -200,4 +228,5 @@ export default {
   EditProfileImage,
   GetAllLocations,
   AssignRoleToWebpage,
+  RemoveRoleFromWebpage,
 };

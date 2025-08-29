@@ -30,6 +30,13 @@ router.post(
   tryCatchWrap(UserController.AssignRoleToWebpage)
 );
 
+// routes/user.ts
+router.delete(
+  "/remove-page-role",
+  authenticateUser,
+  tryCatchWrap(UserController.RemoveRoleFromWebpage)
+);
+
 router.get("/locations", tryCatchWrap(UserController.GetAllLocations));
 
 router.get("/getRolesForUser", tryCatchWrap(UserController.GetRolesForUser));

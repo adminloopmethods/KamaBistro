@@ -13,18 +13,17 @@ import {
   ArrowRight,
   Plus,
 } from "lucide-react";
-import {getAllWebpagesReq, getWebpageReq} from "@/functionality/fetch";
+import {getAllWebpagesReq} from "@/functionality/fetch";
 import WebpageCard from "./_component/WebpageCard";
 import AssignUserModal from "./_component/AssignUserModal";
 import Link from "next/link";
 import {Skeleton} from "@/components/ui/skeleton";
 
-// Types
 interface User {
   id: string;
   name: string;
-  role: "editor" | "verifier";
-  // avatar: string;x
+  email: string;
+  role?: "editor" | "verifier";
 }
 
 interface Webpage {
@@ -39,36 +38,25 @@ interface Webpage {
   route: string;
 }
 
-// import { User, Webpage } from "@/types"; // Ensure these types are exported from a shared file
-
-const icons: Record<any, any> = {
+const icons: Record<string, React.ReactNode> = {
   home: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  about: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  career: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  services: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  contact: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  blog: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
-  products: <LayoutDashboard className="w-6 h-6 text-indigo-500" />,
+  about: <Users className="w-6 h-6 text-indigo-500" />,
+  career: <FileText className="w-6 h-6 text-indigo-500" />,
+  services: <Settings className="w-6 h-6 text-indigo-500" />,
+  contact: <Contact className="w-6 h-6 text-indigo-500" />,
+  blog: <FileText className="w-6 h-6 text-indigo-500" />,
+  products: <ShoppingCart className="w-6 h-6 text-indigo-500" />,
 };
 
 const CMSDashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [users] = useState<User[]>([
-    // { id: "1", name: "Alex Johnson", role: "editor", avatar: "/user1.jpg" },
-    // { id: "2", name: "Maria Garcia", role: "verifier", avatar: "/user2.jpg" },
-    // { id: "3", name: "Sam Wilson", role: "editor", avatar: "/user3.jpg" },
-    // { id: "4", name: "Priya Patel", role: "verifier", avatar: "/user4.jpg" },
-  ]);
-
   const [webpages, setWebpages] = useState<Webpage[]>([]);
-
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [currentPage, setCurrentPage] = useState<Webpage | null>(null);
   const [assigningRole, setAssigningRole] = useState<
     "editor" | "verifier" | null
   >(null);
 
-  // Format date for display
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
@@ -77,7 +65,6 @@ const CMSDashboard = () => {
     });
   };
 
-  // Status badge styling
   const getStatusStyle = (status: string) => {
     switch (status) {
       case "published":
@@ -91,169 +78,85 @@ const CMSDashboard = () => {
     }
   };
 
-  // Open assign user modal
   const openAssignModal = (page: Webpage, role: "editor" | "verifier") => {
     setCurrentPage(page);
     setAssigningRole(role);
     setShowAssignModal(true);
   };
 
-  const refreshWebpages = async () => {
+  const fetchWebpages = async () => {
     try {
+      setIsLoading(true);
       const response = await getAllWebpagesReq();
-      console.log("Webpages refresh response:", response); // Debug log
 
-      if (response.ok) {
-        setWebpages(() => {
-          return response.webpages.map((e: any) => {
-            // Debug what we're getting from API
-            console.log(`Webpage ${e.name} raw data:`, {
-              editor: e.editor,
-              verifier: e.verifier,
-              editorId: e.editorId,
-              verifierId: e.verifierId,
-            });
+      console.log("Webpages API response:", response); // Debug log
 
-            // Handle both user objects and user IDs
-            let editor = null;
-            let verifier = null;
+      if (response.ok && response.webpages) {
+        console.log("Raw webpage data:", response.webpages); // Debug log
 
-            // If editor/verifier are objects with name/email, use them directly
-            if (e.editor && typeof e.editor === "object" && e.editor.name) {
-              editor = e.editor;
-            } else if (e.editorId) {
-              // If we only have ID, we need to fetch user details or handle differently
-              editor = {id: e.editorId, name: "Loading...", email: ""};
-            }
+        const mappedWebpages = response.webpages.map((webpage: any) => {
+          console.log(`Webpage ${webpage.name}:`, {
+            editorId: webpage.editorId,
+            editor: webpage.editor?.name,
+            verifierId: webpage.verifierId,
+            verifier: webpage.verifier?.name,
+          }); // Debug log
 
-            if (
-              e.verifier &&
-              typeof e.verifier === "object" &&
-              e.verifier.name
-            ) {
-              verifier = e.verifier;
-            } else if (e.verifierId) {
-              verifier = {id: e.verifierId, name: "Loading...", email: ""};
-            }
+          // Extract editor and verifier information correctly
+          const editor =
+            webpage.editorId || webpage.editor
+              ? {
+                  id: webpage.editorId || webpage.editor?.id,
+                  name: webpage.editor?.name || "Unknown Editor",
+                  email: webpage.editor?.email || "",
+                  role: "editor" as const,
+                }
+              : undefined;
 
-            return {
-              id: e.id,
-              title: e.name,
-              icon: icons[e.route] || icons.home,
-              lastEdited: e.updatedAt,
-              editor: editor,
-              verifier: verifier,
-              status: e.status,
-              route: e.route,
-            };
-          });
+          const verifier =
+            webpage.verifierId || webpage.verifier
+              ? {
+                  id: webpage.verifierId || webpage.verifier?.id,
+                  name: webpage.verifier?.name || "Unknown Verifier",
+                  email: webpage.verifier?.email || "",
+                  role: "verifier" as const,
+                }
+              : undefined;
+
+          return {
+            id: webpage.id,
+            title: webpage.name,
+            icon: icons[webpage.route] || icons.home,
+            lastEdited: webpage.updatedAt,
+            editor,
+            verifier,
+            status: webpage.status,
+            route: webpage.route,
+          };
         });
+
+        setWebpages(mappedWebpages);
       }
     } catch (err) {
-      console.error("Failed to refresh webpages:", err);
-    }
-  };
-
-  // Assign a user to the page
-  const assignUser = async (user: User) => {
-    if (!currentPage || !assigningRole) return;
-
-    try {
-      // Instead of updating local state optimistically, refresh from backend
-      await refreshWebpages();
-
-      setShowAssignModal(false);
-      setCurrentPage(null);
-      setAssigningRole(null);
-    } catch (error) {
-      console.error("Error updating user assignment:", error);
-    }
-  };
-
-  // Remove assigned user
-  const removeUser = async (pageId: string, role: "editor" | "verifier") => {
-    try {
-      // You might need to implement a remove role API endpoint
-      // For now, just update the local state
-      const updatedPages = webpages.map((page) => {
-        if (page.id === pageId) {
-          return {
-            ...page,
-            [role]: undefined,
-          };
-        }
-        return page;
-      });
-
-      setWebpages(updatedPages);
-
-      // If you have a remove role API endpoint, call it here
-      // await removePageRoleReq({ webpageId: pageId, role });
-    } catch (error) {
-      console.error("Error removing user:", error);
+      console.error("Failed to fetch webpages:", err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    async function getAllpages() {
-      try {
-        setIsLoading(true);
-        const response = await getAllWebpagesReq();
-        console.log("Initial webpages API response:", response);
-
-        if (response.ok) {
-          setWebpages(() => {
-            return response.webpages.map((e: any) => {
-              console.log(`Initial load - Webpage ${e.name}:`, e);
-
-              // Same logic as refreshWebpages
-              let editor = null;
-              let verifier = null;
-
-              if (e.editor && typeof e.editor === "object" && e.editor.name) {
-                editor = e.editor;
-              } else if (e.editorId) {
-                editor = {id: e.editorId, name: "Loading...", email: ""};
-              }
-
-              if (
-                e.verifier &&
-                typeof e.verifier === "object" &&
-                e.verifier.name
-              ) {
-                verifier = e.verifier;
-              } else if (e.verifierId) {
-                verifier = {id: e.verifierId, name: "Loading...", email: ""};
-              }
-
-              return {
-                id: e.id,
-                title: e.name,
-                icon: icons[e.route] || icons.home,
-                lastEdited: e.updatedAt,
-                editor: editor,
-                verifier: verifier,
-                status: e.status,
-                route: e.route,
-              };
-            });
-          });
-        }
-      } catch (err) {
-        console.error("Failed to fetch webpages:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    getAllpages();
+    fetchWebpages();
   }, []);
 
-  //skeleton loader
+  const handleUserAssigned = () => {
+    fetchWebpages(); // Refresh the data after assignment
+  };
+
   const SkeletonCard = () => (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow border border-gray-100 dark:border-gray-700 overflow-hidden transition-all duration-300">
       <div className="p-6">
         <div className="flex justify-between items-start">
-          <div className=" py-3 rounded-xl">
+          <div className="py-3 rounded-xl">
             <Skeleton className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600" />
           </div>
           <Skeleton className="w-20 h-6 rounded-full bg-gray-300 dark:bg-gray-600" />
@@ -265,33 +168,20 @@ const CMSDashboard = () => {
         </div>
 
         <div className="mt-6">
-          {/* Editor Assignment Skeleton */}
-          <div className="mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <Skeleton className="w-16 h-4 bg-gray-300 dark:bg-gray-600" />
-              <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <div className="flex items-center w-full  px-3 py-1.5 rounded-lg">
-                <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
-                <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
+          {[1, 2].map((i) => (
+            <div key={i} className="mb-4">
+              <div className="flex justify-between items-center mb-2">
+                <Skeleton className="w-16 h-4 bg-gray-300 dark:bg-gray-600" />
+                <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <div className="flex items-center w-full px-3 py-1.5 rounded-lg">
+                  <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
+                  <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
+                </div>
               </div>
             </div>
-          </div>
-
-          {/* Verifier Assignment Skeleton */}
-          <div className="mb-4">
-            <div className="flex justify-between items-center mb-2">
-              <Skeleton className="w-16 h-4 bg-gray-300 dark:bg-gray-600" />
-              <Skeleton className="w-16 h-6 rounded-lg bg-gray-300 dark:bg-gray-600" />
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <div className="flex items-center w-full px-3 py-1.5 rounded-lg">
-                <Skeleton className="w-6 h-6 rounded-full mr-2 bg-gray-300 dark:bg-gray-600" />
-                <Skeleton className="w-24 h-4 bg-gray-300 dark:bg-gray-600" />
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
         <div className="mt-6 flex space-x-3">
@@ -304,8 +194,7 @@ const CMSDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br dark:bg-gray-800 p-6">
-      {/* Header */}
-      <div className=" mx-auto mb-10">
+      <div className="mx-auto mb-10">
         <div className="flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -336,12 +225,8 @@ const CMSDashboard = () => {
                 />
               </svg>
             </div>
-            {/* <button className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center">
-              <BarChart2 className="w-5 h-5 mr-2" />
-              Analytics
-            </button> */}
             <Link
-              href={"/editor"}
+              href="/editor"
               className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-4 py-2 rounded-xl flex items-center"
             >
               <Plus className="w-5 h-5 mr-2" />
@@ -351,10 +236,9 @@ const CMSDashboard = () => {
         </div>
       </div>
 
-      {/* Webpage Cards Grid */}
       <div className="mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {isLoading
-          ? Array.from({length: 3}).map((_, index) => (
+          ? Array.from({length: 6}).map((_, index) => (
               <SkeletonCard key={index} />
             ))
           : webpages.map((page) => (
@@ -364,13 +248,11 @@ const CMSDashboard = () => {
                 formatDate={formatDate}
                 getStatusStyle={getStatusStyle}
                 openAssignModal={openAssignModal}
-                removeUser={removeUser}
+                onUserRemoved={handleUserAssigned}
               />
             ))}
       </div>
-      {/* </div> */}
 
-      {/* Assign User Modal */}
       <AssignUserModal
         show={showAssignModal}
         currentPage={currentPage}
@@ -380,9 +262,7 @@ const CMSDashboard = () => {
           setCurrentPage(null);
           setAssigningRole(null);
         }}
-        onAssign={(user) => {
-          assignUser(user);
-        }}
+        onAssign={handleUserAssigned}
       />
     </div>
   );

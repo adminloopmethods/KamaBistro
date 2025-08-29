@@ -28,6 +28,7 @@ const endpointMap = {
   activateUser: `${users}/activate`,
   deactivateUser: `${users}/deactivate`,
   assignPageRole: `${users}/assign-page-role`,
+  removePageRole: `${users}/remove-page-role`,
 
   //roles
   getRoles: `${role}/allRoles`,
