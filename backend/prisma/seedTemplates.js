@@ -2,9 +2,12 @@
 import { randomUUID } from "node:crypto";
 import { createWebpageService } from "../src/modules/content/content.service.js";
 <<<<<<< HEAD
+<<<<<<< HEAD
 // import OurGroup from "./templates/privateDinning.json" assert { type: "json" };
 import OurGroup from "./templates/ourGroup.json"  assert { type: "json" };
 =======
+=======
+>>>>>>> ef282408b166d5a109bede99fbab1d294a8f637f
 
 // Import multiple JSON objects
 import OurGroup from "../test.json" assert { type: "json" };
@@ -16,7 +19,10 @@ import contactUS from "./templates/contactUs.json" assert { type: "json" };
 
 // Put them in an array
 const webpages = [OurGroup, PrivateDining, cateringPage, ourCulture, contactUS];
+<<<<<<< HEAD
 >>>>>>> 67ba25b1c91786cf96ac401fe1e4a71ccf12fd44
+=======
+>>>>>>> ef282408b166d5a109bede99fbab1d294a8f637f
 
 // Function to recursively replace all "id" fields with new UUIDs
 function replaceIds(obj) {
