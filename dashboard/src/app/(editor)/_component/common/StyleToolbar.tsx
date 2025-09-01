@@ -274,6 +274,20 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         )}
 
                         {renderInputRow(
+                            'Flex Wrap',
+                            <CustomSelect
+                                options={[
+                                    { label: "No Wrap", value: "nowrap" },
+                                    { label: "Wrap", value: "wrap" },
+                                    { label: "Wrap Reverse", value: "wrap-reverse" },
+                                ]}
+                                Default={currentSection?.flexWrap}
+                                onChange={(val) => { debouncedUpdateStyles({ flexWrap: val }); }}
+                            />
+                        )}
+
+
+                        {renderInputRow(
                             'Justify Content',
                             <CustomSelect
                                 options={[
