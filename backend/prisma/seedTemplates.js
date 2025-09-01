@@ -2,7 +2,7 @@
 import { randomUUID } from "node:crypto";   // ✅ import randomUUID directly
 import { createWebpageService } from "../src/modules/content/content.service.js";
 // import OurGroup from "./templates/privateDinning.json" assert { type: "json" };
-import OurGroup from "../test.json"  assert { type: "json" };
+import OurGroup from "./templates/ourGroup.json"  assert { type: "json" };
 
 // Function to recursively replace all "id" fields with new UUIDs
 function replaceIds(obj) {
