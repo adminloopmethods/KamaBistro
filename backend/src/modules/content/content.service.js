@@ -478,23 +478,27 @@ export const getContentByIdService = async (id) => {
   const transformSection = (section) => {
     const merged = [
       ...(section.children?.map((child) => ({
-        id: crypto.randomUUID(), // new id for child
+        id: crypto.randomUUID(),
         name: child.name,
         givenName: child.givenName,
+        hover: child.hover || null,
+        aria: child.aria || null,
         style: child.style
-          ? {...child.style, id: crypto.randomUUID()} // new style id
+          ? { ...child.style, id: undefined } // clear id
           : null,
         order: child.order,
         type: "section",
         elements: transformSection(child).elements,
       })) || []),
       ...(section.elements?.map((el) => ({
-        id: crypto.randomUUID(), // new id for element
+        id: crypto.randomUUID(),
         name: el.name,
-        style: el.style
-          ? {...el.style, id: crypto.randomUUID()} // new style id
-          : null,
         content: el.content,
+        hover: el.hover || null,
+        aria: el.aria || null,
+        style: el.style
+          ? { ...el.style, id: undefined } // clear id
+          : null,
         order: el.order,
         type: "element",
       })) || []),
@@ -503,11 +507,13 @@ export const getContentByIdService = async (id) => {
     merged.sort((a, b) => a.order - b.order);
 
     return {
-      id: crypto.randomUUID(), // new id for parent section
+      id: crypto.randomUUID(),
       name: section.name,
       givenName: section.givenName,
+      hover: section.hover || null,
+      aria: section.aria || null,
       style: section.style
-        ? {...section.style, id: crypto.randomUUID()} // new style id
+        ? { ...section.style, id: undefined } // clear id
         : null,
       elements: merged.map(({order, type, ...rest}) => rest), // drop order/type
     };
