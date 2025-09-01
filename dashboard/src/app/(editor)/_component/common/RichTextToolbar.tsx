@@ -3,6 +3,7 @@ import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
 import { debounce } from 'lodash';
 import { screenType, useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
+import CopyStylesUI from './CopyStyleUI';
 
 type StylesState = React.CSSProperties | Record<string, any>;
 
@@ -283,7 +284,7 @@ const RichTextToolBar: React.FC = () => {
                 }
             ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
 
-            <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+            {/* <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
             <div className="flex gap-2">
                 <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
                     XL
@@ -298,7 +299,8 @@ const RichTextToolBar: React.FC = () => {
                 <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
                     SM
                 </button>
-            </div>
+            </div> */}
+            <CopyStylesUI copyTheStyle={copyTheStyle} />
         </div>
     );
 };
