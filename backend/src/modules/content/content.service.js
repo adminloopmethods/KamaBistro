@@ -2,7 +2,12 @@ import prismaClient from "../../config/dbConfig.js";
 import crypto from "node:crypto";
 
 // ---------------- CREATE WEBPAGE ----------------
-export const createWebpageService = async ({ name, contents, route, editedWidth }) => {
+export const createWebpageService = async ({
+  name,
+  contents,
+  route,
+  editedWidth,
+}) => {
   const id = crypto.randomUUID();
 
   const webpage = await prismaClient.webpage.create({
@@ -23,8 +28,8 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                 name: el.name,
                 givenName: el.givenName || null,
                 order: index,
-                hover: el.hover || null,   // ✅ now saving
-                aria: el.aria || null,     // ✅ now saving
+                hover: el.hover || null, // ✅ now saving
+                aria: el.aria || null, // ✅ now saving
                 style: {
                   create: {
                     xl: el.style?.xl,
@@ -79,8 +84,8 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
             name: section.name,
             givenName: section.givenName || null,
             order: sectionIndex,
-            hover: section.hover || null,   // ✅ now saving
-            aria: section.aria || null,     // ✅ now saving
+            hover: section.hover || null, // ✅ now saving
+            aria: section.aria || null, // ✅ now saving
             style: {
               create: {
                 xl: section.style?.xl,
@@ -89,23 +94,23 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
                 sm: section.style?.sm,
               },
             },
-            children: { create: childrenCreate },
-            elements: { create: elementsCreate },
+            children: {create: childrenCreate},
+            elements: {create: elementsCreate},
           };
         }),
       },
     },
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
           children: {
-            orderBy: { order: "asc" },
+            orderBy: {order: "asc"},
             include: {
               style: true,
-              elements: { orderBy: { order: "asc" }, include: { style: true } },
+              elements: {orderBy: {order: "asc"}, include: {style: true}},
             },
           },
         },
@@ -113,20 +118,22 @@ export const createWebpageService = async ({ name, contents, route, editedWidth 
     },
   });
 
-  return { webpage, id };
+  return {webpage, id};
 };
 
 // ---------------- GET ALL WEBPAGES ----------------
 export const getAllWebpagesService = async () => {
   return await prismaClient.webpage.findMany({
     include: {
+      editor: true,
+      verifier: true,
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
           elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            orderBy: {order: "asc"},
+            include: {style: true},
           },
         },
       },
@@ -137,23 +144,23 @@ export const getAllWebpagesService = async () => {
 // ---------------- GET WEBPAGE BY ID ----------------
 export const getWebpageByIdService = async (id) => {
   const webpage = await prismaClient.webpage.findUnique({
-    where: { id },
+    where: {id},
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
           elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            orderBy: {order: "asc"},
+            include: {style: true},
           },
           children: {
-            orderBy: { order: "asc" },
+            orderBy: {order: "asc"},
             include: {
               style: true,
               elements: {
-                orderBy: { order: "asc" },
-                include: { style: true },
+                orderBy: {order: "asc"},
+                include: {style: true},
               },
             },
           },
@@ -172,8 +179,8 @@ export const getWebpageByIdService = async (id) => {
         name: child.name,
         givenName: child.givenName,
         style: child.style,
-        hover: child.hover,   // ✅ now included
-        aria: child.aria,     // ✅ now included
+        hover: child.hover, // ✅ now included
+        aria: child.aria, // ✅ now included
         order: child.order,
         type: "section",
         elements: transformSection(child).elements, // recurse
@@ -183,9 +190,9 @@ export const getWebpageByIdService = async (id) => {
         name: el.name,
         style: el.style,
         content: el.content,
-        hover: el.hover,   // ✅ already included
+        hover: el.hover, // ✅ already included
         href: el.href,
-        aria: el.aria,     // ✅ already included
+        aria: el.aria, // ✅ already included
         order: el.order,
         type: "element",
       })) || []),
@@ -199,9 +206,9 @@ export const getWebpageByIdService = async (id) => {
       name: section.name,
       givenName: section.givenName,
       style: section.style,
-      hover: section.hover,   // ✅ added
-      aria: section.aria,     // ✅ added
-      elements: merged.map(({ order, type, ...rest }) => rest), // clean output
+      hover: section.hover, // ✅ added
+      aria: section.aria, // ✅ added
+      elements: merged.map(({order, type, ...rest}) => rest), // clean output
     };
   };
 
@@ -211,24 +218,26 @@ export const getWebpageByIdService = async (id) => {
   };
 };
 
-
 // ---------------- UPDATE WEBPAGE BY ID ----------------
-export const updateWebpageByIdService = async (id, { name, contents, editedWidth }) => {
+export const updateWebpageByIdService = async (
+  id,
+  {name, contents, editedWidth}
+) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
-    where: { id },
+    where: {id},
     data: {
       name,
-      ...(editedWidth !== undefined && { editedWidth }),
+      ...(editedWidth !== undefined && {editedWidth}),
     },
   });
 
   // Step 2: Fetch existing contents
   const existingContents = await prismaClient.content.findMany({
-    where: { webpageId: id },
+    where: {webpageId: id},
     include: {
-      elements: { include: { style: true } },
-      children: { include: { elements: { include: { style: true } }, style: true } },
+      elements: {include: {style: true}},
+      children: {include: {elements: {include: {style: true}}, style: true}},
       style: true,
     },
   });
@@ -241,8 +250,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
 
   if (sectionsToDelete.length) {
     for (const section of sectionsToDelete) {
-      await prismaClient.content.deleteMany({ where: { parentId: section.id } });
-      await prismaClient.content.delete({ where: { id: section.id } });
+      await prismaClient.content.deleteMany({where: {parentId: section.id}}); // delete children
+      await prismaClient.content.delete({where: {id: section.id}}); // delete parent
     }
   }
 
@@ -255,7 +264,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
         for (const el of content.elements) {
           existingElementMap.set(el.id, el);
           if (el.name === "section" && el.elements) {
-            flattenExisting([{ ...el, elements: el.elements }]);
+            flattenExisting([{...el, elements: el.elements}]);
           }
         }
       }
@@ -282,7 +291,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   );
   if (elementsToDelete.length) {
     await prismaClient.element.deleteMany({
-      where: { id: { in: elementsToDelete.map((e) => e.id) } },
+      where: {id: {in: elementsToDelete.map((e) => e.id)}},
     });
   }
 
@@ -292,25 +301,25 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
       const el = elementsArray[i];
       if (el.name === "section") {
         await prismaClient.content.upsert({
-          where: { id: el.id },
+          where: {id: el.id},
           update: {
             name: el.name,
             givenName: el.givenName || null,
-            hover: el.hover || null,   // ✅ now saving
-            aria: el.aria || null,     // ✅ now saving
+            hover: el.hover || null, // ✅ now saving
+            aria: el.aria || null, // ✅ now saving
             order: i,
-            parent: { connect: { id: parentId } },
-            style: { update: el.style || {} },
+            parent: {connect: {id: parentId}},
+            style: {update: el.style || {}},
           },
           create: {
             id: el.id,
             name: el.name,
             givenName: el.givenName || null,
-            hover: el.hover || null,   // ✅ now saving
-            aria: el.aria || null,     // ✅ now saving
+            hover: el.hover || null, // ✅ now saving
+            aria: el.aria || null, // ✅ now saving
             order: i,
-            parent: { connect: { id: parentId } },
-            style: { create: el.style || {} },
+            parent: {connect: {id: parentId}},
+            style: {create: el.style || {}},
           },
         });
         if (el.elements?.length) {
@@ -318,7 +327,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
         }
       } else {
         await prismaClient.element.upsert({
-          where: { id: el.id },
+          where: {id: el.id},
           update: {
             name: el.name,
             content: el.content,
@@ -326,7 +335,7 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
             href: el.href,
             aria: el.aria,
             order: i,
-            style: { update: el.style || {} },
+            style: {update: el.style || {}},
           },
           create: {
             id: el.id,
@@ -336,8 +345,8 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
             href: el.href,
             aria: el.aria,
             order: i,
-            contentRef: { connect: { id: parentId } },
-            style: { create: el.style || {} },
+            contentRef: {connect: {id: parentId}},
+            style: {create: el.style || {}},
           },
         });
       }
@@ -348,24 +357,24 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
   for (let i = 0; i < contents.length; i++) {
     const section = contents[i];
     await prismaClient.content.upsert({
-      where: { id: section.id },
+      where: {id: section.id},
       update: {
         name: section.name,
         givenName: section.givenName || null,
-        hover: section.hover || null,   // ✅ now saving
-        aria: section.aria || null,     // ✅ now saving
+        hover: section.hover || null, // ✅ now saving
+        aria: section.aria || null, // ✅ now saving
         order: i,
-        style: { update: section.style || {} },
+        style: {update: section.style || {}},
       },
       create: {
         id: section.id,
         name: section.name,
         givenName: section.givenName || null,
-        hover: section.hover || null,   // ✅ now saving
-        aria: section.aria || null,     // ✅ now saving
+        hover: section.hover || null, // ✅ now saving
+        aria: section.aria || null, // ✅ now saving
         order: i,
-        webpage: { connect: { id } },
-        style: { create: section.style || {} },
+        webpage: {connect: {id}},
+        style: {create: section.style || {}},
       },
     });
     if (section.elements?.length) {
@@ -375,16 +384,19 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
 
   // Step 3: Return updated snapshot
   const finalWebpage = await prismaClient.webpage.findUnique({
-    where: { id },
+    where: {id},
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
           children: {
-            orderBy: { order: "asc" },
-            include: { style: true, elements: { orderBy: { order: "asc" }, include: { style: true } } },
+            orderBy: {order: "asc"},
+            include: {
+              style: true,
+              elements: {orderBy: {order: "asc"}, include: {style: true}},
+            },
           },
         },
       },
@@ -405,17 +417,17 @@ export const updateWebpageByIdService = async (id, { name, contents, editedWidth
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {
   return await prismaClient.version.findMany({
-    where: { webpageId },
-    orderBy: { id: "desc" },
+    where: {webpageId},
+    orderBy: {id: "desc"},
   });
 };
 
 // ---------------- FIND WEBPAGE ID BY ROUTE ----------------
 export const findWebpageIdByRouteService = async (route) => {
-  console.log(route)
+  console.log(route);
   const page = await prismaClient.webpage.findUnique({
-    where: { route },
-    select: { id: true },
+    where: {route},
+    select: {id: true},
   });
 
   return page ? page.id : null;
@@ -435,7 +447,7 @@ export const getAllContentsService = async () => {
   });
 
   // Normalize to always return string (avoid nulls if you prefer empty string)
-  return contents.map(c => ({
+  return contents.map((c) => ({
     id: c.id,
     givenName: c.givenName ?? "",
   }));
@@ -444,18 +456,18 @@ export const getAllContentsService = async () => {
 // ---------------- GET CONTENT BY ID (regenerate IDs) ----------------
 export const getContentByIdService = async (id) => {
   const section = await prismaClient.content.findUnique({
-    where: { id },
+    where: {id},
     include: {
       style: true,
       elements: {
-        orderBy: { order: "asc" },
-        include: { style: true },
+        orderBy: {order: "asc"},
+        include: {style: true},
       },
       children: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
         },
       },
     },
@@ -470,7 +482,7 @@ export const getContentByIdService = async (id) => {
         name: child.name,
         givenName: child.givenName,
         style: child.style
-          ? { ...child.style, id: crypto.randomUUID() } // new style id
+          ? {...child.style, id: crypto.randomUUID()} // new style id
           : null,
         order: child.order,
         type: "section",
@@ -480,7 +492,7 @@ export const getContentByIdService = async (id) => {
         id: crypto.randomUUID(), // new id for element
         name: el.name,
         style: el.style
-          ? { ...el.style, id: crypto.randomUUID() } // new style id
+          ? {...el.style, id: crypto.randomUUID()} // new style id
           : null,
         content: el.content,
         order: el.order,
@@ -495,9 +507,9 @@ export const getContentByIdService = async (id) => {
       name: section.name,
       givenName: section.givenName,
       style: section.style
-        ? { ...section.style, id: crypto.randomUUID() } // new style id
+        ? {...section.style, id: crypto.randomUUID()} // new style id
         : null,
-      elements: merged.map(({ order, type, ...rest }) => rest), // drop order/type
+      elements: merged.map(({order, type, ...rest}) => rest), // drop order/type
     };
   };
 

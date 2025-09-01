@@ -13,9 +13,14 @@ import {
   updateProfileImage,
   assignPageRole,
   fetchAllLocations,
+  assignUserToWebpage,
+  removeUserFromWebpageRole,
 } from "../../repository/user.repository.js";
 import {assert, assertEvery} from "../../errors/assertError.js";
 import {logger} from "../../config/logConfig.js";
+import prismaClient from "../../config/dbConfig.js";
+import {findWebpageById} from "../../repository/website.repository.js";
+import {findRoleByID} from "../../repository/role.repository.js";
 
 const createUser = async (name, email, password, phone, locationId) => {
   const user = await createUserHandler(
@@ -142,6 +147,68 @@ const getAllLocations = async () => {
   return {message: "Location fetched successfully", location};
 };
 
+const assignRole = async (webpageId, userId, roleId) => {
+  // Check if role exists and is valid
+  const role = await findRoleByID(roleId);
+  if (!role) {
+    throw new Error("Role not found");
+  }
+
+  // Validate role type
+  if (!["EDITOR", "VERIFIER"].includes(role.name.toUpperCase())) {
+    throw new Error("Invalid role. Must be EDITOR or VERIFIER");
+  }
+
+  // Check if user exists and is active
+  const user = await findUserById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+  if (user.status !== "ACTIVE") {
+    throw new Error("User is not active");
+  }
+
+  // Check if webpage exists
+  const webpage = await findWebpageById(webpageId);
+  if (!webpage) {
+    throw new Error("Webpage not found");
+  }
+
+  // Check for role conflicts
+  if (role.name.toUpperCase() === "EDITOR" && webpage.verifierId === userId) {
+    throw new Error("User is already the verifier of this webpage");
+  }
+
+  if (role.name.toUpperCase() === "VERIFIER" && webpage.editorId === userId) {
+    throw new Error("User is already the editor of this webpage");
+  }
+
+  // Assign the role
+  return await assignUserToWebpage(webpageId, userId, roleId);
+};
+
+const removeRole = async (webpageId, roleId) => {
+  // Check if role exists and is valid
+  const role = await findRoleByID(roleId);
+  if (!role) {
+    throw new Error("Role not found");
+  }
+
+  // Validate role type
+  if (!["EDITOR", "VERIFIER"].includes(role.name.toUpperCase())) {
+    throw new Error("Invalid role. Must be EDITOR or VERIFIER");
+  }
+
+  // Check if webpage exists
+  const webpage = await findWebpageById(webpageId);
+  if (!webpage) {
+    throw new Error("Webpage not found");
+  }
+
+  // Remove the role assignment
+  return await removeUserFromWebpageRole(webpageId, roleId);
+};
+
 export {
   createUser,
   AssignPageRole,
@@ -157,4 +224,6 @@ export {
   getAllUsersByRoleId,
   editProfileImage,
   getAllLocations,
+  assignRole,
+  removeRole,
 };

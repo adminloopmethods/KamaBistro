@@ -2,6 +2,7 @@ import {getSocketId} from "../../helper/socketConnectionID.js";
 import {
   activateUsers,
   AssignPageRole,
+  assignRole,
   createUser,
   deactivateUsers,
   editProfile,
@@ -12,6 +13,7 @@ import {
   getAllUsers,
   getAllUsersByRoleId,
   getUserById,
+  removeRole,
   userRoleType,
 } from "./user.service.js";
 import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
@@ -157,6 +159,59 @@ const GetAllLocations = async (req, res) => {
   res.status(201).json(location);
 };
 
+const AssignRoleToWebpage = async (req, res) => {
+  try {
+    const {webpageId, userId, roleId} = req.body;
+
+    if (!userId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and roleId are required",
+      });
+    }
+
+    const result = await assignRole(webpageId, userId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `User successfully assigned to webpage role`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// controllers/UserController.ts
+const RemoveRoleFromWebpage = async (req, res) => {
+  try {
+    const {webpageId, roleId} = req.body;
+
+    if (!webpageId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "webpageId and roleId are required",
+      });
+    }
+
+    const result = await removeRole(webpageId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `Role successfully removed from webpage`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   CreateUserHandler,
   AssignPageRoleHandler,
@@ -172,4 +227,6 @@ export default {
   GetUserProfile,
   EditProfileImage,
   GetAllLocations,
+  AssignRoleToWebpage,
+  RemoveRoleFromWebpage,
 };
