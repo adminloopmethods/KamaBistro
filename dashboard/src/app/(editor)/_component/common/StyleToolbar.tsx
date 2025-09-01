@@ -5,6 +5,7 @@ import { cloudinaryApiPoint } from '@/utils/endpoints';
 import CustomSelect from '@/app/_common/CustomSelect';
 import { screenType, useMyContext } from '@/Context/EditorContext';
 import { debounce } from "lodash";
+import CopyStylesUI from './CopyStyleUI';
 
 const shadowPresets: Record<string, string> = {
     none: 'none',
@@ -374,7 +375,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 />
             )}
 
-            <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
+            {/* <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
             <div className="flex gap-2">
                 <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
                     XL
@@ -389,7 +390,9 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
                     SM
                 </button>
-            </div>
+            </div> */}
+            <CopyStylesUI copyTheStyle={copyTheStyle} />
+
 
             {showImageSelector &&
                 <ImageSelector
