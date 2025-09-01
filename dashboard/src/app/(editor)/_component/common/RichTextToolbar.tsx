@@ -67,13 +67,11 @@ const RichTextToolBar: React.FC = () => {
     );
 
     const copyTheStyle = (screenSize: screenType) => {
-
         if (screenStyleObj.screenStyles?.[screenSize]) {
             Setter?.((prev: any) => ({
                 ...prev,
                 style: { ...prev.style, [activeScreen]: screenStyleObj.screenStyles?.[screenSize] },
             }))
-
         }
     }
 
@@ -141,7 +139,6 @@ const RichTextToolBar: React.FC = () => {
             />
 
             {/* Bold / Italic / Underline */}
-            {/* Bold / Italic / Underline */}
             <div className="flex flex-col gap-2">
                 <div className="flex gap-2">
                     <button
@@ -194,7 +191,6 @@ const RichTextToolBar: React.FC = () => {
                 </div>
             </div>
 
-
             {/* Colors */}
             <div className="flex gap-2">
                 <input
@@ -222,84 +218,66 @@ const RichTextToolBar: React.FC = () => {
                         <Icon />
                     </button>
                 ))}
-            </div>{/* Position */}{/* Position */}
-            {/* <CustomSelect
-        options={positionOptions}
-        firstOption="position"
-        disableFirstValue
-        Default={localStyle.position?.toString()}
-        onChange={(val) => applyStyle("position", val)}
-      /> */}
-            {/* {renderInput("Z-Index", "zIndex", "number")}
-      {["top", "bottom", "left", "right"].map((key) => renderInput(key, key as keyof StylesState, "text"))} */}
-            {/* <CustomSelect
-        options={positionOptions}
-        firstOption="position"
-        disableFirstValue
-        Default={localStyle.position?.toString()}
-        onChange={(val) => applyStyle("position", val)}
-      /> */}
-            {/* {renderInput("Z-Index", "zIndex", "number")}
-      {["top", "bottom", "left", "right"].map((key) => renderInput(key, key as keyof StylesState, "text"))} */}
+            </div>
 
             {/* Dimensions */}
             {renderInput("Width", "width", "width")}
             {renderInput("Height", "height", "height")}
+
+            {/* Padding */}
             <h4 className="text-xs font-semibold">Padding</h4>
             {[
-                {
-                    "reactName": "paddingTop",
-                    "cssName": "padding-top"
-                },
-                {
-                    "reactName": "paddingBottom",
-                    "cssName": "padding-bottom"
-                },
-                {
-                    "reactName": "paddingLeft",
-                    "cssName": "padding-left"
-                },
-                {
-                    "reactName": "paddingRight",
-                    "cssName": "padding-right"
-                }
-            ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
+                { reactName: "paddingTop", cssName: "padding-top" },
+                { reactName: "paddingBottom", cssName: "padding-bottom" },
+                { reactName: "paddingLeft", cssName: "padding-left" },
+                { reactName: "paddingRight", cssName: "padding-right" }
+            ].map(({ reactName, cssName }) =>
+                renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px")
+            )}
+
+            {/* Margin */}
             <h4 className="text-xs font-semibold">Margin</h4>
             {[
-                {
-                    "reactName": "marginTop",
-                    "cssName": "margin-top"
-                },
-                {
-                    "reactName": "marginBottom",
-                    "cssName": "margin-bottom"
-                },
-                {
-                    "reactName": "marginLeft",
-                    "cssName": "margin-left"
-                },
-                {
-                    "reactName": "marginRight",
-                    "cssName": "margin-right"
-                }
-            ].map(({ reactName, cssName }) => renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px"))}
+                { reactName: "marginTop", cssName: "margin-top" },
+                { reactName: "marginBottom", cssName: "margin-bottom" },
+                { reactName: "marginLeft", cssName: "margin-left" },
+                { reactName: "marginRight", cssName: "margin-right" }
+            ].map(({ reactName, cssName }) =>
+                renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px")
+            )}
 
-            {/* <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
-            <div className="flex gap-2">
-                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
-                    XL
-                </button>
+            {/* Border */}
+            <h4 className="text-xs font-semibold mt-2">Border</h4>
+            {/* Border Width */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Border Width
+                </label>
+                <input
+                    type="number"
+                    value={parseInt(localStyle.borderWidth?.toString() || "0")}
+                    onChange={(e) => {
+                        const newWidth = `${e.target.value}px`;
+                        applyStyle("borderWidth", newWidth);  // ✅ update borderWidth
+                    }}
+                    className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                />
+            </div>
 
-                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
-                    LG
-                </button>
-                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
-                    MD
-                </button>
-                <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
-                    SM
-                </button>
-            </div> */}
+            {/* Border Color */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Border Color
+                </label>
+                <input
+                    type="color"
+                    value={(localStyle.borderColor as string) || "#000000"}
+                    onChange={(e) => applyStyle("borderColor", e.target.value)} // ✅ update borderColor
+                    className="w-10 h-10 border rounded cursor-pointer"
+                />
+            </div>
+
+
             <CopyStylesUI copyTheStyle={copyTheStyle} />
         </div>
     );
