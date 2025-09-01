@@ -23,7 +23,7 @@ services:
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${DATABASE_URL}
-    container_name: backend-kama
+    container_name: kama-backend
     env_file:
       - .env # Dynamically load the correct .env file
     ports:
