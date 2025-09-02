@@ -46,7 +46,7 @@ function hexToRgba(hex: string, alpha: number = 1): string {
 }
 
 // ✅ reusable component for color + alpha
-const ColorPickerWithAlpha: React.FC<{
+export const ColorPickerWithAlpha: React.FC<{
     label: string;
     styleKey: keyof StylesState;
     localStyle: Partial<StylesState>;
