@@ -90,16 +90,16 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         [updateStyles]
     );
 
-    const updateBackground = (url?: string) => {
+    const updateBackground = (url?: string, customGradient?: string) => {
         let combined = '';
-        if (gradient && (bgImage || url)) {
-            combined = `${gradient}, url(${url || bgImage})`;
-        } else if (gradient) {
-            combined = gradient;
+        const g = customGradient ?? gradient;
+
+        if (g && (bgImage || url)) {
+            combined = `${g}, url(${url || bgImage})`;
+        } else if (g) {
+            combined = g;
         } else if (bgImage || url) {
             combined = `url(${url || bgImage})`;
-        } else if (!url) {
-            combined = `${gradient}`;
         }
         debouncedUpdateStyles({ backgroundImage: combined });
     };
@@ -109,10 +109,17 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         debouncedUpdateStyles({ boxShadow: shadowPresets[value] });
     };
 
+    // ✅ Always compute gradient from latest values
     const handleGradientUpdate = (newColor1?: string, newColor2?: string, newDir?: string) => {
-        const g = `linear-gradient(${newDir || gradientDirection}, ${newColor1 || color1}, ${newColor2 || color2})`;
+        const c1 = newColor1 ?? color1;
+        const c2 = newColor2 ?? color2;
+        const dir = newDir ?? gradientDirection;
+
+        const g = `linear-gradient(${dir}, ${c1}, ${c2})`;
         setGradient(g);
-        updateBackground();
+
+        // live apply with fresh gradient
+        updateBackground(undefined, g);
     };
 
     const renderInputRow = (label: string, input: React.ReactNode, extra: React.ReactNode = null) => (
