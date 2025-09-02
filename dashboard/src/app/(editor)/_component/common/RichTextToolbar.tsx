@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { AlignLeft, AlignCenter, AlignRight, AlignJustify } from 'lucide-react';
+import { AlignLeft, AlignCenter, AlignRight, AlignJustify, X } from 'lucide-react';
 import { debounce } from 'lodash';
 import { screenType, useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 import CopyStylesUI from './CopyStyleUI';
+import toolbarStyles from "./dimensionToolbar.module.css"
 
 type StylesState = React.CSSProperties | Record<string, any>;
 
@@ -60,7 +61,8 @@ const ColorPickerWithAlpha: React.FC<{
     return (
         <div className="flex flex-col gap-1">
             <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 relative">
+                {/* Color Input */}
                 <input
                     type="color"
                     value={
@@ -72,8 +74,10 @@ const ColorPickerWithAlpha: React.FC<{
                         const rgba = hexToRgba(e.target.value, alpha);
                         applyStyle(styleKey, rgba);
                     }}
-                    className="w-10 h-10 border rounded cursor-pointer"
+                    className={`w-10 h-10 border rounded cursor-pointer ${toolbarStyles.colorInput}`}
                 />
+
+                {/* Alpha Slider */}
                 <input
                     type="range"
                     min={0}
@@ -87,13 +91,24 @@ const ColorPickerWithAlpha: React.FC<{
                         const rgba = hexToRgba(baseHex, parseFloat(e.target.value));
                         applyStyle(styleKey, rgba);
                     }}
-                    className="flex-1 accent-stone-600"
+                    className={`flex-1 accent-stone-600 `}
                 />
-                <span className="text-xs w-8 text-right">{alpha}</span>
+
+                <span className="text-xs text-right">{alpha}</span>
+
+                {/* ✅ Clear Button */}
+                <button
+                    type="button"
+                    onClick={() => applyStyle(styleKey, "")}
+                    className="px-1 cursor-pointer py-1 text-xs rounded-md bg-red-500 text-white hover:bg-red-600 absolute -top-3 right-1"
+                >
+                    <X size={10}/>
+                </button>
             </div>
         </div>
     );
 };
+
 
 const RichTextToolBar: React.FC = () => {
     const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef, screenStyleObj } = useMyContext();
