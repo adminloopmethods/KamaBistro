@@ -51,7 +51,8 @@ export const ColorPickerWithAlpha: React.FC<{
     styleKey: keyof StylesState;
     localStyle: Partial<StylesState>;
     applyStyle: (key: keyof StylesState, val: string | number) => void;
-}> = ({ label, styleKey, localStyle, applyStyle }) => {
+    liveUpdate: (value: string) => void
+}> = ({ label, styleKey, localStyle, applyStyle, liveUpdate }) => {
     const currentValue = localStyle[styleKey] as string;
 
     // extract alpha if rgba, otherwise default 1
@@ -73,6 +74,7 @@ export const ColorPickerWithAlpha: React.FC<{
                     onChange={(e) => {
                         const rgba = hexToRgba(e.target.value, alpha);
                         applyStyle(styleKey, rgba);
+                        liveUpdate(rgba)
                     }}
                     className={`w-10 h-10 border rounded cursor-pointer ${toolbarStyles.colorInput}`}
                 />
@@ -102,7 +104,7 @@ export const ColorPickerWithAlpha: React.FC<{
                     onClick={() => applyStyle(styleKey, "")}
                     className="px-1 cursor-pointer py-1 text-xs rounded-md bg-red-500 text-white hover:bg-red-600 absolute -top-3 right-1"
                 >
-                    <X size={10}/>
+                    <X size={10} />
                 </button>
             </div>
         </div>
@@ -145,6 +147,13 @@ const RichTextToolBar: React.FC = () => {
             }))
         }
     };
+
+    const applyStyleThroughRef = (css: string, value: string): void => {
+        if (activeRef) {
+            console.log("qwerqwkjhkjqwer")
+            activeRef.style.setProperty(css, value, "important")
+        }
+    }
 
     const renderInput = (
         label: string,
@@ -250,8 +259,20 @@ const RichTextToolBar: React.FC = () => {
             </div>
 
             {/* ✅ Colors with Alpha */}
-            <ColorPickerWithAlpha label="Text Color" styleKey="color" localStyle={localStyle} applyStyle={applyStyle} />
-            <ColorPickerWithAlpha label="Background Color" styleKey="backgroundColor" localStyle={localStyle} applyStyle={applyStyle} />
+            <ColorPickerWithAlpha
+                label="Text Color"
+                styleKey="color"
+                localStyle={localStyle}
+                applyStyle={debouncedApplyStyle}
+                liveUpdate={(value: string) => applyStyleThroughRef("color", value)}
+            />
+            <ColorPickerWithAlpha
+                label="Background Color"
+                styleKey="backgroundColor"
+                localStyle={localStyle}
+                applyStyle={debouncedApplyStyle}
+                liveUpdate={(value: string) => applyStyleThroughRef("background-color", value)}
+            />
 
             {/* Alignment */}
             <div className="flex gap-2">
@@ -295,7 +316,13 @@ const RichTextToolBar: React.FC = () => {
             </div>
 
             {/* ✅ Border Color with Alpha */}
-            <ColorPickerWithAlpha label="Border Color" styleKey="borderColor" localStyle={localStyle} applyStyle={applyStyle} />
+            <ColorPickerWithAlpha
+                label="Border Color"
+                styleKey="borderColor"
+                localStyle={localStyle}
+                applyStyle={debouncedApplyStyle}
+                liveUpdate={(value: string) => applyStyleThroughRef("border-color", value)}
+            />
 
             <CopyStylesUI copyTheStyle={copyTheStyle} />
         </div>
