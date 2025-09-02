@@ -8,7 +8,6 @@ import { rgbaToHex, hexToRgba } from "./StyleToolbar";
 import dimensionStyle from "./dimensionToolbar.module.css";
 import SectionChilds from "../Elements/SectionChilds";
 
-
 // ===== Shadow Presets =====
 const shadowPresets: Record<string, string> = {
     none: "none",
@@ -22,12 +21,56 @@ const shadowPresets: Record<string, string> = {
     "dark-xl": "0 20px 25px rgba(0,0,0,0.85)",
 };
 
+// ✅ Reusable Color Picker with Alpha
+const ColorPickerWithAlpha: React.FC<{
+    label: string;
+    value: string;
+    onChange: (val: string) => void;
+    onLiveChange?: (val: string) => void;
+}> = ({ label, value, onChange, onLiveChange }) => {
+    const alphaMatch = value?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
+    const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
+    const hex = value?.startsWith("rgba") ? "#" + rgbaToHex(value) : value || "#000000";
+
+    return (
+        <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+            <div className="flex items-center gap-2">
+                <input
+                    type="color"
+                    value={hex}
+                    onChange={(e) => {
+                        const rgba = hexToRgba(e.target.value, alpha);
+                        onChange(rgba);
+                        onLiveChange?.(rgba);
+                    }}
+                    className={`w-12 h-8 rounded cursor-pointer border ${dimensionStyle.colorInput}`}
+                />
+                <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={alpha}
+                    onChange={(e) => {
+                        const rgba = hexToRgba(hex, parseFloat(e.target.value));
+                        onChange(rgba);
+                        onLiveChange?.(rgba);
+                    }}
+                    className="flex-1 accent-stone-600"
+                />
+                <span className="text-xs w-8 text-right">{alpha.toFixed(2)}</span>
+            </div>
+        </div>
+    );
+};
+
 function HoverToolbar() {
     const { hoverObject, sectionChilds } = useMyContext();
     const { hoverContext, hoverContextSetter } = hoverObject;
 
     const [hoverText, setHoverText] = useState<string>(
-        hoverContext?.color?.toString() || ""
+        hoverContext?.color?.toString() || "rgba(0,0,0,1)"
     );
     const [hoverShadow, setHoverShadow] = useState<string>(
         hoverContext?.boxShadow?.toString() || "none"
@@ -57,27 +100,23 @@ function HoverToolbar() {
         [hoverContext, hoverContextSetter]
     );
 
-    const updateBackground = (url?: string) => {
+    const updateBackground = (url?: string, customGradient?: string) => {
         let combined = "";
-        if (gradient && (bgImage || url)) {
-            combined = `${gradient}, url(${url || bgImage})`;
-        } else if (gradient) {
-            combined = gradient;
+        const g = customGradient ?? gradient;
+        if (g && (bgImage || url)) {
+            combined = `${g}, url(${url || bgImage})`;
+        } else if (g) {
+            combined = g;
         } else if (bgImage || url) {
             combined = `url(${url || bgImage})`;
         }
         debouncedUpdateStyles({ backgroundImage: combined });
     };
 
-    const handleGradientUpdate = (
-        newColor1?: string,
-        newColor2?: string,
-        newDir?: string
-    ) => {
-        const g = `linear-gradient(${newDir || gradientDirection}, ${newColor1 || color1
-            }, ${newColor2 || color2})`;
+    const handleGradientUpdate = (newColor1?: string, newColor2?: string, newDir?: string) => {
+        const g = `linear-gradient(${newDir ?? gradientDirection}, ${newColor1 ?? color1}, ${newColor2 ?? color2})`;
         setGradient(g);
-        updateBackground();
+        updateBackground(undefined, g);
     };
 
     return (
@@ -88,7 +127,6 @@ function HoverToolbar() {
 
             {/* Width & Height */}
             <label className='text-xs'>Width</label>
-
             <input
                 type="text"
                 placeholder="Width (e.g. 200px / 50%)"
@@ -100,8 +138,6 @@ function HoverToolbar() {
                 className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
             />
             <label className='text-xs'>Height</label>
-
-
             <input
                 type="text"
                 placeholder="Height (e.g. 100px / auto)"
@@ -112,7 +148,6 @@ function HoverToolbar() {
                 }}
                 className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
             />
-
 
             {/* Box Shadow */}
             <CustomSelect
@@ -135,29 +170,17 @@ function HoverToolbar() {
 
             {/* Text Color */}
             <div className="flex flex-col gap-2 border-t pt-3">
-                <label className="text-xs font-medium">Text Color</label>
-                <input
-                    type="color"
-                    value={
-                        hoverText && hoverText.startsWith("#")
-                            ? hoverText
-                            : "#000000"
-                    }
-                    onChange={(e) => {
-                        setHoverText(e.target.value);
-                        debouncedUpdateStyles({ color: e.target.value });
-                    }}
-                    className={`w-12 h-8 rounded cursor-pointer border ${dimensionStyle.colorInput}`}
-                />
-                <input
-                    type="text"
+                <ColorPickerWithAlpha
+                    label="Text Color"
                     value={hoverText}
-                    onChange={(e) => {
-                        setHoverText(e.target.value);
-                        debouncedUpdateStyles({ color: e.target.value });
+                    onChange={(val) => {
+                        setHoverText(val);
+                        debouncedUpdateStyles({ color: val });
                     }}
-                    placeholder="#hex or rgba(...)"
-                    className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
+                    onLiveChange={(val) => {
+                        setHoverText(val);
+                        if (hoverContextSetter) hoverContextSetter({ ...hoverContext, color: val });
+                    }}
                 />
             </div>
 
@@ -170,7 +193,6 @@ function HoverToolbar() {
                 >
                     {bgImage ? "Change Background Image" : "Set Background Image"}
                 </button>
-
                 <button
                     onClick={() => {
                         setBgImage("");
@@ -197,42 +219,22 @@ function HoverToolbar() {
 
             {/* Gradient Background */}
             <div className="flex flex-col gap-2 border-t pt-3">
-                <label className="text-xs font-medium">Gradient</label>
-
-                {[{ color: color1, setColor: setColor1, label: "Color 1" }, { color: color2, setColor: setColor2, label: "Color 2" }].map(
-                    ({ color, setColor, label }, idx) => (
-                        <div key={idx} className="flex flex-col gap-1">
-                            <span className="text-xs font-semibold">
-                                {label}
-                            </span>
-                            <input
-                                type="color"
-                                value={"#" + rgbaToHex(color)}
-                                onChange={(e) => {
-                                    const newColor = hexToRgba(e.target.value, 1);
-                                    setColor(newColor);
-                                    if (label === "Color 1")
-                                        handleGradientUpdate(newColor, undefined, undefined);
-                                    else handleGradientUpdate(undefined, newColor, undefined);
-                                }}
-                                className={`w-12 h-8 rounded cursor-pointer border ${dimensionStyle.colorInput}`}
-                            />
-                            <input
-                                type="text"
-                                value={color}
-                                onChange={(e) => {
-                                    const newColor = e.target.value;
-                                    setColor(newColor);
-                                    if (label === "Color 1")
-                                        handleGradientUpdate(newColor, undefined, undefined);
-                                    else handleGradientUpdate(undefined, newColor, undefined);
-                                }}
-                                placeholder="rgba(...)"
-                                className="p-2 rounded-md border bg-white dark:bg-zinc-800 text-sm"
-                            />
-                        </div>
-                    )
-                )}
+                <ColorPickerWithAlpha
+                    label="Gradient Color 1"
+                    value={color1}
+                    onChange={(val) => {
+                        setColor1(val);
+                        handleGradientUpdate(val, undefined, undefined);
+                    }}
+                />
+                <ColorPickerWithAlpha
+                    label="Gradient Color 2"
+                    value={color2}
+                    onChange={(val) => {
+                        setColor2(val);
+                        handleGradientUpdate(undefined, val, undefined);
+                    }}
+                />
 
                 <CustomSelect
                     options={[

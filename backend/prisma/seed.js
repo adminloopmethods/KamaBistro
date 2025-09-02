@@ -322,7 +322,7 @@ const email = process.env.SUPER_ADMIN_EMAIL;
 const pass = process.env.SUPER_ADMIN_PASSWORD;
 
 const roles = [{name: "EDITOR"}, {name: "VERIFIER"}];
-const locations = [{name: "Location1"}, {name: "Location2"}];
+const locations = [{name: "Location1"}, {name: "Location2"}, {name: "Location3"}];
 const webpages = [
   {name: "Home", route: "/"},
   {name: "About", route: "/about"},

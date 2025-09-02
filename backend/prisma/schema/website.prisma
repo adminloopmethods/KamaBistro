@@ -23,7 +23,7 @@ model Webpage {
   @@index([locationId])
   @@index([editorId])
   @@index([verifierId])
-}
+} 
 
 model Content {
   id        String  @id @default(uuid())
