@@ -66,18 +66,15 @@ export const ColorPickerWithAlpha: React.FC<{
                 {/* Color Input */}
                 <input
                     type="color"
-                    value={
-                        currentValue?.startsWith("rgba")
-                            ? "#000000"
-                            : currentValue || "#000000"
-                    }
+                    value={currentValue?.startsWith("rgba") ? rgbaToHex(currentValue) : currentValue || "#000000"}
                     onChange={(e) => {
                         const rgba = hexToRgba(e.target.value, alpha);
                         applyStyle(styleKey, rgba);
-                        liveUpdate(rgba)
+                        liveUpdate(rgba);
                     }}
                     className={`w-10 h-10 border rounded cursor-pointer ${toolbarStyles.colorInput}`}
                 />
+
 
                 {/* Alpha Slider */}
                 <input
@@ -92,6 +89,7 @@ export const ColorPickerWithAlpha: React.FC<{
                             : currentValue || "#000000";
                         const rgba = hexToRgba(baseHex, parseFloat(e.target.value));
                         applyStyle(styleKey, rgba);
+                        liveUpdate(rgba);
                     }}
                     className={`flex-1 accent-stone-600 `}
                 />
@@ -330,3 +328,12 @@ const RichTextToolBar: React.FC = () => {
 };
 
 export default RichTextToolBar;
+
+function rgbaToHex(rgba: string): string {
+    const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+    if (!match) return "#000000";
+    const r = parseInt(match[1]).toString(16).padStart(2, "0");
+    const g = parseInt(match[2]).toString(16).padStart(2, "0");
+    const b = parseInt(match[3]).toString(16).padStart(2, "0");
+    return `#${r}${g}${b}`;
+}

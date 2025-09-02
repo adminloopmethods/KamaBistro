@@ -5,7 +5,8 @@
   cursor: pointer;
   background: none;
   padding: 0;
-  clip-path: circle();
+  /* clip-path: circle(); */
+  border-radius: 50%;
   /* 👈 adds clean circular shape */
   -webkit-appearance: none;
   /* fix for some browsers */
