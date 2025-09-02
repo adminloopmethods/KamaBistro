@@ -12,7 +12,8 @@ type DimensionToolbarProps = {
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
     const { currentSection, contextForSection } = useMyContext();
     const style = currentSection || {};
-    const { sectionRef, rmSection, sectionGivenNameFn } = contextForSection;
+    const { sectionRef, rmSection, sectionGivenNameFn, sectionName } = contextForSection;
+    const [name, setName] = useState<string>(sectionName)
     // Local state to hold temporary inputs
     const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(style);
 
@@ -73,6 +74,10 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         );
     };
 
+    useEffect(() => {
+        setName(sectionName)
+    }, [sectionName])
+
     return (
         <div className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[4px_4px_0px_0px] border-b-2 border-b-stone-700 shadow-md flex flex-col gap-4 z-[var(--zIndex)]">
             <input
@@ -80,7 +85,9 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 onChange={(e) => {
                     sectionGivenNameFn(e.target.value)
+                    setName(e.target.value)
                 }}
+                value={name || ""}
             />
             {/* Remove Button */}
             <button

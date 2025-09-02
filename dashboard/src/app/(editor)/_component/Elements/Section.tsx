@@ -54,7 +54,7 @@ const Section: React.FC<SectionProps> = ({
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementTypeCustom[]>(element);
   const [hoverEffect, setHoverEffect] = useState<boolean>(false);
-  const [clickEffect, setClickEffect] = useState<boolean>(false);
+  // const [clickEffect, setClickEffect] = useState<boolean>(false);
   const {
     contextRef,
     activeScreen,
@@ -119,7 +119,7 @@ const Section: React.FC<SectionProps> = ({
   const handleMouseUp = (e: MouseEvent) => {
     const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
     if (!parentRect) return;
-    
+
     // mouse position inside parent
     const mouseX = e.clientX - parentRect.left;
     const mouseY = e.clientY - parentRect.top;
@@ -152,11 +152,13 @@ const Section: React.FC<SectionProps> = ({
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     onEditing();
+    console.log(section.givenName)
     contextForSection.setRmSection(() => () => rmSection(section.id))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     contextForSection.setSectionRef(sectionRef)
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
+    contextForSection.setSectionName(section.givenName)
 
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
@@ -290,7 +292,6 @@ const Section: React.FC<SectionProps> = ({
   }, [])
 
   const showAllChildren = () => {
-    // if (childsAreHidden) {
     setElements((prev: ElementTypeCustom[]) =>
       prev.map((e: ElementTypeCustom) => {
         if (e.style?.[activeScreen]?.display === "none") {
@@ -312,11 +313,9 @@ const Section: React.FC<SectionProps> = ({
         )
       })
     )
-    // }
   }
 
   const hideBackHiddenChildrens = () => {
-    console.log(hiddenChildlist)
     if (hiddenChildlist.length > 0) {
       setElements((prev: ElementTypeCustom[]) =>
         prev.map((e: ElementTypeCustom) => {
