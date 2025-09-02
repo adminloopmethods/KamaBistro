@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import dimensionStyle from "./dimensionToolbar.module.css";
 import ImageSelector from './ImageSelector';
 import { cloudinaryApiPoint } from '@/utils/endpoints';
@@ -29,7 +29,8 @@ const ColorPickerWithAlpha: React.FC<{
     label: string;
     value: string;
     onChange: (val: string) => void;
-}> = ({ label, value, onChange }) => {
+    onLiveChange?: (val: string) => void
+}> = ({ label, value, onChange, onLiveChange }) => {
     // extract alpha if rgba, otherwise default 1
     const alphaMatch = value?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
     const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
@@ -47,6 +48,7 @@ const ColorPickerWithAlpha: React.FC<{
                     onChange={(e) => {
                         const rgba = hexToRgba(e.target.value, alpha);
                         onChange(rgba);
+                        onLiveChange?.(rgba)
                     }}
                     className={`w-10 h-10 border rounded cursor-pointer ${dimensionStyle.colorInput}`}
                 />
@@ -58,6 +60,7 @@ const ColorPickerWithAlpha: React.FC<{
                     value={alpha}
                     onChange={(e) => {
                         const rgba = hexToRgba(hex, parseFloat(e.target.value));
+                        onLiveChange?.(rgba)
                         onChange(rgba);
                     }}
                     className="flex-1 accent-stone-600"
@@ -79,6 +82,9 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const [bgImage, setBgImage] = useState<string>('');
     const [boxShadow, setBoxShadow] = useState<string>(currentSection?.boxShadow || 'none');
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
+    const [textColor, setTextColor] = useState<string>(
+        currentSection?.color || "rgba(0,0,0,1)"
+    );
 
     const toolbarRef = useRef<HTMLDivElement>(null);
 
@@ -137,6 +143,13 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
             updateStyles(screenStyleObj.screenStyles?.[screenSize])
         }
     }
+
+    useEffect(() => {
+        // keep in sync when section changes externally
+        if (currentSection?.color) {
+            setTextColor(currentSection.color);
+        }
+    }, [currentSection?.color]);
 
     return (
         <div
@@ -377,9 +390,17 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 '',
                 <ColorPickerWithAlpha
                     label="Text Color"
-                    value={currentSection?.color || "rgba(0,0,0,1)"}
-                    onChange={(val) => debouncedUpdateStyles({ color: val })}
+                    value={textColor}
+                    onChange={(val) => {
+                        setTextColor(val);                 // ✅ update immediately
+                        debouncedUpdateStyles({ color: val });
+                    }}
+                    onLiveChange={(value: string) => {
+                        setTextColor(value);               // ✅ instant slider movement
+                        sectionRef?.current?.style.setProperty("color", value, "important");
+                    }}
                 />
+
             )}
 
             {renderInputRow(
