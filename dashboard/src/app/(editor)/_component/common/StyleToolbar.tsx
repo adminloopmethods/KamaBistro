@@ -24,6 +24,50 @@ type StyleToolbarProps = {
     rmSection?: (id: string) => void;
 };
 
+// ✅ Reusable color + transparency picker
+const ColorPickerWithAlpha: React.FC<{
+    label: string;
+    value: string;
+    onChange: (val: string) => void;
+}> = ({ label, value, onChange }) => {
+    // extract alpha if rgba, otherwise default 1
+    const alphaMatch = value?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
+    const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
+
+    // extract hex for <input type="color">
+    const hex = value?.startsWith("rgba") ? "#" + rgbaToHex(value) : value || "#000000";
+
+    return (
+        <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+            <div className="flex items-center gap-2">
+                <input
+                    type="color"
+                    value={hex}
+                    onChange={(e) => {
+                        const rgba = hexToRgba(e.target.value, alpha);
+                        onChange(rgba);
+                    }}
+                    className={`w-10 h-10 border rounded cursor-pointer ${dimensionStyle.colorInput}`}
+                />
+                <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={alpha}
+                    onChange={(e) => {
+                        const rgba = hexToRgba(hex, parseFloat(e.target.value));
+                        onChange(rgba);
+                    }}
+                    className="flex-1 accent-stone-600"
+                />
+                <span className="text-xs w-8 text-right">{alpha.toFixed(2)}</span>
+            </div>
+        </div>
+    );
+};
+
 const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
     const { contextForSection, screenStyleObj } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
@@ -82,9 +126,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     );
 
     const copyTheStyle = (screenSize: screenType) => {
-
         if (screenStyleObj.screenStyles?.[screenSize]) {
-
             updateStyles(screenStyleObj.screenStyles?.[screenSize])
         }
     }
@@ -92,7 +134,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     return (
         <div
             ref={toolbarRef}
-
             className="bg-white dark:bg-zinc-900 text-sm text-stone-800 dark:text-stone-200 p-4 w-[240px] max-w-[20vw] rounded-[0px_0px_4px_4px] shadow-md flex flex-col gap-4"
         >
             <div className="flex justify-between items-center border-b pb-2 mb-2">
@@ -171,37 +212,25 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 onChange={(val) => { debouncedUpdateStyles({ backgroundPosition: val }); }}
             />
 
-            {/* Gradient Colors */}
+            {/* Gradient Colors with Alpha */}
             <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
             <div className="flex flex-col gap-3">
-                {[{ color: color1, setColor: setColor1, label: 'Color 1' }, { color: color2, setColor: setColor2, label: 'Color 2' }].map(({ color, setColor, label }, idx) => (
-                    <div key={idx} className="flex flex-col gap-1">
-                        <span className="text-xs font-semibold">{label}</span>
-                        <input
-                            type="color"
-                            value={'#' + rgbaToHex(color)}
-                            onChange={(e) => {
-                                const newColor = hexToRgba(e.target.value, 1);
-                                setColor(newColor);
-                                if (label === 'Color 1') handleGradientUpdate(newColor, undefined, undefined);
-                                else handleGradientUpdate(undefined, newColor, undefined);
-                            }}
-                            className={dimensionStyle.colorInput}
-                        />
-                        <input
-                            type="text"
-                            value={color}
-                            onChange={(e) => {
-                                const newColor = e.target.value;
-                                setColor(newColor);
-                                if (label === 'Color 1') handleGradientUpdate(newColor, undefined, undefined);
-                                else handleGradientUpdate(undefined, newColor, undefined);
-                            }}
-                            placeholder="rgba(...)"
-                            className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-                        />
-                    </div>
-                ))}
+                <ColorPickerWithAlpha
+                    label="Color 1"
+                    value={color1}
+                    onChange={(newColor) => {
+                        setColor1(newColor);
+                        handleGradientUpdate(newColor, undefined, undefined);
+                    }}
+                />
+                <ColorPickerWithAlpha
+                    label="Color 2"
+                    value={color2}
+                    onChange={(newColor) => {
+                        setColor2(newColor);
+                        handleGradientUpdate(undefined, newColor, undefined);
+                    }}
+                />
             </div>
 
             {renderInputRow(
@@ -287,7 +316,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                             />
                         )}
 
-
                         {renderInputRow(
                             'Justify Content',
                             <CustomSelect
@@ -337,32 +365,13 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 )}
             </div>
 
+            {/* ✅ Text Color with Alpha */}
             {renderInputRow(
-                'Text Color',
-                <CustomSelect
-                    options={[
-                        { label: "Black", value: "#000000" },
-                        { label: "White", value: "#FFFFFF" },
-                        { label: "Red", value: "#FF0000" },
-                        { label: "Green", value: "#00FF00" },
-                        { label: "Blue", value: "#0000FF" },
-                        { label: "Yellow", value: "#FFFF00" },
-                        { label: "Orange", value: "#FFA500" },
-                        { label: "Purple", value: "#800080" },
-                        { label: "Pink", value: "#FFC0CB" },
-                        { label: "Gray", value: "#808080" },
-                        { label: "Dodger Blue", value: "#1E90FF" },
-                        { label: "Lime Green", value: "#32CD32" },
-                        { label: "Deep Pink", value: "#FF1493" },
-                        { label: "Gold", value: "#FFD700" },
-                        { label: "Dark Red", value: "#8B0000" },
-                        { label: "Dark Green", value: "#006400" },
-                        { label: "Indigo", value: "#4B0082" },
-                        { label: "Dark Turquoise", value: "#00CED1" },
-                        { label: "Orange Red", value: "#FF4500" },
-                    ]}
-                    Default={currentSection?.color}
-                    onChange={(val) => { debouncedUpdateStyles({ color: val }); }}
+                '',
+                <ColorPickerWithAlpha
+                    label="Text Color"
+                    value={currentSection?.color || "rgba(0,0,0,1)"}
+                    onChange={(val) => debouncedUpdateStyles({ color: val })}
                 />
             )}
 
@@ -375,9 +384,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 />
             )}
 
-            
             <CopyStylesUI copyTheStyle={copyTheStyle} />
-
 
             {showImageSelector &&
                 <ImageSelector
@@ -390,7 +397,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     type="IMAGE"
                 />
             }
-
         </div>
     );
 };

@@ -22,12 +22,6 @@ const fontSizeOptions = [12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64].map(size =>
     value: `${size}px`
 }));
 
-const positionOptions = [
-    { label: 'Static', value: 'static' },
-    { label: 'Relative', value: 'relative' },
-    { label: 'Absolute', value: 'absolute' },
-];
-
 const alignmentIcons: Record<string, React.FC<any>> = {
     left: AlignLeft,
     center: AlignCenter,
@@ -35,19 +29,82 @@ const alignmentIcons: Record<string, React.FC<any>> = {
     justify: AlignJustify,
 };
 
+// ✅ helper: hex → rgba
+function hexToRgba(hex: string, alpha: number = 1): string {
+    let r = 0, g = 0, b = 0;
+    if (hex.length === 4) {
+        r = parseInt(hex[1] + hex[1], 16);
+        g = parseInt(hex[2] + hex[2], 16);
+        b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length === 7) {
+        r = parseInt(hex.slice(1, 3), 16);
+        g = parseInt(hex.slice(3, 5), 16);
+        b = parseInt(hex.slice(5, 7), 16);
+    }
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// ✅ reusable component for color + alpha
+const ColorPickerWithAlpha: React.FC<{
+    label: string;
+    styleKey: keyof StylesState;
+    localStyle: Partial<StylesState>;
+    applyStyle: (key: keyof StylesState, val: string | number) => void;
+}> = ({ label, styleKey, localStyle, applyStyle }) => {
+    const currentValue = localStyle[styleKey] as string;
+
+    // extract alpha if rgba, otherwise default 1
+    const alphaMatch = currentValue?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
+    const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
+
+    return (
+        <div className="flex flex-col gap-1">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+            <div className="flex items-center gap-2">
+                <input
+                    type="color"
+                    value={
+                        currentValue?.startsWith("rgba")
+                            ? "#000000"
+                            : currentValue || "#000000"
+                    }
+                    onChange={(e) => {
+                        const rgba = hexToRgba(e.target.value, alpha);
+                        applyStyle(styleKey, rgba);
+                    }}
+                    className="w-10 h-10 border rounded cursor-pointer"
+                />
+                <input
+                    type="range"
+                    min={0}
+                    max={1}
+                    step={0.01}
+                    value={alpha}
+                    onChange={(e) => {
+                        const baseHex = currentValue?.startsWith("rgba")
+                            ? "#000000"
+                            : currentValue || "#000000";
+                        const rgba = hexToRgba(baseHex, parseFloat(e.target.value));
+                        applyStyle(styleKey, rgba);
+                    }}
+                    className="flex-1 accent-stone-600"
+                />
+                <span className="text-xs w-8 text-right">{alpha}</span>
+            </div>
+        </div>
+    );
+};
+
 const RichTextToolBar: React.FC = () => {
     const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef, screenStyleObj } = useMyContext();
     const Setter = elementSetter;
 
-    // Local style state
     const [localStyle, setLocalStyle] = useState<Partial<StylesState>>(element?.style?.[activeScreen] || {});
 
-    // Sync localStyle with context when element or screen changes
     useEffect(() => {
         setLocalStyle(element?.style?.[activeScreen] || {});
     }, [element, activeScreen]);
 
-    // Apply style (updates local + context)
     const applyStyle = useCallback(
         (key: keyof StylesState, val: string | number) => {
             const newStyle = { ...localStyle, [key]: val };
@@ -60,7 +117,6 @@ const RichTextToolBar: React.FC = () => {
         [localStyle, Setter, activeScreen]
     );
 
-    // Debounced for heavy inputs (colors, slider)
     const debouncedApplyStyle = useCallback(
         debounce((key: keyof StylesState, val: string | number) => applyStyle(key, val), 300),
         [applyStyle]
@@ -73,9 +129,8 @@ const RichTextToolBar: React.FC = () => {
                 style: { ...prev.style, [activeScreen]: screenStyleObj.screenStyles?.[screenSize] },
             }))
         }
-    }
+    };
 
-    // Generic input renderer
     const renderInput = (
         label: string,
         key: keyof StylesState,
@@ -95,13 +150,6 @@ const RichTextToolBar: React.FC = () => {
                     onChange={(e) => {
                         const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
                         applyStyle(key, val);
-                        if (activeRef) {
-                            // activeRef.style.setProperty(css, val, "important")
-                        }
-                    }}
-                    onBlur={(e) => {
-                        const val = type === 'number' ? `${e.target.value}${suffix || ''}` : e.target.value;
-                        // setLocalStyle((prev) => ({ ...prev, [key]: val }));
                     }}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
@@ -142,10 +190,7 @@ const RichTextToolBar: React.FC = () => {
             <div className="flex flex-col gap-2">
                 <div className="flex gap-2">
                     <button
-                        className={`tool-btn font-bold border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontWeight && parseInt(localStyle.fontWeight.toString()) >= 500
-                            ? 'bg-stone-600 text-white'
-                            : ''
-                            }`}
+                        className={`tool-btn font-bold border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontWeight && parseInt(localStyle.fontWeight.toString()) >= 500 ? 'bg-stone-600 text-white' : ''}`}
                         onClick={() =>
                             applyStyle(
                                 "fontWeight",
@@ -156,15 +201,13 @@ const RichTextToolBar: React.FC = () => {
                         B
                     </button>
                     <button
-                        className={`tool-btn italic border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontStyle === "italic" ? 'bg-stone-600 text-white' : ''
-                            }`}
+                        className={`tool-btn italic border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.fontStyle === "italic" ? 'bg-stone-600 text-white' : ''}`}
                         onClick={() => applyStyle("fontStyle", localStyle.fontStyle === "italic" ? "normal" : "italic")}
                     >
                         I
                     </button>
                     <button
-                        className={`tool-btn underline border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.textDecoration === "underline" ? 'bg-stone-600 text-white' : ''
-                            }`}
+                        className={`tool-btn underline border p-2 px-3 w-[35px] flex justify-center items-center rounded-md ${localStyle.textDecoration === "underline" ? 'bg-stone-600 text-white' : ''}`}
                         onClick={() =>
                             applyStyle("textDecoration", localStyle.textDecoration === "underline" ? "none" : "underline")
                         }
@@ -191,21 +234,9 @@ const RichTextToolBar: React.FC = () => {
                 </div>
             </div>
 
-            {/* Colors */}
-            <div className="flex gap-2">
-                <input
-                    type="color"
-                    value={(localStyle.color as string) || "#000000"}
-                    onChange={(e) => debouncedApplyStyle("color", e.target.value)}
-                    className="w-8 h-8 border rounded cursor-pointer"
-                />
-                <input
-                    type="color"
-                    value={(localStyle.backgroundColor as string) || "#000000"}
-                    onChange={(e) => debouncedApplyStyle("backgroundColor", e.target.value)}
-                    className="w-8 h-8 border rounded cursor-pointer"
-                />
-            </div>
+            {/* ✅ Colors with Alpha */}
+            <ColorPickerWithAlpha label="Text Color" styleKey="color" localStyle={localStyle} applyStyle={applyStyle} />
+            <ColorPickerWithAlpha label="Background Color" styleKey="backgroundColor" localStyle={localStyle} applyStyle={applyStyle} />
 
             {/* Alignment */}
             <div className="flex gap-2">
@@ -226,57 +257,30 @@ const RichTextToolBar: React.FC = () => {
 
             {/* Padding */}
             <h4 className="text-xs font-semibold">Padding</h4>
-            {[
-                { reactName: "paddingTop", cssName: "padding-top" },
-                { reactName: "paddingBottom", cssName: "padding-bottom" },
-                { reactName: "paddingLeft", cssName: "padding-left" },
-                { reactName: "paddingRight", cssName: "padding-right" }
-            ].map(({ reactName, cssName }) =>
-                renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px")
+            {["paddingTop", "paddingBottom", "paddingLeft", "paddingRight"].map((key) =>
+                renderInput(key, key as keyof StylesState, key, "number", "px")
             )}
 
             {/* Margin */}
             <h4 className="text-xs font-semibold">Margin</h4>
-            {[
-                { reactName: "marginTop", cssName: "margin-top" },
-                { reactName: "marginBottom", cssName: "margin-bottom" },
-                { reactName: "marginLeft", cssName: "margin-left" },
-                { reactName: "marginRight", cssName: "margin-right" }
-            ].map(({ reactName, cssName }) =>
-                renderInput(reactName, reactName as keyof StylesState, cssName, "number", "px")
+            {["marginTop", "marginBottom", "marginLeft", "marginRight"].map((key) =>
+                renderInput(key, key as keyof StylesState, key, "number", "px")
             )}
 
             {/* Border */}
             <h4 className="text-xs font-semibold mt-2">Border</h4>
-            {/* Border Width */}
             <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
-                    Border Width
-                </label>
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Border Width</label>
                 <input
                     type="number"
                     value={parseInt(localStyle.borderWidth?.toString() || "0")}
-                    onChange={(e) => {
-                        const newWidth = `${e.target.value}px`;
-                        applyStyle("borderWidth", newWidth);  // ✅ update borderWidth
-                    }}
+                    onChange={(e) => applyStyle("borderWidth", `${e.target.value}px`)}
                     className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
                 />
             </div>
 
-            {/* Border Color */}
-            <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
-                    Border Color
-                </label>
-                <input
-                    type="color"
-                    value={(localStyle.borderColor as string) || "#000000"}
-                    onChange={(e) => applyStyle("borderColor", e.target.value)} // ✅ update borderColor
-                    className="w-10 h-10 border rounded cursor-pointer"
-                />
-            </div>
-
+            {/* ✅ Border Color with Alpha */}
+            <ColorPickerWithAlpha label="Border Color" styleKey="borderColor" localStyle={localStyle} applyStyle={applyStyle} />
 
             <CopyStylesUI copyTheStyle={copyTheStyle} />
         </div>
