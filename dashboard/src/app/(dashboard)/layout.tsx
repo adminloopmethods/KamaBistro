@@ -9,6 +9,7 @@ import {Provider} from "@/Context/EditorContext";
 import {Poppins} from "next/font/google";
 import {ThemeProvider} from "@/components/ui/theme-provider";
 import FloatingNavbar from "./_Components/layout/FloatingNavbar";
+import {UserProvider} from "@/Context/UserContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -44,20 +45,22 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Provider>
-            <div className="min-h-screen flex flex-col px-4 pb-4 relative">
-              <Header brand="KAMA" />
-              <div className="flex flex-1 gap-4 mt-4">
-                {/* <Sidebar /> */}
-                <main className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 overflow-hidden ">
-                  {children}
-                </main>
-              </div>
+            <UserProvider>
+              <div className="min-h-screen flex flex-col px-4 pb-4 relative">
+                <Header brand="KAMA" />
+                <div className="flex flex-1 gap-4 mt-4">
+                  {/* <Sidebar /> */}
+                  <main className="flex-1 bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6 overflow-hidden ">
+                    {children}
+                  </main>
+                </div>
 
-              {/* Floating Navbar positioned at bottom center */}
-              <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
-                <FloatingNavbar />
+                {/* Floating Navbar positioned at bottom center */}
+                <div className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+                  <FloatingNavbar />
+                </div>
               </div>
-            </div>
+            </UserProvider>
           </Provider>
         </ThemeProvider>
       </body>

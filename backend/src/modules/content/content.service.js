@@ -141,6 +141,29 @@ export const getAllWebpagesService = async () => {
   });
 };
 
+// services/contentService.js
+export const getAssignedWebpagesService = async (userId) => {
+  return await prismaClient.webpage.findMany({
+    where: {
+      OR: [{editorId: userId}, {verifierId: userId}],
+    },
+    include: {
+      editor: true,
+      verifier: true,
+      contents: {
+        orderBy: {order: "asc"},
+        include: {
+          style: true,
+          elements: {
+            orderBy: {order: "asc"},
+            include: {style: true},
+          },
+        },
+      },
+    },
+  });
+};
+
 // ---------------- GET WEBPAGE BY ID ----------------
 export const getWebpageByIdService = async (id) => {
   const webpage = await prismaClient.webpage.findUnique({

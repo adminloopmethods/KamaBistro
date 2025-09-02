@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins, Playfair_Display } from "next/font/google";
+import type {Metadata} from "next";
+import {Geist, Geist_Mono, Poppins, Playfair_Display} from "next/font/google";
 import "./globals.css";
-import { Provider } from "@/Context/ApiContext";
+import {Provider} from "@/Context/ApiContext";
+import {UserProvider} from "@/Context/UserContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,7 +26,6 @@ const playfair = Playfair_Display({
   weight: ["400", "500", "600", "700", "800"], // choose weights you need
 });
 
-
 export const metadata: Metadata = {
   title: "Kama Bistro",
   description: "Kama - description",
@@ -45,7 +45,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${poppins.variable} antialiased p-0`}
       >
         <Provider>
-          {children}
+          <UserProvider>{children}</UserProvider>
         </Provider>
       </body>
     </html>

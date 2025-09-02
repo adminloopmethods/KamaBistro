@@ -1,11 +1,10 @@
-// middleware/authMiddleware.js
-import {assert} from "../errors/assertError.js";
-
+// middleware/requireSuperAdmin.js
 export const requireSuperAdmin = (req, res, next) => {
-  assert(
-    req.user?.isSuperUser,
-    "FORBIDDEN",
-    "Only super admins can perform this action"
-  );
+  if (!req.user || !req.user.isSuperUser) {
+    return res.status(403).json({
+      success: false,
+      message: "Access denied. Admin privileges required.",
+    });
+  }
   next();
 };
