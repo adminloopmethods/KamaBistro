@@ -390,6 +390,7 @@ const Editor = () => {
                                     lastSection={lastSection}
                                     createSection={CreateSection}
                                     setGivenName={setGivenName}
+                                    parentRef={containerRef.current}
                                 />
                             );
                         })}

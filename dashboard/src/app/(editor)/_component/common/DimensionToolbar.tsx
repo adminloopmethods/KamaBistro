@@ -55,7 +55,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                             : e.target.value;
 
                         // live apply to element
-                        if (sectionRef?.current) {
+                        if (sectionRef?.current && type === 'number') {
                             (sectionRef.current as HTMLElement).style[key as any] = val;
                         }
 

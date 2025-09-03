@@ -5,6 +5,7 @@ import { CreateElement, mapElement, ScreenSize } from "../../_functionality/crea
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
 import { SectionElementType, StyleObject } from "../../_functionality/createSection";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 export type ElementTypeCustom = {
   id: string;
@@ -33,7 +34,8 @@ type SectionProps = {
   createSection?: any,
   parentIsSection?: Boolean,
   updateParentElement?: (id: string, element: any, lS: Boolean) => void,
-  setGivenName: (id: string, value: string) => void
+  setGivenName: (id: string, value: string) => void;
+  parentRef: HTMLElement | null;
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -49,7 +51,8 @@ const Section: React.FC<SectionProps> = ({
   createSection,
   parentIsSection,
   updateParentElement,
-  setGivenName
+  setGivenName,
+  parentRef
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementTypeCustom[]>(element);
@@ -337,8 +340,9 @@ const Section: React.FC<SectionProps> = ({
   }
 
   const runningWidth = activeScreen !== "xl";
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
 
-  
+  console.log("qew", runningWidth, { ...runningStyle })
 
   return (
     <div className=""
@@ -353,7 +357,10 @@ const Section: React.FC<SectionProps> = ({
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, transition: ".3s all linear", top: 0, left: 0, position: "relative", ...(hoverEffect ? cleanHover : {}) }}
+        style={{
+          ...(runningStyle),
+          transition: ".3s all linear", top: 0, left: 0, position: "relative", ...(hoverEffect ? cleanHover : {})
+        }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
@@ -381,6 +388,7 @@ const Section: React.FC<SectionProps> = ({
                 lastSection={lastSection}
                 parentIsSection={true}
                 setGivenName={setGivenName}
+                parentRef={parentRef}
               />)
 
           } else {
