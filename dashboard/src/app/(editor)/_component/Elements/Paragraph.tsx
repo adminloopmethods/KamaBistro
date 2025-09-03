@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 type ParagraphProps = {
   element: BaseElement;
@@ -11,6 +12,8 @@ type ParagraphProps = {
   updateContent: (id: string, property: string, value: any) => void;
   updateElement: (id: string, updatedElement: BaseElement) => void;
   rmElement: (id: string) => void;
+  parentRef: HTMLElement | null;
+
 };
 
 const Paragraph: React.FC<ParagraphProps> = ({
@@ -20,10 +23,11 @@ const Paragraph: React.FC<ParagraphProps> = ({
   updateContent,
   updateElement,
   rmElement,
+  parentRef
 }) => {
   const elementRef = useRef<HTMLHeadingElement | null>(null);
   const [thisElement, setThisElement] = useState<BaseElement>(element);
-  const { contextRef, contextElement, toolbarRef, screenStyleObj } = useMyContext();
+  const { contextRef, contextElement, toolbarRef, screenStyleObj, activeScreen } = useMyContext();
   const [isEditing, setEditing] = useState<boolean>(false);
 
   // Set innerHTML when content updates
@@ -44,8 +48,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       elementRef.current.style.outline = "1px dashed black";
     }
     contextRef.setReference(elementRef.current);
-        screenStyleObj.setScreenStyle(thisElement.style)
-
+    screenStyleObj.setScreenStyle(thisElement.style)
   };
 
   const handleBlur = (e: FocusEvent<HTMLHeadingElement>) => {
@@ -56,7 +59,6 @@ const Paragraph: React.FC<ParagraphProps> = ({
         content: value.trim(),
       })
     });
-
   };
 
   // Remove outline if clicked outside
@@ -94,6 +96,9 @@ const Paragraph: React.FC<ParagraphProps> = ({
   }, [thisElement.content]);
 
 
+  const runningWidth = activeScreen !== "xl";
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
+
   return (
     <p
       className="hover:outline-dashed hover:outline"
@@ -102,7 +107,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={{...style, position: "relative", zIndex: "2"}}
+      style={{ ...runningStyle, position: "relative", zIndex: "2" }}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

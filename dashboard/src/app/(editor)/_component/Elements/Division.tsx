@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BaseElement } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
-type HeadingProps = {
+type DivisionProps = {
     element: BaseElement;
     editable?: boolean;
     style: React.CSSProperties;
     updateContent: (id: string, property: string, value: any) => void;
     updateElement: (id: string, updatedElement: BaseElement) => void;
     rmElement: (id: string) => void;
+    parentRef: HTMLElement | null;
 };
 
 const Division = ({
@@ -18,7 +20,8 @@ const Division = ({
     updateContent,
     updateElement,
     rmElement,
-}: HeadingProps) => {
+    parentRef
+}: DivisionProps) => {
     const elementRef = useRef<HTMLDivElement | null>(null);
     const [divStyle, setDivStyle] = useState<React.CSSProperties>(style);
     const { contextElement, toolbarRef, contextForSection, activeScreen, screenStyleObj } = useMyContext();
@@ -130,9 +133,24 @@ const Division = ({
         return () => el.removeEventListener("mousedown", handleMouseDown);
     }, [handleMouseDown]);
 
+    useEffect(() => {
+        setDivStyle(style)
+    }, [activeScreen])
+
+    const runningWidth = activeScreen !== "xl";
+    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(divStyle || {}, parentRef) : divStyle
+
     return (
         <div
-            style={divStyle}
+            style={{
+                ...runningStyle,
+                backgroundImage: runningStyle.backgroundImage
+                    ? runningStyle.backgroundImage
+                    : undefined,
+                backgroundColor: runningStyle.backgroundImage
+                    ? undefined
+                    : runningStyle.backgroundColor || 'transparent',
+            }}
             id={element.id}
             ref={elementRef}
             onClick={activateTheEditing}

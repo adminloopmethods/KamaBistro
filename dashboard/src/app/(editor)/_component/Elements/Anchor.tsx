@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import Link from "next/link";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 type LinkProps = {
     element: BaseElement;
@@ -12,6 +13,8 @@ type LinkProps = {
     updateContent: (id: string, property: string, value: any) => void;
     updateElement: (id: string, updatedElement: BaseElement) => void;
     rmElement: (id: string) => void;
+    parentRef: HTMLElement | null;
+
 };
 
 const LinkComponent: React.FC<LinkProps> = ({
@@ -21,11 +24,12 @@ const LinkComponent: React.FC<LinkProps> = ({
     updateContent,
     updateElement,
     rmElement,
+    parentRef
 }) => {
     const elementRef = useRef<HTMLAnchorElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
     const [thisElement, setThisElement] = useState<BaseElement>(element);
-    const { contextRef, contextElement, toolbarRef, screenStyleObj } = useMyContext();
+    const { contextRef, contextElement, toolbarRef, screenStyleObj, activeScreen } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
 
     // Set text from element.content
@@ -100,19 +104,23 @@ const LinkComponent: React.FC<LinkProps> = ({
     // Check if link is external
     const isExternal = thisElement.href?.startsWith("http");
 
+    const runningWidth = activeScreen !== "xl";
+    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
+
     return (
         <div style={{ position: "relative", zIndex: 2 }}>
             {isExternal ? (
                 <a
                     href={thisElement.href || "#"}
                     aria-label={thisElement.aria || ""}
+                    title={thisElement.aria}
                     id={element.id}
                     ref={elementRef}
                     onClick={activateTheEditing}
                     onBlur={handleBlur}
                     contentEditable={editable}
                     suppressContentEditableWarning={true}
-                    style={{ ...style }}
+                    style={{ ...runningStyle }}
                     target="_blank"
                     rel="noopener noreferrer"
                 >
@@ -122,13 +130,14 @@ const LinkComponent: React.FC<LinkProps> = ({
                 <Link
                     href={thisElement.href || "#"}
                     aria-label={thisElement.aria || ""}
+                    title={thisElement.aria}
                     id={element.id}
                     ref={elementRef}
                     onClick={activateTheEditing}
                     onBlur={handleBlur}
                     contentEditable={editable}
                     suppressContentEditableWarning={true}
-                    style={{ ...style }}
+                    style={runningStyle}
                 >
                     {thisElement.content || "Link Text"}
                 </Link>
@@ -141,7 +150,7 @@ const LinkComponent: React.FC<LinkProps> = ({
                         position: "fixed", // relative to viewport
                         top:
                             elementRef.current.getBoundingClientRect().bottom + 10 >
-                            window.innerHeight - 200
+                                window.innerHeight - 200
                                 ? elementRef.current.getBoundingClientRect().top - 200 - 10 // open above if bottom overflows
                                 : elementRef.current.getBoundingClientRect().bottom + 10, // otherwise below
                         left: Math.min(

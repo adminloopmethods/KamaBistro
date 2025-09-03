@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMyContext } from "@/Context/EditorContext";
 import ImageSelector from "../common/ImageSelector";
 import { cloudinaryApiPoint } from "@/utils/endpoints";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 interface StyleObject {
   [key: string]: React.CSSProperties;
@@ -15,6 +16,7 @@ interface ElementType {
   content: string; // image src
   style: StyleObject;
   alt?: string;
+
 }
 
 interface ImageComponentProps {
@@ -25,6 +27,7 @@ interface ImageComponentProps {
   activeScreen?: string; // like "xl" or "md"
   style: React.CSSProperties;
   rmElement: (id?: string) => void;
+  parentRef: HTMLElement | null;
 }
 
 const ImageElemComponent: React.FC<ImageComponentProps> = ({
@@ -34,7 +37,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   updateContent,
   activeScreen = "xl",
   style,
-  rmElement
+  rmElement,
+  parentRef
 }) => {
   const [toolbarIsOpen, setToolbarIsOpen] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(element.content || "");
@@ -213,6 +217,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     }
   };
 
+
+  const runningWidth = activeScreen !== "xl";
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(thisElement.style?.[activeScreen] || {}, parentRef) : style
+
   return (
     <>
       <img
@@ -224,7 +232,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         onClick={handleImageClick}
         onDoubleClick={handleDoubleClick}
         style={{
-          ...thisElement.style?.[activeScreen],
+          ...runningStyle,
           cursor:
             editable && cursorCondition
               ? "move"

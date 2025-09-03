@@ -5,6 +5,7 @@ import { CreateElement, mapElement, ScreenSize } from "../../_functionality/crea
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
 import { SectionElementType, StyleObject } from "../../_functionality/createSection";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 export type ElementTypeCustom = {
   id: string;
@@ -33,7 +34,8 @@ type SectionProps = {
   createSection?: any,
   parentIsSection?: Boolean,
   updateParentElement?: (id: string, element: any, lS: Boolean) => void,
-  setGivenName: (id: string, value: string) => void
+  setGivenName: (id: string, value: string) => void;
+  parentRef: HTMLElement | null;
 };
 
 const Section: React.FC<SectionProps> = ({
@@ -49,12 +51,13 @@ const Section: React.FC<SectionProps> = ({
   createSection,
   parentIsSection,
   updateParentElement,
-  setGivenName
+  setGivenName,
+  parentRef
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
   const [elements, setElements] = useState<ElementTypeCustom[]>(element);
   const [hoverEffect, setHoverEffect] = useState<boolean>(false);
-  const [clickEffect, setClickEffect] = useState<boolean>(false);
+  // const [clickEffect, setClickEffect] = useState<boolean>(false);
   const {
     contextRef,
     activeScreen,
@@ -119,7 +122,7 @@ const Section: React.FC<SectionProps> = ({
   const handleMouseUp = (e: MouseEvent) => {
     const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
     if (!parentRect) return;
-    
+
     // mouse position inside parent
     const mouseX = e.clientX - parentRect.left;
     const mouseY = e.clientY - parentRect.top;
@@ -152,11 +155,13 @@ const Section: React.FC<SectionProps> = ({
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     onEditing();
+    // console.log(section.givenName)
     contextForSection.setRmSection(() => () => rmSection(section.id))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     contextForSection.setSectionRef(sectionRef)
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
+    contextForSection.setSectionName(section.givenName)
 
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
@@ -290,7 +295,6 @@ const Section: React.FC<SectionProps> = ({
   }, [])
 
   const showAllChildren = () => {
-    // if (childsAreHidden) {
     setElements((prev: ElementTypeCustom[]) =>
       prev.map((e: ElementTypeCustom) => {
         if (e.style?.[activeScreen]?.display === "none") {
@@ -312,11 +316,9 @@ const Section: React.FC<SectionProps> = ({
         )
       })
     )
-    // }
   }
 
   const hideBackHiddenChildrens = () => {
-    console.log(hiddenChildlist)
     if (hiddenChildlist.length > 0) {
       setElements((prev: ElementTypeCustom[]) =>
         prev.map((e: ElementTypeCustom) => {
@@ -337,6 +339,9 @@ const Section: React.FC<SectionProps> = ({
     }
   }
 
+  const runningWidth = activeScreen !== "xl";
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
+
   return (
     <div className=""
       ref={divRef}
@@ -350,7 +355,10 @@ const Section: React.FC<SectionProps> = ({
     >
       <section
         ref={sectionRef}
-        style={{ ...sectionStyle, transition: ".3s all linear", top: 0, left: 0, position: "relative", ...(hoverEffect ? cleanHover : {}) }}
+        style={{
+          ...(runningStyle),
+          transition: ".3s all linear", top: 0, left: 0, position: "relative", ...(hoverEffect ? cleanHover : {})
+        }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
@@ -378,6 +386,7 @@ const Section: React.FC<SectionProps> = ({
                 lastSection={lastSection}
                 parentIsSection={true}
                 setGivenName={setGivenName}
+                parentRef={parentRef}
               />)
 
           } else {
@@ -392,6 +401,7 @@ const Section: React.FC<SectionProps> = ({
                 currentWidth={activeScreen}
                 rmElement={rmElement}
                 activeScreen={activeScreen}
+                parentRef={parentRef}
               />
             );
           }

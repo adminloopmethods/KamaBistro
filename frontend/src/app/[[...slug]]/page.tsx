@@ -22,9 +22,9 @@ const Editor = () => {
 
   // Function to classify width
   const classifyWidth = (w: number) => {
-    if (w > 1024) return "xl";
-    if (w >= 768) return "lg";
-    if (w >= 425) return "md";
+    if (w > 1440) return "xl";
+    if (w >= 1024) return "lg";
+    if (w >= 600) return "md";
     return "sm";
   };
 

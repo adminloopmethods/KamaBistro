@@ -9,7 +9,6 @@ const SectionChilds: React.FC<any> = () => {
     const { sectionChildElements, sectionChildElementsSetter, activeScreen } = useMyContext()
     const [stateOfChildElements, setStateOfChildElements] = useState<ElementTypeCustom[]>(sectionChildElements)
 
-    console.log(sectionChildElements)
 
     const handleHideAndSeek = (id: string, checked: boolean) => {
         if (sectionChildElementsSetter) {
