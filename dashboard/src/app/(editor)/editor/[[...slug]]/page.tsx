@@ -361,6 +361,7 @@ const Editor = () => {
                             flex: 1,
                             width: pageWidth,
                             margin: "0 auto",
+                            transform: activeScreen !== "xl" ? "translateX(-120px)" : "",
                             minHeight: "100vh",
                             transition: ".1s linear all",
                             backgroundColor: "#e7e5e4", // stone-200
