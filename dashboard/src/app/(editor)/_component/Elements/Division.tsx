@@ -144,12 +144,7 @@ const Division = ({
         <div
             style={{
                 ...runningStyle,
-                backgroundImage: runningStyle.backgroundImage
-                    ? runningStyle.backgroundImage
-                    : undefined,
-                backgroundColor: runningStyle.backgroundImage
-                    ? undefined
-                    : runningStyle.backgroundColor || 'transparent',
+               
             }}
             id={element.id}
             ref={elementRef}

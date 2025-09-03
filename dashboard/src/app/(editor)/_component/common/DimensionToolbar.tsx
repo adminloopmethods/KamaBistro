@@ -7,12 +7,11 @@ export type StylesState = React.CSSProperties | Record<string, any>;
 export type updateStylesType = (styles: Partial<StylesState>, applyAll?: Boolean | undefined) => void;
 
 type DimensionToolbarProps = {
-    updateStyles: updateStylesType
+    updateStyles: updateStylesType;
 };
 
-
 const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => {
-    const { currentSection, contextForSection, containerRef, activeScreen } = useMyContext();
+    const { currentSection, contextForSection, activeScreen } = useMyContext();
     const style = currentSection || {};
     const { sectionRef, rmSection, sectionGivenNameFn, sectionName } = contextForSection;
 
@@ -27,22 +26,21 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
     const [radiusUnit, setRadiusUnit] = useState<'px' | '%' | 'em' | 'vw' | 'vh'>('px');
 
     const toKebabCase = (key: string) =>
-        key.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
-
+        key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
 
     const applyStyle = useCallback(
         (key: keyof StylesState, val: string | number) => {
             let newVal: string | number = val;
 
-            if (activeScreen !== "xl" && sectionRef?.current) {
+            if (activeScreen !== 'xl' && sectionRef?.current) {
                 const converted = convertVWVHtoPxParentClamped({ [key]: val }, sectionRef.current);
                 newVal = converted[key]!;
 
-                const cssKey = toKebabCase(key as string); // 👈 convert camelCase to kebab-case
+                const cssKey = toKebabCase(key as string);
                 (sectionRef.current as HTMLElement).style.setProperty(
                     cssKey,
                     String(newVal),
-                    "important"
+                    'important'
                 );
             }
 
@@ -53,11 +51,29 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         [localStyle, updateStyles, sectionRef, activeScreen]
     );
 
-
     // Reset local style on section change
     useEffect(() => {
         setLocalStyle(currentSection || {});
     }, [sectionRef, currentSection]);
+
+    // --- Helper: apply unit change ---
+    const handleUnitChange = (
+        key: keyof StylesState,
+        unit: string,
+        setter: React.Dispatch<React.SetStateAction<any>>
+    ) => {
+        setter(unit);
+        const currentValue = localStyle?.[key];
+
+        if (currentValue !== undefined && currentValue !== '' && currentValue !== 'auto') {
+            const num = parseFloat(currentValue as string);
+            if (!isNaN(num)) {
+                const newVal = `${num}${unit}`;
+                applyStyle(key, newVal);
+                setLocalStyle((prev) => ({ ...prev, [key]: newVal }));
+            }
+        }
+    };
 
     const renderInput = (
         label: string,
@@ -66,28 +82,49 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
         suffix?: string
     ) => {
         let value: string | number | undefined = localStyle?.[key];
+
         if (type === 'number' && typeof value === 'string') {
-            value = parseFloat(value);
+            if (value === 'auto' || value.trim() === '') {
+                value = value;
+            } else {
+                const parsed = parseFloat(value);
+                if (!isNaN(parsed)) {
+                    value = parsed;
+                }
+            }
         }
 
         return (
             <div className="flex flex-col gap-1 w-full" key={key}>
-                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    {label}
+                </label>
                 <input
-                    type={type}
-                    value={value || ""}
+                    type="text"
+                    value={value ?? ''}
+                    placeholder={`e.g. 10${suffix || 'px'}, auto`}
                     onChange={(e) => {
-                        const val = type === 'number'
-                            ? `${e.target.value}${suffix || ''}`
-                            : e.target.value;
-
+                        let val = e.target.value;
+                        if (val === '' || val === 'auto') {
+                            applyStyle(key, val);
+                            setLocalStyle((prev) => ({ ...prev, [key]: val }));
+                            return;
+                        }
+                        if (!isNaN(Number(val))) {
+                            val = `${val}${suffix || ''}`;
+                        }
                         applyStyle(key, val);
                         setLocalStyle((prev) => ({ ...prev, [key]: val }));
                     }}
                     onBlur={(e) => {
-                        const val = type === 'number'
-                            ? `${e.target.value}${suffix || ''}`
-                            : e.target.value;
+                        let val = e.target.value;
+                        if (val === '' || val === 'auto') {
+                            applyStyle(key, val);
+                            return;
+                        }
+                        if (!isNaN(Number(val))) {
+                            val = `${val}${suffix || ''}`;
+                        }
                         applyStyle(key, val);
                     }}
                     className="p-2 w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
@@ -127,7 +164,7 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                     sectionGivenNameFn(e.target.value);
                     setName(e.target.value);
                 }}
-                value={name || ""}
+                value={name || ''}
             />
 
             {/* Remove Button */}
@@ -149,37 +186,43 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 {/* Width */}
                 <div className="flex items-center gap-2 w-full">
                     {renderInput('Width', 'width', 'number', widthUnit)}
-                    {renderUnitSelect(widthUnit, (val) => setWidthUnit(val as any))}
+                    {renderUnitSelect(widthUnit, (val) =>
+                        handleUnitChange('width', val, setWidthUnit)
+                    )}
                 </div>
 
                 {/* Height */}
                 <div className="flex items-center gap-2">
                     {renderInput('Height', 'height', 'number', heightUnit)}
-                    {renderUnitSelect(heightUnit, (val) => setHeightUnit(val as any))}
+                    {renderUnitSelect(heightUnit, (val) =>
+                        handleUnitChange('height', val, setHeightUnit)
+                    )}
                 </div>
 
-                {/* Padding Controls */}
+                {/* Padding */}
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2 flex items-center gap-2">
                     Padding
-                    {renderUnitSelect(paddingUnit, (val) => setPaddingUnit(val as any))}
+                    {renderUnitSelect(paddingUnit, (val) =>
+                        handleUnitChange('paddingTop', val, setPaddingUnit)
+                    )}
                 </h4>
                 <div className="grid grid-cols-2 gap-x-2">
-                    {(['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'] as (keyof StylesState)[])
-                        .map((key) =>
-                            renderInput(key.replace('padding', ''), key, 'number', paddingUnit)
-                        )}
+                    {(['paddingTop', 'paddingBottom', 'paddingLeft', 'paddingRight'] as (keyof StylesState)[]).map(
+                        (key) => renderInput(key.replace('padding', ''), key, 'number', paddingUnit)
+                    )}
                 </div>
 
-                {/* Margin Controls */}
+                {/* Margin */}
                 <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mt-2 flex items-center gap-2">
                     Margin
-                    {renderUnitSelect(marginUnit, (val) => setMarginUnit(val as any))}
+                    {renderUnitSelect(marginUnit, (val) =>
+                        handleUnitChange('marginTop', val, setMarginUnit)
+                    )}
                 </h4>
                 <div className="grid grid-cols-2 gap-x-2">
-                    {(['marginTop', 'marginBottom', 'marginLeft', 'marginRight'] as (keyof StylesState)[])
-                        .map((key) =>
-                            renderInput(key.replace('margin', ''), key, 'number', marginUnit)
-                        )}
+                    {(['marginTop', 'marginBottom', 'marginLeft', 'marginRight'] as (keyof StylesState)[]).map(
+                        (key) => renderInput(key.replace('margin', ''), key, 'number', marginUnit)
+                    )}
                 </div>
 
                 {/* Position Selector */}
@@ -187,10 +230,10 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                     <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Position</label>
                     <CustomSelect
                         options={[
-                            { label: "Static", value: "static" },
-                            { label: "Absolute", value: "absolute" },
-                            { label: "Relative", value: "relative" },
-                            { label: "Fixed", value: "fixed" }
+                            { label: 'Static', value: 'static' },
+                            { label: 'Absolute', value: 'absolute' },
+                            { label: 'Relative', value: 'relative' },
+                            { label: 'Fixed', value: 'fixed' }
                         ]}
                         firstOption="position"
                         disableFirstValue={true}
@@ -204,7 +247,9 @@ const DimensionToolbar: React.FC<DimensionToolbarProps> = ({ updateStyles }) => 
                 {/* Border Radius */}
                 <div className="flex items-center gap-2">
                     {renderInput('Border Radius', 'borderRadius', 'number', radiusUnit)}
-                    {renderUnitSelect(radiusUnit, (val) => setRadiusUnit(val as any))}
+                    {renderUnitSelect(radiusUnit, (val) =>
+                        handleUnitChange('borderRadius', val, setRadiusUnit)
+                    )}
                 </div>
             </div>
         </div>
