@@ -1,21 +1,21 @@
 {
-  "id": "9cc59f29-8685-4b37-a352-8c940ae41412",
+  "id": "501bad83-0dcb-4900-859c-dba0cc3fe436",
   "name": "Our Group",
   "route": "/ourgroup",
   "locationId": null,
-  "createdAt": "2025-08-28T06:22:45.719Z",
-  "updatedAt": "2025-09-01T04:10:25.861Z",
+  "createdAt": "2025-09-01T11:20:43.759Z",
+  "updatedAt": "2025-09-03T05:55:39.442Z",
   "editedWidth": "1280px",
   "Status": true,
   "editorId": null,
   "verifierId": null,
   "contents": [
     {
-      "id": "996ba034-54cd-4739-9500-cc621a31c8eb",
+      "id": "6eadb07d-7a7f-42d1-bd0a-c3600ad1e1de",
       "name": "section",
       "givenName": "Hero Banner",
       "style": {
-        "id": "2a0e5362-e698-46eb-ba41-7c27afb6cecc",
+        "id": "b28595c6-5b7c-489f-9432-e024963eaeac",
         "xl": {
           "top": 2.025009155273438,
           "left": -5.987499237060547,
@@ -40,7 +40,7 @@
           "paddingBottom": "20px",
           "backgroundSize": "cover",
           "justifyContent": "center",
-          "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756363119299)",
+          "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756808582864)",
           "backgroundRepeat": "no-repeat",
           "backgroundPosition": "center"
         },
@@ -127,10 +127,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "cd01d129-bcf6-4c40-a95b-2d47aeae0836",
+          "id": "45bfe32a-0774-4f84-927d-ff809c01cdba",
           "name": "p",
           "style": {
-            "id": "16e4aa7b-4916-4c6b-abb3-b71326b850d9",
+            "id": "d84444be-b790-4c66-8174-e533f653cecf",
             "xl": {
               "color": "#ffffff",
               "display": "block",
@@ -166,17 +166,17 @@
           "aria": null
         },
         {
-          "id": "2e6105ae-65f3-4228-a3b7-221675fced4f",
+          "id": "3514e65c-7542-4b57-ba91-655e4e165ecb",
           "name": "h1",
           "style": {
-            "id": "39c2da02-34ea-4088-bfbe-4c9e6037ea83",
+            "id": "3c30f1bc-dab7-44c7-b909-996a2d58a21c",
             "xl": {
               "color": "#ffffff",
               "display": "block",
               "fontSize": "54px",
               "textAlign": "center",
               "fontFamily": "var(--font-playfair)",
-              "fontWeight": 500
+              "fontWeight": "400"
             },
             "lg": {
               "color": "#ffffff",
@@ -202,10 +202,10 @@
           "aria": null
         },
         {
-          "id": "92c8447f-f916-418b-8412-2efc00c5ebf1",
+          "id": "06b4ff8c-b614-4140-9e19-afad62d09cc4",
           "name": "division",
           "style": {
-            "id": "0253f55b-6e18-4d89-963b-c4d141b28db5",
+            "id": "5d7a368e-744e-4801-b771-d72109218628",
             "xl": {
               "width": "587px",
               "height": "1px",
@@ -240,21 +240,23 @@
           "aria": null
         },
         {
-          "id": "159d29d8-66e9-4369-8db9-14508a7e1a76",
+          "id": "034addb1-9721-4e5f-a3d9-f40190645dc1",
           "name": "p",
           "style": {
-            "id": "b2d7cbaa-a1de-455c-b9a6-376f6b03a190",
+            "id": "2475eea5-3caf-4e5f-8381-4dc2fc3700d3",
             "xl": {
               "color": "#ffd898",
               "display": "block",
               "fontSize": "24px",
-              "marginTop": "10px"
+              "marginTop": "10px",
+              "fontWeight": "300"
             },
             "lg": {
               "color": "#ffd898",
               "display": "block",
               "fontSize": "24px",
-              "marginTop": "10px"
+              "marginTop": "10px",
+              "fontWeight": "300"
             },
             "md": {
               "color": "#ffd898",
@@ -270,10 +272,10 @@
           "aria": null
         },
         {
-          "id": "9c2425ce-f099-4d2c-9d1f-f95d7481bb93",
+          "id": "a5606c0a-dacf-46e9-9669-eb72a6eb20de",
           "name": "img",
           "style": {
-            "id": "5e3994d2-aa3a-470d-866c-17ecd2d391b8",
+            "id": "1b75a54e-df8f-489b-9e64-381ac4a3abe1",
             "xl": {
               "top": "60px",
               "left": "305px",
@@ -313,11 +315,11 @@
       ]
     },
     {
-      "id": "205c1aca-7b57-4894-b0d5-2c01617e4d5e",
+      "id": "e3a0f593-d25c-4fbc-a2e0-573961d40161",
       "name": "section",
       "givenName": null,
       "style": {
-        "id": "0d9c7d9a-6d70-4020-a067-0e38626ce4a5",
+        "id": "7be9b85e-cad6-4855-a4e5-84f084254da4",
         "xl": {
           "top": "0",
           "left": "0",
@@ -414,10 +416,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "0e839752-3339-4acd-a650-ea422bf89911",
+          "id": "1c8c4434-e83c-4ae1-a71b-fa744782eaa0",
           "name": "h2",
           "style": {
-            "id": "eccfe9fa-5503-49a2-8157-eb66e453bde0",
+            "id": "b43c68ed-535f-4de9-a543-6b7f32a365d6",
             "xl": {
               "fontSize": "24px",
               "fontFamily": "var(--font-playfair)",
@@ -449,10 +451,10 @@
           "aria": ""
         },
         {
-          "id": "daa42823-5638-426e-9af6-d822b137fb2d",
+          "id": "39de07d0-f804-4ab0-abe9-41c23e243179",
           "name": "division",
           "style": {
-            "id": "115299e1-abf3-47b5-8b52-c64b8628e283",
+            "id": "7f6ed871-24bc-458b-9ef5-8e6b31a672cf",
             "xl": {
               "width": "131px",
               "height": "2px",
@@ -496,16 +498,17 @@
           "aria": ""
         },
         {
-          "id": "af15dc9a-8772-4aaa-a218-eb15343954c7",
+          "id": "b913f72d-3037-4530-9ec3-b6d8ced17977",
           "name": "p",
           "style": {
-            "id": "e0499b36-f4e8-4f73-bc9a-0dda4e41545f",
+            "id": "5790126f-2158-4900-b858-72d8195e75a6",
             "xl": {
               "width": "829px",
               "height": "196px",
               "fontSize": "18px",
               "marginTop": "32px",
               "textAlign": "center",
+              "fontFamily": "var(--font-poppins)",
               "fontWeight": 300,
               "paddingTop": ""
             },
@@ -515,6 +518,7 @@
               "fontSize": "18px",
               "marginTop": "32px",
               "textAlign": "center",
+              "fontFamily": "var(--font-poppins)",
               "fontWeight": 300,
               "paddingTop": ""
             },
@@ -540,10 +544,10 @@
           "aria": ""
         },
         {
-          "id": "3574c3c6-d55a-4efb-bbac-2e8fbcedc8f2",
+          "id": "08fb7604-b975-4705-9f34-210feb6f1068",
           "name": "img",
           "style": {
-            "id": "83cef01a-9ce0-487a-ae5a-793f6809cc67",
+            "id": "993ef1cd-f7da-4e7c-9541-cd1297fb8060",
             "xl": {
               "top": "-130px",
               "left": "-126px",
@@ -584,10 +588,10 @@
           "aria": ""
         },
         {
-          "id": "625511a8-db05-45f2-9bb3-84cd56de46fb",
+          "id": "e4327a2f-52e0-448e-9089-091261625bbe",
           "name": "img",
           "style": {
-            "id": "971d17c3-43af-4adb-bb67-5f2e9a15f7b4",
+            "id": "8411aa82-4d38-4f7c-bd84-791fe6f01e7d",
             "xl": {
               "top": "11px",
               "left": "1094px",
@@ -628,10 +632,10 @@
           "aria": ""
         },
         {
-          "id": "0acf4560-493e-446b-96b0-f4133629debd",
+          "id": "a8a679b2-ca78-40ff-83ae-60845d8d95b9",
           "name": "img",
           "style": {
-            "id": "2f36bb00-d03f-4f87-a64c-3267fb665df0",
+            "id": "792544f5-ff0e-49b7-b66a-c031a5595dad",
             "xl": {
               "top": "110px",
               "left": "511px",
@@ -671,11 +675,11 @@
       ]
     },
     {
-      "id": "1c4e0028-2a8a-40f8-9dca-89320ab1eb3d",
+      "id": "57e6089f-f603-4983-9600-c2bb5859bb71",
       "name": "section",
       "givenName": null,
       "style": {
-        "id": "9641d354-8980-429d-9e42-bec85692df6b",
+        "id": "7f0f42e3-9029-436a-8fb3-ede20efb931c",
         "xl": {
           "gap": "30px",
           "top": "0",
@@ -774,10 +778,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "05170189-4b9e-4c07-a300-d6c3e5286ab4",
+          "id": "83113ef0-54f5-4c86-a08f-0e15f06879a6",
           "name": "img",
           "style": {
-            "id": "e3dfbe2b-e0c3-492b-b62a-683cae053500",
+            "id": "1b62b074-9025-40f9-914c-8eab350876c6",
             "xl": {
               "width": "50vw",
               "height": "auto",
@@ -807,10 +811,10 @@
           "aria": ""
         },
         {
-          "id": "9162a54b-8a76-4d72-93a6-4f29e4438735",
+          "id": "73fdaa19-0b6e-4335-ba7e-98e87616ee4c",
           "name": "img",
           "style": {
-            "id": "1594e32e-97a5-406e-a2bf-aac3951926a6",
+            "id": "66825561-b3c2-4e3c-a5f7-8923538117dd",
             "xl": {
               "width": "50vw",
               "height": "auto",
@@ -841,10 +845,10 @@
           "aria": ""
         },
         {
-          "id": "0dbec06e-f13d-445e-8cb8-7b64878657c4",
+          "id": "fdbff28e-e6dc-48a3-80cf-1b0026880313",
           "name": "img",
           "style": {
-            "id": "ebea8ef2-5069-46a5-8e49-8dffff8c8323",
+            "id": "9f062c03-7248-4620-9c4c-4928a7cc7ec7",
             "xl": {
               "top": "245px",
               "left": "-278px",
@@ -882,10 +886,10 @@
           "aria": ""
         },
         {
-          "id": "1272b4a9-4bab-43c8-bc18-c74ec6aa7c36",
+          "id": "5e768d7e-2f89-4671-9d2d-2bf422729e1f",
           "name": "img",
           "style": {
-            "id": "8309c82c-16bd-4eaf-b8f9-ebe70300c7c4",
+            "id": "58a4b110-8796-4e6b-8d45-44afa429b862",
             "xl": {
               "top": "301px",
               "left": "1256px",
@@ -925,11 +929,11 @@
       ]
     },
     {
-      "id": "f081ba51-81f2-4943-bc87-8b69b80bbb01",
+      "id": "645a6c82-57df-44ae-941c-b3e6709c6b97",
       "name": "section",
       "givenName": null,
       "style": {
-        "id": "5535de22-fbad-4839-853a-cd9a89c766e4",
+        "id": "13aac05e-88ba-45bf-b56f-dc96fa59a71e",
         "xl": {
           "top": "0",
           "left": "0",
@@ -1017,22 +1021,22 @@
       "aria": null,
       "elements": [
         {
-          "id": "d55edcd7-481b-43f7-a22d-b53fe3815e70",
+          "id": "6748a81f-a97b-49b3-86d3-48a0b1fb501b",
           "name": "h2",
           "style": {
-            "id": "686ddfc9-f0ce-4c6a-86ba-d676c728ea09",
+            "id": "9d4060f6-4145-4de0-bd1e-732dfc13b4d4",
             "xl": {
               "fontSize": "24px",
               "textAlign": "center",
               "fontFamily": "var(--font-playfair)",
-              "fontWeight": 600,
+              "fontWeight": "500",
               "paddingTop": "40px"
             },
             "lg": {
               "fontSize": "24px",
               "textAlign": "center",
               "fontFamily": "var(--font-playfair)",
-              "fontWeight": 600,
+              "fontWeight": "500",
               "paddingTop": "40px"
             },
             "md": {
@@ -1057,11 +1061,11 @@
       ]
     },
     {
-      "id": "f793837e-85a3-4c88-93de-310b98264087",
+      "id": "bb08b9f0-714d-4ac0-9797-81624f083816",
       "name": "section",
       "givenName": "team photo",
       "style": {
-        "id": "4ab09ac6-9147-45ab-a533-97b496e917dd",
+        "id": "e8eada4e-37f9-4c6b-abbf-6a613d24043f",
         "xl": {
           "gap": "20px",
           "top": "0",
@@ -1159,11 +1163,11 @@
       "aria": null,
       "elements": [
         {
-          "id": "c061360c-1fda-4237-b47d-104e6a39aaf1",
+          "id": "40db6b4d-fe9a-4c92-bec7-7eb289a9e53b",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "83144124-63ca-4c21-9b95-aba61006e1d0",
+            "id": "ea3841d5-4345-4d14-a018-377d9f750ffb",
             "xl": {
               "top": "0",
               "left": "0",
@@ -1251,10 +1255,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "f550b2d8-7c70-46ed-a7db-fe6d0b5069ea",
+              "id": "7fd2b2fe-c6fc-4ec0-9a77-cca056223189",
               "name": "img",
               "style": {
-                "id": "11266726-4e8b-46aa-9f15-f5e1836333dd",
+                "id": "0d18b8af-871d-4978-81a9-37dd16920879",
                 "xl": {
                   "width": "400px",
                   "height": "",
@@ -1279,15 +1283,20 @@
               "aria": ""
             },
             {
-              "id": "ef23b317-a96a-42b5-a9cd-75f25ed03b95",
+              "id": "d4fe2a23-2a0e-49f8-a5d9-293632ce4bdc",
               "name": "h3",
               "style": {
-                "id": "c1eb5e62-1b53-4455-92bd-4fb9e3bc5a25",
+                "id": "dbb46cf3-81d8-47ac-82cf-5f7066249d5b",
                 "xl": {
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1302,16 +1311,20 @@
               "aria": ""
             },
             {
-              "id": "a434f70a-6135-4404-9b8a-8b07d771c41e",
+              "id": "a660e133-2437-4311-9659-72301f6d66bb",
               "name": "p",
               "style": {
-                "id": "53171149-01f5-40e8-81ec-0b3531e322a7",
+                "id": "5c16bc23-2e70-4b62-970d-355c16cf4a2c",
                 "xl": {
                   "width": "363px",
                   "fontSize": "18px",
                   "fontWeight": 300
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1328,11 +1341,11 @@
           ]
         },
         {
-          "id": "3f0110d6-9f94-4b8b-98fb-37d74e7d2ee3",
+          "id": "6d67e037-153a-4078-b60e-580ab391636e",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "0f47e461-7dd2-4ba4-bf70-3fd0359d0966",
+            "id": "ecf2dcb8-5c5b-4f73-ac7f-76e51b2726b2",
             "xl": {
               "top": "0",
               "left": "0",
@@ -1414,10 +1427,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "8efb17e7-dc98-4046-ba9a-122686c7f4ac",
+              "id": "5859f429-c0c8-4eac-b5a7-6e623702d354",
               "name": "img",
               "style": {
-                "id": "0770f974-cc9b-48b8-a7cd-16b9cf245f56",
+                "id": "f49f396d-8e24-481f-b544-e6a7943c4663",
                 "xl": {
                   "width": "400px",
                   "objectFit": "cover"
@@ -1440,16 +1453,21 @@
               "aria": ""
             },
             {
-              "id": "2148f1a1-aadc-4a68-9611-4b98c2b0678b",
+              "id": "e6f7bd24-d6a3-4fad-914b-54bf140085ca",
               "name": "h3",
               "style": {
-                "id": "c5c54145-312e-4b8a-9006-0ba34768f65e",
+                "id": "31111da6-c0e2-49a8-be0a-e08b03930218",
                 "xl": {
                   "width": "363px",
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1464,17 +1482,21 @@
               "aria": ""
             },
             {
-              "id": "4e4237cc-df5b-450f-b585-ee4a87e731b2",
+              "id": "be85f086-2aad-433c-b7ee-56da1fc8ec19",
               "name": "p",
               "style": {
-                "id": "0b2038c5-1500-44e8-800e-a683805ccd00",
+                "id": "bfdff2f6-1100-4cfe-bb26-034e719dbd9b",
                 "xl": {
                   "width": "363px",
                   "fontSize": "18px",
                   "fontWeight": 300,
                   "letterSpacing": "0px"
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1491,11 +1513,11 @@
           ]
         },
         {
-          "id": "48e039db-bf99-45ec-88ec-521d194d85f7",
+          "id": "f8cda09f-8df9-4607-be12-2b900e1028b9",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "6e250bf8-097b-4e15-8ad9-05173c3fa168",
+            "id": "26b70637-c062-4632-babf-8db703b5d638",
             "xl": {
               "top": "0",
               "left": "0",
@@ -1577,10 +1599,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "d7874e38-1938-4ac6-9b9a-c106e7aa2849",
+              "id": "10e806b7-a80c-4205-ad93-73a9556abe58",
               "name": "img",
               "style": {
-                "id": "2fc452f4-aa4a-4075-bcb3-11c5a0dadc31",
+                "id": "bc9b7264-7242-4179-a28f-a42f7aeaacdc",
                 "xl": {
                   "width": "400px",
                   "height": "",
@@ -1604,16 +1626,21 @@
               "aria": ""
             },
             {
-              "id": "b605d4a8-1266-4c9c-aaaf-6733ac8c6736",
+              "id": "5bc3cf8e-ca85-48dc-9e8e-d3b88f9ad5a0",
               "name": "h3",
               "style": {
-                "id": "dca7b43f-0da9-4735-a9cb-edd1a994b264",
+                "id": "65c5a1c0-084e-40f4-944f-c8006a965048",
                 "xl": {
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500,
                   "letterSpacing": "0px"
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1628,16 +1655,20 @@
               "aria": ""
             },
             {
-              "id": "2bb66e94-c009-4196-aae8-f3e12c0afae3",
+              "id": "695d049f-5466-4d70-a7bd-927bb3ced3a5",
               "name": "p",
               "style": {
-                "id": "95f3e4be-07c6-4102-a92e-28fc8d173fd4",
+                "id": "1e7250e3-d531-4edd-a91f-48f1fe3f8503",
                 "xl": {
                   "fontSize": "18px",
                   "fontFamily": "var(--font-poppins)",
                   "fontWeight": 300
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1656,11 +1687,11 @@
       ]
     },
     {
-      "id": "38ae5d99-8a32-430c-aefd-35063cf7406d",
+      "id": "0e7babd1-4585-4c34-8317-a1bf6f7cca1b",
       "name": "section",
       "givenName": "team photo",
       "style": {
-        "id": "1a039578-41b6-4253-8bfa-c7bb004a456e",
+        "id": "770f7d10-eabe-4d50-a42e-ffb3c92f83b3",
         "xl": {
           "gap": "20px",
           "top": "0",
@@ -1758,11 +1789,11 @@
       "aria": null,
       "elements": [
         {
-          "id": "df3cced3-f8b1-4124-a04f-1c4cccaa2e92",
+          "id": "5335a4c1-285e-4928-8904-89a176d77dc1",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "2cd28269-a976-44a7-a91d-7e5e2f743398",
+            "id": "00aa92ad-907c-422f-b71d-1cae38075a52",
             "xl": {
               "top": "0",
               "left": "0",
@@ -1847,10 +1878,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "baeea292-7b0f-4845-985a-b4b6dac88676",
+              "id": "849473b3-89a3-485d-b520-acdf7549267c",
               "name": "img",
               "style": {
-                "id": "c747c2a9-4476-47ad-9eb9-09029f1c54ea",
+                "id": "c6c0ac56-d5ea-4b86-9cac-9564dff38a27",
                 "xl": {
                   "width": "400px",
                   "height": "",
@@ -1868,15 +1899,20 @@
               "aria": null
             },
             {
-              "id": "a98f5f9b-6144-4b4e-a629-84929aa7f2ee",
+              "id": "d5cf1e9c-44bd-4917-9d85-aa705f6dd6cf",
               "name": "h3",
               "style": {
-                "id": "cf0bc39f-82e6-4321-858c-1901e71e25e6",
+                "id": "f56698c2-a5ec-4c24-bbf3-481d57b5e67a",
                 "xl": {
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1886,16 +1922,20 @@
               "aria": null
             },
             {
-              "id": "d80441df-c62f-48a5-b705-6a5d42e7944b",
+              "id": "45c0a791-ecd9-4087-8813-4a5debd79192",
               "name": "p",
               "style": {
-                "id": "f14b1e4d-a4ce-468d-9c1a-4920b75c054a",
+                "id": "84015959-0a44-403f-9ea4-7cada571f9af",
                 "xl": {
                   "width": "363px",
                   "fontSize": "18px",
                   "fontWeight": 300
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -1907,11 +1947,11 @@
           ]
         },
         {
-          "id": "f9afe685-55ab-4908-ab1c-398bc25acf0c",
+          "id": "95d97c6e-33b0-431f-8a8f-54f5ba68fed5",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "9a6e7ae7-bccd-4b3e-9bf4-6e42a38304ba",
+            "id": "7c53450c-9c11-4514-afc7-6823176683c1",
             "xl": {
               "top": "0",
               "left": "0",
@@ -1993,10 +2033,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "414bf8ff-d477-4342-83fa-90bea7a00a91",
+              "id": "7c154567-2ec1-485b-9055-bfd31b42f6fa",
               "name": "img",
               "style": {
-                "id": "5371892d-ccde-45d9-8883-623988ef9c27",
+                "id": "ace1b84b-141b-4ca9-8432-717f2e223200",
                 "xl": {
                   "width": "400px",
                   "objectFit": "cover"
@@ -2013,16 +2053,21 @@
               "aria": null
             },
             {
-              "id": "f552d539-f7c5-423e-a70e-8adc03d717fa",
+              "id": "df054ed7-db3b-4c77-b263-fd64765cb9cf",
               "name": "h3",
               "style": {
-                "id": "229a9751-7c6e-4d7c-a579-2e15a4c039c5",
+                "id": "ac1c349e-b0e5-4a6c-b611-a850cf6c2b05",
                 "xl": {
                   "width": "363px",
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -2032,17 +2077,21 @@
               "aria": null
             },
             {
-              "id": "dc110b2c-948c-4911-9a0f-b586dc8541e7",
+              "id": "2bff9b4f-982b-49d5-b8a6-b2acf5526da8",
               "name": "p",
               "style": {
-                "id": "fb9d8885-b6c3-4339-9a21-e38cfe422a9b",
+                "id": "758c0a6f-303e-4fcc-a696-9b9cf997d10c",
                 "xl": {
                   "width": "363px",
                   "fontSize": "18px",
                   "fontWeight": 300,
                   "letterSpacing": "0px"
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -2054,11 +2103,11 @@
           ]
         },
         {
-          "id": "4a4036b5-f0b7-4233-b3c3-ed69e4279778",
+          "id": "3d87d788-5f50-41ea-9e28-f37f561053db",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "8f9a8f4e-bf9e-4192-9191-e2e0c0018fd2",
+            "id": "76c05608-fab3-45a9-99e3-912ee7215ae7",
             "xl": {
               "top": "0",
               "left": "0",
@@ -2140,10 +2189,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "be105556-aa7c-4a1d-bd6b-4db435bdbfc1",
+              "id": "8ca56e9c-e719-4a90-974f-4ed5ad19d89c",
               "name": "img",
               "style": {
-                "id": "95fb2f21-07b5-4a7c-a958-6fc80d24cc34",
+                "id": "15c0c992-37f7-4564-ab1d-42bf027ac93c",
                 "xl": {
                   "width": "400px",
                   "height": "",
@@ -2162,16 +2211,21 @@
               "aria": null
             },
             {
-              "id": "e4d0961d-de38-41e0-a4c5-6e2fc35c3052",
+              "id": "84eeddf9-7aea-4fac-ba1e-2c1928ded6b0",
               "name": "h3",
               "style": {
-                "id": "2461b745-dc99-4a54-8889-28456df6cc0d",
+                "id": "7e3733ce-8b94-4ff3-9ed2-1abdd481f22d",
                 "xl": {
+                  "fontSize": "18px",
                   "fontFamily": "var(--font-playfair)",
                   "fontWeight": 500,
                   "letterSpacing": "0px"
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "500"
+                },
                 "md": {},
                 "sm": {}
               },
@@ -2181,16 +2235,20 @@
               "aria": null
             },
             {
-              "id": "0261b267-6cac-4152-9ebf-0e97ca5e4931",
+              "id": "18812d5a-4301-49b3-ae78-7a29cd45fc83",
               "name": "p",
               "style": {
-                "id": "81563343-e32d-4d2a-804e-2a2892e6dc1d",
+                "id": "96301374-a6ef-46c9-8f0d-3ae92fd41adc",
                 "xl": {
                   "fontSize": "18px",
                   "fontFamily": "var(--font-poppins)",
                   "fontWeight": 300
                 },
-                "lg": {},
+                "lg": {
+                  "fontSize": "18px",
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "300"
+                },
                 "md": {},
                 "sm": {}
               },

@@ -1,21 +1,21 @@
 {
-  "id": "daa00635-8399-41ba-89a4-f4cb9fe7fd0d",
+  "id": "a3763bdc-699d-4a4d-9123-c2a3dd4e9131",
   "name": "Private Dinning",
   "route": "/privatedinning",
   "locationId": null,
-  "createdAt": "2025-08-28T06:23:05.166Z",
-  "updatedAt": "2025-09-01T04:10:36.550Z",
+  "createdAt": "2025-09-01T11:31:05.388Z",
+  "updatedAt": "2025-09-03T05:12:40.173Z",
   "editedWidth": "1280px",
   "Status": true,
   "editorId": null,
   "verifierId": null,
   "contents": [
     {
-      "id": "80f0e37d-60d6-4c21-86b8-3700c3950e06",
+      "id": "ba50da7f-d504-4258-a3dd-6b3302b35042",
       "name": "section",
-      "givenName": "Hero Banner",
+      "givenName": "private hero section",
       "style": {
-        "id": "6643b7ed-2bab-4751-bccf-47b42a6979b1",
+        "id": "7c7e9e76-d419-4218-94bd-00d126bc75c6",
         "xl": {
           "top": 2.025009155273438,
           "left": -5.987499237060547,
@@ -105,10 +105,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "6032834f-bdb3-43fa-9750-1f9f0a38e046",
+          "id": "c9d110be-e76c-4b96-9fa2-a6a24b7f5d64",
           "name": "p",
           "style": {
-            "id": "a971d1d0-7394-4ae3-a483-811054e4150b",
+            "id": "69cfedfe-f2b5-4c12-9fa5-da66071c9c44",
             "xl": {
               "color": "#ffffff",
               "display": "block",
@@ -128,17 +128,17 @@
           "aria": null
         },
         {
-          "id": "a011ebf4-a9e3-4ea9-bb6e-64fc52e7a734",
+          "id": "cb80d4b8-df0c-4000-a849-7f73a871dee9",
           "name": "h1",
           "style": {
-            "id": "05ba6615-95e5-4e60-9e5d-e1e244aacee9",
+            "id": "896733eb-cb7e-4a51-bf2b-fedd79767f13",
             "xl": {
               "color": "#ffffff",
               "display": "block",
               "fontSize": "54px",
               "textAlign": "center",
               "fontFamily": "var(--font-playfair)",
-              "fontWeight": 500
+              "fontWeight": "400"
             },
             "lg": {},
             "md": {},
@@ -150,10 +150,10 @@
           "aria": null
         },
         {
-          "id": "0855e339-7c03-43bb-aa2c-22db3a7f6e7d",
+          "id": "924f507a-f93a-4618-b3bc-4a163ffecd2d",
           "name": "division",
           "style": {
-            "id": "5559651d-deea-4afd-80c0-f2d32205d734",
+            "id": "d8d3173d-27e1-4233-9ab9-b7db369c7430",
             "xl": {
               "width": "587px",
               "height": "1px",
@@ -188,15 +188,16 @@
           "aria": null
         },
         {
-          "id": "b10e2662-935c-49d4-a86b-8214e2652dd0",
+          "id": "c5a17cb6-b316-45b0-8dda-614af8afefd9",
           "name": "p",
           "style": {
-            "id": "a9cf4853-3cec-4fe8-bba9-6ff57c5a754e",
+            "id": "baaba562-c613-4fe7-b406-8ad30cd95b06",
             "xl": {
               "color": "#ffd898",
               "display": "block",
               "fontSize": "24px",
-              "marginTop": "10px"
+              "marginTop": "10px",
+              "fontWeight": "300"
             },
             "lg": {},
             "md": {},
@@ -208,13 +209,13 @@
           "aria": null
         },
         {
-          "id": "bc7e2c85-f962-46e0-ad99-fc77589a1096",
+          "id": "12a575e9-5b97-4ab6-9c73-895441c79644",
           "name": "img",
           "style": {
-            "id": "2ed958f5-6944-473e-9a67-b76e354953e5",
+            "id": "195a5ea1-6cf5-4bf8-b63f-20fb1cef2a16",
             "xl": {
-              "top": "60px",
-              "left": "305px",
+              "top": "62px",
+              "left": "160px",
               "width": "1000px",
               "filter": "brightness(0.5)",
               "zIndex": "1",
@@ -232,11 +233,11 @@
       ]
     },
     {
-      "id": "84e2092c-72b7-4336-bdf5-2ff1d7748ec1",
+      "id": "daa067c1-7f35-4349-8b44-3206e888b79a",
       "name": "section",
       "givenName": "midinfosection",
       "style": {
-        "id": "a8272987-7422-4514-b185-60f45a810dda",
+        "id": "638f73ea-6902-4cd1-a365-be6a16a7c3a7",
         "xl": {
           "top": "0",
           "left": "0",
@@ -321,10 +322,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "1060e180-e766-450f-95bd-3a9a667f32e7",
+          "id": "82fd8af8-d402-4649-aae5-9d5be34fcba4",
           "name": "h2",
           "style": {
-            "id": "7cca36e3-9793-4c46-a5cc-c8685a1c6d02",
+            "id": "8fbf793a-d31b-4c1c-a5af-53aa23c75c80",
             "xl": {
               "fontSize": "24px",
               "fontFamily": "var(--font-playfair)",
@@ -341,12 +342,12 @@
           "aria": null
         },
         {
-          "id": "3cd6d509-c99a-4c24-b667-2cb848b820d0",
+          "id": "d4c77a55-493b-4295-aca6-fd5d04cc1ec2",
           "name": "division",
           "style": {
-            "id": "4beed68e-f1d3-4793-8538-0e2c3ba0c945",
+            "id": "f0fe11b2-7f85-46f9-a653-aa76985661c6",
             "xl": {
-              "width": "131px",
+              "width": "170px",
               "height": "2px",
               "marginTop": "10px",
               "background": "linear-gradient(to right, red, blue)",
@@ -378,10 +379,10 @@
           "aria": null
         },
         {
-          "id": "229dfd03-c302-43ec-9a44-268cf148ec06",
+          "id": "5be5fd66-e186-49db-b39f-1dfc420cdac4",
           "name": "p",
           "style": {
-            "id": "d7ee6d31-527c-42dc-b166-9834321b42fd",
+            "id": "13fc0837-2d8e-4e50-8bda-4d1b37d1028a",
             "xl": {
               "width": "404px",
               "height": "auto",
@@ -401,13 +402,13 @@
           "aria": null
         },
         {
-          "id": "0f9682cc-a70b-40fa-a448-b0f447174e4d",
+          "id": "919fae16-2248-427b-927e-c19fe5374824",
           "name": "img",
           "style": {
-            "id": "7174da10-e527-45af-ad52-5f72136bb308",
+            "id": "8a2df1f5-2403-4054-9da7-6d95b13a2831",
             "xl": {
-              "top": "-130px",
-              "left": "-126px",
+              "top": "-162px",
+              "left": "-102px",
               "width": "550px",
               "filter": "brightness(0.8) grayscale(60%)",
               "height": "486px",
@@ -425,10 +426,10 @@
           "aria": null
         },
         {
-          "id": "e5deaff6-fb85-4060-9048-b258f9ffd14a",
+          "id": "c43b6254-04ac-4c64-80bf-a67e9cc73c03",
           "name": "img",
           "style": {
-            "id": "4a48a5a4-7545-4de8-954a-5c4023c1dd56",
+            "id": "7edcdb93-2761-43be-8579-bce2eee6de7f",
             "xl": {
               "top": "11px",
               "left": "1094px",
@@ -448,13 +449,13 @@
           "aria": null
         },
         {
-          "id": "5b8b1d8d-6283-47a9-8600-dc63b536c811",
+          "id": "e69c2f68-dc54-4fe1-8320-ff622c9b5bf8",
           "name": "img",
           "style": {
-            "id": "5f8f9d23-d142-4041-9369-a0ef59e6131e",
+            "id": "ca50ca17-d63b-41ce-90fb-22ad2c7af3e8",
             "xl": {
-              "top": "110px",
-              "left": "511px",
+              "top": "120px",
+              "left": "400px",
               "width": "510px",
               "height": "486px",
               "zIndex": "1",
@@ -470,10 +471,10 @@
           "aria": null
         },
         {
-          "id": "051acc04-3599-45d9-a3c9-26c92236f27f",
+          "id": "f5b49db4-b949-45fd-96c4-d5725575e459",
           "name": "p",
           "style": {
-            "id": "6a8d45c6-7d81-4cca-ae2f-4905ce8bf31f",
+            "id": "be6718a8-0eaf-419c-b365-d06108c35218",
             "xl": {
               "width": "829px",
               "height": "auto",
@@ -481,6 +482,7 @@
               "marginTop": "30px",
               "textAlign": "center",
               "fontFamily": "var(--font-poppins)",
+              "fontWeight": "300",
               "paddingTop": ""
             },
             "lg": {},
@@ -500,11 +502,11 @@
       ]
     },
     {
-      "id": "c970bc44-f72b-4925-bbe7-b842b4e373d2",
+      "id": "f7944930-9625-419b-942f-d1e77b8ae949",
       "name": "section",
       "givenName": "privateevent reuse",
       "style": {
-        "id": "8cdcfbd7-0336-469a-a10e-500e62a583bd",
+        "id": "7b8b9ac5-e9c2-45d5-8e99-d939a3ff8c0f",
         "xl": {
           "top": "0",
           "left": "0",
@@ -586,10 +588,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "7e767026-22ba-4171-9161-18fb95a4c3c1",
+          "id": "9597d48a-a857-4915-99e9-8f53c55aa761",
           "name": "img",
           "style": {
-            "id": "96f6913e-f5fb-4ffc-a564-1963f6dfa537",
+            "id": "bfda30f4-e7eb-43e5-8db1-de479efc75f6",
             "xl": {
               "width": "921px",
               "height": "651px",
@@ -605,11 +607,11 @@
           "aria": null
         },
         {
-          "id": "67577252-283c-4983-855d-d7d6267cdec0",
+          "id": "76941824-301d-4372-9b10-339133780973",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "dca1be98-1ed6-4de0-83b2-3cfef7b86fed",
+            "id": "acb6b2ae-703c-4233-8e6a-79d9d62d9cbf",
             "xl": {
               "top": 86.90249694824219,
               "left": 965.4000244140625,
@@ -693,10 +695,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "b81d3840-4302-49c2-9707-4868fb1c8684",
+              "id": "c7971078-7078-4943-bc81-6122b687f8a7",
               "name": "img",
               "style": {
-                "id": "11a602b0-880a-4544-8263-ef0b6ef6bab7",
+                "id": "8dba39c7-272f-41b1-b81d-c8374296dbdc",
                 "xl": {
                   "top": "152px",
                   "left": "-34px",
@@ -717,13 +719,14 @@
               "aria": null
             },
             {
-              "id": "8d806490-9d69-43df-b533-a98b31d29b0e",
+              "id": "343f4599-e759-4740-8d56-91203d10b90c",
               "name": "h2",
               "style": {
-                "id": "70e9f50a-bed5-4780-afa1-5a77284a673c",
+                "id": "a07ffc5c-442a-43c9-ba2d-c3f3df8d672f",
                 "xl": {
                   "fontSize": "24px",
-                  "fontFamily": "var(--font-playfair)"
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "600"
                 },
                 "lg": {},
                 "md": {},
@@ -740,13 +743,13 @@
               "aria": ""
             },
             {
-              "id": "dc1e551b-de16-43e6-a17a-6f99d93dbfbb",
+              "id": "9629c66c-0ac8-4286-9b8d-9438176518ad",
               "name": "division",
               "style": {
-                "id": "e4240353-3b1f-465d-898d-e49b8b826865",
+                "id": "c3c8a2f8-62e3-436b-9e83-bce718799c4d",
                 "xl": {
                   "width": "159px",
-                  "height": "1px",
+                  "height": "2px",
                   "marginTop": "12px",
                   "background": "linear-gradient(to right, red, blue)",
                   "backgroundColor": "transparent",
@@ -782,14 +785,15 @@
               "aria": ""
             },
             {
-              "id": "03cc119e-56bd-4571-8e41-844c8989690b",
+              "id": "2c1b6f54-2cb6-4ec6-894f-7ddfe1b08cc1",
               "name": "p",
               "style": {
-                "id": "e799afde-3adb-47b6-96dc-112a0c592be9",
+                "id": "93b35c85-5970-4799-a0ac-dbfaec7cda60",
                 "xl": {
                   "fontSize": "16px",
                   "marginTop": "24px",
-                  "fontFamily": "var(--font-poppins)"
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "500"
                 },
                 "lg": {},
                 "md": {},
@@ -806,10 +810,10 @@
               "aria": ""
             },
             {
-              "id": "cdb00649-596b-4cf0-be85-153d18045213",
+              "id": "4fab422b-b08d-4b5b-a5f6-657ae41a3875",
               "name": "p",
               "style": {
-                "id": "85f84e8d-e14c-4c8e-8166-ad3e62192dd0",
+                "id": "c1e4ee12-3d51-4b28-81ef-0eb04070c22a",
                 "xl": {
                   "top": "19px",
                   "color": "#515151",
@@ -833,17 +837,18 @@
               "aria": ""
             },
             {
-              "id": "c0076bf9-8cab-4434-8851-85c6840f3827",
+              "id": "4f0cfae4-c265-42c8-b46f-308c3e1d44ad",
               "name": "p",
               "style": {
-                "id": "ed716e23-7ad9-492f-bbd4-0263bcc59e65",
+                "id": "2d3f0b8a-e37d-4f4f-92f2-82242bd68f10",
                 "xl": {
                   "top": "40px",
-                  "width": "160px",
+                  "width": "148px",
                   "bottom": "",
-                  "fontSize": "18px",
+                  "fontSize": "16px",
                   "fontWeight": 400,
                   "paddingTop": "12px",
+                  "borderWidth": "1px",
                   "paddingLeft": "27px",
                   "paddingRight": "24px",
                   "paddingBottom": "12px",
@@ -866,10 +871,10 @@
           ]
         },
         {
-          "id": "2a2b2abd-1a0d-43f6-9edd-3b21855b1be1",
+          "id": "d2408554-3539-4ba6-8b4a-67f7d3850ae1",
           "name": "img",
           "style": {
-            "id": "0bb3cc5c-048f-4eb4-bb9e-cbb94ec40fe3",
+            "id": "ea2e61ac-a58d-4fbc-a3d2-910ee7f287ae",
             "xl": {
               "top": "254px",
               "left": "-675px",
@@ -891,10 +896,10 @@
           "aria": ""
         },
         {
-          "id": "22823332-0fa9-41e5-8d2e-ce6bc760f244",
+          "id": "5133bf85-b8ee-4d91-a4d8-6647c474422a",
           "name": "img",
           "style": {
-            "id": "0de54ba9-5732-4224-941e-7bd7c3f7ef50",
+            "id": "de753c9c-39e1-4980-85ca-f6a9c05f7935",
             "xl": {
               "top": "360px",
               "left": "1178px",
@@ -918,11 +923,11 @@
       ]
     },
     {
-      "id": "ae46e4e4-65cd-41bc-9680-5b0aff4ad0e8",
+      "id": "d2c718a1-60cb-46c7-b7cd-bb6ff2d7ccac",
       "name": "section",
       "givenName": "wedding and sangeet reuse",
       "style": {
-        "id": "a10b334d-ded1-4ad1-97d8-08450e7a8dec",
+        "id": "7717ed02-1852-44f4-bc9a-d85bb0808ef7",
         "xl": {
           "top": "0",
           "left": "0",
@@ -1005,10 +1010,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "0737f0f1-f4d5-47e3-8254-0579c4b4167e",
+          "id": "2d52f51b-8765-4084-92d0-497b4cb0ff2c",
           "name": "img",
           "style": {
-            "id": "bff0802b-f2a9-4f25-8fd0-2a2a917fc0dd",
+            "id": "fe4d5306-1ba7-4cff-b198-3e761ab92de5",
             "xl": {
               "width": "921px",
               "height": "651px",
@@ -1025,11 +1030,11 @@
           "aria": null
         },
         {
-          "id": "e3527f89-57f0-4ac0-867d-dd81c0b4833f",
+          "id": "590c8a99-3fe1-42c7-b2ae-c4a2795ab6b8",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "8f8e8b3c-20ae-4a30-9260-4f7b0fb5813a",
+            "id": "725e0c2f-5c6a-4f3f-a122-af14d311b5c7",
             "xl": {
               "top": 86.90249694824219,
               "left": 965.4000244140625,
@@ -1113,13 +1118,13 @@
           "aria": null,
           "elements": [
             {
-              "id": "50875e7b-d546-4d8f-b46f-8b76a8ca23f6",
+              "id": "f15f6100-d1c6-49de-bb6b-fbe995f0a8b4",
               "name": "img",
               "style": {
-                "id": "4390ca1f-35ea-4ad7-986c-5a4240e06c0e",
+                "id": "9f291a79-76bb-466c-8e64-219e6b0bb2d2",
                 "xl": {
-                  "top": "152px",
-                  "left": "-34px",
+                  "top": "128px",
+                  "left": "-28px",
                   "width": "500px",
                   "height": "",
                   "zIndex": "1",
@@ -1137,13 +1142,14 @@
               "aria": null
             },
             {
-              "id": "9f891bfd-1f93-4e73-92fa-94b8b350d31f",
+              "id": "2a51e1df-3f66-4eb5-b5e6-f1ec8649e495",
               "name": "h2",
               "style": {
-                "id": "dadfcdb9-1330-480c-8674-20fa4f7c9f50",
+                "id": "ed59d990-c117-46b9-88ba-bf457b5765c4",
                 "xl": {
                   "fontSize": "24px",
-                  "fontFamily": "var(--font-playfair)"
+                  "fontFamily": "var(--font-playfair)",
+                  "fontWeight": "600"
                 },
                 "lg": {},
                 "md": {},
@@ -1155,13 +1161,13 @@
               "aria": null
             },
             {
-              "id": "b039e07c-196a-479f-951d-176eb54d34c3",
+              "id": "fee250da-6d38-4f2c-8d8b-b335e6a4f529",
               "name": "division",
               "style": {
-                "id": "2d2ca60f-4503-4045-8d20-2d545397435d",
+                "id": "e266fe03-a1db-4e73-876e-74525ed73d65",
                 "xl": {
                   "width": "159px",
-                  "height": "1px",
+                  "height": "2px",
                   "marginTop": "12px",
                   "background": "linear-gradient(to right, red, blue)",
                   "backgroundColor": "transparent",
@@ -1192,14 +1198,15 @@
               "aria": null
             },
             {
-              "id": "f1ff3eaa-1ca6-4ec0-95ab-c18117dac554",
+              "id": "b8c921a4-084f-437b-97e1-8cfe73adb3c2",
               "name": "p",
               "style": {
-                "id": "f4f3c284-d87f-448e-a06d-c92582cdec4e",
+                "id": "100c57fa-5074-4730-97ce-fcbdcd5b43fc",
                 "xl": {
                   "fontSize": "16px",
                   "marginTop": "24px",
-                  "fontFamily": "var(--font-poppins)"
+                  "fontFamily": "var(--font-poppins)",
+                  "fontWeight": "500"
                 },
                 "lg": {},
                 "md": {},
@@ -1211,14 +1218,14 @@
               "aria": null
             },
             {
-              "id": "6de9b666-b9ed-4d01-86f7-dd28c0001ac5",
+              "id": "9d370d33-5990-4bff-8d27-16d1ccfbe40a",
               "name": "p",
               "style": {
-                "id": "2e8900a5-d0cb-40fd-a6e9-26965a0940e2",
+                "id": "ce948f23-a155-43c4-a496-3a22eb2768bc",
                 "xl": {
                   "top": "19px",
                   "color": "#ffffff",
-                  "width": "148px",
+                  "width": "150px",
                   "bottom": "",
                   "height": "48px",
                   "fontSize": "16px",
@@ -1226,6 +1233,7 @@
                   "fontFamily": "var(--font-poppins)",
                   "fontWeight": 400,
                   "paddingTop": "12px",
+                  "borderWidth": "1px",
                   "paddingLeft": "27px",
                   "paddingRight": "27px ",
                   "paddingBottom": "12px",
@@ -1243,13 +1251,13 @@
           ]
         },
         {
-          "id": "81a5499d-248e-4103-bbec-af8d20b1cf3a",
+          "id": "f2309749-2084-4424-aeca-3718587d0761",
           "name": "img",
           "style": {
-            "id": "273b28b9-1d67-46f5-bda3-97911b626734",
+            "id": "f90409a2-59fc-40ae-8d8c-d409ba2ef807",
             "xl": {
-              "top": "482px",
-              "left": "-641px",
+              "top": "607px",
+              "left": "-651px",
               "zIndex": "1",
               "position": "absolute"
             },
@@ -1263,10 +1271,10 @@
           "aria": null
         },
         {
-          "id": "6544c44e-283c-45fa-9af7-ce03299d7f49",
+          "id": "3c488d58-5680-43a3-866d-7dc563b34ae0",
           "name": "img",
           "style": {
-            "id": "953a094e-0c61-48f6-812f-c0402ac4b499",
+            "id": "29e482ec-618f-4272-be66-4b53280b2c07",
             "xl": {
               "top": "-358px",
               "left": "1255px",
@@ -1285,11 +1293,11 @@
       ]
     },
     {
-      "id": "110e8eb4-f929-41a2-926d-fdff2f186802",
+      "id": "d097747e-59f0-44e5-80d3-f5b3ce0c7ef5",
       "name": "section",
       "givenName": "signature dishes",
       "style": {
-        "id": "df6d51de-4020-4704-8387-fa57a0941176",
+        "id": "1deef561-94c8-4c9b-ab97-935715eaa433",
         "xl": {
           "gap": "181px",
           "top": "0",
@@ -1372,10 +1380,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "fb400e97-2d90-46da-9d1d-23601885f401",
+          "id": "c6feb624-d1dd-4f31-a042-01165fdfeda4",
           "name": "h2",
           "style": {
-            "id": "66d42723-a0eb-474b-ac53-501b35302c4b",
+            "id": "69d18b06-631b-4824-b432-37dcde3b757e",
             "xl": {
               "width": "365px",
               "fontSize": "24px",
@@ -1392,10 +1400,10 @@
           "aria": null
         },
         {
-          "id": "250ccb87-3925-49e8-9d76-f62b534055f1",
+          "id": "39989f09-9c5c-429d-82d9-3ae232cf26de",
           "name": "p",
           "style": {
-            "id": "63815425-ab69-4e8f-bd63-573c655f8698",
+            "id": "f280f9ac-7375-4ae3-9e40-33f4dc092963",
             "xl": {
               "width": "688px",
               "fontFamily": "var(--font-poppins)"
@@ -1410,10 +1418,10 @@
           "aria": null
         },
         {
-          "id": "5b742128-f8ec-4e79-9660-11a50e75720c",
+          "id": "89d123a8-7925-4f1e-aef2-77202ed6e718",
           "name": "img",
           "style": {
-            "id": "fe428942-c450-4ddc-98e7-55e1c06e7661",
+            "id": "f5ef41e3-1f19-43bf-9c18-52915472939d",
             "xl": {
               "top": "-79px",
               "left": "1086px",
@@ -1433,11 +1441,11 @@
       ]
     },
     {
-      "id": "f411e979-e178-41ba-85ea-858efc15435d",
+      "id": "0016dcb5-c181-40cd-83e4-e07734c79c30",
       "name": "section",
       "givenName": "animation hover",
       "style": {
-        "id": "1324b129-3fe2-4917-a46a-da280940589e",
+        "id": "2eb2a4aa-b613-41bd-8a73-2df229a9bf9e",
         "xl": {
           "gap": "30px",
           "top": "0",
@@ -1521,10 +1529,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "0ca53b6b-0fd3-4406-8ad7-5e11163c9262",
+          "id": "31eb6963-21c3-4cd7-bc46-94ef011a30e3",
           "name": "img",
           "style": {
-            "id": "52dba2ca-ec0c-45e8-9fe5-9fc94b80266f",
+            "id": "66aa806c-acfc-45de-b066-e7b106969dac",
             "xl": {
               "top": "334px",
               "left": "1264px",
@@ -1542,11 +1550,11 @@
           "aria": null
         },
         {
-          "id": "5bc90aa3-e55f-4f80-8864-507863647b72",
+          "id": "3d9bf9aa-aae9-4ae5-a232-a98c0436cd3f",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "63cb8a31-27cf-42e3-beca-01cdfa4a6708",
+            "id": "d6c5b9cd-38dc-4f6a-b807-9937862c67cb",
             "xl": {
               "gap": "25px",
               "top": "0",
@@ -1638,10 +1646,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "34ae2b56-7bdf-4a8b-87a2-6ffc8eb953ba",
+              "id": "a0e73f65-b402-4b2f-a3ca-8c582e138ca5",
               "name": "h3",
               "style": {
-                "id": "34ef38d4-3f0d-4ee1-898e-0e32f59fe2b5",
+                "id": "56e0297d-2d80-4ca9-85b7-2c25f1d09f80",
                 "xl": {
                   "display": "none",
                   "fontSize": "24px",
@@ -1657,10 +1665,10 @@
               "aria": null
             },
             {
-              "id": "fde32984-80c7-4b68-a541-39869a66f7a5",
+              "id": "12fbe961-3794-4d80-9389-75fdbc28353e",
               "name": "p",
               "style": {
-                "id": "b44f9cfa-619e-443d-b4b5-91bf7c608f60",
+                "id": "3ac0366f-d543-4c62-aba6-38f4fb660f69",
                 "xl": {
                   "display": "none",
                   "fontSize": "14px",
@@ -1678,10 +1686,10 @@
           ]
         },
         {
-          "id": "886d20d4-aaf7-4d80-ac71-7686604a386c",
+          "id": "92ea9f39-0744-479e-b38a-e00df391379b",
           "name": "division",
           "style": {
-            "id": "3dee97bf-2c27-42df-ac35-a57863ff4275",
+            "id": "dfbdf5af-4964-4a57-a9fb-f8c5f0f3109f",
             "xl": {
               "width": "1px",
               "height": "",
@@ -1714,11 +1722,11 @@
           "aria": null
         },
         {
-          "id": "254fde42-3f16-4977-b9a7-b9bb771a73db",
+          "id": "1529a24d-55ef-4cf0-a6ea-b165df4cf6ce",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "c129dbae-8dcc-471c-ac9b-afa720e83bc2",
+            "id": "9664ee62-0def-4e22-a7ce-663a2caec016",
             "xl": {
               "gap": "25px",
               "top": "0",
@@ -1808,10 +1816,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "09a20268-45b3-4261-ad13-6787efa85d92",
+              "id": "77260748-3458-464c-a1cd-348169c05270",
               "name": "h3",
               "style": {
-                "id": "d2b00a9c-1ce1-48bf-9a5c-803d91ec5a48",
+                "id": "3f235f27-9683-4135-85ff-762c6c975561",
                 "xl": {
                   "display": "none",
                   "fontSize": "24px",
@@ -1827,10 +1835,10 @@
               "aria": null
             },
             {
-              "id": "a484440f-5707-4460-99b6-b7a88fa620de",
+              "id": "e651b382-9855-43ba-bc23-9c4754956113",
               "name": "p",
               "style": {
-                "id": "84fb59f1-4b5e-4b88-bb78-5924a244c17f",
+                "id": "f3db6ca7-c6cd-448c-85ca-6bd50a1ed457",
                 "xl": {
                   "display": "none",
                   "textAlign": "center"
@@ -1847,10 +1855,10 @@
           ]
         },
         {
-          "id": "db672a12-ab93-4f49-b1d1-b54527c41d2e",
+          "id": "1f53c859-dce1-400b-bfd7-48fc805df156",
           "name": "division",
           "style": {
-            "id": "0691debe-900d-4599-bb1e-0798cae6ec0e",
+            "id": "18fe2825-c23b-4221-aaa4-807c2982a823",
             "xl": {
               "width": "1px",
               "height": "",
@@ -1883,11 +1891,11 @@
           "aria": null
         },
         {
-          "id": "9fd9d59e-a9c1-4ff8-8ff0-fe561dda546c",
+          "id": "d3858e7c-7aa2-4c4f-a350-e5ffacdd6cdc",
           "name": "section",
           "givenName": null,
           "style": {
-            "id": "fea734ef-577a-4a31-83e6-eb9b696421b4",
+            "id": "566c7ce7-c372-43fe-ac58-f05ad2301525",
             "xl": {
               "gap": "25px",
               "top": "0",
@@ -1978,10 +1986,10 @@
           "aria": null,
           "elements": [
             {
-              "id": "8b174311-1077-4887-ac45-36942a2ed1f3",
+              "id": "d0420d3c-ab92-46e2-a8b5-17f1ccf8d433",
               "name": "h3",
               "style": {
-                "id": "e2cc6fde-fc7e-4879-a88e-f34a3902785b",
+                "id": "72bf52ec-0468-4504-a8e1-36c16787c49a",
                 "xl": {
                   "display": "none",
                   "fontSize": "24px",
@@ -1998,10 +2006,10 @@
               "aria": null
             },
             {
-              "id": "43dcc7e5-211a-41df-88e8-ebde0d7cffd9",
+              "id": "e9f59a5e-64ff-4b4e-ab86-015cf375353d",
               "name": "p",
               "style": {
-                "id": "67da210a-bd1b-4437-8f40-4b76a809e94e",
+                "id": "178570c9-5c69-4378-a609-0c0eaa9dc72e",
                 "xl": {
                   "display": "none",
                   "textAlign": "center"
@@ -2020,11 +2028,11 @@
       ]
     },
     {
-      "id": "b6516007-dbe2-4a0a-a77c-8403e834add1",
+      "id": "7ef803c9-a430-4397-b464-bb625f111d7c",
       "name": "section",
       "givenName": null,
       "style": {
-        "id": "9e65807a-c483-4379-b912-ce19ef7bc0a7",
+        "id": "e7708c5e-413d-4494-a6ef-bd7ec7a6c39c",
         "xl": {
           "top": "0",
           "left": "0",
@@ -2111,10 +2119,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "5fce70f4-892c-41c3-9ec3-1beb083a8b1b",
+          "id": "c0aad6c0-8857-4f9b-91b4-7f294e0286af",
           "name": "p",
           "style": {
-            "id": "95d8d9bb-3ed7-4c88-bb6f-5fcace768817",
+            "id": "78a98615-bca9-46ea-a1e9-ad7413f0241a",
             "xl": {
               "color": "#ffffff",
               "width": "148px",
@@ -2142,10 +2150,10 @@
           "aria": ""
         },
         {
-          "id": "99195c48-63af-4e59-baad-3da238ce1a4a",
+          "id": "a8b561e4-3fd6-4ef3-abbe-ada2841a7937",
           "name": "img",
           "style": {
-            "id": "517a39a3-3693-4b79-83a0-9b615f1ca3b2",
+            "id": "549a1769-0e46-47b4-9a32-438cec8a593c",
             "xl": {
               "top": "-66px",
               "left": "-342px",
@@ -2167,13 +2175,13 @@
           "aria": ""
         },
         {
-          "id": "1e845cd0-47b5-46f2-80cf-bb2014bc87fd",
+          "id": "cb6e05a2-da70-45ba-a244-c7088a5b792a",
           "name": "img",
           "style": {
-            "id": "95f9f1e9-5444-4557-86f8-d4f4a067c5d7",
+            "id": "af01729f-2f18-4511-8456-e1d3fa612e6c",
             "xl": {
-              "top": "-248px",
-              "left": "1246px",
+              "top": "-247px",
+              "left": "1198px",
               "filter": "brightness(1.8)",
               "zIndex": "1",
               "position": "absolute"
@@ -2195,11 +2203,11 @@
       ]
     },
     {
-      "id": "591f651d-ed3e-4215-b1c0-223c0af62437",
+      "id": "00aed7a4-0e0b-4b76-b20b-d7a124de6e46",
       "name": "section",
       "givenName": "gallery card section ",
       "style": {
-        "id": "6562216f-87cd-4089-b474-30c9074d45a4",
+        "id": "334b8425-66b5-4654-9ce1-6992c1d432d4",
         "xl": {
           "top": "0",
           "left": "0",
@@ -2284,10 +2292,10 @@
       "aria": null,
       "elements": [
         {
-          "id": "fdc14805-bd9d-4e4e-b13e-acf079f31d68",
+          "id": "550f04db-4f44-4f87-aaaa-25010ecd22b6",
           "name": "img",
           "style": {
-            "id": "9f2f02e2-3cf8-4082-828c-0ec2e9ad075f",
+            "id": "019b9d96-b2db-4753-acdc-f1ce8b3be093",
             "xl": {
               "width": "483px",
               "height": "342px"
@@ -2307,10 +2315,10 @@
           "aria": ""
         },
         {
-          "id": "75c4d0a1-3afb-4a17-9142-80e2287b7a35",
+          "id": "22898ad0-205b-4b41-be49-21c743af904b",
           "name": "img",
           "style": {
-            "id": "418a8539-0816-437d-9c1e-f7cda1336d71",
+            "id": "1d143917-debc-47b9-ad21-ec844a90e861",
             "xl": {
               "width": "438px",
               "height": "342px"
@@ -2330,10 +2338,10 @@
           "aria": ""
         },
         {
-          "id": "fc011a12-1ae2-48ee-804d-793af460a56f",
+          "id": "15829803-2f69-46c0-a811-d897ab4fec1c",
           "name": "img",
           "style": {
-            "id": "db22dffc-73d4-4058-9854-044a8a059907",
+            "id": "47b7d07a-3bc1-421b-914e-2701fb8d2682",
             "xl": {
               "width": "438px",
               "height": "342px",
@@ -2355,10 +2363,10 @@
           "aria": ""
         },
         {
-          "id": "8d57c5aa-af0e-4ea0-b36c-dc10db0c8603",
+          "id": "056f0c48-44f6-4950-8436-7e0d50019dad",
           "name": "img",
           "style": {
-            "id": "e393ad2e-9b9d-4072-b5a3-f05db236cde3",
+            "id": "ee5d97fb-35aa-4a03-a797-c144007118fc",
             "xl": {
               "width": "483px",
               "height": "342px"
@@ -2378,10 +2386,10 @@
           "aria": ""
         },
         {
-          "id": "8865a99e-f4b2-4945-bd4f-14a0ec80749c",
+          "id": "05752357-d8ea-48ca-ad62-d2d8433bb074",
           "name": "img",
           "style": {
-            "id": "d18ba0e9-8570-48d4-8513-e4c4b51d9905",
+            "id": "fc6e881b-1ae1-4428-9b21-353670467b68",
             "xl": {
               "width": "438px",
               "height": "342px"
@@ -2401,10 +2409,10 @@
           "aria": ""
         },
         {
-          "id": "237e2bf3-1ad5-4489-be26-b9431ca95836",
+          "id": "c888ac99-1d2e-4af6-9fec-fa6b73868ac7",
           "name": "img",
           "style": {
-            "id": "bbfb83eb-c73a-4c3c-afda-de30bce4f8fb",
+            "id": "4a6a462d-1545-4ffe-ae76-56f6e5b3663a",
             "xl": {
               "width": "438px",
               "height": "342px"
@@ -2424,13 +2432,13 @@
           "aria": ""
         },
         {
-          "id": "c62ec24d-9d5b-4f51-a69e-106712b5714a",
+          "id": "124aae88-e065-4d69-9ca6-60c3b9bcd346",
           "name": "img",
           "style": {
-            "id": "31bf1704-4801-4fa1-b4ee-1c294224aa67",
+            "id": "fb203e00-1ee5-4a81-bb33-1e0777b91d7b",
             "xl": {
-              "top": "-373px",
-              "left": "1279px",
+              "top": "-366px",
+              "left": "1243px",
               "zIndex": "1",
               "position": "absolute"
             },
@@ -2449,10 +2457,10 @@
           "aria": ""
         },
         {
-          "id": "1aa3c079-6d14-4d7d-9429-7226a3491642",
+          "id": "2e6d438c-d557-4df1-8238-b20338c66bf9",
           "name": "img",
           "style": {
-            "id": "043bba89-166a-4243-bfdf-1d2c6a70d7f6",
+            "id": "0f499509-6a43-48dc-b9d8-8698aefbaaac",
             "xl": {
               "top": "-362px",
               "left": "-297px",
@@ -2475,10 +2483,10 @@
           "aria": ""
         },
         {
-          "id": "b4a69869-2bf9-417a-95c1-d7c4d6b0df35",
+          "id": "829b4992-4060-4f74-b007-af4bb5696305",
           "name": "img",
           "style": {
-            "id": "ca7b4544-1d67-4e9d-81c4-d51e3b3b6145",
+            "id": "edc4e7f8-0f13-4f19-b934-611b0086a53f",
             "xl": {
               "top": "421px",
               "left": "-285px",
@@ -2500,10 +2508,10 @@
           "aria": ""
         },
         {
-          "id": "0feae1fe-2124-4a6a-9d05-47c1dd71c90f",
+          "id": "d8529d06-91bb-41c7-897d-ccc515309efb",
           "name": "img",
           "style": {
-            "id": "8a3b31af-97de-4d3b-8060-dd70a6acbf18",
+            "id": "75914d47-5ed7-4eda-8867-8c426097320a",
             "xl": {
               "top": "448px",
               "left": "1313px",
