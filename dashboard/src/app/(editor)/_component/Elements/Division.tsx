@@ -133,13 +133,16 @@ const Division = ({
         return () => el.removeEventListener("mousedown", handleMouseDown);
     }, [handleMouseDown]);
 
-    const runningWidth = activeScreen !== "xl";
-    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
+    useEffect(() => {
+        setDivStyle(style)
+    }, [activeScreen])
 
+    const runningWidth = activeScreen !== "xl";
+    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(divStyle || {}, parentRef) : divStyle
 
     return (
         <div
-            style={runningStyle}
+            style={{ ...runningStyle, background: '' }}
             id={element.id}
             ref={elementRef}
             onClick={activateTheEditing}
