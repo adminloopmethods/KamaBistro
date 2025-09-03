@@ -8,7 +8,6 @@ import {
   getAllContentsService,
   getContentByIdService,
   getAssignedWebpagesService,
-  clearAllTables
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -156,12 +155,3 @@ export const getContentByIdController = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch content" });
   }
 };
-
-// export const clearWebpagesTablesController = async (req, res) => {
-//   try {
-//     await clearAllTables()
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Failed to delete contents." });
-//   }
-// }
