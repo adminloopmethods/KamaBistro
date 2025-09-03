@@ -1,23 +1,33 @@
-import { Router } from "express";
+import {Router} from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
-import { createWebpage, getAllContentsController, getAllWebpages, getContentByIdController, getWebpageById, getWebpageByRoute, updateWebpageById } from "./content.controller.js";
+import {
+  createWebpage,
+  getAllContentsController,
+  getAllWebpages,
+  getContentByIdController,
+  getWebpageById,
+  getWebpageByRoute,
+  updateWebpageById,
+} from "./content.controller.js";
+import {authenticateUser} from "../../helper/authMiddleware.js";
 // import ContentController from "./content.controller.js";
 // import validator from "../../validation/validator.js";
 // import {ContentSchema} from "../../validation/contentSchema.js";
 // import contentController from "./content.controller.js";
 
-
 const router = Router();
-router.get("/", tryCatchWrap(getAllWebpages));
-router.get("/route/:route", getWebpageByRoute);
-router.get("/section", getAllContentsController);
-router.get("/section/:id", getContentByIdController);
 
-router.get("/:id", tryCatchWrap(getWebpageById));
-router.post("/", tryCatchWrap(createWebpage));
-router.put("/:id", tryCatchWrap(updateWebpageById));
+// router.use(authenticateUser);
 
+router.get("/", authenticateUser, tryCatchWrap(getAllWebpages));
+router.get("/route/:route", authenticateUser, getWebpageByRoute);
+router.get("/section", authenticateUser, getAllContentsController);
+router.get("/section/:id", authenticateUser, getContentByIdController);
+
+router.get("/:id", authenticateUser, tryCatchWrap(getWebpageById));
+router.post("/", authenticateUser, tryCatchWrap(createWebpage));
+router.put("/:id", authenticateUser, tryCatchWrap(updateWebpageById));
 
 // router.post(
 //   "/addResource",

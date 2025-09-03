@@ -2,6 +2,8 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono} from "next/font/google";
 import "../globals.css";
 import {ThemeProvider} from "@/components/ui/theme-provider";
+import {User} from "lucide-react";
+import {UserProvider} from "@/Context/UserContext";
 // import { ThemeProvider } from "@/Context/ThemeContext";
 
 const geistSans = Geist({
@@ -30,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased p-0`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {children}
+          <UserProvider>{children}</UserProvider>
         </ThemeProvider>
       </body>
     </html>

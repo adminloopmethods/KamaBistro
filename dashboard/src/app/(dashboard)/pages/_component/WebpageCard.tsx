@@ -1,7 +1,10 @@
+// webpagecard.tsx
 import React from "react";
 import {Edit, UserPlus, X} from "lucide-react";
 import {useRouter} from "next/navigation";
 import {getRoleByName, removeUserFromPageRole} from "@/utils/roleManagement";
+import {useUser} from "@/Context/UserContext";
+// import { useUser } from "@/context/UserContext"; // Assuming you have a user context
 
 interface User {
   id: string;
@@ -38,10 +41,14 @@ const WebpageCard: React.FC<Props> = ({
   onUserRemoved,
 }) => {
   const router = useRouter();
+  const {user: currentUser} = useUser(); // Get current user from context
   const [isRemoving, setIsRemoving] = React.useState<{
     editor: boolean;
     verifier: boolean;
   }>({editor: false, verifier: false});
+
+  const isAdmin = currentUser?.isSuperUser; // Check if current user is admin
+  // console.log("Current User:", currentUser);
 
   const handleRemoveUser = async (role: "editor" | "verifier") => {
     try {
@@ -77,47 +84,46 @@ const WebpageCard: React.FC<Props> = ({
 
   const renderRoleSection = (
     roleType: "editor" | "verifier",
-    user?: User,
-    bgColor: string
+    user?: User
+    // bgColor: string
   ) => (
     <div className="mb-4">
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
           {roleType}
         </span>
-        {!user ? (
-          <button
-            onClick={() => openAssignModal(page, roleType)}
-            className="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded-lg text-gray-700 dark:text-gray-300 flex items-center gap-1"
-          >
-            <UserPlus className="w-3 h-3" />
-            Assign
-          </button>
-        ) : (
-          <button
-            onClick={() => handleRemoveUser(roleType)}
-            disabled={isRemoving[roleType]}
-            className="text-xs bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 px-2 py-1 rounded-lg text-red-700 dark:text-red-400 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isRemoving[roleType] ? (
-              <>
-                <div className="w-3 h-3 border border-red-400 border-t-transparent rounded-full animate-spin" />
-                Removing...
-              </>
-            ) : (
-              <>
-                <X className="w-3 h-3" />
-                Remove
-              </>
-            )}
-          </button>
-        )}
+        {isAdmin && // Only show assign/remove buttons if user is admin
+          (!user ? (
+            <button
+              onClick={() => openAssignModal(page, roleType)}
+              className="text-xs bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 px-2 py-1 rounded-lg text-gray-700 dark:text-gray-300 flex items-center gap-1"
+            >
+              <UserPlus className="w-3 h-3" />
+              Assign
+            </button>
+          ) : (
+            <button
+              onClick={() => handleRemoveUser(roleType)}
+              disabled={isRemoving[roleType]}
+              className="text-xs bg-red-100 dark:bg-red-900/30 hover:bg-red-200 dark:hover:bg-red-900/50 px-2 py-1 rounded-lg text-red-700 dark:text-red-400 flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isRemoving[roleType] ? (
+                <>
+                  <div className="w-3 h-3 border border-red-400 border-t-transparent rounded-full animate-spin" />
+                  Removing...
+                </>
+              ) : (
+                <>
+                  <X className="w-3 h-3" />
+                  Remove
+                </>
+              )}
+            </button>
+          ))}
       </div>
       <div className="flex flex-wrap gap-2">
         {user ? (
-          <div
-            className={`flex items-center ${bgColor} px-3 py-1.5 rounded-lg`}
-          >
+          <div className={`flex items-center  px-3 py-1.5 rounded-lg`}>
             <div className="bg-gray-200 border-2 border-dashed rounded-xl w-6 h-6 mr-2 flex items-center justify-center text-xs font-medium">
               {user.name.charAt(0).toUpperCase()}
             </div>
@@ -171,13 +177,13 @@ const WebpageCard: React.FC<Props> = ({
         <div className="mt-6">
           {renderRoleSection(
             "editor",
-            page.editor,
-            "bg-indigo-50 dark:bg-indigo-900/20"
+            page.editor
+            // "bg-indigo-50 dark:bg-indigo-900/20"
           )}
           {renderRoleSection(
             "verifier",
-            page.verifier,
-            "bg-green-50 dark:bg-green-900/20"
+            page.verifier
+            // "bg-green-50 dark:bg-green-900/20"
           )}
         </div>
 
@@ -189,21 +195,23 @@ const WebpageCard: React.FC<Props> = ({
             <Edit className="w-5 h-5 mr-2" />
             Edit Content
           </button>
-          <button className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 p-2.5 rounded-xl">
-            <svg
-              className="w-5 h-5 text-gray-700 dark:text-gray-300"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 5v.01M12 12v.01M12 19v.01"
-              />
-            </svg>
-          </button>
+          {isAdmin && ( // Only show settings button for admin
+            <button className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 p-2.5 rounded-xl">
+              <svg
+                className="w-5 h-5 text-gray-700 dark:text-gray-300"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 5v.01M12 12v.01M12 19v.01"
+                />
+              </svg>
+            </button>
+          )}
         </div>
       </div>
     </div>

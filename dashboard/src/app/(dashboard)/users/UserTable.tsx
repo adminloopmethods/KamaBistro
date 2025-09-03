@@ -299,15 +299,15 @@ const UserTable: React.FC<UserTableProps> = ({
             Next
           </button>
         </div>
-        <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-          <div>
+        <div className="hidden sm:flex-1 sm:flex  sm:items-center sm:justify-between">
+          {/* <div>
             <p className="text-sm text-gray-700 dark:text-gray-300">
               Showing{" "}
               <span className="font-medium">{data?.pagination?.limit}</span> of{" "}
               <span className="font-medium">{data?.pagination?.totalUser}</span>{" "}
               results
             </p>
-          </div>
+          </div> */}
           <div>
             <nav
               className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"

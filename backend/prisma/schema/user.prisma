@@ -50,6 +50,7 @@ model User {
   auditLog    UserAuditLog[]
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
+  deletedAt   DateTime?      @map("deleted_at")
   location    location?      @relation(fields: [locationId], references: [id])
   locationId  String?
 

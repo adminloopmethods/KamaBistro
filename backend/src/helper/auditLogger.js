@@ -85,6 +85,16 @@ function resolveAction(req, method, entity) {
       actionType: "FORGOT_PASSWORD_UPDATE",
       action_performed: "Password updated via reset flow",
     },
+    {
+      match: (req) => req.path === "/assign-page-role",
+      actionType: "ASSIGN",
+      action_performed: "Role assigned to user on webpage",
+    },
+    {
+      match: (req) => req.path === "/remove-page-role",
+      actionType: "REMOVE",
+      action_performed: "Role removed from user on webpage",
+    },
   ];
   for (const ca of customActions) {
     if (ca.match(req))
@@ -236,6 +246,32 @@ const entityAuditHandlers = {
   resource: getResourceAssignments,
   content: getResourceAssignments, // alias for content module
   // Add more entities as needed
+  resource: async (id) => {
+    const resource = await prismaClient.webpage.findUnique({
+      where: {id},
+      include: {
+        pageRoles: {
+          // Changed from 'roles' to 'pageRoles'
+          include: {
+            role: true,
+            user: {select: {name: true, email: true}},
+          },
+        },
+      },
+    });
+
+    if (!resource) return null;
+
+    return {
+      title: resource.titleEn,
+      roles: resource.pageRoles.map((r) => ({
+        // Changed from 'roles' to 'pageRoles'
+        role: r.role.name,
+        user: r.user.name,
+        userEmail: r.user.email,
+      })),
+    };
+  },
 };
 
 // --- Helper to fetch approval log and construct audit value ---
@@ -329,6 +365,12 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
   // const fetchAuditValue =
   //   entityAuditHandlers[entity] ||
   //   (async (id) => await prismaClient[entity]?.findUnique({ where: { id } }));
+
+  // Handle role assignment/removal specifically
+  if (req.path === "/assign-page-role" || req.path === "/remove-page-role") {
+    entity = "resource"; // Treat as resource for auditing
+    entityId = req.body.webpageId; // Use webpageId from request body
+  }
 
   if (req.baseUrl.includes("auth")) {
     entity = "auth";
@@ -529,8 +571,16 @@ const auditLogger = async (req, res, responseBodyOrNext) => {
     oldValue = await fetchAuditValue(entityId);
   }
 
+  if (["ASSIGN", "REMOVE"].includes(actionType) && entityId) {
+    oldValue = await entityAuditHandlers.resource(entityId);
+  }
+
   res.on("finish", async () => {
     // const io = req.app.locals.io; // ✅ Add this
+
+    if (["ASSIGN", "REMOVE"].includes(actionType) && entityId) {
+      newValue = await entityAuditHandlers.resource(entityId);
+    }
 
     if (actionType === "CREATE" && !entityId) {
       entityId =

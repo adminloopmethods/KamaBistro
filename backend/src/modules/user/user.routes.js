@@ -26,7 +26,8 @@ router.post(
 router.post(
   "/assign-page-role",
   authenticateUser,
-  // requireSuperAdmin,
+  requireSuperAdmin,
+  auditLogger,
   tryCatchWrap(UserController.AssignRoleToWebpage)
 );
 
@@ -34,6 +35,8 @@ router.post(
 router.delete(
   "/remove-page-role",
   authenticateUser,
+  requireSuperAdmin,
+  auditLogger,
   tryCatchWrap(UserController.RemoveRoleFromWebpage)
 );
 
