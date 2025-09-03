@@ -173,7 +173,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   }, [toolbarIsOpen]);
 
   useEffect(() => {
-    updateContent(element.id, "content", thisElement.content);
+    // updateContent(element.id, "content", thisElement.content);
+    updateElement(element.id, thisElement);
     setPreviewSrc(thisElement.content || "");
   }, [thisElement.content]);
 
@@ -184,13 +185,14 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       style: thisElement.style,
     }));
     updateElement(element.id, thisElement);
-  }, [thisElement.style]);
+  }, [thisElement.style,]);
 
   const cursorCondition =
     // thisElement.style?.[activeScreen]?.position === "relative" ||
     thisElement.style?.[activeScreen]?.position === "absolute";
 
   const onImageSelect = (fileInfo: any, altText: any) => {
+    console.log(altText)
     const src =
       typeof fileInfo === "string"
         ? fileInfo
@@ -198,7 +200,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     setThisElement((prev) => ({
       ...prev,
       content: `/${src}`,
-      alt: altText?.en || prev.alt,
+      alt: altText || prev.alt
     }));
     setShowImageSelector(false);
     setImageContext((prev) => ({ ...prev, openSelector: false }))

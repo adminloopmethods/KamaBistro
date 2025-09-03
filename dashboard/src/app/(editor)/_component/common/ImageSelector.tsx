@@ -21,13 +21,9 @@ type ImageType = {
     resourceId: string;
 };
 
-type AltTextType = {
-    en: string;
-    ar: string;
-};
 
 interface ImageSelectorProps {
-    onSelectImage: (fileInfo: string[] | string, altText?: AltTextType) => void;
+    onSelectImage: (fileInfo: string[] | string, altText: string) => void;
     onClose: () => void;
     type?: "IMAGE" | "DOCUMENT";
 }
@@ -72,7 +68,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
     const [deleteImgId, setDeleteImgId] = useState("");
     const [popup, setPopup] = useState(false);
     const [random, setRandom] = useState(Math.random());
-    const [altText, setAltText] = useState<AltTextType>({ en: "", ar: "" });
+    const [altText, setAltText] = useState<string>("");
 
     const documentMode = type === "DOCUMENT";
 
@@ -107,7 +103,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
     };
 
     const handleAltText = (e: ChangeEvent<HTMLInputElement>) => {
-        setAltText(prev => ({ ...prev, [e.target.name]: e.target.value }));
+        setAltText(prev => e.target.value);
     };
 
     const handleImageSelect = (src: string, index: number) => {
@@ -136,7 +132,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
             if (response.ok) {
                 toast.success("Image has been deleted Successfully.");
                 setRandom(Math.random());
-                onSelectImage([""]);
+                onSelectImage([""], "");
             } else {
                 throw new Error("Failed to delete image");
             }
@@ -365,7 +361,7 @@ const ImageSelector: React.FC<ImageSelectorProps> = ({ // props are here
                                                 type="text"
                                                 name="en"
                                                 id="altEn"
-                                                className="rounded-sm p-2 text-xs xl:w-[15vw] sm:w-full"
+                                                className="rounded-sm p-2 text-xs xl:w-[15vw] sm:w-full border border-stone-800"
                                             />
                                         </label>
                                     </div>
