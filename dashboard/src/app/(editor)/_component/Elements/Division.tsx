@@ -142,7 +142,15 @@ const Division = ({
 
     return (
         <div
-            style={{ ...runningStyle, background: '' }}
+            style={{
+                ...runningStyle,
+                backgroundImage: runningStyle.backgroundImage
+                    ? runningStyle.backgroundImage
+                    : undefined,
+                backgroundColor: runningStyle.backgroundImage
+                    ? undefined
+                    : runningStyle.backgroundColor || 'transparent',
+            }}
             id={element.id}
             ref={elementRef}
             onClick={activateTheEditing}

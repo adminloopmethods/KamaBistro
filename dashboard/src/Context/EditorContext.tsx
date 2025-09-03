@@ -138,6 +138,8 @@ type MyContextType = {
   setSectionChildElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>;
   sectionChildElementsSetter: (id: string, checked: boolean) => void,
   setSectionChildElementsSetter: React.Dispatch<React.SetStateAction<(id: string, checked: boolean) => void>>;
+  containerRef: HTMLElement | null;
+  setContainerRef: React.Dispatch<React.SetStateAction<HTMLElement | null>>
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -148,6 +150,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [widthValue, setWidthValue] = useState<string>("")
   // global content
   const [webpage, setWebpage] = useState<webpageType | null>(null);
+  const [containerRef, setContainerRef] = useState<HTMLElement | null>(null)
 
   // elements
   const [activeRef, setContextRef] = useState<RefType>(null); // to active the current ref of the element
@@ -242,6 +245,8 @@ function Provider({ children }: { children: ReactNode }) {
         websiteContent, // the base of the elements
         SubmissionObject,
         finalSubmit,
+        containerRef,
+        setContainerRef,
 
         width, // context for width
         activeScreen,

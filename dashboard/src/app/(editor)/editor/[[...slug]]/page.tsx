@@ -71,6 +71,7 @@ const Editor = () => {
         activeScreen, // the active Screen
         currentSectionSetter, // setter of the setter to set the section style
         finalSubmit, // the array of the all section
+        setContainerRef
     } = useMyContext();
 
     const { webpage, setWebpage } = websiteContent;
@@ -88,14 +89,14 @@ const Editor = () => {
     ///////////// screen related functionality ///////////////////
     // Function to classify width
     const classifyWidth = (w: number) => {
-        if (w > 1200) return "xl";
-        if (w >= 768) return "lg";
-        if (w >= 425) return "md";
+        if (w > 1440) return "xl";
+        if (w >= 1024) return "lg";
+        if (w >= 600) return "md";
         return "sm";
     };
 
     const applySMScreen = () => {
-        setPageWidth("424px")
+        setPageWidth("420px")
     }
 
     const applyMDScreen = () => {
@@ -103,7 +104,7 @@ const Editor = () => {
     }
 
     const applyLGScreen = () => {
-        setPageWidth("1200px")
+        setPageWidth("1024px")
     }
 
     const applyXLScreen = () => {
@@ -296,6 +297,9 @@ const Editor = () => {
         });
     }
 
+    useEffect(() => {
+        setContainerRef(containerRef.current)
+    }, [containerRef.current])
     return (
         <div className="flex flex-col overflow-hidden">
             <div className="h-[8vh] bg-slate-700 flex justify-end items-center p-2 gap-8">
@@ -349,7 +353,7 @@ const Editor = () => {
 
             <div style={{ display: "flex", height: "92vh", position: "relative", zIndex: 1, overflow: "hidden" }}>
                 {/* website */}
-                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden",  position: "relative", zIndex: 1}}>
+                <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden", position: "relative", zIndex: 1 }}>
 
                     <div
                         ref={containerRef}
@@ -367,7 +371,7 @@ const Editor = () => {
                             backgroundSize: "15px 15px", // size of grid squares
                             position: "relative",
                             zIndex: 1,
-                            overflow:"hidden"
+                            overflow: "hidden"
                         }}
                         className="bg-stone-200"
                     >
