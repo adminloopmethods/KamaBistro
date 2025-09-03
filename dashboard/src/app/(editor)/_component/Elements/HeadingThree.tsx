@@ -3,6 +3,7 @@
 import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import { BaseElement } from "@/app/(editor)/_functionality/createElement"; // editor error
 import { useMyContext } from "@/Context/EditorContext";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 type HeadingProps = {
     element: BaseElement;
@@ -11,6 +12,7 @@ type HeadingProps = {
     updateContent: (id: string, property: string, value: any) => void;
     updateElement: (id: string, updatedElement: BaseElement) => void;
     rmElement: (id: string) => void;
+    parentRef: HTMLElement | null;
 };
 
 const Headingthree: React.FC<HeadingProps> = ({
@@ -20,10 +22,19 @@ const Headingthree: React.FC<HeadingProps> = ({
     updateContent,
     updateElement,
     rmElement,
+    parentRef
 }) => {
     const elementRef = useRef<HTMLHeadingElement | null>(null);
     const [thisElement, setThisElement] = useState<BaseElement>(element);
-    const { contextRef, contextElement, toolbarRef, screenStyleObj } = useMyContext();
+
+    const {///////////////////
+        contextRef,////////////////Context
+        contextElement,
+        toolbarRef,
+        screenStyleObj,
+        activeScreen
+    } = useMyContext(); //////////////////// Context Caller
+
     const [isEditing, setEditing] = useState<boolean>(false);
 
     // Set innerHTML when content updates
@@ -93,6 +104,9 @@ const Headingthree: React.FC<HeadingProps> = ({
         updateContent(element.id, "content", thisElement.content);
     }, [thisElement.content]);
 
+    const runningWidth = activeScreen !== "xl";
+    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
+
     return (
         <h3
             className=""
@@ -101,7 +115,7 @@ const Headingthree: React.FC<HeadingProps> = ({
             onBlur={handleBlur}
             contentEditable={editable}
             suppressContentEditableWarning={true}
-            style={{ ...style, position: "relative", zIndex: "2" }}
+            style={{ ...runningStyle, position: "relative", zIndex: "2" }}
             onFocus={activateTheEditing}
             onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
             onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

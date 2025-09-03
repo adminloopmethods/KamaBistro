@@ -342,8 +342,6 @@ const Section: React.FC<SectionProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
 
-  console.log("qew", runningWidth, { ...runningStyle })
-
   return (
     <div className=""
       ref={divRef}
@@ -403,6 +401,7 @@ const Section: React.FC<SectionProps> = ({
                 currentWidth={activeScreen}
                 rmElement={rmElement}
                 activeScreen={activeScreen}
+                parentRef={parentRef}
               />
             );
           }

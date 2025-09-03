@@ -24,9 +24,9 @@ export const convertVWVHtoPxParentClamped = (
         newStyle[cssKey] = `${pxValue}px` as any;
       } else if (value.endsWith("vh")) {
         const vh = parseFloat(value);
-        let pxValue = (vh / 100) * parentHeight;
+        let pxValue = (vh / 100) * screenHeight;
         // Clamp to screen height max
-        pxValue = Math.min(pxValue, screenHeight);
+        // pxValue = Math.min(pxValue, screenHeight);
         newStyle[cssKey] = `${pxValue}px` as any;
       } else {
         newStyle[cssKey] = value as any;
