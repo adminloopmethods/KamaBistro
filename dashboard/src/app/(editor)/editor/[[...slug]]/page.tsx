@@ -89,14 +89,14 @@ const Editor = () => {
     ///////////// screen related functionality ///////////////////
     // Function to classify width
     const classifyWidth = (w: number) => {
-        if (w > 1440) return "xl";
+        if (w > 1200) return "xl";
         if (w >= 1024) return "lg";
         if (w >= 600) return "md";
         return "sm";
     };
 
     const applySMScreen = () => {
-        setPageWidth("420px")
+        setPageWidth("400px")
     }
 
     const applyMDScreen = () => {
