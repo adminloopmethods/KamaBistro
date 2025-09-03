@@ -26,22 +26,6 @@ export const createWebpage = async (req, res) => {
   }
 };
 
-// export const getAllWebpages = async (req, res) => {
-//   try {
-//     const webpages = await getAllWebpagesService();
-//     res.json({ webpages });
-//   } catch (error) {
-//     logger.error(`Error fetching webpages: ${error.message}`, { error });
-//     res.status(500).json({ error: "Failed to fetch webpages." });
-//   }
-// };
-
-// controllers/contentController.js
-// import {
-//   getAllWebpagesService,
-//   getAssignedWebpagesService,
-// } from "../services/contentService.js";
-
 export const getAllWebpages = async (req, res) => {
   try {
     let webpages;

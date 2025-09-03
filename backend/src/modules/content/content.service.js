@@ -265,17 +265,48 @@ export const updateWebpageByIdService = async (
     },
   });
 
-  // ---------------- DELETE MISSING SECTIONS ----------------
-  const incomingSectionIds = new Set(contents.map((c) => c.id));
-  const sectionsToDelete = existingContents.filter(
+  // ---------------- DELETE MISSING SECTIONS (Recursive) ----------------
+  function collectSectionIds(sections, set) {
+    for (const s of sections) {
+      set.add(s.id);
+      if (s.children?.length) {
+        collectSectionIds(s.children, set);
+      }
+      if (s.elements?.length) {
+        // If elements can also be nested sections
+        const nestedSections = s.elements.filter((el) => el.name === "section");
+        collectSectionIds(nestedSections, set);
+      }
+    }
+  }
+
+  const incomingSectionIds = new Set();
+  collectSectionIds(contents, incomingSectionIds);
+
+  function collectExistingSections(contentsArray, all = []) {
+    for (const c of contentsArray) {
+      all.push(c);
+      if (c.children?.length) {
+        collectExistingSections(c.children, all);
+      }
+    }
+    return all;
+  }
+  const allExistingSections = collectExistingSections(existingContents);
+
+  const sectionsToDelete = allExistingSections.filter(
     (c) => !incomingSectionIds.has(c.id)
   );
 
   if (sectionsToDelete.length) {
-    for (const section of sectionsToDelete) {
-      await prismaClient.content.deleteMany({ where: { parentId: section.id } }); // delete children
-      await prismaClient.content.delete({ where: { id: section.id } }); // delete parent
-    }
+    await prismaClient.$transaction(async (tx) => {
+      for (const section of sectionsToDelete) {
+        // Delete children first (if schema doesn’t cascade)
+        await tx.content.deleteMany({ where: { parentId: section.id } });
+        // Delete section itself
+        await tx.content.delete({ where: { id: section.id } });
+      }
+    });
   }
 
   // ---------------- DELETE MISSING ELEMENTS ----------------
@@ -328,8 +359,8 @@ export const updateWebpageByIdService = async (
           update: {
             name: el.name,
             givenName: el.givenName || null,
-            hover: el.hover || null, // ✅ now saving
-            aria: el.aria || null, // ✅ now saving
+            hover: el.hover || null,
+            aria: el.aria || null,
             order: i,
             parent: { connect: { id: parentId } },
             style: { update: el.style || {} },
@@ -338,8 +369,8 @@ export const updateWebpageByIdService = async (
             id: el.id,
             name: el.name,
             givenName: el.givenName || null,
-            hover: el.hover || null, // ✅ now saving
-            aria: el.aria || null, // ✅ now saving
+            hover: el.hover || null,
+            aria: el.aria || null,
             order: i,
             parent: { connect: { id: parentId } },
             style: { create: el.style || {} },
@@ -384,8 +415,8 @@ export const updateWebpageByIdService = async (
       update: {
         name: section.name,
         givenName: section.givenName || null,
-        hover: section.hover || null, // ✅ now saving
-        aria: section.aria || null, // ✅ now saving
+        hover: section.hover || null,
+        aria: section.aria || null,
         order: i,
         style: { update: section.style || {} },
       },
@@ -393,8 +424,8 @@ export const updateWebpageByIdService = async (
         id: section.id,
         name: section.name,
         givenName: section.givenName || null,
-        hover: section.hover || null, // ✅ now saving
-        aria: section.aria || null, // ✅ now saving
+        hover: section.hover || null,
+        aria: section.aria || null,
         order: i,
         webpage: { connect: { id } },
         style: { create: section.style || {} },

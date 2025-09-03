@@ -31,6 +31,21 @@ const alignmentIcons: Record<string, React.FC<any>> = {
 };
 
 // ✅ helper: hex → rgba
+// function hexToRgba(hex: string, alpha: number = 1): string {
+//     let r = 0, g = 0, b = 0;
+//     if (hex.length === 4) {
+//         r = parseInt(hex[1] + hex[1], 16);
+//         g = parseInt(hex[2] + hex[2], 16);
+//         b = parseInt(hex[3] + hex[3], 16);
+//     } else if (hex.length === 7) {
+//         r = parseInt(hex.slice(1, 3), 16);
+//         g = parseInt(hex.slice(3, 5), 16);
+//         b = parseInt(hex.slice(5, 7), 16);
+//     }
+//     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+// }
+
+// ✅ helper: hex → rgba
 function hexToRgba(hex: string, alpha: number = 1): string {
     let r = 0, g = 0, b = 0;
     if (hex.length === 4) {
@@ -45,19 +60,40 @@ function hexToRgba(hex: string, alpha: number = 1): string {
     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 }
 
-// ✅ reusable component for color + alpha
+// ✅ helper: rgba → hex
+function rgbaToHex(rgba: string): string {
+    const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+    if (!match) return "#000000";
+    const r = parseInt(match[1]).toString(16).padStart(2, "0");
+    const g = parseInt(match[2]).toString(16).padStart(2, "0");
+    const b = parseInt(match[3]).toString(16).padStart(2, "0");
+    return `#${r}${g}${b}`;
+}
+
 export const ColorPickerWithAlpha: React.FC<{
     label: string;
     styleKey: keyof StylesState;
     localStyle: Partial<StylesState>;
     applyStyle: (key: keyof StylesState, val: string | number) => void;
-    liveUpdate: (value: string) => void
+    liveUpdate: (value: string) => void;
 }> = ({ label, styleKey, localStyle, applyStyle, liveUpdate }) => {
     const currentValue = localStyle[styleKey] as string;
 
-    // extract alpha if rgba, otherwise default 1
-    const alphaMatch = currentValue?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
-    const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
+    const rgbaMatch = currentValue?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+    const initialAlpha = rgbaMatch ? parseFloat(rgbaMatch[4] || "1") : 1;
+    const hexValue = rgbaMatch ? rgbaToHex(currentValue) : (currentValue || "#000000");
+
+    // ✅ keep alpha in state so slider moves immediately
+    const [alpha, setAlpha] = useState(initialAlpha);
+
+    // sync local alpha when style changes outside
+    useEffect(() => {
+        if (rgbaMatch) {
+            setAlpha(parseFloat(rgbaMatch[4] || "1"));
+        } else {
+            setAlpha(1);
+        }
+    }, [currentValue]);
 
     return (
         <div className="flex flex-col gap-1">
@@ -66,7 +102,7 @@ export const ColorPickerWithAlpha: React.FC<{
                 {/* Color Input */}
                 <input
                     type="color"
-                    value={currentValue?.startsWith("rgba") ? rgbaToHex(currentValue) : currentValue || "#000000"}
+                    value={hexValue}
                     onChange={(e) => {
                         const rgba = hexToRgba(e.target.value, alpha);
                         applyStyle(styleKey, rgba);
@@ -74,7 +110,6 @@ export const ColorPickerWithAlpha: React.FC<{
                     }}
                     className={`w-10 h-10 border rounded cursor-pointer ${toolbarStyles.colorInput}`}
                 />
-
 
                 {/* Alpha Slider */}
                 <input
@@ -84,19 +119,34 @@ export const ColorPickerWithAlpha: React.FC<{
                     step={0.01}
                     value={alpha}
                     onChange={(e) => {
-                        const baseHex = currentValue?.startsWith("rgba")
-                            ? "#000000"
-                            : currentValue || "#000000";
-                        const rgba = hexToRgba(baseHex, parseFloat(e.target.value));
+                        const newAlpha = parseFloat(e.target.value);
+                        setAlpha(newAlpha); // ✅ move thumb instantly
+
+                        let r = 0, g = 0, b = 0;
+                        if (rgbaMatch) {
+                            r = parseInt(rgbaMatch[1]);
+                            g = parseInt(rgbaMatch[2]);
+                            b = parseInt(rgbaMatch[3]);
+                        } else {
+                            const tmp = hexToRgba(hexValue, newAlpha);
+                            const m = tmp.match(/rgba\((\d+),\s*(\d+),\s*(\d+)/);
+                            if (m) {
+                                r = parseInt(m[1]);
+                                g = parseInt(m[2]);
+                                b = parseInt(m[3]);
+                            }
+                        }
+
+                        const rgba = `rgba(${r}, ${g}, ${b}, ${newAlpha})`;
                         applyStyle(styleKey, rgba);
                         liveUpdate(rgba);
                     }}
-                    className={`flex-1 accent-stone-600 `}
+                    className="flex-1 accent-stone-600"
                 />
 
-                <span className="text-xs text-right">{alpha}</span>
+                <span className="text-xs text-right">{alpha.toFixed(2)}</span>
 
-                {/* ✅ Clear Button */}
+                {/* Clear Button */}
                 <button
                     type="button"
                     onClick={() => applyStyle(styleKey, "")}
@@ -108,6 +158,8 @@ export const ColorPickerWithAlpha: React.FC<{
         </div>
     );
 };
+
+
 
 
 const RichTextToolBar: React.FC = () => {
@@ -329,11 +381,11 @@ const RichTextToolBar: React.FC = () => {
 
 export default RichTextToolBar;
 
-function rgbaToHex(rgba: string): string {
-    const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
-    if (!match) return "#000000";
-    const r = parseInt(match[1]).toString(16).padStart(2, "0");
-    const g = parseInt(match[2]).toString(16).padStart(2, "0");
-    const b = parseInt(match[3]).toString(16).padStart(2, "0");
-    return `#${r}${g}${b}`;
-}
+// function rgbaToHex(rgba: string): string {
+//     const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
+//     if (!match) return "#000000";
+//     const r = parseInt(match[1]).toString(16).padStart(2, "0");
+//     const g = parseInt(match[2]).toString(16).padStart(2, "0");
+//     const b = parseInt(match[3]).toString(16).padStart(2, "0");
+//     return `#${r}${g}${b}`;
+// }
