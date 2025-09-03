@@ -152,7 +152,7 @@ const Section: React.FC<SectionProps> = ({
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
     onEditing();
-    console.log(section.givenName)
+    // console.log(section.givenName)
     contextForSection.setRmSection(() => () => rmSection(section.id))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
@@ -335,6 +335,10 @@ const Section: React.FC<SectionProps> = ({
       )
     }
   }
+
+  const runningWidth = activeScreen !== "xl";
+
+  
 
   return (
     <div className=""
