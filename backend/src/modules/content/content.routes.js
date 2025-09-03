@@ -9,6 +9,7 @@ import {
   getWebpageById,
   getWebpageByRoute,
   updateWebpageById,
+  // clearWebpagesTablesController
 } from "./content.controller.js";
 import {authenticateUser} from "../../helper/authMiddleware.js";
 // import ContentController from "./content.controller.js";
@@ -28,6 +29,7 @@ router.get("/section/:id", authenticateUser, getContentByIdController);
 router.get("/:id", authenticateUser, tryCatchWrap(getWebpageById));
 router.post("/", authenticateUser, tryCatchWrap(createWebpage));
 router.put("/:id", authenticateUser, tryCatchWrap(updateWebpageById));
+// router.delete("/", clearWebpagesTablesController)
 
 // router.post(
 //   "/addResource",

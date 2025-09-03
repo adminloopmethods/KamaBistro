@@ -1,9 +1,9 @@
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "../globals.css";
-import {ThemeProvider} from "@/components/ui/theme-provider";
-import {User} from "lucide-react";
-import {UserProvider} from "@/Context/UserContext";
+import { ThemeProvider } from "@/components/ui/theme-provider";
+import { User } from "lucide-react";
+import { UserProvider } from "@/Context/UserContext";
 // import { ThemeProvider } from "@/Context/ThemeContext";
 
 const geistSans = Geist({
@@ -14,6 +14,13 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"], // pick only weights you need
+  variable: "--font-poppins",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -27,9 +34,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased p-0`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <UserProvider>{children}</UserProvider>
