@@ -1,11 +1,41 @@
 'use client';
 
 import React, { useEffect, useRef, useState, MouseEvent, CSSProperties } from "react";
-import { CreateElement, mapElement, ScreenSize } from "../../_functionality/createElement";
+import { CreateElement, ImageElement, LinkElementClass, mapElement, ScreenSize } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 import AddElement from "../common/AddElement";
 import { SectionElementType, StyleObject } from "../../_functionality/createSection";
 import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
+import Section from "./Section";
+import logo from "@/assets/brand/kamalogo.png"
+
+const theBaseData = {
+  name: "header",
+  elements: [
+    new LinkElementClass("Our Group", "/ourgroup"),
+    new LinkElementClass("Culture", "/ourgroup"),
+    new LinkElementClass("Private Events", "/ourgroup"),
+    new ImageElement("img", logo.src, "Kama logo"),
+    new LinkElementClass("Catering", "/ourgroup"),
+    new LinkElementClass("Contact", "/ourgroup"),
+    new LinkElementClass("Career", "/ourgroup"),
+    new LinkElementClass("Our Group", "/ourgroup"),
+  ],
+  style: {
+    xl: {},
+    lg: {},
+    md: {},
+    sm: {}
+  },
+  id: "",
+  givenName: "Header - Base",
+  hover: {
+    xl: {},
+    lg: {},
+    md: {},
+    sm: {}
+  }
+}
 
 export type ElementTypeCustom = {
   id: string;
@@ -18,12 +48,12 @@ export type ElementTypeCustom = {
   hover: { [screen in ScreenSize]?: StyleObject }
 };
 
-type SectionProps = {
-  element: ElementTypeCustom[];
-  rmSection: (id: string) => void;
-  onEditing: () => void;
-  style: React.CSSProperties;
-  updateData: any;
+type HeaderProps = {
+  element?: ElementTypeCustom[];
+  rmSection?: (id: string) => void;
+  onEditing?: () => void;
+  style?: React.CSSProperties;
+  updateData?: any;
   setUpdateData: React.Dispatch<React.SetStateAction<any>>;
   lastSection: boolean;
   section: {
@@ -38,7 +68,7 @@ type SectionProps = {
   parentRef: HTMLElement | null;
 };
 
-const Section: React.FC<SectionProps> = ({
+const Header: React.FC<HeaderProps> = ({
   element,
   rmSection,
   onEditing,
@@ -55,9 +85,8 @@ const Section: React.FC<SectionProps> = ({
   parentRef
 }) => {
   const [onAddElement, setOnAddElement] = useState(false);
-  const [elements, setElements] = useState<ElementTypeCustom[]>(element);
+  const [elements, setElements] = useState<ElementTypeCustom[]>(element || []);
   const [hoverEffect, setHoverEffect] = useState<boolean>(false);
-  // const [clickEffect, setClickEffect] = useState<boolean>(false);
   const {
     contextRef,
     activeScreen,
@@ -70,75 +99,12 @@ const Section: React.FC<SectionProps> = ({
 
   const sectionRef = useRef<HTMLElement | null>(null);
   const divRef = useRef<HTMLDivElement | null>(null)
-  const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style);
-  const [hover, setHover] = useState<React.CSSProperties>(section.hover?.[activeScreen] || {})
+  const [sectionStyle, setSectionStyle] = useState<React.CSSProperties>(style || {});
+  const [hover, setHover] = useState<React.CSSProperties>(section?.hover?.[activeScreen] || {})
   const [hiddenChildlist, setHiddenChildList] = useState<string[]>([])
   const cleanHover = Object.fromEntries(
     Object.entries(hover).filter(([_, value]) => Boolean(value))
   );
-
-  // const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
-  // const [allowUpdate, setAllowUpdate] = useState(true);
-
-  const [isDragging, setIsDragging] = useState(false);
-  const [dragOffsetX, setDragOffsetX] = useState(0);
-  const [dragOffsetY, setDragOffsetY] = useState(0);
-
-
-  const handleMouseDown = (e: MouseEvent) => {
-    if (sectionStyle.position !== "absolute" && sectionStyle.position !== "fixed") return;
-
-    const rect = divRef.current?.getBoundingClientRect();
-    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
-    if (!rect || !parentRect) return;
-
-    // store where inside the element we clicked (relative to parent space)
-    setDragOffsetX(e.clientX - rect.left);
-    setDragOffsetY(e.clientY - rect.top);
-
-    setIsDragging(true);
-    e.preventDefault();
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging) return;
-
-    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
-    console.log(parentRect)
-    if (!parentRect) return;
-
-    // mouse position inside parent
-    const mouseX = e.clientX - parentRect.left;
-    const mouseY = e.clientY - parentRect.top;
-
-    // new position = mouse inside parent - click offset
-    const newLeft = mouseX - dragOffsetX;
-    const newTop = mouseY - dragOffsetY;
-
-    divRef.current?.style.setProperty("left", `${newLeft}px`, "important");
-    divRef.current?.style.setProperty("top", `${newTop}px`, "important");
-  };
-
-  const handleMouseUp = (e: MouseEvent) => {
-    const parentRect = divRef.current?.parentElement?.getBoundingClientRect();
-    if (!parentRect) return;
-
-    // mouse position inside parent
-    const mouseX = e.clientX - parentRect.left;
-    const mouseY = e.clientY - parentRect.top;
-
-    // new position = mouse inside parent - click offset
-    const newLeft = mouseX - dragOffsetX;
-    const newTop = mouseY - dragOffsetY;
-
-    setIsDragging(false);
-    setSectionStyle((prev) => ({
-      ...prev,
-      left: newLeft,
-      top: newTop,
-    }));
-  };
-
 
   const onEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
@@ -154,21 +120,21 @@ const Section: React.FC<SectionProps> = ({
 
   const onStyleEdit = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation()
-    onEditing();
+    onEditing?.();
     // console.log(section.givenName)
-    contextForSection.setRmSection(() => () => rmSection(section.id))
+    contextForSection.setRmSection(() => () => rmSection?.(section?.id || ""))
     contextForSection.setCurrentSection(sectionStyle)
     contextForSection.setCurrentSectionSetter(() => setSectionStyle)
     contextForSection.setSectionRef(sectionRef)
-    contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
-    contextForSection.setSectionName(section.givenName)
+    contextForSection.setSectionGivenName(() => (value: string) => { setGivenName?.(section?.id || "", value) })
+    contextForSection.setSectionName("Header - Base Pages")
 
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
       setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
 
-    screenStyleObj.setScreenStyle(section.style)
+    screenStyleObj.setScreenStyle(section?.style)
 
     setSectionChildElements(elements)
     setSectionChildElementsSetter(() =>
@@ -231,27 +197,10 @@ const Section: React.FC<SectionProps> = ({
     })
   }
 
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMouseMove as any);
-      window.addEventListener("mouseup", handleMouseUp as any);
-    } else {
-      window.removeEventListener("mousemove", handleMouseMove as any);
-      window.removeEventListener("mouseup", handleMouseUp as any);
-    }
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove as any);
-      window.removeEventListener("mouseup", handleMouseUp as any);
-    };
-  }, [isDragging]);
-
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+      finalUpdate(section?.id, { ...section, elements: elements, hover: { ...section?.hover, [activeScreen]: hover } }, lastSection)
     }
-
 
   }, [updateData, elements, hover]);
 
@@ -263,18 +212,18 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+      updateParentElement(section?.id, { ...section, elements: elements, hover: { ...section?.hover, [activeScreen]: hover } }, lastSection)
     }
     hoverObject.setHoverContext(hover)
   }, [elements, hover])
 
   useEffect(() => {
     if (finalUpdate) {
-      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+      finalUpdate(section?.id, { ...section, style: { ...section?.style, [activeScreen]: sectionStyle }, hover: { ...section?.hover, [activeScreen]: hover } }, lastSection)
     }
 
     if (updateParentElement) {
-      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+      updateParentElement(section?.id, { ...section, style: { ...section?.style, [activeScreen]: sectionStyle }, hover: { ...section?.hover, [activeScreen]: hover } }, lastSection)
     }
     contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
@@ -282,7 +231,7 @@ const Section: React.FC<SectionProps> = ({
   useEffect(() => {
     setSectionStyle((prev) => {
       if (JSON.stringify(prev) !== JSON.stringify(style)) {
-        return style;
+        return style || {};
       }
       return prev;
     });
@@ -340,7 +289,7 @@ const Section: React.FC<SectionProps> = ({
   }
 
   const runningWidth = activeScreen !== "xl";
-  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef || null) : sectionStyle
 
   return (
     <div className=""
@@ -353,7 +302,7 @@ const Section: React.FC<SectionProps> = ({
         // height: "fit-content"
       }}
     >
-      <section
+      <header
         ref={sectionRef}
         style={{
           ...(runningStyle),
@@ -361,12 +310,11 @@ const Section: React.FC<SectionProps> = ({
         }}
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
-        onMouseDown={handleMouseDown}
         onMouseEnter={() => { setHoverEffect(true); showAllChildren() }}
         onMouseLeave={() => { setHoverEffect(false); hideBackHiddenChildrens() }}
       // className={hover}
       >
-        {elements?.map((Element, i, a) => {
+        {(elements ?  elements : theBaseData.elements)?.map((Element: any, i, a) => {
           const lastSection = i === a.length - 1
           if (Element.name === "section") {
 
@@ -406,10 +354,10 @@ const Section: React.FC<SectionProps> = ({
             );
           }
         })}
-      </section>
+      </header>
       {onAddElement && <AddElement controller={addElement} canAddSection={!parentIsSection} />}
     </div >
   );
 };
 
-export default React.memo(Section);
+export default React.memo(Header);

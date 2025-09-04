@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import {Geist, Geist_Mono, Poppins, Playfair_Display} from "next/font/google";
 import "./globals.css";
 import {Provider} from "@/Context/ApiContext";
+import Header from "./_elements/Header";
 // import {UserProvider} from "@/Context/UserContext";
 
 const geistSans = Geist({
@@ -45,6 +46,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${poppins.variable} antialiased p-0`}
       >
         <Provider>
+          <Header />
           {/* <UserProvider> */}
             {children}
             {/* </UserProvider> */}

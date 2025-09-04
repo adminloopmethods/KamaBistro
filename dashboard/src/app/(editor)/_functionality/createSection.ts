@@ -70,6 +70,8 @@ const gED = generateElementData;
 
 export const CreateSection: Record<string, () => SectionElement> = {
     section: () => gED("section"),
+    header: () => gED("header"),
+    navigationbar: () => gED("nav"),
 };
 
 export const mapSection: Record<string, React.ComponentType<any>> = {

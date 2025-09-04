@@ -73,7 +73,7 @@ const Editor = () => {
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
 
         <div
           ref={containerRef}
