@@ -68,7 +68,8 @@ const Section: React.FC<SectionProps> = ({ //Props
           position: "relative",
           top: 0,
           left: 0,
-          overflow: "hidden"
+          overflow: "hidden",
+          
           // width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
         }}
       >

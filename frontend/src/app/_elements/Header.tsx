@@ -1,68 +1,118 @@
 'use client';
 
-import React, { useRef } from "react";
-import { useMyContext } from "@/Context/ApiContext";
-import { mapElement } from "@/functionalities/createElement";
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import logo from "@/assets/favicon.png";
 
-type ElementType = {
-  id: string;
-  name: keyof typeof mapElement;
-  content?: any;
-  style?: {
-    [key: string]: React.CSSProperties;
-  };
-  [key: string]: any;
-};
+// Example nav links
+const navLinksLeft = [
+  { label: "Our Group", href: "/our-group" },
+  { label: "Culture", href: "/culture" },
+  { label: "Private Events", href: "/private-events" },
+];
 
-type SectionProps = {
-  element: ElementType[];
-  style: React.CSSProperties;
-  lastSection: boolean;
-  section: {
-    id?: string;
-    [key: string]: any;
-  };
-  currentWidth: string;
-  sectionIsParent?: Boolean
-};
+const navLinksRight = [
+  { label: "Catering", href: "/catering" },
+  { label: "Contact", href: "/contact" },
+  { label: "Career", href: "/career" },
+];
 
-const Header: React.FC<SectionProps> = ({ //Props
-  element,
-  style,
-  lastSection,
-  section,
-  sectionIsParent,
-}) => { // function starts here
-
-  const { //////////// Context variable
-    currentWidth,
-    widthSize,
-    editedWidth,
-  } = useMyContext(); ////////////////////////////Context is here
-
-  const thisStyle = section?.style?.[currentWidth]
-
-  const sectionRef = useRef<HTMLElement | null>(null);
-
-  // const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle.position;
-
-  // const widthIsRatio = String(style?.width).slice(-1) === "%"
-
+const Header: React.FC = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-      <header
-        ref={sectionRef}
-        style={{
-          ...style,
-          position: "absolute",
-          top: 0,
-          left: 0,
-          overflow: "hidden"
-        }}
-      >
+    <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 lg:px-10">
+      <div className="lg:container lg:mx-auto w-full flex bg-black items-center justify-between px-4 py-3 lg:rounded-xl">
         
-      </header>
+        {/* Mobile & Tablet Layout */}
+        <div className="flex items-center justify-between w-full lg:hidden">
+          <a href="/" aria-label="Go to Home">
+            <img src={logo.src} alt="Company Logo" className="h-10 w-auto" />
+          </a>
+          <button
+            className="p-2 rounded-lg hover:bg-gray-100 text-white"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen(!menuOpen)}
+          >
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
+
+        {/* Desktop Layout (from 1024px up) */}
+        <nav
+          className="hidden lg:flex items-center justify-center space-x-6 w-full"
+          aria-label="Main navigation"
+        >
+          {/* Left links */}
+          {navLinksLeft.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-gray-50 hover:text-white transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+
+          {/* Logo in center */}
+          <a href="/" aria-label="Go to Home">
+            <img src={logo.src} alt="Company Logo" className="h-12 w-auto mx-4" />
+          </a>
+
+          {/* Right links */}
+          {navLinksRight.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              className="text-gray-50 hover:text-white transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+
+          {/* CTA Button */}
+          <a
+            href="/gift-cards"
+            className="ml-4 px-4 py-2 bg-[#AE9060] text-white hover:bg-gray-800 transition"
+          >
+            Gift Cards
+          </a>
+        </nav>
+      </div>
+
+      {/* Mobile & Tablet Dropdown */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.nav
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="lg:hidden bg-white shadow-md overflow-hidden"
+            aria-label="Mobile navigation"
+          >
+            <div className="flex flex-col space-y-4 px-4 py-4">
+              {[...navLinksLeft, ...navLinksRight].map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-gray-700 hover:text-black transition-colors"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <a
+                href="/gift-cards"
+                className="w-full px-4 py-2 rounded-2xl bg-black text-white hover:bg-gray-800 transition text-center"
+              >
+                Gift Cards
+              </a>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
 
-export default React.memo(Header);
+export default Header;
