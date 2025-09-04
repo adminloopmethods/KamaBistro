@@ -5,3 +5,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+.poppins-text {
+    font-family: var(--font-poppins), sans-serif;
+}
+
+section{
+    /* word-break: break-all; */
+    word-wrap: break-word;
+}

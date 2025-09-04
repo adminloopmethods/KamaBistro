@@ -86,8 +86,9 @@ const Editor = () => {
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
             backgroundSize: "15px 15px", // size of grid squares
+            
           }}
-          className="bg-stone-200"
+          className="bg-stone-200 poppins-text"
         >
           {websiteContent?.webpage?.contents?.map((section: any, i: number, a: any[]) => {
             const lastSection = i === a.length - 1;

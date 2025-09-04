@@ -337,6 +337,26 @@ const RichTextToolBar: React.FC = () => {
                 ))}
             </div>
 
+            {/* ✅ Letter Spacing Slider */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Letter Spacing
+                </label>
+                <input
+                    type="range"
+                    min={1}
+                    max={10}
+                    step={1}
+                    value={localStyle.letterSpacing ? parseInt(localStyle.letterSpacing.toString()) : 0}
+                    onChange={(e) => applyStyle("letterSpacing", `${e.target.value}px`)}
+                    className="w-full accent-stone-600"
+                />
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {localStyle.letterSpacing || "0px"}
+                </span>
+            </div>
+
+
             {/* Dimensions */}
             {renderInput("Width", "width", "width")}
             {renderInput("Height", "height", "height")}

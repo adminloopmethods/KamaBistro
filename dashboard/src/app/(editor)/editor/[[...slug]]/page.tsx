@@ -13,7 +13,7 @@ import StyleToolbar from "../../_component/common/StyleToolbar";
 import DimensionToolbar, { updateStylesType } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
 import { test } from "@/assets/test"
-import { ArrowBigLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
@@ -308,9 +308,9 @@ const Editor = () => {
             <div className="h-[8vh] bg-slate-700 flex justify-between items-center p-2 gap-8">
                 <button
                     onClick={() => router.back()}
-                    className="cursor-pointer"
+                    className="cursor-pointer bg-stone-200 p-1 rounded-[50%]"
                 >
-                  <ArrowBigLeft />
+                  <ArrowLeft color="#808080" />
                 </button>
 
                 <div className="flex justify-end items-center gap-8">

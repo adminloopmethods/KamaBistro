@@ -62,7 +62,7 @@ const divisionBaseStyle: React.CSSProperties = {
   "width": "20px",
   "height": "5px",
   "backgroundColor": "transparent",
-  "background": "linear-gradient(to right, red, blue)"
+  "backgroundImage": "linear-gradient(to right, red, blue)"
 }
 
 // Base Element class
