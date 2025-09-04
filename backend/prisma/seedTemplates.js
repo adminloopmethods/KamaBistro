@@ -1,5 +1,6 @@
 // Import dependencies
 import { randomUUID } from "node:crypto";
+import { PrismaClient } from "@prisma/client";
 import { createWebpageService } from "../src/modules/content/content.service.js";
 
 import Catering from "./templates/catering.json" assert {type: "json"}
@@ -22,9 +23,6 @@ import privateDinningLocationThree from "./templates/privateDinningLocationthree
 import reserveTableLocationOne from "./templates/reserveTableLocationone.json" assert {type: "json"}
 import reserveTableLocationTwo from "./templates/reserveTableLocationtwo.json" assert {type: "json"}
 import reserveTableLocationThree from "./templates/reserveTableLocationthree.json" assert {type: "json"}
-// import Catering from "./templates/catering.json" assert {type: "json"}
-// import Catering from "./templates/catering.json" assert {type: "json"}
-
 
 // Put them in an array
 const webpages = [
@@ -68,18 +66,43 @@ function replaceIds(obj) {
   return obj;
 }
 
-// Main function to process all webpages
-async function processWebpages() {
-  for (const page of webpages) {
-    const newData = replaceIds(page);
+// Main function to process all webpages in a transaction
+export async function processWebpages() {
+  const prisma = new PrismaClient();
 
-    // Refresh timestamps
+  // Prepare all new data first
+  const newPages = webpages.map(page => {
+    const newData = replaceIds(page);
     newData.createdAt = new Date().toISOString();
     newData.updatedAt = new Date().toISOString();
+    return newData;
+  });
 
-    // Save to database
-    await createWebpageService(newData);
+  try {
+    await prisma.$transaction(async (tx) => {
+      // We assume createWebpageService can accept a Prisma transaction client as an optional argument
+      // If not, you may need to refactor createWebpageService to accept tx or use tx directly here
+      for (const newData of newPages) {
+        try {
+          await createWebpageService(newData, tx);
+          console.log(`Inserted page with route: ${newData.route}`);
+        } catch (error) {
+          // Prisma error code for unique constraint violation is P2002
+          if (error.code === 'P2002' && error.meta && error.meta.target && error.meta.target.includes('route')) {
+            console.warn(`Skipped duplicate route: ${newData.route}`);
+            // Optionally, you can throw here to rollback the whole transaction if you want strict all-or-nothing
+            throw error;
+          } else {
+            console.error(`Error inserting page with route: ${newData.route}`, error);
+            throw error; // Rollback transaction on any error
+          }
+        }
+      }
+    });
+    console.log("All pages inserted successfully in a single transaction.");
+  } catch (err) {
+    console.error("Transaction failed. No data was inserted.", err);
+  } finally {
+    await prisma.$disconnect();
   }
 }
-
-processWebpages();

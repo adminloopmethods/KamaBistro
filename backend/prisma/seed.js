@@ -1,39 +1,43 @@
 import prismaClient from "../src/config/dbConfig.js";
-import {EncryptData} from "../src/helper/bcryptManager.js";
+import { EncryptData } from "../src/helper/bcryptManager.js";
+import { processWebpages } from "./seedTemplates.js";
 
 const mode = process.env.MODE || "dev";
 const email = process.env[`SUPER_ADMIN_EMAIL_${mode}`];
 const pass = process.env[`SUPER_ADMIN_PASSWORD_${mode}`];
 
-const roles = [{name: "EDITOR"}, {name: "VERIFIER"}];
-const locations = [{name: "La Grange"}, {name: "Wicker Park"}, {name: "West Loop"}];
+const roles = [{ name: "EDITOR" }, { name: "VERIFIER" }];
+const locations = [
+  { name: "La Grange" },
+  { name: "Wicker Park" },
+  { name: "West Loop" },
+];
 
 // Helper function to upsert roles
 const upsertRole = async (role) => {
   await prismaClient.role.upsert({
-    where: {name: role.name},
+    where: { name: role.name },
     update: {},
-    create: {name: role.name},
+    create: { name: role.name },
   });
   console.log(`Ensured role: ${role.name}`);
 };
 
-// Helper fuction to upsert location
+// Helper function to upsert location
 const upsertLocation = async (location) => {
   const existingLocation = await prismaClient.location.findFirst({
-    where: {name: location.name},
+    where: { name: location.name },
   });
 
   if (!existingLocation) {
     await prismaClient.location.create({
-      data: {name: location.name},
+      data: { name: location.name },
     });
     console.log(`Created location: ${location.name}`);
   } else {
     console.log(`Location already exists: ${location.name}`);
   }
 };
-
 
 const seedDB = async () => {
   try {
@@ -42,7 +46,7 @@ const seedDB = async () => {
       await upsertRole(role);
     }
 
-    // Upsert location
+    // Upsert locations
     for (const location of locations) {
       await upsertLocation(location);
     }
@@ -52,7 +56,7 @@ const seedDB = async () => {
 
     // Upsert super admin user
     await prismaClient.user.upsert({
-      where: {email},
+      where: { email },
       update: {
         password: hashedPassword,
         isSuperUser: true,
@@ -65,6 +69,9 @@ const seedDB = async () => {
       },
     });
     console.log("Super admin user ensured successfully");
+
+    // Run the webpage seeding after super admin seed is complete
+    await processWebpages();
   } catch (error) {
     console.error("Error seeding database:", error);
     throw error;
