@@ -1,37 +1,33 @@
-<!-- # Ignore system files
+# Ignore system files
 .DS_Store
 Thumbs.db
 
-# Node.js related files
-node_modules/
+# Node modules and logs
+node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-# Ignore IDE files
-.vscode/
-.idea/
-# Ignore build outputs
-/dist/
-/build/
 
-# Ignore environment files
+# IDE/editor files
+.vscode
+.idea
+
+# Build artifacts
+dist
+build
+
+# Env files
 .env
 .env.*
+.cache
 
-# Cache and temporary files
-.cache/
+# Swap files
 *.swp
 *.swo
 
+# Exclude special character files and empty ones
+[!a-zA-Z0-9]*
+*.*
 
-# Ignore files with unusual names
- [backend
- =
- transferring
-
- # Ignore all files that start with a special character
- [!a-zA-Z0-9]*
-
- # Ignore all empty files
- *.*  # This ignores all files with an extension
- !backend/.env.* -->
+# Allow specific env files
+!backend/.env.*
