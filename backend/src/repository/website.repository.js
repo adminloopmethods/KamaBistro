@@ -146,3 +146,18 @@ export const fetchContentForWebsite = async (
 
   return result;
 };
+
+export const findWebpageById = async (webpageId) => {
+  return await prismaClient.webpage.findUnique({
+    where: {id: webpageId},
+    // include: {
+    //   editor: true,
+    //   verifier: true,
+    //   pageRoles: {
+    //     include: {
+    //       user: true,
+    //     },
+    //   },
+    // },
+  });
+};

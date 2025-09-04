@@ -1,10 +1,10 @@
-import {Router} from "express";
+import { Router } from "express";
 import MediaController from "./media.controller.js";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import multer from "multer";
 import mediaUploader from "../../helper/mediaUploader.js";
 const router = Router();
-const upload = multer({dest: "uploads/"}); // temporary folder
+const upload = multer({ dest: "uploads/" }); // temporary folder
 
 router.post(
   "/upload",

@@ -4,7 +4,9 @@ const emailRule = Joi.string().email().min(3).max(30).required();
 const passwordRule = Joi.string()
   .min(8)
   .max(30)
-  .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/) //^[a-zA-Z0-9@._-]+$
+  .pattern(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+  ) //^[a-zA-Z0-9@._-]+$
   .required();
 const otpOriginRule = Joi.string().min(8).max(30).required();
 const deviceIdRule = Joi.string().min(6).max(20).required();

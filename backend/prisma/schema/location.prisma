@@ -1,0 +1,6 @@
+model location {
+  id      String    @id @default(uuid())
+  name    String
+  User    User[]
+  Webpage Webpage[]
+}

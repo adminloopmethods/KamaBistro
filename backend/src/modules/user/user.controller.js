@@ -1,33 +1,51 @@
 import {getSocketId} from "../../helper/socketConnectionID.js";
 import {
   activateUsers,
+  AssignPageRole,
+  assignRole,
   createUser,
   deactivateUsers,
   editProfile,
   editProfileImage,
   editUserDetails,
+  getAllLocations,
   getAllRolesForUser,
   getAllUsers,
   getAllUsersByRoleId,
   getUserById,
+  removeRole,
   userRoleType,
 } from "./user.service.js";
-import { handleEntityCreationNotification } from "../../helper/notificationHelper.js";
+import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
+import {assignPageRole} from "../../repository/user.repository.js";
 
 const CreateUserHandler = async (req, res) => {
-  const {name, email, password, phone, roles} = req.body;
-  const user = await createUser(name, email, password, phone, roles);
-  res.locals.entityId = user.user.id;
+  const {name, email, password, phone, locationId} = req.body;
+  const user = await createUser(name, email, password, phone, locationId);
+  console.log(user, "--------------------------------user");
+  res.locals.entityId = user?.user?.id;
   res.status(201).json(user);
   // Notification: user created
-  const io = req.app.locals.io;
-  await handleEntityCreationNotification({
-    io,
-    userId: req.user?.id || user.user.id, // fallback to created user if no actor
-    entity: "user",
-    newValue: user.user,
-    actionType: "CREATE",
-    targetUserId: user.user.id,
+  // const io = req.app.locals.io;
+  // await handleEntityCreationNotification({
+  //   io,
+  //   userId: req.user?.id || user.user.id, // fallback to created user if no actor
+  //   entity: "user",
+  //   newValue: user.user,
+  //   actionType: "CREATE",
+  //   targetUserId: user.user.id,
+  // });
+};
+
+const AssignPageRoleHandler = async (req, res) => {
+  const {userId, webpageId, roleId} = req.body;
+
+  // Only super admins can assign roles - enforced by middleware
+  const assignment = await AssignPageRole(userId, webpageId, roleId);
+
+  res.status(201).json({
+    message: "Role assigned successfully",
+    assignment,
   });
 };
 
@@ -66,20 +84,26 @@ const GetAllUsersByRoleId = async (req, res) => {
 
 const EditUserDetails = async (req, res) => {
   const {id} = req.params;
-  const {name, password, phone, roles} = req.body;
-  const updatedUser = await editUserDetails(id, name, password, phone, roles);
-  const io = req.app.locals.io;
+  const {name, password, phone, locationId} = req.body;
+  const updatedUser = await editUserDetails(
+    id,
+    name,
+    password,
+    phone,
+    locationId
+  );
+  // const io = req.app.locals.io;
   // Notification: user updated
-  await handleEntityCreationNotification({
-    io,
-    userId: req.user?.id,
-    entity: "user",
-    newValue: updatedUser.result,
-    actionType: "UPDATE",
-    targetUserId: id,
-  });
-  const socketIdOfUpdatedUser = getSocketId(id);
-  io.to(socketIdOfUpdatedUser).emit("userUpdated", updatedUser);
+  // await handleEntityCreationNotification({
+  //   io,
+  //   userId: req.user?.id,
+  //   entity: "user",
+  //   newValue: updatedUser.result,
+  //   actionType: "UPDATE",
+  //   targetUserId: id,
+  // });
+  // const socketIdOfUpdatedUser = getSocketId(id);
+  // io.to(socketIdOfUpdatedUser).emit("userUpdated", updatedUser);
   res.status(201).json(updatedUser);
 };
 
@@ -99,9 +123,10 @@ const ActivateUser = async (req, res) => {
 const DeactivateUser = async (req, res) => {
   const {id} = req.body;
   const result = await deactivateUsers(id);
-  const io = req.app.locals.io;
-  const socketIdOfUpdatedUser = getSocketId(id);
-  io.to(socketIdOfUpdatedUser).emit("userUpdated", {result});
+  res.locals.entityId = id;
+  // const io = req.app.locals.io;
+  // const socketIdOfUpdatedUser = getSocketId(id);
+  // io.to(socketIdOfUpdatedUser).emit("userUpdated", {result});
   res.status(200).json(result);
 };
 
@@ -129,8 +154,67 @@ const EditProfileImage = async (req, res) => {
   res.status(201).json(updatedUser);
 };
 
+const GetAllLocations = async (req, res) => {
+  const location = await getAllLocations();
+  res.status(201).json(location);
+};
+
+const AssignRoleToWebpage = async (req, res) => {
+  try {
+    const {webpageId, userId, roleId} = req.body;
+
+    if (!userId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and roleId are required",
+      });
+    }
+
+    const result = await assignRole(webpageId, userId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `User successfully assigned to webpage role`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// controllers/UserController.ts
+const RemoveRoleFromWebpage = async (req, res) => {
+  try {
+    const {webpageId, roleId} = req.body;
+
+    if (!webpageId || !roleId) {
+      return res.status(400).json({
+        success: false,
+        message: "webpageId and roleId are required",
+      });
+    }
+
+    const result = await removeRole(webpageId, roleId);
+
+    res.status(200).json({
+      success: true,
+      message: `Role successfully removed from webpage`,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   CreateUserHandler,
+  AssignPageRoleHandler,
   GetAllUsers,
   GetUserById,
   EditUserDetails,
@@ -142,4 +226,7 @@ export default {
   GetAllUsersByRoleId,
   GetUserProfile,
   EditProfileImage,
+  GetAllLocations,
+  AssignRoleToWebpage,
+  RemoveRoleFromWebpage,
 };

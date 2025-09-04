@@ -1,487 +1,601 @@
-import {logger} from "../../config/index.js";
-import {assert, assertEvery} from "../../errors/assertError.js";
-import {
-  fetchResources,
-  assignUserToResource,
-  fetchEligibleUsers,
-  fetchResourceInfo,
-  fetchAssignedUsers,
-  fetchContent,
-  fetchAllResourcesWithContent,
-  createOrUpdateVersion,
-  publishContent,
-  updateContentAndGenerateRequest,
-  fetchRequests,
-  fetchRequestInfo,
-  markAllAssignedUserInactive,
-  approveRequestInVerification,
-  approveRequestInPublication,
-  rejectRequestInVerification,
-  rejectRequestInPublication,
-  fetchVersionsList,
-  deleteAllResourceRelatedDataFromDb,
-  fetchVersionsInfo,
-  restoreLiveVersion,
-  deactivateResource,
-  activateResource,
-  getTotalRolesCounts,
-  getTotalUserCounts,
-  getTotalResourceRole,
-  getTotalAvailableRequests,
-  getTotalAvailableProjects,
-  scheduleRequestToPublish,
-  createResources,
-  fetchVersionContent,
-  checkSlugExists,
-  fetchAllFilters,
-  fetchAllResourceSlugs
-} from "../../repository/content.repository.js";
+import prismaClient from "../../config/dbConfig.js";
+import crypto from "node:crypto";
 
-// Create New Resource ================================
+// ---------------- CREATE WEBPAGE ----------------
+export const createWebpageService = async ({
+  name,
+  contents,
+  route,
+  editedWidth,
+}) => {
+  const id = crypto.randomUUID();
 
+  const webpage = await prismaClient.webpage.create({
+    data: {
+      id,
+      name,
+      route,
+      editedWidth,
+      contents: {
+        create: contents.map((section, sectionIndex) => {
+          const childrenCreate = [];
+          const elementsCreate = [];
 
-const addNewResource = async (
-  titleEn,
-  titleAr,
-  slug,
-  resourceType,
-  resourceTag,
-  relationType,
-  parentId,
-  filters,
-  icon,
-  image,
-  referenceDoc,
-  comments,
-  sections
-) => {
+          section.elements.forEach((el, index) => {
+            if (el.name === "section") {
+              childrenCreate.push({
+                id: el.id,
+                name: el.name,
+                givenName: el.givenName || null,
+                order: index,
+                hover: el.hover || null, // ✅ now saving
+                aria: el.aria || null, // ✅ now saving
+                style: {
+                  create: {
+                    xl: el.style?.xl,
+                    lg: el.style?.lg,
+                    md: el.style?.md,
+                    sm: el.style?.sm,
+                  },
+                },
+                elements: {
+                  create: el.elements.map((childEl, childIndex) => ({
+                    id: childEl.id,
+                    name: childEl.name,
+                    content: childEl.content,
+                    hover: childEl.hover,
+                    href: childEl.href,
+                    aria: childEl.aria,
+                    order: childIndex,
+                    style: {
+                      create: {
+                        xl: childEl.style?.xl,
+                        lg: childEl.style?.lg,
+                        md: childEl.style?.md,
+                        sm: childEl.style?.sm,
+                      },
+                    },
+                  })),
+                },
+              });
+            } else {
+              elementsCreate.push({
+                id: el.id,
+                name: el.name,
+                content: el.content,
+                hover: el.hover,
+                href: el.href,
+                aria: el.aria,
+                order: index,
+                style: {
+                  create: {
+                    xl: el.style?.xl,
+                    lg: el.style?.lg,
+                    md: el.style?.md,
+                    sm: el.style?.sm,
+                  },
+                },
+              });
+            }
+          });
 
-  // Check if slug exists
-  const existingResource = await checkSlugExists(slug);
-  if (existingResource) {
-    throw new Error("Resource with this slug already exists");
-  }
-
-
-  // Create the resource with all its related data
-  const newResource = await createResources(
-    titleEn,
-    titleAr,
-    slug,
-    resourceType,
-    resourceTag,
-    relationType,
-    parentId,
-    filters,
-    icon,
-    image,
-    referenceDoc,
-    comments,
-    sections
-  );
-
-  logger.info({
-    response: "New resource created successfully",
+          return {
+            id: section.id,
+            name: section.name,
+            givenName: section.givenName || null,
+            order: sectionIndex,
+            hover: section.hover || null, // ✅ now saving
+            aria: section.aria || null, // ✅ now saving
+            style: {
+              create: {
+                xl: section.style?.xl,
+                lg: section.style?.lg,
+                md: section.style?.md,
+                sm: section.style?.sm,
+              },
+            },
+            children: { create: childrenCreate },
+            elements: { create: elementsCreate },
+          };
+        }),
+      },
+    },
+    include: {
+      contents: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          children: {
+            orderBy: { order: "asc" },
+            include: {
+              style: true,
+              elements: { orderBy: { order: "asc" }, include: { style: true } },
+            },
+          },
+        },
+      },
+    },
   });
-  return {message: "Success", newResource};
+
+  return { webpage, id };
 };
 
-//=====================================================
+// ---------------- GET ALL WEBPAGES ----------------
+export const getAllWebpagesService = async () => {
+  return await prismaClient.webpage.findMany({
+    include: {
+      editor: true,
+      verifier: true,
+      contents: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: {
+            orderBy: { order: "asc" },
+            include: { style: true },
+          },
+        },
+      },
+    },
+  });
+};
 
-const getResources = async (
-  resourceType,
-  resourceTag,
-  relationType,
-  isAssigned,
-  search,
-  status,
-  pageNum,
-  limitNum,
-  fetchType,
-  userId,
-  roleId,
-  apiCallType,
-  filterText,
-  parentId
+// services/contentService.js
+export const getAssignedWebpagesService = async (userId) => {
+  return await prismaClient.webpage.findMany({
+    where: {
+      OR: [{ editorId: userId }, { verifierId: userId }],
+    },
+    include: {
+      editor: true,
+      verifier: true,
+      contents: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: {
+            orderBy: { order: "asc" },
+            include: { style: true },
+          },
+        },
+      },
+    },
+  });
+};
+
+// ---------------- GET WEBPAGE BY ID ----------------
+export const getWebpageByIdService = async (id) => {
+  const webpage = await prismaClient.webpage.findUnique({
+    where: { id },
+    include: {
+      contents: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: {
+            orderBy: { order: "asc" },
+            include: { style: true },
+          },
+          children: {
+            orderBy: { order: "asc" },
+            include: {
+              style: true,
+              elements: {
+                orderBy: { order: "asc" },
+                include: { style: true },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!webpage) return null;
+
+  const transformSection = (section) => {
+    // merge children + elements into one list with order preserved
+    const merged = [
+      ...(section.children?.map((child) => ({
+        id: child.id,
+        name: child.name,
+        givenName: child.givenName,
+        style: child.style,
+        hover: child.hover, // ✅ now included
+        aria: child.aria, // ✅ now included
+        order: child.order,
+        type: "section",
+        elements: transformSection(child).elements, // recurse
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: el.id,
+        name: el.name,
+        style: el.style,
+        content: el.content,
+        hover: el.hover, // ✅ already included
+        href: el.href,
+        aria: el.aria, // ✅ already included
+        order: el.order,
+        type: "element",
+      })) || []),
+    ];
+
+    // sort by order before returning
+    merged.sort((a, b) => a.order - b.order);
+
+    return {
+      id: section.id,
+      name: section.name,
+      givenName: section.givenName,
+      style: section.style,
+      hover: section.hover, // ✅ added
+      aria: section.aria, // ✅ added
+      elements: merged.map(({ order, type, ...rest }) => rest), // clean output
+    };
+  };
+
+  return {
+    ...webpage,
+    contents: webpage.contents.map(transformSection),
+  };
+};
+
+// ---------------- UPDATE WEBPAGE BY ID ----------------
+export const updateWebpageByIdService = async (
+  id,
+  { name, contents, editedWidth }
 ) => {
-  if (fetchType === "CONTENT") {
-    const resources = await fetchAllResourcesWithContent(
-      resourceType,
-      resourceTag,
-      relationType,
-      isAssigned,
-      search,
-      status,
-      pageNum,
-      limitNum,
-      userId,
-      roleId,
-      apiCallType,
-      filterText,
-      parentId
-    );
-    logger.info({
-      response: "Resources fetched successfully with content",
-      // resources: resources,
+  // Step 1: Update webpage info
+  const updatedWebpage = await prismaClient.webpage.update({
+    where: { id },
+    data: {
+      name,
+      ...(editedWidth !== undefined && { editedWidth }),
+    },
+  });
+
+  // Step 2: Fetch existing contents
+  const existingContents = await prismaClient.content.findMany({
+    where: { webpageId: id },
+    include: {
+      elements: { include: { style: true } },
+      children: { include: { elements: { include: { style: true } }, style: true } },
+      style: true,
+    },
+  });
+
+  // ---------------- DELETE MISSING SECTIONS (Recursive) ----------------
+  function collectSectionIds(sections, set) {
+    for (const s of sections) {
+      set.add(s.id);
+      if (s.children?.length) {
+        collectSectionIds(s.children, set);
+      }
+      if (s.elements?.length) {
+        // If elements can also be nested sections
+        const nestedSections = s.elements.filter((el) => el.name === "section");
+        collectSectionIds(nestedSections, set);
+      }
+    }
+  }
+
+  const incomingSectionIds = new Set();
+  collectSectionIds(contents, incomingSectionIds);
+
+  function collectExistingSections(contentsArray, all = []) {
+    for (const c of contentsArray) {
+      all.push(c);
+      if (c.children?.length) {
+        collectExistingSections(c.children, all);
+      }
+    }
+    return all;
+  }
+  const allExistingSections = collectExistingSections(existingContents);
+
+  const sectionsToDelete = allExistingSections.filter(
+    (c) => !incomingSectionIds.has(c.id)
+  );
+
+  if (sectionsToDelete.length) {
+    await prismaClient.$transaction(async (tx) => {
+      for (const section of sectionsToDelete) {
+        // Delete children first (if schema doesn’t cascade)
+        await tx.content.deleteMany({ where: { parentId: section.id } });
+        // Delete section itself
+        await tx.content.delete({ where: { id: section.id } });
+      }
     });
-    return {message: "Success", resources};
-  } else if(fetchType === 'SLUG'){
-    const resources =  await fetchAllResourceSlugs( resourceType,
-      resourceTag,)
-      logger.info({
-        response: "Resource's slug fetch successfully",
-      });
-      return {message: "Success", resources};
-  }
-  const resources = await fetchResources(
-    resourceType,
-    resourceTag,
-    relationType,
-    isAssigned,
-    search,
-    status,
-    pageNum,
-    limitNum,
-    userId,
-    roleId,
-    apiCallType,
-    filterText,
-    parentId
-  );
-  logger.info({
-    response: "Resources fetched successfully without content",
-    // resources: resources,
-  });
-  return {message: "Success", resources};
-};
-
-const getResourceInfo = async (resourceId) => {
-  const resourceInfo = await fetchResourceInfo(resourceId);
-  logger.info({
-    response: "Page Info fetched successfully",
-    // resourceInfo: resourceInfo,
-  });
-  return {message: "Success", resourceInfo};
-};
-
-const getAssignedUsers = async (resourceId) => {
-  const assignedUsers = await fetchAssignedUsers(resourceId);
-  logger.info({
-    response: `assignedUsers fetched successfully`,
-    // assignedUsers: assignedUsers,
-  });
-  return {message: "Success", assignedUsers};
-};
-
-const getEligibleUser = async (roleType, permission) => {
-  const eligibleUsers = await fetchEligibleUsers(roleType, permission);
-  logger.info({
-    response: `eligibleUsers fetched successfully for ${roleType} and ${permission}`,
-    // eligibleUsers: eligibleUsers,
-  });
-  return {message: "Success", eligibleUsers};
-};
-
-const assignUser = async (
-  resourceId,
-  manager,
-  editor,
-  verifiers,
-  publisher
-) => {
-  const assignedUsers = await assignUserToResource(
-    resourceId,
-    manager,
-    editor,
-    verifiers,
-    publisher
-  );
-  logger.info({
-    response: `Users assigned successfully`,
-    // assignedUsers: assignedUsers,
-  });
-  return {message: "Users assigned successfully", assignedUsers};
-};
-
-const removeAssignedUser = async (resourceId) => {
-  assert(resourceId, "NOT_FOUND", "ResourceId required");
-  const result = await markAllAssignedUserInactive(resourceId);
-  logger.info({
-    response: `Users removed successfully`,
-    // result: result,
-  });
-  return {message: "Users removed successfully", result};
-};
-
-const getContent = async (resourceId) => {
-  const content = await fetchContent(resourceId);
-  logger.info({
-    response: "Content fetched successfully",
-    // content: content,
-  });
-  return {message: "Success", content};
-};
-
-const updateContent = async (saveAs, content) => {
-  // If saveAs is provided, update the version status in the content
-  if (saveAs && content.newVersionEditMode) {
-    content.newVersionEditMode.versionStatus = saveAs;
-  }
-  const updatedContent = await createOrUpdateVersion(content);
-  logger.info({
-    response: "Content updated successfully",
-    updatedContent: updatedContent,
-  });
-  return {message: updatedContent.message, resource: updatedContent.resource};
-};
-
-const directPublishContent = async (content, userId) => {
-  const publishedContent = await publishContent(content, userId);
-  logger.info({
-    response: "Content published successfully",
-    publishedContent: publishedContent,
-  });
-  return {message: "Success", content: publishedContent};
-};
-
-const generateRequest = async (content, userId) => {
-  const request = await updateContentAndGenerateRequest(content, userId);
-  logger.info({
-    response: "Content update request has been generated",
-    request: request,
-  });
-  return {message: "Success", content: request};
-};
-
-const getRequest = async (
-  userId,
-  roleId,
-  permission,
-  search,
-  status,
-  pageNum,
-  limitNum,
-  resourceId
-) => {
-  const requests = await fetchRequests(
-    userId,
-    roleId,
-    permission,
-    search,
-    status,
-    pageNum,
-    limitNum,
-    resourceId
-  );
-  logger.info({
-    response: "Requests fetched successfully",
-    // requests: requests,
-  });
-  return {message: "Success", requests};
-};
-
-const getRequestInfo = async (requestId) => {
-  const requestInfo = await fetchRequestInfo(requestId);
-  logger.info({
-    response: "Request Info fetched successfully",
-    // requestInfo: requestInfo,
-  });
-  return {message: "Success", requestInfo};
-};
-
-const approveRequest = async (requestId, userId) => {
-  // First, get the request to determine if it's a verification or publication request
-  const requestInfo = await fetchRequestInfo(requestId);
-
-  let request;
-  // Check the request type to determine which approval function to use
-  if (requestInfo.details.requestType === "PUBLICATION") {
-    // This is a publication request, use approveRequestInPublication
-    request = await approveRequestInPublication(requestId, userId);
-  } else {
-    // This is a verification request, use approveRequestInVerification
-    request = await approveRequestInVerification(requestId, userId);
   }
 
-  logger.info({
-    response: "Request Approved successfully",
-    // request: request,
-  });
-  return {message: "Success", request};
-};
+  // ---------------- DELETE MISSING ELEMENTS ----------------
+  const existingElementMap = new Map();
 
-const rejectRequest = async (requestId, userId, rejectReason) => {
-  // First, get the request to determine if it's a verification or publication request
-  const requestInfo = await fetchRequestInfo(requestId);
+  function flattenExisting(contentsArray) {
+    for (const content of contentsArray) {
+      if (content.elements) {
+        for (const el of content.elements) {
+          existingElementMap.set(el.id, el);
+          if (el.name === "section" && el.elements) {
+            flattenExisting([{ ...el, elements: el.elements }]);
+          }
+        }
+      }
+      if (content.children) {
+        flattenExisting(content.children);
+      }
+    }
+  }
+  flattenExisting(existingContents);
 
-  let request;
-  // Check the request type to determine which rejection function to use
-  if (requestInfo.details.requestType === "PUBLICATION") {
-    // This is a publication request, use rejectRequestInPublication
-    request = await rejectRequestInPublication(requestId, userId, rejectReason);
-  } else {
-    // This is a verification request, use rejectRequestInVerification
-    request = await rejectRequestInVerification(
-      requestId,
-      userId,
-      rejectReason
-    );
+  const incomingElementIds = new Set();
+  function collectIncomingIds(elementsArray) {
+    for (const el of elementsArray) {
+      incomingElementIds.add(el.id);
+      if (el.name === "section" && el.elements) {
+        collectIncomingIds(el.elements);
+      }
+    }
+  }
+  collectIncomingIds(contents.flatMap((c) => c.elements || []));
+
+  const elementsToDelete = Array.from(existingElementMap.values()).filter(
+    (e) => !incomingElementIds.has(e.id)
+  );
+  if (elementsToDelete.length) {
+    await prismaClient.element.deleteMany({
+      where: { id: { in: elementsToDelete.map((e) => e.id) } },
+    });
   }
 
-  logger.info({
-    response: "Request Rejected successfully",
-    request: request,
+  // ---------------- UPSERT ELEMENTS ----------------
+  async function upsertElements(parentId, elementsArray) {
+    for (let i = 0; i < elementsArray.length; i++) {
+      const el = elementsArray[i];
+      if (el.name === "section") {
+        await prismaClient.content.upsert({
+          where: { id: el.id },
+          update: {
+            name: el.name,
+            givenName: el.givenName || null,
+            hover: el.hover || null,
+            aria: el.aria || null,
+            order: i,
+            parent: { connect: { id: parentId } },
+            style: { update: el.style || {} },
+          },
+          create: {
+            id: el.id,
+            name: el.name,
+            givenName: el.givenName || null,
+            hover: el.hover || null,
+            aria: el.aria || null,
+            order: i,
+            parent: { connect: { id: parentId } },
+            style: { create: el.style || {} },
+          },
+        });
+        if (el.elements?.length) {
+          await upsertElements(el.id, el.elements);
+        }
+      } else {
+        await prismaClient.element.upsert({
+          where: { id: el.id },
+          update: {
+            name: el.name,
+            content: el.content,
+            hover: el.hover,
+            href: el.href,
+            aria: el.aria,
+            order: i,
+            style: { update: el.style || {} },
+          },
+          create: {
+            id: el.id,
+            name: el.name,
+            content: el.content,
+            hover: el.hover,
+            href: el.href,
+            aria: el.aria,
+            order: i,
+            contentRef: { connect: { id: parentId } },
+            style: { create: el.style || {} },
+          },
+        });
+      }
+    }
+  }
+
+  // ---------------- UPSERT SECTIONS ----------------
+  for (let i = 0; i < contents.length; i++) {
+    const section = contents[i];
+    await prismaClient.content.upsert({
+      where: { id: section.id },
+      update: {
+        name: section.name,
+        givenName: section.givenName || null,
+        hover: section.hover || null,
+        aria: section.aria || null,
+        order: i,
+        style: { update: section.style || {} },
+      },
+      create: {
+        id: section.id,
+        name: section.name,
+        givenName: section.givenName || null,
+        hover: section.hover || null,
+        aria: section.aria || null,
+        order: i,
+        webpage: { connect: { id } },
+        style: { create: section.style || {} },
+      },
+    });
+    if (section.elements?.length) {
+      await upsertElements(section.id, section.elements);
+    }
+  }
+
+  // Step 3: Return updated snapshot
+  const finalWebpage = await prismaClient.webpage.findUnique({
+    where: { id },
+    include: {
+      contents: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          children: {
+            orderBy: { order: "asc" },
+            include: {
+              style: true,
+              elements: { orderBy: { order: "asc" }, include: { style: true } },
+            },
+          },
+        },
+      },
+    },
   });
-  return {message: "Success", request};
+
+  // Step 4: Save version snapshot
+  await prismaClient.version.create({
+    data: {
+      webpageId: id,
+      version: finalWebpage,
+    },
+  });
+
+  return finalWebpage;
 };
 
-const scheduleRequest = async (requestId, userId, date) => {
-  const request = await scheduleRequestToPublish(requestId, userId, date);
-  logger.info({
-    response: "Request Scheduled successfully",
-    // request: request,
+// ---------------- GET WEBPAGE VERSIONS ----------------
+export const getWebpageVersionsService = async (webpageId) => {
+  return await prismaClient.version.findMany({
+    where: { webpageId },
+    orderBy: { id: "desc" },
   });
-  return {message: "Success", request};
 };
 
-const PublishRequest = async (requestId) => {
-  const request = await fetchRequestInfo(requestId);
-  logger.info({
-    response: "Request Published successfully",
-    // request: request,
+// ---------------- FIND WEBPAGE ID BY ROUTE ----------------
+export const findWebpageIdByRouteService = async (route) => {
+  console.log(route);
+  const page = await prismaClient.webpage.findUnique({
+    where: { route },
+    select: { id: true },
   });
-  return {message: "Success", request};
+
+  return page ? page.id : null;
 };
 
-const getVersionsList = async (resourceId, search, status, page, limit) => {
-  const content = await fetchVersionsList(
-    resourceId,
-    search,
-    status,
-    page,
-    limit
-  );
-  logger.info({
-    response: "Version history fetched successfully",
-    // content: content,
+// get sections
+// ---------------- GET ALL CONTENTS ----------------
+export const getAllContentsService = async () => {
+  const contents = await prismaClient.content.findMany({
+    select: {
+      id: true,
+      givenName: true,
+    },
+    // orderBy: {
+    //   createdAt: "asc", // optional: keep ordering consistent
+    // },
   });
-  return {message: "Success", content};
+
+  // Normalize to always return string (avoid nulls if you prefer empty string)
+  return contents.map((c) => ({
+    id: c.id,
+    givenName: c.givenName ?? "",
+  }));
 };
 
-const getVersionInfo = async (versionId) => {
-  const content = await fetchVersionsInfo(versionId);
-  logger.info({
-    response: "Version info fetched successfully",
-    // content: content,
+// ---------------- GET CONTENT BY ID (regenerate IDs) ----------------
+export const getContentByIdService = async (id) => {
+  const section = await prismaClient.content.findUnique({
+    where: { id },
+    include: {
+      style: true,
+      elements: {
+        orderBy: { order: "asc" },
+        include: { style: true },
+      },
+      children: {
+        orderBy: { order: "asc" },
+        include: {
+          style: true,
+          elements: { orderBy: { order: "asc" }, include: { style: true } },
+        },
+      },
+    },
   });
-  return {message: "Success", content};
-};
 
-const restoreVersion = async (versionId) => {
-  const content = await restoreLiveVersion(versionId);
-  logger.info({
-    response: "Version restored successfully",
-    // content: content,
-  });
-  return {message: "Success", content};
-};
+  if (!section) return null;
 
-const deleteAllContentData = async () => {
-  const result = await deleteAllResourceRelatedDataFromDb();
-  logger.info({
-    response: "All content-related data deleted successfully",
-    result: result,
-  });
-  return {message: "All content-related data deleted successfully", result};
-};
+  const transformSection = (section) => {
+    const merged = [
+      ...(section.children?.map((child) => ({
+        id: crypto.randomUUID(),
+        name: child.name,
+        givenName: child.givenName,
+        hover: child.hover || null,
+        aria: child.aria || null,
+        style: child.style
+          ? { ...child.style, id: undefined } // clear id
+          : null,
+        order: child.order,
+        type: "section",
+        elements: transformSection(child).elements,
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: crypto.randomUUID(),
+        name: el.name,
+        content: el.content,
+        hover: el.hover || null,
+        aria: el.aria || null,
+        style: el.style
+          ? { ...el.style, id: undefined } // clear id
+          : null,
+        order: el.order,
+        type: "element",
+      })) || []),
+    ];
 
-const deactivateResources = async (resourceId) => {
-  assert(resourceId, "NOT_FOUND", "ResourceId required");
-  const result = await deactivateResource(resourceId);
-  logger.info({
-    response: `Resource deactivated successfully`,
-    // result: result,
-  });
-  return {message: "Resource deactivated successfully", result};
-};
+    merged.sort((a, b) => a.order - b.order);
 
-const activateResources = async (resourceId) => {
-  assert(resourceId, "NOT_FOUND", "ResourceId required");
-  const result = await activateResource(resourceId);
-  logger.info({
-    response: `Resource activated successfully`,
-    // result: result,
-  });
-  return {message: "Resource activated successfully", result};
-};
-
-const getDashboardInsight = async () => {
-  const totalRoles = await getTotalRolesCounts();
-  const totalUsers = await getTotalUserCounts();
-  const totalResourceRoles = await getTotalResourceRole();
-  const totalAvailableRequests = await getTotalAvailableRequests();
-  const totalAvailableProjects = await getTotalAvailableProjects();
-
-  const result = {
-    totalRoles,
-    totalUsers,
-    totalResourceRoles,
-    totalAvailableRequests,
-    totalAvailableProjects,
+    return {
+      id: crypto.randomUUID(),
+      name: section.name,
+      givenName: section.givenName,
+      hover: section.hover || null,
+      aria: section.aria || null,
+      style: section.style
+        ? { ...section.style, id: undefined } // clear id
+        : null,
+      elements: merged.map(({ order, type, ...rest }) => rest), // drop order/type
+    };
   };
 
-  logger.info({
-    response: "All content-related dashboard insight fetched successfully",
-    result: result,
-  });
-
-  return {
-    message: "All content-related dashboard insight fetched successfully",
-    result,
-  };
+  return transformSection(section);
 };
 
-const getVersionContent = async (versionId) => {
-  const response = await fetchVersionContent(versionId);
-  if (!response) {
-    throw new Error("Version not found");
-  }
-  return {
-    message: "Version content fetched successfully",
-    data: response,
-  };
-};
+// export async function clearAllTables() {
+//   await prismaClient.element.deleteMany({});
+//   await prismaClient.content.deleteMany({});
+//   await prismaClient.style.deleteMany({});
+//   await prismaClient.version.deleteMany({});
+//   await prismaClient.proposedVersion.deleteMany({});
+//   await prismaClient.draft.deleteMany({});
+//   await prismaClient.webpage.deleteMany({});
+// }
 
-const getAllFilters = async (resourceId) => {
-  const filters = await fetchAllFilters(resourceId);
-  return { message: "Success", filters };
-};
+// async function clearWebpagesData() {
 
-export {
-  getResources,
-  getResourceInfo,
-  getEligibleUser,
-  assignUser,
-  removeAssignedUser,
-  getAssignedUsers,
-  getContent,
-  updateContent,
-  directPublishContent,
-  generateRequest,
-  getRequest,
-  getRequestInfo,
-  approveRequest,
-  rejectRequest,
-  scheduleRequest,
-  PublishRequest,
-  getVersionsList,
-  getVersionInfo,
-  restoreVersion,
-  deleteAllContentData,
-  deactivateResources,
-  activateResources,
-  getDashboardInsight,
-  getVersionContent,
-  addNewResource,
-  getAllFilters
-};
+//   clearAllTables()
+//     .then(() => {
+//       console.log("✅ All tables cleared successfully!");
+//     })
+//     .catch((err) => {
+//       console.error("❌ Error clearing tables:", err);
+//     })
+//     .finally(async () => {
+//       await prismaClient.$disconnect();
+//     });
+// }

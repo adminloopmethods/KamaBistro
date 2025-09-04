@@ -1,8 +1,8 @@
 model Reminder {
   id          String   @id @default(cuid())
-  sender      User     @relation("SentReminders", fields: [senderId], references: [id])
+  // sender      User     @relation("SentReminders", fields: [senderId], references: [id])
   senderId    String
-  receiver    User     @relation("ReceivedReminders", fields: [receiverId], references: [id])
+  // receiver    User     @relation("ReceivedReminders", fields: [receiverId], references: [id])
   receiverId  String
   subject     String
   message     String

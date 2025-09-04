@@ -18,19 +18,29 @@ const rolesRule = Joi.array()
   .items(Joi.string())
   .messages({"array.includes": "Invalid role ID format"});
 
+const locationRule = Joi.string().optional();
+
 const userSchema = Joi.object({
   name: nameRule,
   email: emailRule,
   password: passwordRule,
   phone: phoneRule,
-  roles: rolesRule,
+  // roles: rolesRule,
+  locationId: locationRule,
 });
 
 const updateUserSchema = Joi.object({
   name: nameRule,
   password: passwordRule,
   phone: phoneRule,
-  roles: rolesRule,
+  locationId: locationRule,
 });
+
+// const updateUserSchema = Joi.object({
+//   name: Joi.string().required(),
+//   password: Joi.string().allow(null, '').optional(),
+//   phone: Joi.string().required(),
+//   locationId: Joi.string().allow(null, '').optional(),
+// });
 
 export {userSchema, updateUserSchema};

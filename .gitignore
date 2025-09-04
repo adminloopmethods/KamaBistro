@@ -20,18 +20,23 @@ out/
 # misc
 .DS_Store
 *.pem
+.env
+.env.* 
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# local env files
+.env*.local
+
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
-# next-env.d.ts
+next-env.d.ts
 
 # Logs
 logs/
@@ -46,7 +51,7 @@ Thumbs.db
 
 # Build output
 /dist/
-/next/
+/.next/
 /out/
 
 # Temporary files
@@ -81,8 +86,9 @@ Thumbs.db
 docker-compose.override.yml
 docker-compose.local.yml
 
-# Only ignore the main .env file, allow .env.example, .env.* etc.
+# .env files (if you don't want to include sensitive environment files in the container)
 .env
+.env.* 
 
 # IDE/editor files
 .vscode/
@@ -109,3 +115,8 @@ node_modules
 *.log
 tmp
 *.lock
+.env
+env
+env.* 
+
+

@@ -17,7 +17,7 @@ import {
 const Login = async (req, res) => {
   const {email, password} = req.body;
   const response = await login(email, password);
-  //Create and save the audit log 
+  //Create and save the audit log
   await prismaClient.auditLog.create({
     data: {
       actionType: "LOGIN",
@@ -108,20 +108,30 @@ const GetAllLogs = async (req, res) => {
   const {search, status, page, limit, entity, startDate, endDate} = req.query;
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 10;
-  const response = await getAllLogs(search, status, pageNum, limitNum, entity, startDate, endDate);
+  const response = await getAllLogs(
+    search,
+    status,
+    pageNum,
+    limitNum,
+    entity,
+    startDate,
+    endDate
+  );
   res.status(200).json(response);
 };
 
 const DeleteLogsByDateRange = async (req, res) => {
-  const { startDate, endDate } = req.body;
+  const {startDate, endDate} = req.body;
   if (!startDate || !endDate) {
-    return res.status(400).json({ message: "startDate and endDate are required" });
+    return res
+      .status(400)
+      .json({message: "startDate and endDate are required"});
   }
   try {
     const count = await serviceDeleteLogsByDateRange(startDate, endDate);
-    res.status(200).json({ message: `Deleted ${count} logs`, count });
+    res.status(200).json({message: `Deleted ${count} logs`, count});
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({message: err.message});
   }
 };
 

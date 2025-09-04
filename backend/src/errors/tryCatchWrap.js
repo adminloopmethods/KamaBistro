@@ -4,6 +4,7 @@ const tryCatchWrap = (fn) => async (req, res, next) => {
   try {
     await fn(req, res, next);
   } catch (error) {
+    console.log("at the catch")
     handlePrismaError(error, next);
   }
 };

@@ -41,17 +41,17 @@ const uploadMedia = async (mediaType, resourceId, uploadedMedia) => {
   };
 };
 
-const getMedia = async ( resourceId,
-    mediaType,
-    search,
-    pageNum,
-    limitNum) => {
-  const media = await fetchMedia( resourceId,
+const getMedia = async (resourceId,
+  mediaType,
+  search,
+  pageNum,
+  limitNum) => {
+  const media = await fetchMedia(resourceId,
     mediaType,
     search,
     pageNum,
     limitNum);
-  return { message: "Media fetched successfully", media:media };
+  return { message: "Media fetched successfully", media: media };
 };
 
 const deleteMedia = async (mediaId) => {

@@ -7,19 +7,40 @@ import {checkPermission} from "../../helper/roleBasedAccess.js";
 import auditLogger from "../../helper/auditLogger.js";
 import multer from "multer";
 import mediaUploader from "../../helper/mediaUploader.js";
+import {requireSuperAdmin} from "../../helper/requireSuperAdmin.js";
+import {authenticateUser} from "../../helper/authMiddleware.js";
 const upload = multer({dest: "uploads/"}); // temporary folder
 
 const router = Router();
 
-const requiredPermissionsForUser = ["USER_MANAGEMENT"];
+// const requiredPermissionsForUser = ["USER_MANAGEMENT"];
 
 router.post(
   "/create",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   validate(userSchema),
   auditLogger,
   tryCatchWrap(UserController.CreateUserHandler)
 );
+
+router.post(
+  "/assign-page-role",
+  authenticateUser,
+  requireSuperAdmin,
+  auditLogger,
+  tryCatchWrap(UserController.AssignRoleToWebpage)
+);
+
+// routes/user.ts
+router.delete(
+  "/remove-page-role",
+  authenticateUser,
+  requireSuperAdmin,
+  auditLogger,
+  tryCatchWrap(UserController.RemoveRoleFromWebpage)
+);
+
+router.get("/locations", tryCatchWrap(UserController.GetAllLocations));
 
 router.get("/getRolesForUser", tryCatchWrap(UserController.GetRolesForUser));
 
@@ -30,24 +51,21 @@ router.get(
 
 router.get(
   "/getAllUsers",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   tryCatchWrap(UserController.GetAllUsers)
 );
 
-router.get(
-  "/getUserProfile",
-  tryCatchWrap(UserController.GetUserProfile)
-);
+router.get("/getUserProfile", tryCatchWrap(UserController.GetUserProfile));
 
 router.get(
   "/:id",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   tryCatchWrap(UserController.GetUserById)
 );
 
 router.put(
   "/updateUser/:id",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   validate(updateUserSchema),
   auditLogger,
   tryCatchWrap(UserController.EditUserDetails)
@@ -69,21 +87,18 @@ router.put(
 
 router.put(
   "/activate",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   auditLogger,
   tryCatchWrap(UserController.ActivateUser)
 );
 
 router.put(
   "/deactivate",
-  checkPermission(requiredPermissionsForUser),
+  // checkPermission(requiredPermissionsForUser),
   auditLogger,
   tryCatchWrap(UserController.DeactivateUser)
 );
 
-router.get(
-  "/userRoleType/:id",
-  tryCatchWrap(UserController.UserRoleType)
-);
+router.get("/userRoleType/:id", tryCatchWrap(UserController.UserRoleType));
 
 export default router;

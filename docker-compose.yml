@@ -1,37 +1,37 @@
 services:
-  postgres:
-    image: postgres:latest
-    container_name: postgres-service
-    # restart: always
-    env_file:
-      - .env # Dynamically load the correct .env file
-    ports:
-      - "${POSTGRES_PORT}:5432" # Expose for development only
-    networks:
-      - cms_network
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_LISTEN_ADDRESS: 0.0.0.0
-    volumes:
-      - postgres-data:/var/lib/postgresql/data # Persist database data
+  # kama-postgres:
+  #   image: postgres:latest
+  #   container_name: kama-postgres
+  #   # restart: always
+  #   env_file:
+  #     - .env # Dynamically load the correct .env file
+  #   ports:
+  #     - "${POSTGRES_PORT}:5432" # Expose for development only
+  #   networks:
+  #     - cms_network
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     POSTGRES_LISTEN_ADDRESS: 0.0.0.0
+  #   volumes:
+  #     - postgres-data:/var/lib/postgresql/data # Persist database data
 
-  backend:
+  kama-backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
         DATABASE_URL: ${DATABASE_URL}
-    container_name: backend-service
+    container_name: kama-backend
     env_file:
       - .env # Dynamically load the correct .env file
     ports:
       - "${BACKEND_PORT}:3000" # Expose for development only
     networks:
       - cms_network
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
     volumes:
       - ./backend:/app # Mount the source code for live updates
       - backend-data:/app/data # Persist backend data
@@ -45,5 +45,5 @@ networks:
     driver: bridge
 
 volumes:
-  postgres-data:
+  # postgres-data:
   backend-data:

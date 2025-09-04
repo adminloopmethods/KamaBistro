@@ -10,33 +10,38 @@ import {
   updatePasswordSchema,
 } from "../../validation/authSchema.js";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
-import { resendOtpRateLimiter, generateOtpRateLimiter} from "../../helper/rateLimiter.js";
-import { checkPermission } from "../../helper/roleBasedAccess.js";
+import {
+  resendOtpRateLimiter,
+  generateOtpRateLimiter,
+} from "../../helper/rateLimiter.js";
+import {checkPermission} from "../../helper/roleBasedAccess.js";
+import auditLogger from "../../helper/auditLogger.js";
 
 const router = Router();
 
-const requiredPermissionsLog = ["AUDIT_LOGS_MANAGEMENT"];
+// const requiredPermissionsLog = ["AUDIT_LOGS_MANAGEMENT"];
 
 router.post(
   "/login",
-  validator(loginSchema),
+  // validator(loginSchema),
+
   tryCatchWrap(AuthController.Login)
 );
 
 // takes email and generates otp
-router.post(
-  "/mfa/login",
-  generateOtpRateLimiter,
-  validator(generateOtpSchema),
-  tryCatchWrap(AuthController.MFALogin)
-);
+// router.post(
+//   "/mfa/login",
+//   generateOtpRateLimiter,
+//   validator(generateOtpSchema),
+//   tryCatchWrap(AuthController.MFALogin)
+// );
 
 // takes otp and verifies it to login
-router.post(
-  "/mfa/verify",
-  validator(verifyOtpSchema),
-  tryCatchWrap(AuthController.VerifyMFALogin)
-);
+// router.post(
+//   "/mfa/verify",
+//   validator(verifyOtpSchema),
+//   tryCatchWrap(AuthController.VerifyMFALogin)
+// );
 
 router.post("/logout", authenticateUser, tryCatchWrap(AuthController.Logout));
 
@@ -51,18 +56,23 @@ router.post(
   "/forgotPassword",
   generateOtpRateLimiter,
   validator(generateOtpSchema),
+  auditLogger,
   tryCatchWrap(AuthController.ForgotPassword)
 );
 
 router.post(
   "/forgotPassword/verify",
   validator(verifyOtpSchema),
+  auditLogger,
+
   tryCatchWrap(AuthController.ForgotPasswordVerify)
 );
 
 router.post(
   "/forgotPassword/updatePassword",
   validator(updatePasswordSchema),
+  auditLogger,
+
   tryCatchWrap(AuthController.UpdatePassword)
 );
 
@@ -83,16 +93,15 @@ router.post(
 router.get(
   "/logs",
   authenticateUser,
-  checkPermission(requiredPermissionsLog),
+  // checkPermission(requiredPermissionsLog),
   tryCatchWrap(AuthController.GetAllLogs)
 );
 
 router.post(
   "/logs/delete",
   authenticateUser,
-  checkPermission(requiredPermissionsLog),
+  // checkPermission(requiredPermissionsLog),
   tryCatchWrap(AuthController.DeleteLogsByDateRange)
 );
 
 export default router;
-

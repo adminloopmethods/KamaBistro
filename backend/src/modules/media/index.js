@@ -1,4 +1,4 @@
-import {Router} from "express";
+import { Router } from "express";
 import MediaRoutes from "./media.routes.js";
 import { authenticateUser } from "../../helper/authMiddleware.js";
 
