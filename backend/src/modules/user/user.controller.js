@@ -17,7 +17,15 @@ import {
   userRoleType,
 } from "./user.service.js";
 import {handleEntityCreationNotification} from "../../helper/notificationHelper.js";
-import {assignPageRole} from "../../repository/user.repository.js";
+import {
+  assignPageRole,
+  findUserById,
+  findUserByIdIncludingDeleted,
+  restoreUser,
+  softDeleteUser,
+} from "../../repository/user.repository.js";
+import extendedPrismaClient from "../../config/dbConfig.js";
+import prismaClient from "../../config/dbConfig.js";
 
 const CreateUserHandler = async (req, res) => {
   const {name, email, password, phone, locationId} = req.body;
@@ -212,6 +220,70 @@ const RemoveRoleFromWebpage = async (req, res) => {
   }
 };
 
+const DeleteUser = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    // Check if user exists and is not already deleted
+    const user = await findUserById(id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Soft delete the user
+    await softDeleteUser(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+const RestoreDeletedUser = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    // Use the function that can find users including soft-deleted ones
+    const user = await findUserByIdIncludingDeleted(id);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    if (!user.deletedAt) {
+      return res.status(400).json({
+        success: false,
+        message: "User is not deleted",
+      });
+    }
+
+    // Restore the user
+    await restoreUser(id);
+
+    res.status(200).json({
+      success: true,
+      message: "User restored successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 export default {
   CreateUserHandler,
   AssignPageRoleHandler,
@@ -229,4 +301,6 @@ export default {
   GetAllLocations,
   AssignRoleToWebpage,
   RemoveRoleFromWebpage,
+  DeleteUser,
+  RestoreDeletedUser,
 };

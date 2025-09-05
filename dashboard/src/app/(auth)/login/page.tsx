@@ -30,26 +30,36 @@ const Login: React.FC = () => {
     otpOrigin: "MFA_Login",
   });
 
+  // Add email validation state
+  const [isEmailValid, setIsEmailValid] = useState(false);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
     setFormData((prev) => ({...prev, [name]: value}));
+
+    // Validate email in real-time
+    if (name === "email") {
+      setIsEmailValid(emailRegex.test(value));
+    }
+  };
+
+  // Check if form is valid
+  const isFormValid = () => {
+    return (
+      formData.email && formData.password && formData.deviceId && isEmailValid
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    if (!formData.email || !formData.password) {
-      toast.error("Please fill in all fields.");
+    if (!isFormValid()) {
+      toast.error("Please fill in all fields correctly.");
       return;
     }
 
-    if (!emailRegex.test(formData.email)) {
-      toast.error("Please enter a valid email address.");
-      return;
-    }
-
+    setIsLoading(true);
     try {
       const response = await toastWithUpdate(() => loginReq(formData), {
         loading: "Logging in...",
@@ -69,6 +79,8 @@ const Login: React.FC = () => {
       }
     } catch (error) {
       console.error("Login Failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -215,9 +227,9 @@ const Login: React.FC = () => {
 
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={!isFormValid() || isLoading}
                 className={`w-full py-3 bg-[#AE9060] text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:ring-2 focus:ring-[#AE9060]/50 focus:ring-offset-2 ${
-                  isLoading
+                  !isFormValid() || isLoading
                     ? "opacity-70 cursor-not-allowed"
                     : "hover:bg-[#9c7d52]"
                 }`}

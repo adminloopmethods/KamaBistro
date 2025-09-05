@@ -41,6 +41,14 @@ const ForgotPassword: React.FC<{
     setFormData((prev) => ({...prev, [name]: value}));
   };
 
+  // Function to check password strength
+  const isPasswordStrong = (password: string): boolean => {
+    // At least 8 characters, one uppercase, one lowercase, one number, and one special character
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return strongPasswordRegex.test(password);
+  };
+
   // Step 1: Send OTP to email
   const handleSendOtp = async () => {
     if (!formData.email) {
@@ -55,12 +63,13 @@ const ForgotPassword: React.FC<{
         deviceId,
         otpOrigin: "forgot_Pass",
       });
+      console.log(response, "response");
 
       if (response.ok) {
         toast.success("OTP sent to your email");
         setStep(2);
       } else {
-        throw new Error(response.error || "Failed to send OTP");
+        throw new Error(response.message || "Failed to send OTP");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -110,6 +119,14 @@ const ForgotPassword: React.FC<{
       return;
     }
 
+    // Check password strength
+    if (!isPasswordStrong(formData.new_password)) {
+      toast.error(
+        "Password is not strong enough. It must contain at least 8 characters, including uppercase, lowercase, number, and special character."
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
       const response = await forgotPasswordUpdateReq({
@@ -124,7 +141,7 @@ const ForgotPassword: React.FC<{
         toast.success("Password updated successfully!");
         setTimeout(() => onBackToLogin(), 2000);
       } else {
-        throw new Error(response.error || "Password update failed");
+        throw new Error(response.message || "Password update failed");
       }
     } catch (error: any) {
       toast.error(error.message);
@@ -304,7 +321,8 @@ const ForgotPassword: React.FC<{
               )}
             </button>
             <p className="mt-1 text-xs text-gray-500">
-              Must be at least 8 characters
+              Must be at least 8 characters with uppercase, lowercase, number,
+              and special character
             </p>
           </div>
 

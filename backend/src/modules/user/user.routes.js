@@ -15,6 +15,16 @@ const router = Router();
 
 // const requiredPermissionsForUser = ["USER_MANAGEMENT"];
 
+// Soft delete a user
+router.delete("/:id", requireSuperAdmin, UserController.DeleteUser);
+
+// Restore a soft-deleted user
+router.patch(
+  "/restore/:id",
+  requireSuperAdmin,
+  UserController.RestoreDeletedUser
+);
+
 router.post(
   "/create",
   // checkPermission(requiredPermissionsForUser),

@@ -24,6 +24,7 @@ const router = Router();
 router.post(
   "/login",
   // validator(loginSchema),
+  // globalRateLimiter,
 
   tryCatchWrap(AuthController.Login)
 );

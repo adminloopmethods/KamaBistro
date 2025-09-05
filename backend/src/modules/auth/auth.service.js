@@ -78,7 +78,7 @@ const refreshToken = async (user) => {
 const forgotPassword = async (email, deviceId, otpOrigin) => {
   const user = await getUser(email);
   const otp = await generateOtpAndSendOnEmail(user, deviceId, otpOrigin);
-  return {message: `OTP has been Sent`, otp: otp};
+  return {message: `OTP sent to your registered email`, otp: otp};
 };
 
 const forgotPasswordVerify = async (email, deviceId, otp, otpOrigin) => {
@@ -115,6 +115,7 @@ const updatePassword = async (
   await deleteOTP(otp.id);
   return {message: "Passwords has been updated successfully"};
 };
+
 const resendOTP = async (email, deviceId, otpOrigin, userId) => {
   const user = await getUser(email);
   const otp = await generateOtpAndSendOnEmail(user, deviceId, otpOrigin);
