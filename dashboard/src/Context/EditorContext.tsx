@@ -54,7 +54,9 @@ interface SectionContextType {
   sectionRef: React.RefObject<HTMLElement | null> | null,
   setSectionRef: React.Dispatch<React.SetStateAction<React.RefObject<HTMLElement | null> | null>>
   sectionGivenNameFn: (value: string) => void,
-  setSectionGivenName: React.Dispatch<React.SetStateAction<(value: string) => void>>
+  setSectionGivenName: React.Dispatch<React.SetStateAction<(value: string) => void>>,
+  setSectionName: React.Dispatch<React.SetStateAction<string>>,
+  sectionName: string
 }
 
 
@@ -136,6 +138,8 @@ type MyContextType = {
   setSectionChildElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>;
   sectionChildElementsSetter: (id: string, checked: boolean) => void,
   setSectionChildElementsSetter: React.Dispatch<React.SetStateAction<(id: string, checked: boolean) => void>>;
+  containerRef: HTMLElement | null;
+  setContainerRef: React.Dispatch<React.SetStateAction<HTMLElement | null>>
 };
 
 const MyFunctionContext = createContext<MyContextType | undefined>(undefined);
@@ -146,6 +150,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [widthValue, setWidthValue] = useState<string>("")
   // global content
   const [webpage, setWebpage] = useState<webpageType | null>(null);
+  const [containerRef, setContainerRef] = useState<HTMLElement | null>(null)
 
   // elements
   const [activeRef, setContextRef] = useState<RefType>(null); // to active the current ref of the element
@@ -158,6 +163,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [currentSectionSetter, setCurrentSectionSetter] = useState<any>(null)
   const [sectionRef, setSectionRef] = useState<React.RefObject<HTMLElement | null> | null>(null);
   const [sectionGivenNameFn, setSectionGivenName] = useState<stringFunctionType>((id: string) => { });
+  const [sectionName, setSectionName] = useState<string>("")
   const [rmSection, setRmSection] = useState<(() => void)>(() => { })
   const [screenStyles, setScreenStyle] = useState<StyleObject | null>(null)
   const [sectionChildElements, setSectionChildElements] = useState<ElementTypeCustom[]>([])
@@ -201,7 +207,9 @@ function Provider({ children }: { children: ReactNode }) {
     sectionRef,
     setSectionRef,
     sectionGivenNameFn,
-    setSectionGivenName
+    setSectionGivenName,
+    setSectionName,
+    sectionName
   }
 
   const contextElement: ContextElementType = { // element and element setter
@@ -237,6 +245,8 @@ function Provider({ children }: { children: ReactNode }) {
         websiteContent, // the base of the elements
         SubmissionObject,
         finalSubmit,
+        containerRef,
+        setContainerRef,
 
         width, // context for width
         activeScreen,

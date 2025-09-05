@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useMyContext } from "@/Context/EditorContext";
 import ImageSelector from "../common/ImageSelector";
 import { cloudinaryApiPoint } from "@/utils/endpoints";
+import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 interface StyleObject {
   [key: string]: React.CSSProperties;
@@ -15,6 +16,7 @@ interface ElementType {
   content: string; // image src
   style: StyleObject;
   alt?: string;
+
 }
 
 interface ImageComponentProps {
@@ -25,6 +27,7 @@ interface ImageComponentProps {
   activeScreen?: string; // like "xl" or "md"
   style: React.CSSProperties;
   rmElement: (id?: string) => void;
+  parentRef: HTMLElement | null;
 }
 
 const ImageElemComponent: React.FC<ImageComponentProps> = ({
@@ -34,7 +37,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   updateContent,
   activeScreen = "xl",
   style,
-  rmElement
+  rmElement,
+  parentRef
 }) => {
   const [toolbarIsOpen, setToolbarIsOpen] = useState(false);
   const [previewSrc, setPreviewSrc] = useState(element.content || "");
@@ -83,13 +87,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   };
 
   // ==== Drag Handlers ====
-  // ==== Drag Handlers ====
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      (
-        // thisElement.style?.[activeScreen]?.position !== "relative" &&
-        thisElement.style?.[activeScreen]?.position !== "absolute")
+      thisElement.style?.[activeScreen]?.position !== "absolute"
     ) {
       return;
     }
@@ -98,42 +99,50 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
 
-    const currentLeft =
+    if (!imageRef.current?.parentElement) return;
+    const parentRect = imageRef.current.parentElement.getBoundingClientRect();
+
+    const currentLeftPx =
       parseFloat(thisElement.style?.[activeScreen]?.left as string) || 0;
-    const currentTop =
+    const currentTopPx =
       parseFloat(thisElement.style?.[activeScreen]?.top as string) || 0;
-    elementStartPos.current = { x: currentLeft, y: currentTop };
+
+    // Convert % -> px if already stored as %
+    const leftInPx = thisElement.style?.[activeScreen]?.left?.toString().includes("%")
+      ? (currentLeftPx / 100) * parentRect.width
+      : currentLeftPx;
+
+    const topInPx = thisElement.style?.[activeScreen]?.top?.toString().includes("%")
+      ? (currentTopPx / 100) * parentRect.height
+      : currentTopPx;
+
+    elementStartPos.current = { x: leftInPx, y: topInPx };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.current) return;
+    if (!isDragging.current || !imageRef.current?.parentElement) return;
+
+    const parentRect = imageRef.current.parentElement.getBoundingClientRect();
 
     const dx = e.clientX - dragStartPos.current.x;
     const dy = e.clientY - dragStartPos.current.y;
 
-    // Update React state directly (no direct DOM updates)
-    imageRef.current?.style.setProperty("top", elementStartPos.current.y + dy + "px", "important")
-    imageRef.current?.style.setProperty("left", elementStartPos.current.x + dx + "px", "important")
+    const newLeftPx = elementStartPos.current.x + dx;
+    const newTopPx = elementStartPos.current.y + dy;
 
-    // setThisElement((prev) => ({
-    //   ...prev,
-    //   style: {
-    //     ...prev.style,
-    //     [activeScreen]: {
-    //       ...prev.style?.[activeScreen],
-    //       left: elementStartPos.current.x + dx + "px",
-    //       top: elementStartPos.current.y + dy + "px",
-    //     },
-    //   },
-    // }));
+    // Convert px -> %
+    const leftPercent = (newLeftPx / parentRect.width) * 100;
+    const topPercent = (newTopPx / parentRect.height) * 100;
+
+    imageRef.current.style.setProperty("left", `${leftPercent}%`, "important");
+    imageRef.current.style.setProperty("top", `${topPercent}%`, "important");
   };
 
-
   const handleMouseUp = () => {
-    if (!isDragging.current || !imageRef.current) return;
+    if (!isDragging.current || !imageRef.current?.parentElement) return;
 
     const finalLeft = imageRef.current.style.left;
     const finalTop = imageRef.current.style.top;
@@ -156,6 +165,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   };
 
 
+
   // ==== Effects ====
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
@@ -169,7 +179,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   }, [toolbarIsOpen]);
 
   useEffect(() => {
-    updateContent(element.id, "content", thisElement.content);
+    // updateContent(element.id, "content", thisElement.content);
+    updateElement(element.id, thisElement);
     setPreviewSrc(thisElement.content || "");
   }, [thisElement.content]);
 
@@ -180,13 +191,14 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       style: thisElement.style,
     }));
     updateElement(element.id, thisElement);
-  }, [thisElement.style]);
+  }, [thisElement.style,]);
 
   const cursorCondition =
     // thisElement.style?.[activeScreen]?.position === "relative" ||
     thisElement.style?.[activeScreen]?.position === "absolute";
 
   const onImageSelect = (fileInfo: any, altText: any) => {
+    console.log(altText)
     const src =
       typeof fileInfo === "string"
         ? fileInfo
@@ -194,7 +206,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     setThisElement((prev) => ({
       ...prev,
       content: `/${src}`,
-      alt: altText?.en || prev.alt,
+      alt: altText || prev.alt
     }));
     setShowImageSelector(false);
     setImageContext((prev) => ({ ...prev, openSelector: false }))
@@ -213,6 +225,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     }
   };
 
+
+  const runningWidth = activeScreen !== "xl";
+  const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(thisElement.style?.[activeScreen] || {}, parentRef) : style
+
   return (
     <>
       <img
@@ -224,7 +240,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
         onClick={handleImageClick}
         onDoubleClick={handleDoubleClick}
         style={{
-          ...thisElement.style?.[activeScreen],
+          ...runningStyle,
           cursor:
             editable && cursorCondition
               ? "move"

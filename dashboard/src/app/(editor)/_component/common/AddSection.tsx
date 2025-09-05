@@ -31,8 +31,8 @@ const styleClasses = `
 
 const sectionsOptions: Option[] = [
   { label: "Section", value: "section" },
-  // { label: "Two Section Modal", value: "section-d" },
-  // { label: "Three Section Modal", value: "section-t" },
+  { label: "Header", value: "header" },
+  { label: "Navigationbar", value: "navigationbar" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {

@@ -356,17 +356,17 @@ const upsertLocation = async (location) => {
 };
 
 // Helper function to upsert the webpages
-const upsertWebpage = async (webpage) => {
-  await prismaClient.webpage.upsert({
-    where: {route: webpage.route},
-    update: {},
-    create: {
-      // id: randomUUID(),
-      name: webpage.name,
-      route: webpage.route,
-    },
-  });
-};
+// const upsertWebpage = async (webpage) => {
+//   await prismaClient.webpage.upsert({
+//     where: {route: webpage.route},
+//     update: {},
+//     create: {
+//       // id: randomUUID(),
+//       name: webpage.name,
+//       route: webpage.route,
+//     },
+//   });
+// };
 
 const seedDB = async () => {
   try {
@@ -381,9 +381,9 @@ const seedDB = async () => {
     }
 
     // Upsert webpages
-    for (const webpage of webpages) {
-      await upsertWebpage(webpage);
-    }
+    // for (const webpage of webpages) {
+    //   await upsertWebpage(webpage);
+    // }
 
     // Hash the password
     const hashedPassword = await EncryptData(pass, 10);

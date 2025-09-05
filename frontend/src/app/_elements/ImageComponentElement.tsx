@@ -58,12 +58,13 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                     ...element?.style?.[currentWidth],
                     top: 0,
                     left: 0,
-                    position: "static",
+                    position: "relative",
                     backgroundColor: "transparent",
                     paddingTop: 0,
                     paddingBottom: 0,
                     paddingLeft: 0,
-                    paddingRight: 0
+                    paddingRight: 0,
+
                 }}
             />
         </div>

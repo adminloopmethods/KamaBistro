@@ -22,9 +22,9 @@ const Editor = () => {
 
   // Function to classify width
   const classifyWidth = (w: number) => {
-    if (w > 1024) return "xl";
-    if (w >= 768) return "lg";
-    if (w >= 425) return "md";
+    if (w > 1200) return "xl";
+    if (w >= 1024) return "lg";
+    if (w >= 600) return "md";
     return "sm";
   };
 
@@ -73,7 +73,7 @@ const Editor = () => {
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowY: "scroll", overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
 
         <div
           ref={containerRef}
@@ -86,8 +86,9 @@ const Editor = () => {
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
             backgroundSize: "15px 15px", // size of grid squares
+            
           }}
-          className="bg-stone-200"
+          className="bg-stone-200 poppins-text"
         >
           {websiteContent?.webpage?.contents?.map((section: any, i: number, a: any[]) => {
             const lastSection = i === a.length - 1;
