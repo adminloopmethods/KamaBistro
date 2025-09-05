@@ -9,11 +9,11 @@ import toolbarStyles from "./dimensionToolbar.module.css"
 type StylesState = React.CSSProperties | Record<string, any>;
 
 const fontFamilyOptions = [
-    { label: 'Courier New', value: '"Courier New", monospace' },
-    { label: 'Serif', value: 'serif' },
-    { label: 'System UI', value: 'system-ui' },
-    { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Monospace', value: 'monospace' },
+    // { label: 'Courier New', value: '"Courier New", monospace' },
+    // { label: 'Serif', value: 'serif' },
+    // { label: 'System UI', value: 'system-ui' },
+    // { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
+    // { label: 'Monospace', value: 'monospace' },
     { label: 'Poppins', value: 'var(--font-poppins)' },
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
