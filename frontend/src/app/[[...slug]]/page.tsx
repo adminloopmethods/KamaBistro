@@ -5,6 +5,7 @@ import Section from "../_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
+import Header from "../_elements/Header";
 
 const Editor = () => {
   const params = useParams()
@@ -50,7 +51,7 @@ const Editor = () => {
     async function getContentfromServer() {
       try {
         const response: any = await getContentReq(page)
-        console.log(response)
+        console.log(JSON.stringify(response))
         if (response.ok) {
           websiteContent.setWebpage(response.webpage)
           width.setEditedWidth(response.webpage.editedWidth)
@@ -74,6 +75,8 @@ const Editor = () => {
     >
       {/* website */}
       <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
+        <Header />
+
 
         <div
           ref={containerRef}
@@ -86,7 +89,7 @@ const Editor = () => {
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
             backgroundSize: "15px 15px", // size of grid squares
-            
+
           }}
           className="bg-stone-200 poppins-text"
         >
