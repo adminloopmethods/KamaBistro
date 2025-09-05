@@ -22,7 +22,7 @@ const router = Router();
 // router.use(authenticateUser);
 
 router.get("/", authenticateUser, tryCatchWrap(getAllWebpages));
-router.get("/route/:route", authenticateUser, getWebpageByRoute);
+router.get("/route/:route", getWebpageByRoute);
 router.get("/section", authenticateUser, getAllContentsController);
 router.get("/section/:id", authenticateUser, getContentByIdController);
 
