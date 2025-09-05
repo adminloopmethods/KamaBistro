@@ -9,7 +9,9 @@ import InputField from "@/app/_common/InputField";
 import SubmitButton from "@/app/_common/SubmitButton";
 import {toastWithUpdate} from "@/functionality/ToastWithUpdate";
 import {loginReq} from "@/functionality/fetch";
-import ForgotPassword from "../forgotPassword/page";
+// import ForgotPassword from "../forgotPassword/page";
+// import ForgotPassword from "@/app/_components/ForgotPassword";
+import ForgotPassword from "../forgotPassword/forgetPassword";
 
 type FormData = {
   email: string;
