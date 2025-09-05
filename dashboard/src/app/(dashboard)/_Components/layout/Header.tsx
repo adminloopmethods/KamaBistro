@@ -1,22 +1,14 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import {
-  Moon,
-  SunMedium,
   BellRing,
-  UserCircle,
   ChevronDown,
-  Search,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ThemeToggleButton } from "@/components/ui/theme-toggle-button";
-import { Router } from "next/router";
 import Image from "next/image";
 import logo from "@/assets/brand/kamalogo.png";
 import { useClickOutside } from "@/functionality/useClickOutside";
-// import {useTheme} from "@/Context/ThemeContext";
-// import ThemeToggleButton from "@/components/ui/theme-toggle-button";
-// import ThemeToggleButton from "@components/ui/theme-toggle-button";
 
 type User = {
   name: string;
@@ -29,7 +21,6 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ brand }) => {
   const router = useRouter();
-  // const {theme, toggleTheme} = useTheme();
   const [dropDown, setDropDown] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
@@ -43,11 +34,11 @@ const Header: React.FC<HeaderProps> = ({ brand }) => {
       } catch (error) {
         console.error("Failed to parse user from localStorage", error);
         localStorage.clear();
-        router.push("/login");
+        router.push("/auth");
       }
     } else {
       localStorage.clear();
-      router.push("/login");
+      router.push("/auth");
     }
   }, [router]);
 
@@ -67,11 +58,8 @@ const Header: React.FC<HeaderProps> = ({ brand }) => {
 
       <div className="flex items-center gap-4">
         {/* Theme toggle */}
-
         <ThemeToggleButton
           variant="circle"
-        //  start="top-left"
-        //  showLabel={false}
         />
 
         {/* Notifications */}

@@ -1,15 +1,15 @@
 // layout.tsx
-import type {Metadata} from "next";
-import {Geist, Geist_Mono} from "next/font/google";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import "../globals.css";
 import Header from "./_Components/layout/Header";
 import Sidebar from "./_Components/layout/Sidebar";
 // import {ThemeProvider} from "@/Context/ThemeContext";
-import {Provider} from "@/Context/EditorContext";
-import {Poppins} from "next/font/google";
-import {ThemeProvider} from "@/components/ui/theme-provider";
+import { Provider } from "@/Context/EditorContext";
+import { Poppins } from "next/font/google";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import FloatingNavbar from "./_Components/layout/FloatingNavbar";
-import {UserProvider} from "@/Context/UserContext";
+import { UserProvider } from "@/Context/UserContext";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -33,11 +33,15 @@ export const metadata: Metadata = {
   description: "Modern content management dashboard",
 };
 
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
