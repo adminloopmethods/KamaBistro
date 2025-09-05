@@ -31,11 +31,11 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const [isEditing, setEditing] = useState<boolean>(false);
 
   // Set innerHTML when content updates
-  // useEffect(() => {
-  //   if (elementRef.current && (element.content || element.content === "")) {
-  //     elementRef.current.innerHTML = element.content;
-  //   }
-  // }, [element.content]);
+  useEffect(() => {
+    if (elementRef.current && (element.content || element.content === "")) {
+      elementRef.current.innerHTML = element.content;
+    }
+  }, [element.content]);
 
   const activateTheEditing = (e: any) => {
     e.stopPropagation()
@@ -114,7 +114,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
-      dangerouslySetInnerHTML={{ __html: thisElement.content }}
+      // dangerouslySetInnerHTML={{ __html: thisElement.content }}
     />
   );
 };
