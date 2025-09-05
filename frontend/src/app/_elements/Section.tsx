@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef } from "react";
+import React, { useRef, useState, CSSProperties } from "react";
 import { useMyContext } from "@/Context/ApiContext";
 import { mapElement } from "@/functionalities/createElement";
 
@@ -20,45 +20,86 @@ type SectionProps = {
   lastSection: boolean;
   section: {
     id?: string;
+    hover?: { [screen: string]: CSSProperties };
     [key: string]: any;
   };
   currentWidth: string;
-  sectionIsParent?: Boolean
+  sectionIsParent?: Boolean;
 };
 
-const Section: React.FC<SectionProps> = ({ //Props
+const Section: React.FC<SectionProps> = ({
   element,
   style,
   lastSection,
   section,
   sectionIsParent,
-}) => { // function starts here
+  currentWidth,
+}) => {
+  const { widthSize, editedWidth } = useMyContext();
 
-  const { //////////// Context variable
-    currentWidth,
-    widthSize,
-    editedWidth,
-  } = useMyContext(); ////////////////////////////Context is here
+  const thisStyle = section?.style?.[currentWidth];
+  const hover = section?.hover?.[currentWidth] || {};
+  const [hoverEffect, setHoverEffect] = useState(false);
+  const [elements, setElements] = useState<ElementType[]>(element);
+  const [hiddenChildList, setHiddenChildList] = useState<string[]>([]);
 
-  const thisStyle = section?.style?.[currentWidth]
+  const cleanHover = Object.fromEntries(
+    Object.entries(hover).filter(([_, value]) => Boolean(value))
+  );
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
-  // const setPosition = thisStyle?.position === "absolute" ? (sectionIsParent ? "absolute" : "fixed") : thisStyle.position;
+  // Show all hidden children while hovering
+  const showAllChildren = () => {
+    setElements((prev) =>
+      prev.map((e) => {
+        if (e.style?.[currentWidth]?.display === "none") {
+          setHiddenChildList((prevHidden) => [...prevHidden, e.id]);
+          return {
+            ...e,
+            style: {
+              ...e.style,
+              [currentWidth]: {
+                ...e.style?.[currentWidth],
+                display: "block",
+              },
+            },
+          };
+        }
+        return e;
+      })
+    );
+  };
 
-  // const widthIsRatio = String(style?.width).slice(-1) === "%"
-
+  // Restore children that were originally hidden
+  const hideBackHiddenChildren = () => {
+    if (hiddenChildList.length > 0) {
+      setElements((prev) =>
+        prev.map((e) =>
+          hiddenChildList.includes(e.id)
+            ? {
+                ...e,
+                style: {
+                  ...e.style,
+                  [currentWidth]: {
+                    ...e.style?.[currentWidth],
+                    display: "none",
+                  },
+                },
+              }
+            : e
+        )
+      );
+      setHiddenChildList([]); // reset
+    }
+  };
 
   return (
-    <div className=""
+    <div
       style={{
         position: thisStyle?.position,
         left: style.left || 0,
         top: style.top || 0,
-        // zIndex: 1,
-        // (parseFloat(String(style.left ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
-        // (parseFloat(String(style.top ?? "0")) / parseFloat(String(editedWidth))) * widthSize || "0",
-        // overflow: !sectionIsParent ? "" : ""
       }}
     >
       <section
@@ -68,13 +109,22 @@ const Section: React.FC<SectionProps> = ({ //Props
           position: "relative",
           top: 0,
           left: 0,
-          overflow: "hidden"
-          // width: thisStyle?.position === "absolute" ? (parseFloat(String(style.width)) / parseFloat(String(editedWidth))) * widthSize : ""
+          overflow: "hidden",
+          ...(hoverEffect ? cleanHover : {}),
+          transition: ".3s all linear"
+        }}
+        className=""
+        onMouseEnter={() => {
+          setHoverEffect(true);
+          showAllChildren();
+        }}
+        onMouseLeave={() => {
+          setHoverEffect(false);
+          hideBackHiddenChildren();
         }}
       >
-        {element.map((Element, i) => { // [{heading}, {para}, {img}] = {name: "h1", content: "text/src", style:{}}
+        {elements.map((Element, i) => {
           if (Element.name === "section") {
-
             return (
               <Section
                 key={i}
@@ -85,9 +135,9 @@ const Section: React.FC<SectionProps> = ({ //Props
                 section={Element}
                 sectionIsParent={true}
               />
-            )
+            );
           }
-          const Component = mapElement[Element.name]; // mapElement.h1
+          const Component = mapElement[Element.name];
           return (
             <Component
               key={i}

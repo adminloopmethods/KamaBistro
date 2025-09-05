@@ -87,13 +87,10 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   };
 
   // ==== Drag Handlers ====
-  // ==== Drag Handlers ====
   const handleMouseDown = (e: React.MouseEvent<HTMLImageElement>) => {
     if (
       !editable ||
-      (
-        // thisElement.style?.[activeScreen]?.position !== "relative" &&
-        thisElement.style?.[activeScreen]?.position !== "absolute")
+      thisElement.style?.[activeScreen]?.position !== "absolute"
     ) {
       return;
     }
@@ -102,42 +99,50 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     isDragging.current = true;
     dragStartPos.current = { x: e.clientX, y: e.clientY };
 
-    const currentLeft =
+    if (!imageRef.current?.parentElement) return;
+    const parentRect = imageRef.current.parentElement.getBoundingClientRect();
+
+    const currentLeftPx =
       parseFloat(thisElement.style?.[activeScreen]?.left as string) || 0;
-    const currentTop =
+    const currentTopPx =
       parseFloat(thisElement.style?.[activeScreen]?.top as string) || 0;
-    elementStartPos.current = { x: currentLeft, y: currentTop };
+
+    // Convert % -> px if already stored as %
+    const leftInPx = thisElement.style?.[activeScreen]?.left?.toString().includes("%")
+      ? (currentLeftPx / 100) * parentRect.width
+      : currentLeftPx;
+
+    const topInPx = thisElement.style?.[activeScreen]?.top?.toString().includes("%")
+      ? (currentTopPx / 100) * parentRect.height
+      : currentTopPx;
+
+    elementStartPos.current = { x: leftInPx, y: topInPx };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.current) return;
+    if (!isDragging.current || !imageRef.current?.parentElement) return;
+
+    const parentRect = imageRef.current.parentElement.getBoundingClientRect();
 
     const dx = e.clientX - dragStartPos.current.x;
     const dy = e.clientY - dragStartPos.current.y;
 
-    // Update React state directly (no direct DOM updates)
-    imageRef.current?.style.setProperty("top", elementStartPos.current.y + dy + "px", "important")
-    imageRef.current?.style.setProperty("left", elementStartPos.current.x + dx + "px", "important")
+    const newLeftPx = elementStartPos.current.x + dx;
+    const newTopPx = elementStartPos.current.y + dy;
 
-    // setThisElement((prev) => ({
-    //   ...prev,
-    //   style: {
-    //     ...prev.style,
-    //     [activeScreen]: {
-    //       ...prev.style?.[activeScreen],
-    //       left: elementStartPos.current.x + dx + "px",
-    //       top: elementStartPos.current.y + dy + "px",
-    //     },
-    //   },
-    // }));
+    // Convert px -> %
+    const leftPercent = (newLeftPx / parentRect.width) * 100;
+    const topPercent = (newTopPx / parentRect.height) * 100;
+
+    imageRef.current.style.setProperty("left", `${leftPercent}%`, "important");
+    imageRef.current.style.setProperty("top", `${topPercent}%`, "important");
   };
 
-
   const handleMouseUp = () => {
-    if (!isDragging.current || !imageRef.current) return;
+    if (!isDragging.current || !imageRef.current?.parentElement) return;
 
     const finalLeft = imageRef.current.style.left;
     const finalTop = imageRef.current.style.top;
@@ -158,6 +163,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     document.removeEventListener("mousemove", handleMouseMove);
     document.removeEventListener("mouseup", handleMouseUp);
   };
+
 
 
   // ==== Effects ====

@@ -13,6 +13,7 @@ import StyleToolbar from "../../_component/common/StyleToolbar";
 import DimensionToolbar, { updateStylesType } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
 import { test } from "@/assets/test"
+import { ArrowLeft } from 'lucide-react';
 
 import { CiMobile1 } from "react-icons/ci";
 import { IoIosTabletPortrait } from "react-icons/io";
@@ -24,6 +25,7 @@ import CustomSelect from "@/app/_common/CustomSelect";
 import { preSection } from "@/assets/preSection.js"
 import { useDraggable } from "../../_component/common/useDraggable";
 import HoverToolbar from "../../_component/common/HoverToolbar";
+import { useRouter } from "next/navigation";
 
 const renderInput = (
     label: string,
@@ -60,6 +62,7 @@ const Editor = () => {
     const [currentWidth, setCurrentWidth] = useState<string>("")
     const [onHoverToolbar, setOnHoverToolbar] = useState<boolean>(false);
     const [showToolbar, setShowToolbar] = useState<boolean>(true)
+    const router = useRouter();
 
     const toolbarRef = useDraggable()
 
@@ -302,52 +305,61 @@ const Editor = () => {
     }, [containerRef.current])
     return (
         <div className="flex flex-col overflow-hidden">
-            <div className="h-[8vh] bg-slate-700 flex justify-end items-center p-2 gap-8">
-                <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
-                    <button onClick={() => applyXLScreen()} className={`${styleForScreenIcons} ${activeScreen === "xl" && "bg-stone-500"}`}><CiDesktop /></button>
-                    <button onClick={() => applyLGScreen()} className={`${styleForScreenIcons} ${activeScreen === "lg" && "bg-stone-500"}`}><CiLaptop /></button>
-                    <button onClick={() => applyMDScreen()} className={`${styleForScreenIcons} ${activeScreen === "md" && "bg-stone-500"}`}><IoIosTabletPortrait /></button>
-                    <button onClick={() => applySMScreen()} className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"}`}><CiMobile1 /></button>
-                </div>
+            <div className="h-[8vh] bg-slate-700 flex justify-between items-center p-2 gap-8">
                 <button
-                    className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-                    style={{
-                        border: "none",
-                        padding: "6px 8px",
-                        borderRadius: "2px",
-                        color: "white",
-                        top: 0,
-                    }}
-                    onClick={(e) => { e.stopPropagation(); setOnHoverToolbar(!onHoverToolbar) }}
+                    onClick={() => router.back()}
+                    className="cursor-pointer bg-stone-200 p-1 rounded-[50%]"
                 >
-                    {onHoverToolbar ? "Styles" : "Hover styles"}
+                  <ArrowLeft color="#808080" />
                 </button>
 
-                <button
-                    className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-                    style={{
-                        border: "none",
-                        padding: "6px 8px",
-                        borderRadius: "2px",
-                        color: "white",
-                    }}
-                    onClick={(e) => { e.stopPropagation(); setShowToolbar(!showToolbar) }}
-                >
-                    {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
-                </button>
-                <button
-                    className="text-sm cursor-pointer"
-                    style={{
-                        backgroundColor: "#007bff",
-                        border: "none",
-                        padding: "6px 8px",
-                        borderRadius: "2px",
-                        color: "white",
-                    }}
-                    onClick={(e) => { e.stopPropagation(); saveAllSection(); setSaveData(true); }}
-                >
-                    Save Changes
-                </button>
+                <div className="flex justify-end items-center gap-8">
+                    <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
+                        <button onClick={() => applyXLScreen()} className={`${styleForScreenIcons} ${activeScreen === "xl" && "bg-stone-500"}`}><CiDesktop /></button>
+                        <button onClick={() => applyLGScreen()} className={`${styleForScreenIcons} ${activeScreen === "lg" && "bg-stone-500"}`}><CiLaptop /></button>
+                        <button onClick={() => applyMDScreen()} className={`${styleForScreenIcons} ${activeScreen === "md" && "bg-stone-500"}`}><IoIosTabletPortrait /></button>
+                        <button onClick={() => applySMScreen()} className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"}`}><CiMobile1 /></button>
+                    </div>
+                    <button
+                        className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                        style={{
+                            border: "none",
+                            padding: "6px 8px",
+                            borderRadius: "2px",
+                            color: "white",
+                            top: 0,
+                        }}
+                        onClick={(e) => { e.stopPropagation(); setOnHoverToolbar(!onHoverToolbar) }}
+                    >
+                        {onHoverToolbar ? "Styles" : "Hover styles"}
+                    </button>
+
+                    <button
+                        className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                        style={{
+                            border: "none",
+                            padding: "6px 8px",
+                            borderRadius: "2px",
+                            color: "white",
+                        }}
+                        onClick={(e) => { e.stopPropagation(); setShowToolbar(!showToolbar) }}
+                    >
+                        {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
+                    </button>
+                    <button
+                        className="text-sm cursor-pointer"
+                        style={{
+                            backgroundColor: "#007bff",
+                            border: "none",
+                            padding: "6px 8px",
+                            borderRadius: "2px",
+                            color: "white",
+                        }}
+                        onClick={(e) => { e.stopPropagation(); saveAllSection(); setSaveData(true); }}
+                    >
+                        Save Changes
+                    </button>
+                </div>
             </div>
 
 
@@ -366,9 +378,9 @@ const Editor = () => {
                             transition: ".1s linear all",
                             backgroundColor: "#e7e5e4", // stone-200
                             backgroundImage: `
-                        linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
-                        linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
-                        `,
+                                linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+                                linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
+                                `,
                             backgroundSize: "15px 15px", // size of grid squares
                             position: "relative",
                             zIndex: 1,

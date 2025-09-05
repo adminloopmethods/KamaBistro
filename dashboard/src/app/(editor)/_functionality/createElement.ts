@@ -20,7 +20,7 @@ export type StyleObject = Partial<Record<ScreenSize, React.CSSProperties>>;
 export interface BaseElement {
   id: string;
   name: string;
-  content: string;
+  content: string; // Element = [baseElements...]
   style: StyleObject;
   [key: string]: any;
   hover: StyleObject;
@@ -62,7 +62,7 @@ const divisionBaseStyle: React.CSSProperties = {
   "width": "20px",
   "height": "5px",
   "backgroundColor": "transparent",
-  "background": "linear-gradient(to right, red, blue)"
+  "backgroundImage": "linear-gradient(to right, red, blue)"
 }
 
 // Base Element class
@@ -95,7 +95,7 @@ class DivisionClass extends Element {
 }
 
 // ImageElement class with alt text
-class ImageElement extends Element implements ImageElementType {
+export class ImageElement extends Element implements ImageElementType {
   alt: string;
 
   constructor(name: string, content: string, alt: string) {
@@ -125,7 +125,7 @@ class ButtonElementClass extends Element implements ButtonElement {
 }
 
 // LinkElement class with href and target
-class LinkElementClass extends Element implements LinkElement {
+export class LinkElementClass extends Element implements LinkElement {
   href: string;
   target?: string;
 
