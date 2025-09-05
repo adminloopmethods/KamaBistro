@@ -3,51 +3,52 @@ import { randomUUID } from "node:crypto";
 import { createWebpageService } from "../src/modules/content/content.service.js";
 
 import Catering from "./templates/catering.json" assert {type: "json"}
-import CateringLocationOne from "./templates/cateringLocationone.json" assert {type: "json"}
+// import CateringLocationOne from "./templates/cateringLocationone.json" assert {type: "json"}
 // import CateringLocationTwo from "./templates/cateringLocationtwo.json" assert {type: "json"}
 // import CateringLocationThree from "./templates/cateringLocationthree.json" assert {type: "json"}
-import ContactUs from "./templates/contactUs.json" assert {type: "json"}
-import LandingPageLocationOne from "./templates/landingPageLocationone.json" assert {type: "json"}
+// import ContactUs from "./templates/contactUs.json" assert {type: "json"}
+// import LandingPageLocationOne from "./templates/landingPageLocationone.json" assert {type: "json"}
 // import LandingPageLocationTwo from "./templates/landingPageLocationtwo.json" assert {type: "json"}
 // import LandingPageLocationThree from "./templates/landingPageLocationthree.json" assert {type: "json"}
-import orderOnlineLocationOne from "./templates/orderOnlineLocationone.json" assert {type: "json"}
+// import orderOnlineLocationOne from "./templates/orderOnlineLocationone.json" assert {type: "json"}
 // import orderOnlineLocationTwo from "./templates/orderOnlineLocationtwo.json" assert {type: "json"}
 // import orderOnlineLocationThree from "./templates/orderOnlineLocationthree.json" assert {type: "json"}
-import ourCulture from "./templates/ourCulture.json" assert {type: "json"}
-import ourGroup from "./templates/ourGroup.json" assert {type: "json"}
-import privateDinning from "./templates/privateDinning.json" assert {type: "json"}
-import privateDinningLocationOne from "./templates/privateDinningLocationone.json" assert {type: "json"}
+// import ourCulture from "./templates/ourCulture.json" assert {type: "json"}
+// import ourGroup from "./templates/ourGroup.json" assert {type: "json"}
+// import privateDinning from "./templates/privateDinning.json" assert {type: "json"}
+// import privateDinningLocationOne from "./templates/privateDinningLocationone.json" assert {type: "json"}
 // import privateDinningLocationTwo from "./templates/privateDinningLocationtwo.json" assert {type: "json"}
 // import privateDinningLocationThree from "./templates/privateDinningLocationthree.json" assert {type: "json"}
-import reserveTableLocationOne from "./templates/reserveTableLocationone.json" assert {type: "json"}
+// import reserveTableLocationOne from "./templates/reserveTableLocationone.json" assert {type: "json"}
 // import reserveTableLocationTwo from "./templates/reserveTableLocationtwo.json" assert {type: "json"}
 // import reserveTableLocationThree from "./templates/reserveTableLocationthree.json" assert {type: "json"}
 // import Catering from "./templates/catering.json" assert {type: "json"}
 // import Catering from "./templates/catering.json" assert {type: "json"}
-
+import HomePage from "./templatesBase/Home.json" assert {type: "json"}
 
 // Put them in an array
 const webpages = [
   // Catering,
-  CateringLocationOne,
+  // CateringLocationOne,
   // CateringLocationTwo,
   // CateringLocationThree,
-  ContactUs,
-  LandingPageLocationOne,
+  // ContactUs,
+  // LandingPageLocationOne,
   // LandingPageLocationTwo,
   // LandingPageLocationThree,
-  orderOnlineLocationOne,
+  // orderOnlineLocationOne,
   // orderOnlineLocationTwo,
   // orderOnlineLocationThree,
-  ourCulture,
-  ourGroup,
-  privateDinning,
-  privateDinningLocationOne,
+  // ourCulture,
+  // ourGroup,
+  // privateDinning,
+  // privateDinningLocationOne,
   // privateDinningLocationTwo,
   // privateDinningLocationThree,
-  reserveTableLocationOne,
+  // reserveTableLocationOne,
   // reserveTableLocationTwo,
   // reserveTableLocationThree
+  HomePage
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs
