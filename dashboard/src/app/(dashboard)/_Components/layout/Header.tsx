@@ -47,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ brand }) => {
 
   const handleLogout = () => {
     localStorage.clear();
-    router.push("/login");
+    router.push("/auth");
   };
 
   return (
