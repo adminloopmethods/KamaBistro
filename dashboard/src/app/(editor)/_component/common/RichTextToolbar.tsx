@@ -18,7 +18,7 @@ const fontFamilyOptions = [
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
 
-const fontSizeOptions = [12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64].map(size => ({
+const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24, 32, 36, 40, 48, 54, 64].map(size => ({
     label: `${size}px`,
     value: `${size}px`
 }));
