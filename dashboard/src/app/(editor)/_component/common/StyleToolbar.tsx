@@ -92,7 +92,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const debouncedUpdateStyles = useCallback(
         debounce((styles: Record<string, any>) => {
             updateStyles(styles);
-        }, 150),
+        }, 350),
         [updateStyles]
     );
 

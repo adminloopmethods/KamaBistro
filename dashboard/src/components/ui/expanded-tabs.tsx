@@ -1,10 +1,11 @@
 "use client";
 
 import * as React from "react";
-import {AnimatePresence, motion} from "framer-motion";
-import {LucideIcon} from "lucide-react";
-import {cn} from "@/lib/utils";
-import {useRouter, usePathname} from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useRouter, usePathname } from "next/navigation";
+import type { Transition } from "framer-motion";
 
 interface Tab {
   title: string;
@@ -42,12 +43,12 @@ const buttonVariants = {
 };
 
 const spanVariants = {
-  initial: {width: 0, opacity: 0},
-  animate: {width: "auto", opacity: 1},
-  exit: {width: 0, opacity: 0},
+  initial: { width: 0, opacity: 0 },
+  animate: { width: "auto", opacity: 1 },
+  exit: { width: 0, opacity: 0 },
 };
 
-const transition = {delay: 0.1, type: "spring", bounce: 0, duration: 0.6};
+const transition: Transition = { delay: 0.1, type: "spring", bounce: 0, duration: 0.6 };
 
 export function ExpandedTabs({
   tabs,

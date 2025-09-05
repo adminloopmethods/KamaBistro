@@ -266,15 +266,12 @@ export const updateWebpageByIdService = async (
     },
   });
 
-  // ---------------- DELETE MISSING SECTIONS (Recursive) ----------------
+  // ---------------- DELETE MISSING SECTIONS ----------------
   function collectSectionIds(sections, set) {
     for (const s of sections) {
       set.add(s.id);
-      if (s.children?.length) {
-        collectSectionIds(s.children, set);
-      }
+      if (s.children?.length) collectSectionIds(s.children, set);
       if (s.elements?.length) {
-        // If elements can also be nested sections
         const nestedSections = s.elements.filter((el) => el.name === "section");
         collectSectionIds(nestedSections, set);
       }
@@ -287,26 +284,19 @@ export const updateWebpageByIdService = async (
   function collectExistingSections(contentsArray, all = []) {
     for (const c of contentsArray) {
       all.push(c);
-      if (c.children?.length) {
-        collectExistingSections(c.children, all);
-      }
+      if (c.children?.length) collectExistingSections(c.children, all);
     }
     return all;
   }
+
   const allExistingSections = collectExistingSections(existingContents);
+  const sectionsToDeleteIds = allExistingSections
+    .filter((c) => !incomingSectionIds.has(c.id))
+    .map((s) => s.id);
 
-  const sectionsToDelete = allExistingSections.filter(
-    (c) => !incomingSectionIds.has(c.id)
-  );
-
-  if (sectionsToDelete.length) {
-    await prismaClient.$transaction(async (tx) => {
-      for (const section of sectionsToDelete) {
-        // Delete children first (if schema doesn’t cascade)
-        await tx.content.deleteMany({ where: { parentId: section.id } });
-        // Delete section itself
-        await tx.content.delete({ where: { id: section.id } });
-      }
+  if (sectionsToDeleteIds.length) {
+    await prismaClient.content.deleteMany({
+      where: { id: { in: sectionsToDeleteIds } },
     });
   }
 
@@ -323,9 +313,7 @@ export const updateWebpageByIdService = async (
           }
         }
       }
-      if (content.children) {
-        flattenExisting(content.children);
-      }
+      if (content.children) flattenExisting(content.children);
     }
   }
   flattenExisting(existingContents);
@@ -334,19 +322,18 @@ export const updateWebpageByIdService = async (
   function collectIncomingIds(elementsArray) {
     for (const el of elementsArray) {
       incomingElementIds.add(el.id);
-      if (el.name === "section" && el.elements) {
-        collectIncomingIds(el.elements);
-      }
+      if (el.name === "section" && el.elements) collectIncomingIds(el.elements);
     }
   }
   collectIncomingIds(contents.flatMap((c) => c.elements || []));
 
-  const elementsToDelete = Array.from(existingElementMap.values()).filter(
-    (e) => !incomingElementIds.has(e.id)
-  );
-  if (elementsToDelete.length) {
+  const elementsToDeleteIds = Array.from(existingElementMap.values())
+    .filter((e) => !incomingElementIds.has(e.id))
+    .map((e) => e.id);
+
+  if (elementsToDeleteIds.length) {
     await prismaClient.element.deleteMany({
-      where: { id: { in: elementsToDelete.map((e) => e.id) } },
+      where: { id: { in: elementsToDeleteIds } },
     });
   }
 
@@ -377,9 +364,7 @@ export const updateWebpageByIdService = async (
             style: { create: el.style || {} },
           },
         });
-        if (el.elements?.length) {
-          await upsertElements(el.id, el.elements);
-        }
+        if (el.elements?.length) await upsertElements(el.id, el.elements);
       } else {
         await prismaClient.element.upsert({
           where: { id: el.id },
@@ -432,9 +417,7 @@ export const updateWebpageByIdService = async (
         style: { create: section.style || {} },
       },
     });
-    if (section.elements?.length) {
-      await upsertElements(section.id, section.elements);
-    }
+    if (section.elements?.length) await upsertElements(section.id, section.elements);
   }
 
   // Step 3: Return updated snapshot
@@ -460,14 +443,12 @@ export const updateWebpageByIdService = async (
 
   // Step 4: Save version snapshot
   await prismaClient.version.create({
-    data: {
-      webpageId: id,
-      version: finalWebpage,
-    },
+    data: { webpageId: id, version: finalWebpage },
   });
 
   return finalWebpage;
 };
+
 
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {

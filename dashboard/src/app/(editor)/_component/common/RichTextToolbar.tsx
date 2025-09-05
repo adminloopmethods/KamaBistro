@@ -9,16 +9,16 @@ import toolbarStyles from "./dimensionToolbar.module.css"
 type StylesState = React.CSSProperties | Record<string, any>;
 
 const fontFamilyOptions = [
-    { label: 'Courier New', value: '"Courier New", monospace' },
-    { label: 'Serif', value: 'serif' },
-    { label: 'System UI', value: 'system-ui' },
-    { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Monospace', value: 'monospace' },
+    // { label: 'Courier New', value: '"Courier New", monospace' },
+    // { label: 'Serif', value: 'serif' },
+    // { label: 'System UI', value: 'system-ui' },
+    // { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
+    // { label: 'Monospace', value: 'monospace' },
     { label: 'Poppins', value: 'var(--font-poppins)' },
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
 ];
 
-const fontSizeOptions = [12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64].map(size => ({
+const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24, 32, 36, 40, 48, 54, 64].map(size => ({
     label: `${size}px`,
     value: `${size}px`
 }));
@@ -336,6 +336,26 @@ const RichTextToolBar: React.FC = () => {
                     </button>
                 ))}
             </div>
+
+            {/* ✅ Letter Spacing Slider */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Letter Spacing
+                </label>
+                <input
+                    type="range"
+                    min={1}
+                    max={10}
+                    step={1}
+                    value={localStyle.letterSpacing ? parseInt(localStyle.letterSpacing.toString()) : 0}
+                    onChange={(e) => applyStyle("letterSpacing", `${e.target.value}px`)}
+                    className="w-full accent-stone-600"
+                />
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {localStyle.letterSpacing || "0px"}
+                </span>
+            </div>
+
 
             {/* Dimensions */}
             {renderInput("Width", "width", "width")}

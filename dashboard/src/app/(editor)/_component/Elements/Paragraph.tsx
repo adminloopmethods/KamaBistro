@@ -56,7 +56,9 @@ const Paragraph: React.FC<ParagraphProps> = ({
     setThisElement((prev: BaseElement) => {
       return ({
         ...prev,
-        content: value.trim(),
+        // content: value.trim(),
+        // content: value.replace("<", "&lt").replace(">","&gt"),
+        content: value.replace(/&lt;/g, "<").replace(/&gt;/g, ">") 
       })
     });
   };
@@ -99,6 +101,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
 
+  console.log(element.content)
   return (
     <p
       className="hover:outline-dashed hover:outline"
@@ -111,6 +114,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
+      // dangerouslySetInnerHTML={{ __html: thisElement.content }}
     />
   );
 };
