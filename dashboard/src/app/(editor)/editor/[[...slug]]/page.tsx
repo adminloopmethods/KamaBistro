@@ -462,6 +462,7 @@ const Editor = () => {
                                 <>
                                     <DimensionToolbar updateStyles={updateSectionStyles} />
                                     <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
+                                    
                                 </>
                             ) : (
                                 imageEdit ?

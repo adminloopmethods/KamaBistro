@@ -77,6 +77,8 @@ const Section: React.FC<SectionProps> = ({
     Object.entries(hover).filter(([_, value]) => Boolean(value))
   );
 
+  const allowHover = activeScreen === "xl" || activeScreen === "lg"
+
   // const childsAreHidden = elements.some((el: any) => el?.style?.[activeScreen]?.display === "block")
   // const [allowUpdate, setAllowUpdate] = useState(true);
 
@@ -362,8 +364,18 @@ const Section: React.FC<SectionProps> = ({
         onDoubleClick={onEdit}
         onClick={onStyleEdit}
         onMouseDown={handleMouseDown}
-        onMouseEnter={() => { setHoverEffect(true); showAllChildren() }}
-        onMouseLeave={() => { setHoverEffect(false); hideBackHiddenChildrens() }}
+        onMouseEnter={() => {
+          if (allowHover) {
+            setHoverEffect(true);
+            showAllChildren()
+          }
+        }}
+        onMouseLeave={() => {
+          if (allowHover) {
+            setHoverEffect(false);
+            hideBackHiddenChildrens()
+          }
+        }}
       // className={hover}
       >
         {elements?.map((Element, i, a) => {

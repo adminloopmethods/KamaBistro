@@ -10,13 +10,24 @@ import { ColorPickerWithAlpha } from './ColorPickerWithAlpha';
 type StylesState = React.CSSProperties | Record<string, any>;
 
 const fontFamilyOptions = [
-    // { label: 'Serif', value: 'serif' },
-    // { label: 'Courier New', value: '"Courier New", monospace' },
-    // { label: 'System UI', value: 'system-ui' },
-    // { label: 'Monospace', value: 'monospace' },
-    { label: 'Poppins', value: 'var(--font-poppins)' },
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
+    { label: 'Poppins', value: 'var(--font-poppins)' },
+    // { label: 'System UI', value: 'system-ui' },
+    // { label: 'Courier New', value: '"Courier New", monospace' },
+    // { label: 'Monospace', value: 'monospace' },
+    // { label: 'Serif', value: 'serif' },
 ];
+
+// ✅ Add options for Display property
+const displayOptions = [
+    { label: "Block", value: "block" },
+    { label: "Inline", value: "inline" },
+    { label: "Inline Block", value: "inline-block" },
+    { label: "Flex", value: "flex" },
+    { label: "Grid", value: "grid" },
+    { label: "None", value: "none" },
+];
+
 
 const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24, 32, 36, 40, 48, 54, 64].map(size => ({ // add number to have the font size option
     label: `${size}px`,
@@ -111,6 +122,15 @@ const RichTextToolBar: React.FC = () => {
             >
                 Remove Element
             </button>
+
+            {/* ✅ Display Property */}
+            <CustomSelect
+                options={displayOptions}
+                firstOption="display"
+                disableFirstValue
+                Default={localStyle.display?.toString()}
+                onChange={(val) => applyStyle("display", val)}
+            />
 
             {/* Font Family / Size */}
             <CustomSelect

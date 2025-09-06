@@ -324,7 +324,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                         )}
 
                         {renderInputRow(
-                            'Flex Wrap',
+                            'Wrap Items',
                             <CustomSelect
                                 options={[
                                     { label: "No Wrap", value: "nowrap" },
@@ -354,21 +354,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
 
                         {renderInputRow(
                             'Align Items',
-                            <CustomSelect
-                                options={[
-                                    { label: "Stretch", value: "stretch" },
-                                    { label: "Start", value: "flex-start" },
-                                    { label: "Center", value: "center" },
-                                    { label: "End", value: "flex-end" },
-                                    { label: "Baseline", value: "baseline" },
-                                ]}
-                                Default={currentSection?.alignItems}
-                                onChange={(val) => { debouncedUpdateStyles({ alignItems: val }); }}
-                            />
-                        )}
-
-                        {renderInputRow(
-                            'Wrap Items',
                             <CustomSelect
                                 options={[
                                     { label: "Stretch", value: "stretch" },
