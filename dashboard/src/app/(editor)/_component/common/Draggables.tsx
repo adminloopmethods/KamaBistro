@@ -5,10 +5,10 @@ import { useDrag, useDrop, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { ElementTypeCustom } from "../Elements/Section";
 
-
 type DraggableListProps = {
     elements: ElementTypeCustom[];
     setElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>> | null;
+    setVisibleElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>;
     renderItem: (element: ElementTypeCustom) => React.ReactNode;
 };
 
@@ -24,10 +24,24 @@ const DraggableItem: React.FC<{
 
     const [, drop] = useDrop({
         accept: ITEM_TYPE,
-        hover(item: { index: number }) {
+        hover(item: { index: number }, monitor) {
             const dragIndex = item.index;
             const hoverIndex = index;
+
+            if (!ref.current) return;
             if (dragIndex === hoverIndex) return;
+
+            const hoverBoundingRect = ref.current.getBoundingClientRect();
+            const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2;
+
+            const clientOffset = monitor.getClientOffset();
+            if (!clientOffset) return;
+
+            const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+
+            // Only move when mouse has crossed half of the item's height
+            if (dragIndex < hoverIndex && hoverClientY < hoverMiddleY) return;
+            if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) return;
 
             moveItem(dragIndex, hoverIndex);
             item.index = hoverIndex;
@@ -45,16 +59,35 @@ const DraggableItem: React.FC<{
     drag(drop(ref));
 
     return (
-        <div ref={ref} style={{ opacity: isDragging ? 0.5 : 1, cursor: "move" }}>
+        <div
+            ref={ref}
+            style={{
+                opacity: isDragging ? 0.5 : 1,
+                cursor: "grab",
+            }}
+        >
             {renderItem(element)}
         </div>
     );
 };
 
-const DraggableList: React.FC<DraggableListProps> = ({ elements, setElements, renderItem }) => {
+const DraggableList: React.FC<DraggableListProps> = ({
+    elements,
+    setElements,
+    setVisibleElements,
+    renderItem,
+}) => {
     const moveItem = (from: number, to: number) => {
-        if (!setElements) return
+        if (!setElements) return;
+
         setElements((prev) => {
+            const updated = [...prev];
+            const [moved] = updated.splice(from, 1);
+            updated.splice(to, 0, moved);
+            return updated;
+        });
+
+        setVisibleElements((prev) => {
             const updated = [...prev];
             const [moved] = updated.splice(from, 1);
             updated.splice(to, 0, moved);

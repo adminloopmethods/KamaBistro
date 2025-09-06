@@ -66,7 +66,7 @@ const Editor = () => {
     const router = useRouter();
 
     const childElementsRef = useRef<HTMLDivElement | null>(null);
-    const toolbarRef = useDraggable()
+    const toolbarRef = useDraggable(childElementsRef)
 
     const {
         width, // {currentWidth, setCurrentWidth}

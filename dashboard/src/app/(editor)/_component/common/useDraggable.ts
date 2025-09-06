@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, RefObject } from "react";
 
-export const useDraggable = () => {
+export const useDraggable = (blockedRef?: RefObject<HTMLElement | null>) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -12,10 +12,15 @@ export const useDraggable = () => {
     let offsetY = 0;
 
     const onMouseDown = (e: MouseEvent) => {
-      if (
-        e.target instanceof HTMLElement &&
-        ["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(e.target.tagName)
-      ) {
+      if (!(e.target instanceof HTMLElement)) return;
+
+      // ✅ block dragging if inside blockedRef
+      if (blockedRef?.current && blockedRef.current.contains(e.target)) {
+        return;
+      }
+
+      // block inputs
+      if (["INPUT", "TEXTAREA", "SELECT", "BUTTON"].includes(e.target.tagName)) {
         return;
       }
 
@@ -40,11 +45,8 @@ export const useDraggable = () => {
     };
 
     el.addEventListener("mousedown", onMouseDown);
-
-    return () => {
-      el.removeEventListener("mousedown", onMouseDown);
-    };
-  }, [ref.current]); // 👈 re-run when ref.current changes
+    return () => el.removeEventListener("mousedown", onMouseDown);
+  }, [blockedRef?.current]);
 
   return ref;
 };

@@ -66,6 +66,7 @@ const Section: React.FC<SectionProps> = ({
     screenStyleObj,
     setSectionChildElements,
     setSectionChildElementsSetter,
+    setSectionChildElementsSetterFull
   } = useMyContext(); ////////////////////// Context /////////////////////////
 
   const sectionRef = useRef<HTMLElement | null>(null);
@@ -165,14 +166,17 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
     contextForSection.setSectionName(section.givenName)
 
+    
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
       setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
-
+    
     screenStyleObj.setScreenStyle(section.style)
-
+    
     setSectionChildElements(elements)
+    setSectionChildElementsSetterFull(() => setElements)
+    
     setSectionChildElementsSetter(() =>
       (id: string, checked: boolean) => {
         setHiddenChildList((prev: string[]) => prev.filter((e: string) => e !== id))
