@@ -17,7 +17,7 @@ const Editor = () => {
   const {
     width,
     websiteContent,
-    currentWidth,
+    currentWidth: activeScreen,
   } = useMyContext();
 
 
@@ -100,9 +100,9 @@ const Editor = () => {
                 key={i}
                 element={section.elements}
                 section={section}
-                style={section.style[currentWidth]}
+                style={section.style[activeScreen]}
                 lastSection={lastSection}
-                currentWidth={currentWidth}
+                activeScreen={activeScreen}
               />
             );
           })}

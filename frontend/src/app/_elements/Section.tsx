@@ -23,7 +23,7 @@ type SectionProps = {
     hover?: { [screen: string]: CSSProperties };
     [key: string]: any;
   };
-  currentWidth: string;
+  activeScreen: string;
   sectionIsParent?: Boolean;
 };
 
@@ -33,12 +33,12 @@ const Section: React.FC<SectionProps> = ({
   lastSection,
   section,
   sectionIsParent,
-  currentWidth,
+  activeScreen,
 }) => {
   const { widthSize, editedWidth } = useMyContext();
 
-  const thisStyle = section?.style?.[currentWidth];
-  const hover = section?.hover?.[currentWidth] || {};
+  const thisStyle = section?.style?.[activeScreen];
+  const hover = section?.hover?.[activeScreen] || {};
   const [hoverEffect, setHoverEffect] = useState(false);
   const [elements, setElements] = useState<ElementType[]>(element);
   const [hiddenChildList, setHiddenChildList] = useState<string[]>([]);
@@ -49,18 +49,20 @@ const Section: React.FC<SectionProps> = ({
 
   const sectionRef = useRef<HTMLElement | null>(null);
 
+  const allowHover = activeScreen === "xl" || activeScreen === "lg"
+
   // Show all hidden children while hovering
   const showAllChildren = () => {
     setElements((prev) =>
       prev.map((e) => {
-        if (e.style?.[currentWidth]?.display === "none") {
+        if (e.style?.[activeScreen]?.display === "none") {
           setHiddenChildList((prevHidden) => [...prevHidden, e.id]);
           return {
             ...e,
             style: {
               ...e.style,
-              [currentWidth]: {
-                ...e.style?.[currentWidth],
+              [activeScreen]: {
+                ...e.style?.[activeScreen],
                 display: "block",
               },
             },
@@ -78,15 +80,15 @@ const Section: React.FC<SectionProps> = ({
         prev.map((e) =>
           hiddenChildList.includes(e.id)
             ? {
-                ...e,
-                style: {
-                  ...e.style,
-                  [currentWidth]: {
-                    ...e.style?.[currentWidth],
-                    display: "none",
-                  },
+              ...e,
+              style: {
+                ...e.style,
+                [activeScreen]: {
+                  ...e.style?.[activeScreen],
+                  display: "none",
                 },
-              }
+              },
+            }
             : e
         )
       );
@@ -115,12 +117,16 @@ const Section: React.FC<SectionProps> = ({
         }}
         className=""
         onMouseEnter={() => {
-          setHoverEffect(true);
-          showAllChildren();
+          if (allowHover) {
+            setHoverEffect(true);
+            showAllChildren();
+          }
         }}
         onMouseLeave={() => {
-          setHoverEffect(false);
-          hideBackHiddenChildren();
+          if (allowHover) {
+            setHoverEffect(false);
+            hideBackHiddenChildren();
+          }
         }}
       >
         {elements.map((Element, i) => {
@@ -129,8 +135,8 @@ const Section: React.FC<SectionProps> = ({
               <Section
                 key={i}
                 element={Element.elements}
-                style={Element?.style?.[currentWidth] || {}}
-                currentWidth={currentWidth}
+                style={Element?.style?.[activeScreen] || {}}
+                activeScreen={activeScreen}
                 lastSection={lastSection}
                 section={Element}
                 sectionIsParent={true}
@@ -142,8 +148,8 @@ const Section: React.FC<SectionProps> = ({
             <Component
               key={i}
               element={Element}
-              style={Element.style?.[currentWidth]}
-              currentWidth={currentWidth}
+              style={Element.style?.[activeScreen]}
+              currentWidth={activeScreen}
             />
           );
         })}

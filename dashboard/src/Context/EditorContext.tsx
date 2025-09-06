@@ -138,6 +138,8 @@ type MyContextType = {
   setSectionChildElements: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>;
   sectionChildElementsSetter: (id: string, checked: boolean) => void,
   setSectionChildElementsSetter: React.Dispatch<React.SetStateAction<(id: string, checked: boolean) => void>>;
+  sectionChildElementsSetterFull: React.Dispatch<React.SetStateAction<ElementTypeCustom[]>> | null
+  setSectionChildElementsSetterFull: React.Dispatch<React.SetStateAction<(React.Dispatch<React.SetStateAction<ElementTypeCustom[]>>) | null>>
   containerRef: HTMLElement | null;
   setContainerRef: React.Dispatch<React.SetStateAction<HTMLElement | null>>
 };
@@ -168,7 +170,7 @@ function Provider({ children }: { children: ReactNode }) {
   const [screenStyles, setScreenStyle] = useState<StyleObject | null>(null)
   const [sectionChildElements, setSectionChildElements] = useState<ElementTypeCustom[]>([])
   const [sectionChildElementsSetter, setSectionChildElementsSetter] = useState<(id: string, check: boolean) => void>(() => { })
-
+  const [sectionChildElementsSetterFull, setSectionChildElementsSetterFull] = useState<React.Dispatch<React.SetStateAction<ElementTypeCustom[]>> | null>(null)
   // hover related state
   const [hoverContext, setHoverContext] = useState<React.CSSProperties>({});
   const [hoverContextSetter, setHoverContextSetter] = useState<(css: CSSProperties) => void>((css: CSSProperties) => { });
@@ -276,7 +278,9 @@ function Provider({ children }: { children: ReactNode }) {
         sectionChildElements,
         sectionChildElementsSetter,
         setSectionChildElements,
-        setSectionChildElementsSetter
+        setSectionChildElementsSetter,
+        sectionChildElementsSetterFull,
+        setSectionChildElementsSetterFull
       }}
     >
       {children}
