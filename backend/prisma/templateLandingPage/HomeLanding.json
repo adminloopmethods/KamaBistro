@@ -5,7 +5,7 @@
         "route": "/landingpage",
         "locationId": null,
         "createdAt": "2025-09-04T09:47:01.080Z",
-        "updatedAt": "2025-09-07T04:09:36.571Z",
+        "updatedAt": "2025-09-07T05:59:52.666Z",
         "editedWidth": "1280px",
         "Status": true,
         "editorId": null,
@@ -85,7 +85,7 @@
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
-                        "paddingLeft": "100px",
+                        "paddingLeft": "10px",
                         "marginBottom": "0",
                         "paddingRight": "100px",
                         "flexDirection": "column",
@@ -100,18 +100,26 @@
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "zIndex": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
+                        "alignItems": "flex-start",
                         "marginLeft": "0",
-                        "paddingTop": "20px",
+                        "paddingTop": "100px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "10px",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "100px",
+                        "flexDirection": "column",
+                        "paddingBottom": "50px",
+                        "backgroundSize": "cover",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756979187347)",
+                        "backgroundRepeat": "no-repeat"
                     }
                 },
                 "hover": {
@@ -145,7 +153,12 @@
                                 "marginTop": "px",
                                 "fontFamily": "var(--font-poppins)"
                             },
-                            "sm": {}
+                            "sm": {
+                                "color": "rgba(255, 255, 255, 1)",
+                                "fontSize": "16px",
+                                "marginTop": "50px",
+                                "fontFamily": "var(--font-poppins)"
+                            }
                         },
                         "content": "WICKER PARK",
                         "hover": {
@@ -183,7 +196,13 @@
                                 "fontFamily": "var(--font-playfair)",
                                 "marginBottom": "15px"
                             },
-                            "sm": {}
+                            "sm": {
+                                "color": "rgba(255, 255, 255, 1)",
+                                "fontSize": "24px",
+                                "marginTop": "15px",
+                                "fontFamily": "var(--font-playfair)",
+                                "marginBottom": "15px"
+                            }
                         },
                         "content": "Kama Wicker Park - Indian&nbsp;<div>Food Reimagined</div>",
                         "hover": {
@@ -222,10 +241,11 @@
                                 "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0))"
                             },
                             "sm": {
-                                "width": "20px",
-                                "height": "5px",
+                                "width": "200px",
+                                "height": "1px",
                                 "background": "linear-gradient(to right, red, blue)",
-                                "backgroundColor": "transparent"
+                                "backgroundColor": "transparent",
+                                "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0))"
                             }
                         },
                         "content": "null",
@@ -262,9 +282,15 @@
                                 "fontSize": "18px",
                                 "marginTop": "25px",
                                 "fontFamily": "var(--font-poppins)",
-                                "marginBottom": "50px"
+                                "marginBottom": "30px"
                             },
-                            "sm": {}
+                            "sm": {
+                                "color": "rgba(255, 216, 152, 1)",
+                                "fontSize": "12px",
+                                "marginTop": "25px",
+                                "fontFamily": "var(--font-poppins)",
+                                "marginBottom": "50px"
+                            }
                         },
                         "content": "“Urban setting. New dishes. Same bold flavors.”",
                         "hover": {
@@ -343,19 +369,21 @@
                                 "paddingBottom": "20px"
                             },
                             "sm": {
+                                "gap": "20px",
                                 "top": "0",
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "",
                                 "minHeight": "1vh",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
-                                "paddingLeft": "20px",
+                                "paddingLeft": "10px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
                                 "paddingBottom": "20px"
@@ -403,7 +431,17 @@
                                         "paddingBottom": "10px",
                                         "backgroundColor": "rgba(64, 62, 64, 1)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "5px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "20px",
+                                        "paddingRight": "20px",
+                                        "paddingBottom": "5px",
+                                        "backgroundColor": "rgba(64, 62, 64, 1)"
+                                    }
                                 },
                                 "content": "Online Ordering",
                                 "hover": {
@@ -446,7 +484,16 @@
                                         "paddingBottom": "10px",
                                         "backgroundColor": "rgba(174, 144, 96, 1)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "5px",
+                                        "paddingLeft": "20px",
+                                        "paddingRight": "20px",
+                                        "paddingBottom": "5px",
+                                        "backgroundColor": "rgba(174, 144, 96, 1)"
+                                    }
                                 },
                                 "content": "Reserve Now",
                                 "hover": {
@@ -489,7 +536,14 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "22.9478%",
+                                "left": "11.3065%",
+                                "width": "64vw",
+                                "height": "39vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            }
                         },
                         "content": "/file_1756981338954",
                         "hover": {
@@ -582,22 +636,28 @@
                         "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255,255,255,1))"
                     },
                     "sm": {
+                        "gap": "30px",
                         "top": "0",
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
-                        "marginTop": "0",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
+                        "alignItems": "center",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "flexDirection": "column",
+                        "paddingBottom": "80px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255,255,255,1))"
                     }
                 },
                 "hover": {
@@ -685,18 +745,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "0px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
-                                "paddingTop": "20px",
+                                "paddingTop": "80px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             }
                         },
                         "hover": {
@@ -753,7 +817,13 @@
                                         "fontWeight": "500",
                                         "paddingTop": "1px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "fontSize": "16px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "1px"
+                                    }
                                 },
                                 "content": "Made from Scratch",
                                 "hover": {
@@ -797,7 +867,15 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "70vw",
+                                        "height": "auto",
+                                        "fontSize": "12px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "18px"
+                                    }
                                 },
                                 "content": "Each dish at Kama is crafted in-house—from our signature sauces and spice blends to handcrafted desserts and beverages—ensuring every bite delivers a fresh and distinctive experience.",
                                 "hover": {
@@ -888,18 +966,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "0px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
-                                "paddingTop": "20px",
+                                "paddingTop": "80px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             }
                         },
                         "hover": {
@@ -924,7 +1006,9 @@
                                     "md": {
                                         "width": ""
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": ""
+                                    }
                                 },
                                 "content": "/file_1756981803158",
                                 "hover": {
@@ -959,7 +1043,12 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "fontSize": "16px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    }
                                 },
                                 "content": "Gluten-Free",
                                 "hover": {
@@ -1003,7 +1092,15 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "70vw",
+                                        "height": "auto",
+                                        "fontSize": "12px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "18px"
+                                    }
                                 },
                                 "content": "Our thoughtfully curated gluten-free selections, from appetizers to entrées, are created to delight the palate without compromise.",
                                 "hover": {
@@ -1094,18 +1191,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "0px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
-                                "paddingTop": "20px",
+                                "paddingTop": "80px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             }
                         },
                         "hover": {
@@ -1159,7 +1260,12 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "fontSize": "16px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    }
                                 },
                                 "content": "<span data-metadata=\"&lt;!--(figmeta)eyJmaWxlS2V5IjoiWVNVRjZvWUdtWG5uRUlPcmlWejhKZiIsInBhc3RlSUQiOjE0ODc4MDc2ODQsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)--&gt;\"></span><span style=\"white-space-collapse: preserve;\">Vegan-Friendly</span>",
                                 "hover": {
@@ -1203,7 +1309,16 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "139px",
+                                        "height": "2px",
+                                        "marginTop": "10px",
+                                        "background": "linear-gradient(to right, red, blue)",
+                                        "marginLeft": "49px",
+                                        "marginBottom": "20px",
+                                        "backgroundColor": "transparent",
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
+                                    }
                                 },
                                 "content": "<span data-metadata=\"<!--(figmeta)eyJmaWxlS2V5IjoiWVNVRjZvWUdtWG5uRUlPcmlWejhKZiIsInBhc3RlSUQiOjIwNDcxNzE5ODQsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)-->\"></span><span style=\"white-space-collapse: preserve;\">We take pride in accommodating all dietary lifestyles. Our menu includes a variety of flavorful vegan dishes that never sacrifice taste.</span>",
                                 "hover": {
@@ -1252,7 +1367,16 @@
                                 "position": "absolute",
                                 "transform": "rotate(45deg)"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "20.9164%",
+                                "left": "76.6961%",
+                                "width": "55vw",
+                                "filter": "brightness(1.3)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute",
+                                "transform": "rotate(45deg)"
+                            }
                         },
                         "content": "/file_1756981302463",
                         "hover": {
@@ -1299,7 +1423,16 @@
                                 "position": "absolute",
                                 "transform": "rotate(180deg)"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "49.3627%",
+                                "left": "21.9027%",
+                                "width": "55vw",
+                                "filter": "brightness(1.1)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute",
+                                "transform": "rotate(180deg)"
+                            }
                         },
                         "content": "/file_1756981302460",
                         "hover": {
@@ -1343,7 +1476,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "-23.8447%",
+                                "left": "-28.4661%",
+                                "width": "55vw",
+                                "filter": "brightness(1) grayscale(40%)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            }
                         },
                         "content": "/file_1756981338954",
                         "hover": {
@@ -1411,18 +1552,21 @@
                         "width": "100%",
                         "height": "auto",
                         "display": "flex",
+                        "flexWrap": "",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0px",
                         "minHeight": "1vh",
+                        "alignItems": "",
                         "marginLeft": "0",
-                        "paddingTop": "100px",
+                        "paddingTop": "50px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "0px",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "100px",
+                        "paddingRight": "0px",
+                        "flexDirection": "column-reverse",
+                        "paddingBottom": "50px",
                         "justifyContent": "center",
                         "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
@@ -1431,18 +1575,23 @@
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
-                        "marginTop": "0",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
+                        "alignItems": "",
                         "marginLeft": "0",
-                        "paddingTop": "20px",
+                        "paddingTop": "100px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "0px",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "0px",
+                        "flexDirection": "column-reverse",
+                        "paddingBottom": "100px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     }
                 },
                 "hover": {
@@ -1498,7 +1647,7 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "37vw",
+                                "width": "90%",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
@@ -1516,19 +1665,19 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
+                                "width": "100vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "",
                                 "minHeight": "1vh",
-                                "marginLeft": "0",
+                                "marginLeft": "0px",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
-                                "paddingLeft": "20px",
+                                "paddingLeft": "10px",
                                 "marginBottom": "0",
-                                "paddingRight": "20px",
+                                "paddingRight": "10px",
                                 "paddingBottom": "20px"
                             }
                         },
@@ -1562,14 +1711,21 @@
                                         "marginLeft": "49px"
                                     },
                                     "md": {
-                                        "width": "23vw",
-                                        "fontSize": "18px",
-                                        "marginTop": "10px",
+                                        "width": "100%",
+                                        "fontSize": "16px",
+                                        "marginTop": "0px",
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500",
-                                        "marginLeft": "20px"
+                                        "marginLeft": "10px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "100%",
+                                        "fontSize": "16px",
+                                        "marginTop": "0px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "10px"
+                                    }
                                 },
                                 "content": "Charcoal Grill",
                                 "hover": {
@@ -1611,16 +1767,20 @@
                                         "height": "2px",
                                         "marginTop": "10px",
                                         "background": "linear-gradient(to right, red, blue)",
-                                        "marginLeft": "20px",
+                                        "marginLeft": "10px",
                                         "marginBottom": "10px",
                                         "backgroundColor": "transparent",
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     },
                                     "sm": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "139px",
+                                        "height": "2px",
+                                        "marginTop": "10px",
                                         "background": "linear-gradient(to right, red, blue)",
-                                        "backgroundColor": "transparent"
+                                        "marginLeft": "10px",
+                                        "marginBottom": "5px",
+                                        "backgroundColor": "transparent",
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     }
                                 },
                                 "content": "null",
@@ -1657,16 +1817,24 @@
                                         "paddingBottom": "px"
                                     },
                                     "md": {
-                                        "width": "30vw",
+                                        "width": "100%",
                                         "height": "auto",
                                         "fontSize": "14px",
                                         "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "300",
-                                        "marginLeft": "20px",
+                                        "marginLeft": "10px",
                                         "marginBottom": "px",
                                         "paddingBottom": "px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "90vw",
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "300",
+                                        "marginLeft": "10px",
+                                        "marginBottom": "px",
+                                        "paddingBottom": "px"
+                                    }
                                 },
                                 "content": "Kama brings bold, smoky flavor to the forefront by using a traditional Indian tandoor—a charcoal-fired clay oven that seals in natural juices while imparting an irresistible char. From Prime Ribeye to Paneer Tikka, each dish is authentically crafted, richly flavorful, and sure to impress.",
                                 "hover": {
@@ -1781,10 +1949,14 @@
                                         "height": "45vw"
                                     },
                                     "md": {
-                                        "width": "46vw",
-                                        "height": "32vw"
+                                        "width": "100%",
+                                        "height": "auto",
+                                        "objectFit": "auto"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "100%",
+                                        "height": "auto"
+                                    }
                                 },
                                 "content": "/file_1756984227310",
                                 "hover": {
@@ -1876,19 +2048,23 @@
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
+                        "alignItems": "",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "",
+                        "paddingBottom": "20px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     }
                 },
                 "hover": {
@@ -1922,7 +2098,12 @@
                                 "marginLeft": "",
                                 "paddingLeft": "0"
                             },
-                            "sm": {}
+                            "sm": {
+                                "width": "61vw",
+                                "height": "auto",
+                                "marginLeft": "",
+                                "paddingLeft": "0"
+                            }
                         },
                         "content": "/file_1756986920664",
                         "hover": {
@@ -1998,22 +2179,23 @@
                                 "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             },
                             "sm": {
-                                "top": "0",
-                                "left": "0",
-                                "width": "100%",
+                                "top": 0,
+                                "left": 0,
+                                "width": "34vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "60px",
                                 "minHeight": "1vh",
-                                "marginLeft": "0",
+                                "marginLeft": "-80px",
                                 "paddingTop": "20px",
-                                "marginRight": "0",
+                                "marginRight": "",
                                 "paddingLeft": "20px",
-                                "marginBottom": "0",
+                                "marginBottom": "",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingBottom": "20px",
+                                "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             }
                         },
                         "hover": {
@@ -2050,7 +2232,13 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(245, 245, 245, 1)",
+                                        "fontSize": "16px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    }
                                 },
                                 "content": "Explore Our Menu",
                                 "hover": {
@@ -2149,7 +2337,17 @@
                                         "marginBottom": "27px",
                                         "backgroundColor": ""
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "width": "29vw",
+                                        "height": "20vw",
+                                        "fontSize": "14px",
+                                        "marginTop": "0px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginBottom": "27px",
+                                        "backgroundColor": ""
+                                    }
                                 },
                                 "content": "Experience a menu where timeless Indian traditions are reimagined with modern creativity — from curried lamb tacos and Prime Ribeye to Kama Lobster Bisque and Tandoori Chilean Seabass.<br>At Kama, each dish is a vibrant fusion of bold Indian flavors and global influences. Enjoy fresh, scratch-made cuisine at La Grange, Wicker Park or West Loop locations.",
                                 "hover": {
@@ -2205,7 +2403,19 @@
                                         "paddingBottom": "13px",
                                         "backgroundColor": "rgba(187, 162, 122, 1)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "marginTop": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "13px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "21px",
+                                        "marginBottom": "px",
+                                        "paddingRight": "21px",
+                                        "paddingBottom": "13px",
+                                        "backgroundColor": "rgba(187, 162, 122, 1)"
+                                    }
                                 },
                                 "content": "Explore Menu",
                                 "hover": {
@@ -2252,7 +2462,16 @@
                                         "position": "absolute",
                                         "transform": "rotate(180deg)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "top": "28px",
+                                        "left": "-82px",
+                                        "width": "54vw",
+                                        "filter": "brightness(0.8)",
+                                        "height": "32vw",
+                                        "zIndex": "1",
+                                        "position": "absolute",
+                                        "transform": "rotate(180deg)"
+                                    }
                                 },
                                 "content": "/file_1756981302460",
                                 "hover": {
@@ -2335,7 +2554,7 @@
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "100%",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
@@ -2347,7 +2566,8 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "20px",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     }
                 },
                 "hover": {
@@ -2384,7 +2604,13 @@
                                 "fontWeight": "500",
                                 "paddingLeft": "99px"
                             },
-                            "sm": {}
+                            "sm": {
+                                "fontSize": "24px",
+                                "marginTop": "26px",
+                                "fontFamily": "var(--font-playfair)",
+                                "fontWeight": "500",
+                                "paddingLeft": "99px"
+                            }
                         },
                         "content": "Weekly Specials",
                         "hover": {
@@ -2471,22 +2697,26 @@
                         "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     },
                     "sm": {
+                        "gap": "16px",
                         "top": "0",
                         "left": "0",
-                        "width": "100%",
-                        "height": "auto",
+                        "width": "",
+                        "height": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
                         "marginLeft": "0",
-                        "paddingTop": "20px",
+                        "paddingTop": "30px",
                         "marginRight": "0",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "84px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     }
                 },
                 "hover": {
@@ -2496,7 +2726,9 @@
                     "md": {
                         "color": "rgba(255,255,255,1)"
                     },
-                    "sm": {},
+                    "sm": {
+                        "color": "rgba(255,255,255,1)"
+                    },
                     "xl": {
                         "color": "rgba(255,255,255,1)"
                     }
@@ -2593,20 +2825,29 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256957)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -2618,7 +2859,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256957)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256957)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256957)"
@@ -2649,7 +2893,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -2678,7 +2927,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only&nbsp;",
                                 "hover": {
@@ -2779,20 +3033,28 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256958)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -2804,7 +3066,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256958)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256958)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256958)"
@@ -2835,7 +3100,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -2864,7 +3134,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only&nbsp;",
                                 "hover": {
@@ -2968,20 +3243,29 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256955)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -2993,7 +3277,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256955)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256955)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256955)"
@@ -3024,7 +3311,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -3053,7 +3345,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
                                 "hover": {
@@ -3154,8 +3451,10 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
@@ -3167,7 +3466,13 @@
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256959)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -3179,7 +3484,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256959)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256959)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256959)"
@@ -3210,7 +3518,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -3239,7 +3552,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
                                 "hover": {
@@ -3343,20 +3661,29 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256953)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -3368,7 +3695,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256953)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256953)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256953)"
@@ -3399,7 +3729,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -3428,7 +3763,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
                                 "hover": {
@@ -3532,20 +3872,29 @@
                             "sm": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256908)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             }
                         },
                         "hover": {
@@ -3557,7 +3906,10 @@
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256908)"
                             },
-                            "sm": {},
+                            "sm": {
+                                "width": "30vw",
+                                "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256908)"
+                            },
                             "xl": {
                                 "width": "30vw",
                                 "backgroundImage": "linear-gradient(to bottom, rgba(98,64,184,0.3), rgba(98,64,184,1)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256908)"
@@ -3588,7 +3940,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "16px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    }
                                 },
                                 "content": "HAPPY HOUR",
                                 "hover": {
@@ -3617,7 +3974,12 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "width": "290px",
+                                        "display": "none",
+                                        "fontSize": "12px",
+                                        "fontFamily": "var(--font-poppins)"
+                                    }
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
                                 "hover": {
@@ -3660,7 +4022,14 @@
                                 "zIndex": "0",
                                 "position": "absolute"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "76.6395%",
+                                "left": "-12.8319%",
+                                "width": "55vw",
+                                "height": "34vw",
+                                "zIndex": "0",
+                                "position": "absolute"
+                            }
                         },
                         "content": "/file_1756981302463",
                         "hover": {
@@ -3704,7 +4073,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "sm": {}
+                            "sm": {
+                                "top": "13.873%",
+                                "left": "84.4395%",
+                                "width": "55vw",
+                                "filter": "brightness(1.2)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            }
                         },
                         "content": "/file_1756981302463",
                         "hover": {
@@ -3794,22 +4171,28 @@
                         "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
                     "sm": {
+                        "gap": "0px",
                         "top": "0",
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
-                        "position": "relative",
-                        "marginTop": "0",
+                        "position": "static",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
-                        "marginLeft": "0",
-                        "paddingTop": "20px",
-                        "marginRight": "0",
+                        "alignItems": "center",
+                        "marginLeft": "",
+                        "paddingTop": "50px",
+                        "marginRight": "",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "flexDirection": "column-reverse",
+                        "paddingBottom": "50px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     }
                 },
                 "hover": {
@@ -3894,6 +4277,8 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "zIndex": "3",
+                                "display": "block",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
@@ -3901,11 +4286,12 @@
                                 "minHeight": "1vh",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
-                                "marginRight": "0",
+                                "marginRight": "0px",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingBottom": "20px",
+                                "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             }
                         },
                         "hover": {
@@ -3945,7 +4331,14 @@
                                         "paddingTop": "5px",
                                         "paddingLeft": "5px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "10px",
+                                        "paddingLeft": "10px"
+                                    }
                                 },
                                 "content": "Private Event",
                                 "hover": {
@@ -3993,10 +4386,14 @@
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(174,144,96,1))"
                                     },
                                     "sm": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "100px",
+                                        "height": "2px",
+                                        "marginTop": "10px",
+                                        "marginLeft": "10px",
+                                        "paddingTop": "",
+                                        "marginBottom": "5px",
                                         "backgroundColor": "transparent",
-                                        "backgroundImage": "linear-gradient(to right, red, blue)"
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(174,144,96,1))"
                                     }
                                 },
                                 "content": "null",
@@ -4053,7 +4450,19 @@
                                         "marginBottom": "40px",
                                         "paddingBottom": "-4px"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "width": "100%",
+                                        "height": "auto",
+                                        "fontSize": "12px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "5px",
+                                        "marginRight": "43px",
+                                        "marginBottom": "40px",
+                                        "paddingBottom": "-4px"
+                                    }
                                 },
                                 "content": "Kama Wicker Park is your go-to venue for unforgettable celebrations — from corporate gatherings and rehearsal dinners to birthdays and holiday parties. With stylish, intimate spaces perfect for groups of 12 to 80, we offer both private and semi-private options tailored to your occasion. Let us help you craft a memorable experience in the heart of the city.",
                                 "hover": {
@@ -4108,7 +4517,18 @@
                                         "paddingBottom": "12px",
                                         "backgroundColor": "rgba(187, 161, 121, 1)"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "marginTop": "px",
+                                        "marginLeft": "10px",
+                                        "paddingTop": "12px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "12px",
+                                        "marginBottom": "px",
+                                        "paddingRight": "35px",
+                                        "paddingBottom": "12px",
+                                        "backgroundColor": "rgba(187, 161, 121, 1)"
+                                    }
                                 },
                                 "content": "Book Now",
                                 "hover": {
@@ -4142,7 +4562,12 @@
                                         "position": "absolute"
                                     },
                                     "md": {},
-                                    "sm": {}
+                                    "sm": {
+                                        "top": "3.71617%",
+                                        "left": "1.96625%",
+                                        "zIndex": "1",
+                                        "position": "absolute"
+                                    }
                                 },
                                 "content": "/file_1756981302460",
                                 "hover": {
@@ -4173,7 +4598,10 @@
                                 "width": "61vw",
                                 "height": "44vw"
                             },
-                            "sm": {}
+                            "sm": {
+                                "width": "100%",
+                                "height": "60vw"
+                            }
                         },
                         "content": "/file_1757051971103",
                         "hover": {
@@ -4579,7 +5007,9 @@
                             "md": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             },
-                            "sm": {},
+                            "sm": {
+                                "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
+                            },
                             "xl": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             }
@@ -4807,7 +5237,9 @@
                             "md": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             },
-                            "sm": {},
+                            "sm": {
+                                "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
+                            },
                             "xl": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             }
@@ -4835,7 +5267,9 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "500"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "display": "none"
+                                    }
                                 },
                                 "content": "Midday Indian Feast",
                                 "hover": {
@@ -4874,7 +5308,9 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "300"
                                     },
-                                    "sm": {}
+                                    "sm": {
+                                        "display": "none"
+                                    }
                                 },
                                 "content": "Enjoy bold, authentic flavors - your perfect afternoon escape.",
                                 "hover": {
@@ -5040,7 +5476,9 @@
                             "md": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             },
-                            "sm": {},
+                            "sm": {
+                                "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
+                            },
                             "xl": {
                                 "backgroundImage": "linear-gradient(to right, rgba(71,43,140,1), rgba(71,43,140,1))"
                             }
