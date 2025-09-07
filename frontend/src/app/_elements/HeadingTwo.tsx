@@ -22,7 +22,6 @@ const HeadingTwo: React.FC<HeadingProps> = ({
     }
   }, [element.content]);
 
-console.log(style?.fontFamily)
   return (
     <h2
       id={element.id}

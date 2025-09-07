@@ -31,8 +31,6 @@ const styleClasses = `
 
 const sectionsOptions: Option[] = [
   { label: "Section", value: "section" },
-  { label: "Header", value: "header" },
-  { label: "Navigationbar", value: "navigationbar" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {

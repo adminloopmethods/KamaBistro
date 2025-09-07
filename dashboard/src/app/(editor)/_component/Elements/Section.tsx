@@ -397,6 +397,7 @@ const Section: React.FC<SectionProps> = ({
                 parentIsSection={true}
                 setGivenName={setGivenName}
                 parentRef={parentRef}
+                createSection={createSection}
               />)
 
           } else {
