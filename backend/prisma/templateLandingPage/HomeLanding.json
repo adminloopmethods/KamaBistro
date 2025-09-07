@@ -1,10 +1,11 @@
 {
+    "webpage": {
         "id": "37fd809f-b59a-45bd-8440-e9407041668a",
         "name": "Landing Page",
         "route": "/landingpage",
         "locationId": null,
         "createdAt": "2025-09-04T09:47:01.080Z",
-        "updatedAt": "2025-09-05T12:35:08.895Z",
+        "updatedAt": "2025-09-07T04:09:36.571Z",
         "editedWidth": "1280px",
         "Status": true,
         "editorId": null,
@@ -72,19 +73,27 @@
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "85vw",
+                        "zIndex": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
+                        "alignItems": "flex-start",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "100px",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "100px",
+                        "flexDirection": "column",
+                        "paddingBottom": "20px",
+                        "backgroundSize": "cover",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756979187347)",
+                        "backgroundRepeat": "no-repeat"
                     },
                     "sm": {
                         "top": "0",
@@ -130,7 +139,12 @@
                                 "marginTop": "px",
                                 "fontFamily": "var(--font-poppins)"
                             },
-                            "md": {},
+                            "md": {
+                                "color": "rgba(255, 255, 255, 1)",
+                                "fontSize": "16px",
+                                "marginTop": "px",
+                                "fontFamily": "var(--font-poppins)"
+                            },
                             "sm": {}
                         },
                         "content": "WICKER PARK",
@@ -162,7 +176,13 @@
                                 "fontFamily": "var(--font-playfair)",
                                 "marginBottom": "15px"
                             },
-                            "md": {},
+                            "md": {
+                                "color": "rgba(255, 255, 255, 1)",
+                                "fontSize": "48px",
+                                "marginTop": "5px",
+                                "fontFamily": "var(--font-playfair)",
+                                "marginBottom": "15px"
+                            },
                             "sm": {}
                         },
                         "content": "Kama Wicker Park - Indian&nbsp;<div>Food Reimagined</div>",
@@ -195,10 +215,11 @@
                                 "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0))"
                             },
                             "md": {
-                                "width": "20px",
-                                "height": "5px",
+                                "width": "350px",
+                                "height": "1px",
                                 "background": "linear-gradient(to right, red, blue)",
-                                "backgroundColor": "transparent"
+                                "backgroundColor": "transparent",
+                                "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(255,255,255,0))"
                             },
                             "sm": {
                                 "width": "20px",
@@ -236,7 +257,13 @@
                                 "fontFamily": "var(--font-poppins)",
                                 "marginBottom": "50px"
                             },
-                            "md": {},
+                            "md": {
+                                "color": "rgba(255, 216, 152, 1)",
+                                "fontSize": "18px",
+                                "marginTop": "25px",
+                                "fontFamily": "var(--font-poppins)",
+                                "marginBottom": "50px"
+                            },
                             "sm": {}
                         },
                         "content": "“Urban setting. New dishes. Same bold flavors.”",
@@ -296,14 +323,16 @@
                                 "paddingBottom": "20px"
                             },
                             "md": {
+                                "gap": "20px",
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
+                                "width": "74vw",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "",
                                 "minHeight": "1vh",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
@@ -363,7 +392,17 @@
                                         "paddingBottom": "11px",
                                         "backgroundColor": "rgba(64, 62, 64, 1)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "10px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "42px",
+                                        "paddingRight": "42px",
+                                        "paddingBottom": "10px",
+                                        "backgroundColor": "rgba(64, 62, 64, 1)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Online Ordering",
@@ -397,7 +436,16 @@
                                         "paddingBottom": "12px",
                                         "backgroundColor": "rgba(174, 144, 96, 1)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "10px",
+                                        "paddingLeft": "42px",
+                                        "paddingRight": "42px",
+                                        "paddingBottom": "10px",
+                                        "backgroundColor": "rgba(174, 144, 96, 1)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Reserve Now",
@@ -433,7 +481,14 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "30.8171%",
+                                "left": "0.167207%",
+                                "width": "80vw",
+                                "height": "45vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981338954",
@@ -503,22 +558,28 @@
                         "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255,255,255,1))"
                     },
                     "md": {
+                        "gap": "5px",
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "70vw",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
-                        "marginTop": "0",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
+                        "alignItems": "center",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "flexDirection": "row",
+                        "paddingBottom": "80px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255,255,255,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -602,18 +663,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "20px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -681,7 +746,13 @@
                                         "fontWeight": "500",
                                         "paddingTop": "1px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "16px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "1px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Made from Scratch",
@@ -717,7 +788,15 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "25vw",
+                                        "height": "30vw",
+                                        "fontSize": "12px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "18px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Each dish at Kama is crafted in-house—from our signature sauces and spice blends to handcrafted desserts and beverages—ensuring every bite delivers a fresh and distinctive experience.",
@@ -787,18 +866,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "20px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -838,7 +921,9 @@
                                     "lg": {
                                         "width": ""
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": ""
+                                    },
                                     "sm": {}
                                 },
                                 "content": "/file_1756981803158",
@@ -868,7 +953,12 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "16px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Gluten-Free",
@@ -904,7 +994,15 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "25vw",
+                                        "height": "30vw",
+                                        "fontSize": "12px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "18px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Our thoughtfully curated gluten-free selections, from appetizers to entrées, are created to delight the palate without compromise.",
@@ -974,18 +1072,22 @@
                                 "left": "0",
                                 "width": "100%",
                                 "height": "auto",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "20px",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "justifyContent": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -1051,7 +1153,12 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "16px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "<span data-metadata=\"&lt;!--(figmeta)eyJmaWxlS2V5IjoiWVNVRjZvWUdtWG5uRUlPcmlWejhKZiIsInBhc3RlSUQiOjE0ODc4MDc2ODQsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)--&gt;\"></span><span style=\"white-space-collapse: preserve;\">Vegan-Friendly</span>",
@@ -1087,7 +1194,15 @@
                                         "fontWeight": "500",
                                         "paddingTop": "18px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "25vw",
+                                        "height": "30vw",
+                                        "fontSize": "12px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "18px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "<span data-metadata=\"<!--(figmeta)eyJmaWxlS2V5IjoiWVNVRjZvWUdtWG5uRUlPcmlWejhKZiIsInBhc3RlSUQiOjIwNDcxNzE5ODQsImRhdGFUeXBlIjoic2NlbmUifQo=(/figmeta)-->\"></span><span style=\"white-space-collapse: preserve;\">We take pride in accommodating all dietary lifestyles. Our menu includes a variety of flavorful vegan dishes that never sacrifice taste.</span>",
@@ -1127,7 +1242,16 @@
                                 "position": "absolute",
                                 "transform": "rotate(45deg)"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "20.9164%",
+                                "left": "76.6961%",
+                                "width": "55vw",
+                                "filter": "brightness(1.3)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute",
+                                "transform": "rotate(45deg)"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981302463",
@@ -1165,7 +1289,16 @@
                                 "position": "absolute",
                                 "transform": "rotate(180deg)"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "49.3627%",
+                                "left": "21.9027%",
+                                "width": "55vw",
+                                "filter": "brightness(1.1)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute",
+                                "transform": "rotate(180deg)"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981302460",
@@ -1201,7 +1334,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "-23.8447%",
+                                "left": "-28.4661%",
+                                "width": "55vw",
+                                "filter": "brightness(1) grayscale(40%)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981338954",
@@ -1269,18 +1410,21 @@
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
-                        "marginTop": "0",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
                         "marginLeft": "0",
-                        "paddingTop": "20px",
+                        "paddingTop": "100px",
                         "marginRight": "0",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "100px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -1354,14 +1498,14 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
+                                "width": "37vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "",
                                 "minHeight": "1vh",
-                                "marginLeft": "0",
+                                "marginLeft": "0px",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
@@ -1417,7 +1561,14 @@
                                         "fontWeight": "500",
                                         "marginLeft": "49px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "23vw",
+                                        "fontSize": "18px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "20px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Charcoal Grill",
@@ -1456,10 +1607,14 @@
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     },
                                     "md": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "139px",
+                                        "height": "2px",
+                                        "marginTop": "10px",
                                         "background": "linear-gradient(to right, red, blue)",
-                                        "backgroundColor": "transparent"
+                                        "marginLeft": "20px",
+                                        "marginBottom": "10px",
+                                        "backgroundColor": "transparent",
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     },
                                     "sm": {
                                         "width": "20px",
@@ -1501,7 +1656,16 @@
                                         "marginBottom": "px",
                                         "paddingBottom": "px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "30vw",
+                                        "height": "auto",
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "300",
+                                        "marginLeft": "20px",
+                                        "marginBottom": "px",
+                                        "paddingBottom": "px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Kama brings bold, smoky flavor to the forefront by using a traditional Indian tandoor—a charcoal-fired clay oven that seals in natural juices while imparting an irresistible char. From Prime Ribeye to Paneer Tikka, each dish is authentically crafted, richly flavorful, and sure to impress.",
@@ -1543,7 +1707,7 @@
                             "lg": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "37vw",
+                                "width": "40vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
@@ -1561,7 +1725,7 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
+                                "width": "40vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
@@ -1569,12 +1733,12 @@
                                 "marginTop": "0",
                                 "minHeight": "1vh",
                                 "marginLeft": "0",
-                                "paddingTop": "20px",
+                                "paddingTop": "0vw",
                                 "marginRight": "0",
-                                "paddingLeft": "20px",
+                                "paddingLeft": "0vw",
                                 "marginBottom": "0",
-                                "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingRight": "0vw",
+                                "paddingBottom": "0vw"
                             },
                             "sm": {
                                 "top": "0",
@@ -1616,7 +1780,10 @@
                                         "width": "40vw",
                                         "height": "45vw"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "46vw",
+                                        "height": "32vw"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "/file_1756984227310",
@@ -1687,19 +1854,23 @@
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
+                        "alignItems": "",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "",
+                        "paddingBottom": "20px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -1745,7 +1916,12 @@
                                 "marginLeft": "",
                                 "paddingLeft": "0"
                             },
-                            "md": {},
+                            "md": {
+                                "width": "61vw",
+                                "height": "46vw",
+                                "marginLeft": "",
+                                "paddingLeft": "0"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756986920664",
@@ -1803,22 +1979,23 @@
                                 "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             },
                             "md": {
-                                "top": "0",
-                                "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "top": 0,
+                                "left": 0,
+                                "width": "34vw",
+                                "height": "70vw",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "60px",
                                 "minHeight": "1vh",
-                                "marginLeft": "0",
+                                "marginLeft": "-80px",
                                 "paddingTop": "20px",
-                                "marginRight": "0",
+                                "marginRight": "",
                                 "paddingLeft": "20px",
-                                "marginBottom": "0",
+                                "marginBottom": "",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingBottom": "20px",
+                                "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             },
                             "sm": {
                                 "top": "0",
@@ -1866,7 +2043,13 @@
                                         "fontFamily": "var(--font-playfair)",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(245, 245, 245, 1)",
+                                        "fontSize": "18px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Explore Our Menu",
@@ -1903,10 +2086,13 @@
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(98,64,184,0))"
                                     },
                                     "md": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "138px",
+                                        "height": "2px",
+                                        "marginTop": "5px",
                                         "background": "linear-gradient(to right, red, blue)",
-                                        "backgroundColor": "transparent"
+                                        "marginBottom": "5px",
+                                        "backgroundColor": "transparent",
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(98,64,184,0))"
                                     },
                                     "sm": {
                                         "width": "20px",
@@ -1952,7 +2138,17 @@
                                         "marginBottom": "27px",
                                         "backgroundColor": ""
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "width": "29vw",
+                                        "height": "20vw",
+                                        "fontSize": "14px",
+                                        "marginTop": "0px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginBottom": "27px",
+                                        "backgroundColor": ""
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Experience a menu where timeless Indian traditions are reimagined with modern creativity — from curried lamb tacos and Prime Ribeye to Kama Lobster Bisque and Tandoori Chilean Seabass.<br>At Kama, each dish is a vibrant fusion of bold Indian flavors and global influences. Enjoy fresh, scratch-made cuisine at La Grange, Wicker Park or West Loop locations.",
@@ -1996,7 +2192,19 @@
                                         "paddingBottom": "10px",
                                         "backgroundColor": "rgba(187, 162, 122, 1)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "marginTop": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "paddingTop": "13px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "21px",
+                                        "marginBottom": "px",
+                                        "paddingRight": "21px",
+                                        "paddingBottom": "13px",
+                                        "backgroundColor": "rgba(187, 162, 122, 1)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Explore Menu",
@@ -2034,7 +2242,16 @@
                                         "position": "absolute",
                                         "transform": "rotate(180deg)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "top": "28px",
+                                        "left": "-82px",
+                                        "width": "54vw",
+                                        "filter": "brightness(0.8)",
+                                        "height": "32vw",
+                                        "zIndex": "1",
+                                        "position": "absolute",
+                                        "transform": "rotate(180deg)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "/file_1756981302460",
@@ -2099,7 +2316,7 @@
                         "top": "0",
                         "left": "0",
                         "width": "100%",
-                        "height": "auto",
+                        "height": "100%",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
@@ -2111,7 +2328,8 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "20px",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     },
                     "sm": {
                         "top": "0",
@@ -2159,7 +2377,13 @@
                                 "fontWeight": "500",
                                 "paddingLeft": "99px"
                             },
-                            "md": {},
+                            "md": {
+                                "fontSize": "24px",
+                                "marginTop": "26px",
+                                "fontFamily": "var(--font-playfair)",
+                                "fontWeight": "500",
+                                "paddingLeft": "99px"
+                            },
                             "sm": {}
                         },
                         "content": "Weekly Specials",
@@ -2225,22 +2449,26 @@
                         "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     },
                     "md": {
+                        "gap": "16px",
                         "top": "0",
                         "left": "0",
-                        "width": "100%",
-                        "height": "auto",
+                        "width": "",
+                        "height": "",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
                         "marginLeft": "0",
-                        "paddingTop": "20px",
+                        "paddingTop": "30px",
                         "marginRight": "0",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "84px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(174,144,96,0.3))"
                     },
                     "sm": {
                         "top": "0",
@@ -2338,20 +2566,29 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256957)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -2406,7 +2643,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -2432,7 +2674,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only&nbsp;",
@@ -2508,20 +2753,28 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256958)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -2576,7 +2829,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -2602,7 +2860,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only&nbsp;",
@@ -2680,20 +2941,29 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256955)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -2748,7 +3018,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -2774,7 +3049,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
@@ -2850,8 +3128,10 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
@@ -2863,7 +3143,13 @@
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256959)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -2918,7 +3204,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -2944,7 +3235,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
@@ -3022,20 +3316,29 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256953)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -3090,7 +3393,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -3116,7 +3424,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
@@ -3194,20 +3505,29 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "10vw",
+                                "height": "38vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "flex-start",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "flex-end",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1757049256908)",
+                                "backgroundRepeat": "no-repeat",
+                                "backgroundPosition": "center"
                             },
                             "sm": {
                                 "top": "0",
@@ -3262,7 +3582,12 @@
                                         "fontSize": "24px",
                                         "fontFamily": "var(--font-playfair)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "150px",
+                                        "display": "none",
+                                        "fontSize": "24px",
+                                        "fontFamily": "var(--font-playfair)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "HAPPY HOUR",
@@ -3288,7 +3613,10 @@
                                         "width": "290px",
                                         "display": "none"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "290px",
+                                        "display": "none"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Mon-Fri | 4-6 | Bar &amp; Lounge Only",
@@ -3324,7 +3652,14 @@
                                 "zIndex": "0",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "76.6395%",
+                                "left": "-12.8319%",
+                                "width": "55vw",
+                                "height": "34vw",
+                                "zIndex": "0",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981302463",
@@ -3360,7 +3695,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "13.873%",
+                                "left": "84.4395%",
+                                "width": "55vw",
+                                "filter": "brightness(1.2)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981302463",
@@ -3428,22 +3771,27 @@
                         "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
                     "md": {
+                        "gap": "0px",
                         "top": "0",
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
-                        "position": "relative",
-                        "marginTop": "0",
+                        "position": "static",
+                        "marginTop": "0px",
                         "minHeight": "1vh",
-                        "marginLeft": "0",
-                        "paddingTop": "20px",
-                        "marginRight": "0",
+                        "alignItems": "center",
+                        "marginLeft": "",
+                        "paddingTop": "100px",
+                        "marginRight": "",
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "100px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(255,255,255,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -3523,8 +3871,10 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "35vw",
+                                "height": "33vw",
+                                "zIndex": "3",
+                                "display": "block",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
@@ -3532,11 +3882,12 @@
                                 "minHeight": "1vh",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
-                                "marginRight": "0",
+                                "marginRight": "-100px",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingBottom": "20px",
+                                "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             },
                             "sm": {
                                 "top": "0",
@@ -3586,7 +3937,14 @@
                                         "paddingTop": "5px",
                                         "paddingLeft": "23px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "18px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "paddingTop": "5px",
+                                        "paddingLeft": "5px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Private Event",
@@ -3625,10 +3983,14 @@
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(174,144,96,1))"
                                     },
                                     "md": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "100px",
+                                        "height": "2px",
+                                        "marginTop": "5px",
+                                        "marginLeft": "5px",
+                                        "paddingTop": "",
+                                        "marginBottom": "5px",
                                         "backgroundColor": "transparent",
-                                        "backgroundImage": "linear-gradient(to right, red, blue)"
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(174,144,96,1))"
                                     },
                                     "sm": {
                                         "width": "20px",
@@ -3678,7 +4040,19 @@
                                         "marginBottom": "40px",
                                         "paddingBottom": "-4px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "width": "27vw",
+                                        "height": "15vw",
+                                        "fontSize": "14px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "5px",
+                                        "marginRight": "43px",
+                                        "marginBottom": "40px",
+                                        "paddingBottom": "-4px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Kama Wicker Park is your go-to venue for unforgettable celebrations — from corporate gatherings and rehearsal dinners to birthdays and holiday parties. With stylish, intimate spaces perfect for groups of 12 to 80, we offer both private and semi-private options tailored to your occasion. Let us help you craft a memorable experience in the heart of the city.",
@@ -3720,7 +4094,20 @@
                                         "paddingBottom": "12px",
                                         "backgroundColor": "rgba(187, 161, 121, 1)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "12px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "43px",
+                                        "paddingTop": "12px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "33px",
+                                        "marginBottom": "px",
+                                        "paddingRight": "35px",
+                                        "paddingBottom": "12px",
+                                        "backgroundColor": "rgba(187, 161, 121, 1)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Book Now",
@@ -3782,7 +4169,10 @@
                                 "width": "61vw",
                                 "height": "44vw"
                             },
-                            "md": {},
+                            "md": {
+                                "width": "61vw",
+                                "height": "44vw"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1757051971103",
@@ -3857,7 +4247,8 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "20px",
+                        "backgroundImage": "linear-gradient(to right, rgba(254,254,253,1), rgba(187,163,125,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -3909,7 +4300,15 @@
                                 "marginLeft": "97px",
                                 "marginRight": "px"
                             },
-                            "md": {},
+                            "md": {
+                                "color": "rgba(0, 0, 0, 1)",
+                                "fontSize": "24px",
+                                "marginTop": "36px",
+                                "fontFamily": "var(--font-playfair)",
+                                "fontWeight": "500",
+                                "marginLeft": "97px",
+                                "marginRight": "px"
+                            },
                             "sm": {}
                         },
                         "content": "Chef’s Signature Picks",
@@ -3945,7 +4344,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "-208.928%",
+                                "left": "62.3156%",
+                                "width": "55vw",
+                                "filter": "brightness(0)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981338954",
@@ -4013,10 +4420,13 @@
                         "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(174,144,96,0.81))"
                     },
                     "md": {
+                        "gap": "38px",
                         "top": "0",
                         "left": "0",
-                        "width": "100%",
+                        "color": "rgba(255,255,255,1)",
+                        "width": "",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
@@ -4028,7 +4438,9 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "80px",
+                        "justifyContent": "center",
+                        "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(174,144,96,0.81))"
                     },
                     "sm": {
                         "top": "0",
@@ -4116,22 +4528,30 @@
                                 "backgroundRepeat": "no-repeat"
                             },
                             "md": {
+                                "gap": "20px",
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "25vw",
+                                "height": "31vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "center",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756269559528)",
+                                "backgroundRepeat": "no-repeat"
                             },
                             "sm": {
                                 "top": "0",
@@ -4181,7 +4601,12 @@
                                         "fontSize": "18px",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "display": "none",
+                                        "fontSize": "18px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "BBQ Ribs Namaste",
@@ -4211,7 +4636,13 @@
                                         "textAlign": "center",
                                         "fontWeight": "300"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "display": "none",
+                                        "fontSize": "14px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "300"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Tender, smoky ribs glazed with a bold Indian-inspired BBQ sauce.",
@@ -4244,10 +4675,10 @@
                                 "backgroundImage": "linear-gradient(to bottom, rgba(174,144,96,0.52), rgba(174,144,96,0.52))"
                             },
                             "md": {
-                                "width": "20px",
-                                "height": "5px",
+                                "width": "1px",
+                                "height": "31vw",
                                 "backgroundColor": "transparent",
-                                "backgroundImage": "linear-gradient(to right, red, blue)"
+                                "backgroundImage": "linear-gradient(to bottom, rgba(174,144,96,0.52), rgba(174,144,96,0.52))"
                             },
                             "sm": {
                                 "width": "20px",
@@ -4325,22 +4756,30 @@
                                 "backgroundRepeat": "no-repeat"
                             },
                             "md": {
+                                "gap": "20px",
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "25vw",
+                                "height": "31vw",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "center",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756269799369)",
+                                "backgroundRepeat": "no-repeat"
                             },
                             "sm": {
                                 "top": "0",
@@ -4390,7 +4829,12 @@
                                         "fontSize": "18px",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "display": "none",
+                                        "fontSize": "18px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Midday Indian Feast",
@@ -4422,7 +4866,14 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "300"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "80%",
+                                        "display": "none",
+                                        "fontSize": "14px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "300"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Enjoy bold, authentic flavors - your perfect afternoon escape.",
@@ -4537,22 +4988,31 @@
                                 "backgroundRepeat": "no-repeat"
                             },
                             "md": {
+                                "gap": "20px",
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
-                                "height": "auto",
+                                "width": "25vw",
+                                "height": "31vw",
+                                "zIndex": "3",
+                                "display": "flex",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
                                 "marginTop": "0",
                                 "minHeight": "1vh",
+                                "alignItems": "center",
                                 "marginLeft": "0",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
                                 "marginBottom": "0",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "flexDirection": "column",
+                                "paddingBottom": "20px",
+                                "backgroundSize": "cover",
+                                "justifyContent": "center",
+                                "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1756269530850)",
+                                "backgroundRepeat": "no-repeat"
                             },
                             "sm": {
                                 "top": "0",
@@ -4606,7 +5066,14 @@
                                         "textAlign": "center",
                                         "fontWeight": "500"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "80%",
+                                        "display": "none",
+                                        "fontSize": "18px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Avacado &amp; Soft-Boiled Egg Toast",
@@ -4638,7 +5105,14 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "300"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "width": "80%",
+                                        "display": "none",
+                                        "fontSize": "14px",
+                                        "textAlign": "center",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "300"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Wholesome toast with spinach, avacado, and soft-boiled eggs.",
@@ -4676,7 +5150,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "-65.6577%",
+                                "left": "62.4631%",
+                                "width": "55vw",
+                                "filter": "brightness(0)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981338954",
@@ -4712,7 +5194,15 @@
                                 "zIndex": "1",
                                 "position": "absolute"
                             },
-                            "md": {},
+                            "md": {
+                                "top": "36.5401%",
+                                "left": "70.2064%",
+                                "width": "55vw",
+                                "filter": "brightness(0)",
+                                "height": "34vw",
+                                "zIndex": "1",
+                                "position": "absolute"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1756981338954",
@@ -4787,7 +5277,8 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingBottom": "20px",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -4870,18 +5361,21 @@
                         "left": "0",
                         "width": "100%",
                         "height": "auto",
+                        "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
                         "position": "relative",
                         "marginTop": "0",
                         "minHeight": "1vh",
+                        "alignItems": "center",
                         "marginLeft": "0",
                         "paddingTop": "20px",
                         "marginRight": "0",
-                        "paddingLeft": "20px",
+                        "paddingLeft": "100px",
                         "marginBottom": "0",
-                        "paddingRight": "20px",
-                        "paddingBottom": "20px"
+                        "paddingRight": "",
+                        "paddingBottom": "20px",
+                        "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
                     },
                     "sm": {
                         "top": "0",
@@ -4923,7 +5417,10 @@
                                 "width": "63vw",
                                 "height": "48vw"
                             },
-                            "md": {},
+                            "md": {
+                                "width": "63vw",
+                                "height": "48vw"
+                            },
                             "sm": {}
                         },
                         "content": "/file_1757056479215",
@@ -4985,20 +5482,22 @@
                             "md": {
                                 "top": "0",
                                 "left": "0",
-                                "width": "100%",
+                                "color": "rgba(255,255,255,1)",
+                                "width": "34vw",
                                 "height": "auto",
                                 "minWidth": "2px",
                                 "overflow": "hidden",
                                 "position": "relative",
-                                "marginTop": "0",
+                                "marginTop": "-30px",
                                 "minHeight": "1vh",
-                                "marginLeft": "0",
+                                "marginLeft": "-150px",
                                 "paddingTop": "20px",
                                 "marginRight": "0",
                                 "paddingLeft": "20px",
-                                "marginBottom": "0",
+                                "marginBottom": "0px",
                                 "paddingRight": "20px",
-                                "paddingBottom": "20px"
+                                "paddingBottom": "40px",
+                                "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(174,144,96,1))"
                             },
                             "sm": {
                                 "top": "0",
@@ -5046,7 +5545,13 @@
                                         "fontWeight": "500",
                                         "marginLeft": "20px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "18px",
+                                        "marginTop": "10px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "10px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Wicker Park Catering",
@@ -5085,10 +5590,14 @@
                                         "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     },
                                     "md": {
-                                        "width": "20px",
-                                        "height": "5px",
+                                        "width": "100px",
+                                        "height": "2px",
+                                        "marginTop": "5px",
+                                        "marginLeft": "10px",
+                                        "borderRadius": "2px",
+                                        "marginBottom": "10px",
                                         "backgroundColor": "transparent",
-                                        "backgroundImage": "linear-gradient(to right, red, blue)"
+                                        "backgroundImage": "linear-gradient(to right, rgba(98,64,184,1), rgba(0,0,255,0))"
                                     },
                                     "sm": {
                                         "width": "20px",
@@ -5126,7 +5635,13 @@
                                         "marginLeft": "20px",
                                         "marginBottom": "30px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "10px",
+                                        "marginBottom": "30px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Planning something special in the heart of the city? Kama Wicker Park brings the flavor and flair to your next event — from stylish cocktail parties to milestone celebrations and polished corporate gatherings.",
@@ -5160,7 +5675,14 @@
                                         "position": "absolute",
                                         "transform": "rotate(90deg)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "top": "25.7079%",
+                                        "left": "-1.1489%",
+                                        "width": "48vw",
+                                        "zIndex": "1",
+                                        "position": "absolute",
+                                        "transform": "rotate(90deg)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "/file_1756101099159",
@@ -5190,7 +5712,12 @@
                                         "fontWeight": "500",
                                         "marginLeft": "20px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "37px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Here’s what we bring to the table:",
@@ -5218,7 +5745,11 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "marginLeft": "20px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "37px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "•&nbsp;Full-service or drop-off catering — your choice",
@@ -5246,7 +5777,11 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "marginLeft": "20px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "37px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "• Bold, chef-crafted Indian fusion menus",
@@ -5274,7 +5809,11 @@
                                         "fontFamily": "var(--font-poppins)",
                                         "marginLeft": "20px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "37px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "•&nbsp;Vegan, vegetarian &amp; gluten-free options for every guest",
@@ -5304,7 +5843,12 @@
                                         "marginLeft": "20px",
                                         "marginBottom": "15px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "14px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "37px",
+                                        "marginBottom": "15px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "•&nbsp;Custom packages for 12 to 80 people",
@@ -5336,7 +5880,13 @@
                                         "marginLeft": "20px",
                                         "marginBottom": "25px"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "fontSize": "18px",
+                                        "fontFamily": "var(--font-playfair)",
+                                        "fontWeight": "500",
+                                        "marginLeft": "37px",
+                                        "marginBottom": "25px"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Make your next event unforgettable.",
@@ -5380,7 +5930,20 @@
                                         "paddingBottom": "10px",
                                         "backgroundColor": "rgba(186, 161, 120, 1)"
                                     },
-                                    "md": {},
+                                    "md": {
+                                        "color": "rgba(255, 255, 255, 1)",
+                                        "fontSize": "14px",
+                                        "marginTop": "px",
+                                        "fontFamily": "var(--font-poppins)",
+                                        "marginLeft": "37px",
+                                        "paddingTop": "12px",
+                                        "borderWidth": "1px",
+                                        "paddingLeft": "43px",
+                                        "marginBottom": "px",
+                                        "paddingRight": "43px",
+                                        "paddingBottom": "12px",
+                                        "backgroundColor": "rgba(186, 161, 120, 1)"
+                                    },
                                     "sm": {}
                                 },
                                 "content": "Book Now",
@@ -5434,4 +5997,6 @@
                 ]
             }
         ]
-    }
+    },
+    "ok": true
+}
