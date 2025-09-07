@@ -166,17 +166,17 @@ const Section: React.FC<SectionProps> = ({
     contextForSection.setSectionGivenName(() => (value: string) => { setGivenName(section.id, value) })
     contextForSection.setSectionName(section.givenName)
 
-    
+
     hoverObject.setHoverContext(hover) // set the contexts for hover
     hoverObject.setHoverContextSetter(() => ((newValue: React.CSSProperties) => {
       setHover((prev: CSSProperties) => ({ ...prev, ...newValue }))
     }))
-    
+
     screenStyleObj.setScreenStyle(section.style)
-    
+
     setSectionChildElements(elements)
     setSectionChildElementsSetterFull(() => setElements)
-    
+
     setSectionChildElementsSetter(() =>
       (id: string, checked: boolean) => {
         setHiddenChildList((prev: string[]) => prev.filter((e: string) => e !== id))
@@ -254,38 +254,6 @@ const Section: React.FC<SectionProps> = ({
   }, [isDragging]);
 
   useEffect(() => {
-    if (finalUpdate) {
-      finalUpdate(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
-    }
-
-
-  }, [updateData, elements, hover]);
-
-  useEffect(() => {
-
-    // setSectionChilds(() => SectionChilds(elements, setElements, activeScreen))
-  }, [elements])
-
-
-  useEffect(() => {
-    if (updateParentElement) {
-      updateParentElement(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
-    }
-    hoverObject.setHoverContext(hover)
-  }, [elements, hover])
-
-  useEffect(() => {
-    if (finalUpdate) {
-      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
-    }
-
-    if (updateParentElement) {
-      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
-    }
-    contextForSection.setCurrentSection(sectionStyle)
-  }, [sectionStyle])
-
-  useEffect(() => {
     setSectionStyle((prev) => {
       if (JSON.stringify(prev) !== JSON.stringify(style)) {
         return style;
@@ -347,6 +315,32 @@ const Section: React.FC<SectionProps> = ({
 
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
+
+  /////////////// Reason for infinite renders/////////////////////////////////
+  useEffect(() => {
+    if (finalUpdate) {
+      finalUpdate(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+    }
+  }, [updateData, elements, hover]);
+
+  useEffect(() => {
+    if (updateParentElement) {
+      updateParentElement(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+    }
+    hoverObject.setHoverContext(hover)
+  }, [elements, hover])
+
+  useEffect(() => {
+    if (finalUpdate) {
+      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+    }
+
+    if (updateParentElement) {
+      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+    }
+    contextForSection.setCurrentSection(sectionStyle)
+  }, [sectionStyle])
+  /////////////////////////////////////////////////////////////////////////
 
   return (
     <div className=""

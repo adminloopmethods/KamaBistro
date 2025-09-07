@@ -97,7 +97,7 @@ const DraggableList: React.FC<DraggableListProps> = ({
 
     return (
         <DndProvider backend={HTML5Backend}>
-            {elements.map((el, i) => (
+            {Array.isArray(elements) && elements.map((el, i) => (
                 <DraggableItem
                     key={el.id}
                     element={el}

@@ -225,7 +225,7 @@ const RichTextToolBar: React.FC = () => {
                 ))}
             </div>
 
-            {/* ✅ Letter Spacing Slider */}
+            {/*  Letter Spacing Slider */}
             <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
                     Letter Spacing
@@ -243,6 +243,26 @@ const RichTextToolBar: React.FC = () => {
                     {localStyle.letterSpacing || "0px"}
                 </span>
             </div>
+
+            {/*  Line Height Slider */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Line Height
+                </label>
+                <input
+                    type="range"
+                    min={1}
+                    max={2.5}
+                    step={0.1}
+                    value={localStyle.lineHeight ? parseFloat(localStyle.lineHeight.toString()) : 1.2}
+                    onChange={(e) => applyStyle("lineHeight", e.target.value)}
+                    className="w-full accent-stone-600"
+                />
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {localStyle.lineHeight || "1.2"}
+                </span>
+            </div>
+
 
 
             {/* Dimensions */}
