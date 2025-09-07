@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, ChangeEvent, useEffect } from "react";
+import React, { useRef, ChangeEvent, useEffect, useState } from "react";
 import { screenType, useMyContext } from "@/Context/EditorContext";
 import CustomSelect from "@/app/_common/CustomSelect";
 import ImageSelector from "./ImageSelector";
@@ -30,7 +30,6 @@ const boxShadowPresets: Record<string, string> = {
 const ImageStyleToolbar: React.FC = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const { imageContext, setImageEdit, setImageContext, contextRef, activeScreen, screenStyleObj } = useMyContext();
-
   if (!imageContext || !("element" in imageContext)) return null;
 
   const { element, style = {}, setElement, onClose, rmElement, imageRef, setSrcFn, openSelector } = imageContext;
@@ -72,6 +71,44 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
+  // Unified transform handler
+  const handleTransformChange = (type: "scaleX" | "scaleY" | "rotate") => (value: string) => {
+    setElement((prev: any) => {
+      const prevStyle = prev.style?.[activeScreen] || {};
+      const prevTransform = prevStyle.transform || "";
+
+      // Parse existing transform
+      const transforms: Record<string, string> = {};
+      prevTransform.split(" ").forEach((t:any) => {
+        const match = t.match(/^(\w+)\(([^)]+)\)$/);
+        if (match) transforms[match[1]] = match[2];
+      });
+
+      // Update the specific transform
+      if (type === "rotate") {
+        transforms.rotate = `${value}deg`;
+      } else {
+        transforms[type] = value;
+      }
+
+      // Rebuild transform string
+      const newTransform = Object.entries(transforms)
+        .map(([k, v]) => `${k}(${v})`)
+        .join(" ");
+
+      return {
+        ...prev,
+        style: {
+          ...prev.style,
+          [activeScreen]: {
+            ...prevStyle,
+            transform: newTransform,
+          },
+        },
+      };
+    });
+  };
+
   const handleInputValue = (name: keyof ElementType) => (value: string) => {
     setElement((prev: any) => ({
       ...prev,
@@ -95,8 +132,6 @@ const ImageStyleToolbar: React.FC = () => {
       let newVal = value;
       if (filterName === "grayscale") {
         newVal = `${parseFloat(value) * 100}%`; // 0–1 slider → %
-      } else if (filterName === "brightness") {
-        newVal = value;
       }
 
       filters[filterName] = newVal;
@@ -196,22 +231,6 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
-  const handleQuickRotate = (deg: number) => {
-    setElement((prev: any) => {
-      const prevStyle = prev.style?.[activeScreen] || {};
-      return {
-        ...prev,
-        style: {
-          ...prev.style,
-          [activeScreen]: {
-            ...prevStyle,
-            transform: `rotate(${deg}deg)`,
-          },
-        },
-      };
-    });
-  };
-
   const copyTheStyle = (screenSize: screenType) => {
     if (screenStyleObj.screenStyles?.[screenSize]) {
       setElement((prev: any) => ({
@@ -239,6 +258,8 @@ const ImageStyleToolbar: React.FC = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose, setImageEdit, imageRef]);
+
+  const prevTransform = style?.[activeScreen]?.transform || "";
 
   return (
     <div
@@ -328,6 +349,35 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow("Radius:", style?.[activeScreen]?.borderRadius, "text", handleInputStyles("borderRadius"))}
 
+      {/* Transform Controls */}
+      {renderInputRow(
+        "Scale - X:",
+        parseFloat(prevTransform.match(/scaleX\(([^)]+)\)/)?.[1] || "1"),
+        "number",
+        handleTransformChange("scaleX"),
+        "-1.1",
+        "10",
+        "0.1"
+      )}
+      {renderInputRow(
+        "Scale - Y:",
+        parseFloat(prevTransform.match(/scaleY\(([^)]+)\)/)?.[1] || "1"),
+        "number",
+        handleTransformChange("scaleY"),
+        "-1.1",
+        "10",
+        "0.1"
+      )}
+      {renderInputRow(
+        "Rotate:",
+        parseFloat(prevTransform.match(/rotate\(([^)]+)deg\)/)?.[1] || "0"),
+        "number",
+        handleTransformChange("rotate"),
+        "-360",
+        "360",
+        "1"
+      )}
+
       <div className="flex flex-col">
         <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Box Shadow</h4>
         <select
@@ -388,19 +438,6 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow("Stack Index:", style?.[activeScreen]?.zIndex, "number", handleInputStyles("zIndex"))}
       {renderInputRow("top:", style?.[activeScreen]?.top, "text", handleInputStyles("top"))}
       {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
-
-      <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Quick Rotate</h4>
-      <div className="flex gap-2 flex-wrap">
-        {[0, 45, 90, 135, 180].map((deg) => (
-          <button
-            key={deg}
-            onClick={() => handleQuickRotate(deg)}
-            className="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 dark:bg-zinc-700 dark:hover:bg-zinc-600 border text-sm"
-          >
-            {deg}°
-          </button>
-        ))}
-      </div>
 
       <CopyStylesUI copyTheStyle={copyTheStyle} />
 

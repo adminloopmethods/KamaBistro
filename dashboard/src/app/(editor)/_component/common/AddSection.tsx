@@ -88,7 +88,7 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
             const lastThreeChar = String(e.givenName).slice(-3).split("")
             const isDuplicate = lastThreeChar[0] === "(" && typeof (lastThreeChar[1]) === "number" && lastThreeChar[2] === ")"
             const postsuffix = isDuplicate ? `(${lastThreeChar[1] + 1})` : "(1)"
-            const givenName: string = e.givenName ? `${e.givenName} duplicate${postsuffix}` : ("random" + (i + 1))
+            const givenName: string = e.givenName ? `${e.givenName}` : ("random" + (i + 1))
             return {
               value: e.id, label: givenName
             }
