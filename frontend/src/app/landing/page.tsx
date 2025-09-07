@@ -102,7 +102,7 @@ const Editor = () => {
                                 section={section}
                                 style={section.style[currentWidth]}
                                 lastSection={lastSection}
-                                currentWidth={currentWidth}
+                                activeScreen={currentWidth}
                             />
                         );
                     })}

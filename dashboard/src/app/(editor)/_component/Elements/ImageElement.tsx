@@ -108,13 +108,15 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
       parseFloat(thisElement.style?.[activeScreen]?.top as string) || 0;
 
     // Convert % -> px if already stored as %
-    const leftInPx = thisElement.style?.[activeScreen]?.left?.toString().includes("%")
-      ? (currentLeftPx / 100) * parentRect.width
-      : currentLeftPx;
+    const leftInPx =
+      // thisElement.style?.[activeScreen]?.left?.toString().includes("%") ?
+      (currentLeftPx / 100) * parentRect.width
+    // : currentLeftPx;
 
-    const topInPx = thisElement.style?.[activeScreen]?.top?.toString().includes("%")
-      ? (currentTopPx / 100) * parentRect.height
-      : currentTopPx;
+    const topInPx =
+      // thisElement.style?.[activeScreen]?.top?.toString().includes("%") ?
+        (currentTopPx / 100) * parentRect.height
+        // : currentTopPx;
 
     elementStartPos.current = { x: leftInPx, y: topInPx };
 
