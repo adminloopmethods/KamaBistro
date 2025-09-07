@@ -242,10 +242,7 @@ export const getWebpageByIdService = async (id) => {
 };
 
 // ---------------- UPDATE WEBPAGE BY ID ----------------
-export const updateWebpageByIdService = async (
-  id,
-  { name, contents, editedWidth, route }
-) => {
+export const updateWebpageByIdService = async (id, { name, contents, editedWidth, route }) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
     where: { id },
@@ -294,10 +291,35 @@ export const updateWebpageByIdService = async (
     .filter((c) => !incomingSectionIds.has(c.id))
     .map((s) => s.id);
 
+  // Recursive delete: children -> elements -> parent
+  async function deleteSectionRecursively(sectionIds) {
+    for (const id of sectionIds) {
+      const section = await prismaClient.content.findUnique({
+        where: { id },
+        include: { elements: true, children: true },
+      });
+
+      if (!section) continue;
+
+      // Delete child sections recursively
+      if (section.children?.length) {
+        await deleteSectionRecursively(section.children.map((c) => c.id));
+      }
+
+      // Delete elements in this section
+      if (section.elements?.length) {
+        await prismaClient.element.deleteMany({
+          where: { id: { in: section.elements.map((e) => e.id) } },
+        });
+      }
+
+      // Delete this section
+      await prismaClient.content.delete({ where: { id } });
+    }
+  }
+
   if (sectionsToDeleteIds.length) {
-    await prismaClient.content.deleteMany({
-      where: { id: { in: sectionsToDeleteIds } },
-    });
+    await deleteSectionRecursively(sectionsToDeleteIds);
   }
 
   // ---------------- DELETE MISSING ELEMENTS ----------------
@@ -448,6 +470,7 @@ export const updateWebpageByIdService = async (
 
   return finalWebpage;
 };
+
 
 
 // ---------------- GET WEBPAGE VERSIONS ----------------

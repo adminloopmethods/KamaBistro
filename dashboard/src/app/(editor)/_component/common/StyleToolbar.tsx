@@ -31,11 +31,9 @@ const ColorPickerWithAlpha: React.FC<{
     onChange: (val: string) => void;
     onLiveChange?: (val: string) => void
 }> = ({ label, value, onChange, onLiveChange }) => {
-    // extract alpha if rgba, otherwise default 1
     const alphaMatch = value?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
     const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
 
-    // extract hex for <input type="color">
     const hex = value?.startsWith("rgba") ? "#" + rgbaToHex(value) : value || "#000000";
 
     return (
@@ -86,9 +84,18 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         currentSection?.color || "rgba(0,0,0,1)"
     );
 
+    // ✅ Border states
+  const [borderWidth, setBorderWidth] = useState<string>(
+  typeof currentSection?.borderWidth === "number"
+    ? `${currentSection.borderWidth}px`
+    : currentSection?.borderWidth || "0px"
+);
+
+    const [borderStyle, setBorderStyle] = useState<string>(currentSection?.borderStyle || "none");
+    const [borderColor, setBorderColor] = useState<string>(currentSection?.borderColor || "rgba(0,0,0,1)");
+
     const toolbarRef = useRef<HTMLDivElement>(null);
 
-    // ===== Debounced Handlers =====
     const debouncedUpdateStyles = useCallback(
         debounce((styles: Record<string, any>) => {
             updateStyles(styles);
@@ -115,7 +122,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         debouncedUpdateStyles({ boxShadow: shadowPresets[value] });
     };
 
-    // ✅ Always compute gradient from latest values
     const handleGradientUpdate = (newColor1?: string, newColor2?: string, newDir?: string) => {
         const c1 = newColor1 ?? color1;
         const c2 = newColor2 ?? color2;
@@ -123,8 +129,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
 
         const g = `linear-gradient(${dir}, ${c1}, ${c2})`;
         setGradient(g);
-
-        // live apply with fresh gradient
         updateBackground(undefined, g);
     };
 
@@ -145,7 +149,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     }
 
     useEffect(() => {
-        // keep in sync when section changes externally
         if (currentSection?.color) {
             setTextColor(currentSection.color);
         }
@@ -232,7 +235,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 onChange={(val) => { debouncedUpdateStyles({ backgroundPosition: val }); }}
             />
 
-            {/* Gradient Colors with Alpha */}
+            {/* Gradient */}
             <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
             <div className="flex flex-col gap-3">
                 <ColorPickerWithAlpha
@@ -279,7 +282,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 </button>
             )}
 
-            {/* Flexbox Controls */}
+            {/* Flexbox */}
             <div className="flex flex-col gap-3 border-t pt-3 border-b pb-2">
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Layout (Flexbox)</label>
 
@@ -370,24 +373,24 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 )}
             </div>
 
-            {/* ✅ Text Color with Alpha */}
+            {/* Text Color */}
             {renderInputRow(
                 '',
                 <ColorPickerWithAlpha
                     label="Text Color"
                     value={textColor}
                     onChange={(val) => {
-                        setTextColor(val);                 // ✅ update immediately
+                        setTextColor(val);
                         debouncedUpdateStyles({ color: val });
                     }}
                     onLiveChange={(value: string) => {
-                        setTextColor(value);               // ✅ instant slider movement
+                        setTextColor(value);
                         sectionRef?.current?.style.setProperty("color", value, "important");
                     }}
                 />
-
             )}
 
+            {/* Box Shadow */}
             {renderInputRow(
                 'Box Shadow',
                 <CustomSelect
@@ -396,6 +399,64 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                     onChange={handleShadowChange}
                 />
             )}
+
+            {/* ✅ Border Controls */}
+            <div className="flex flex-col gap-3 border-t pt-3">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Border</label>
+
+                {renderInputRow(
+                    'Border Width',
+                    <input
+                        type="number"
+                        min="0"
+                        value={parseInt(borderWidth)}
+                        onChange={(e) => {
+                            const val = `${e.target.value}px`;
+                            setBorderWidth(val);
+                            debouncedUpdateStyles({ borderWidth: val });
+                        }}
+                        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
+                    />
+                )}
+
+                {renderInputRow(
+                    'Border Style',
+                    <CustomSelect
+                        options={[
+                            { label: "None", value: "none" },
+                            { label: "Solid", value: "solid" },
+                            { label: "Dashed", value: "dashed" },
+                            { label: "Dotted", value: "dotted" },
+                            { label: "Double", value: "double" },
+                            { label: "Groove", value: "groove" },
+                            { label: "Ridge", value: "ridge" },
+                            { label: "Inset", value: "inset" },
+                            { label: "Outset", value: "outset" },
+                        ]}
+                        Default={borderStyle}
+                        onChange={(val) => {
+                            setBorderStyle(val);
+                            debouncedUpdateStyles({ borderStyle: val });
+                        }}
+                    />
+                )}
+
+                {renderInputRow(
+                    'Border Color',
+                    <ColorPickerWithAlpha
+                        label="Pick"
+                        value={borderColor}
+                        onChange={(val) => {
+                            setBorderColor(val);
+                            debouncedUpdateStyles({ borderColor: val });
+                        }}
+                        onLiveChange={(value: string) => {
+                            setBorderColor(value);
+                            sectionRef?.current?.style.setProperty("border-color", value, "important");
+                        }}
+                    />
+                )}
+            </div>
 
             <CopyStylesUI copyTheStyle={copyTheStyle} />
 

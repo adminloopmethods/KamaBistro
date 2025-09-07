@@ -25,7 +25,7 @@ type ImageType = {
 interface ImageSelectorProps {
     onSelectImage: (fileInfo: string[] | string, altText: string) => void;
     onClose: () => void;
-    type?: "IMAGE" | "DOCUMENT";
+    type?: "IMAGE" | "DOCUMENT" | "VIDEO";
 }
 
 const imageStructure: ImageType[] = [

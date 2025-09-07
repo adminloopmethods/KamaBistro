@@ -84,6 +84,7 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
       if (response.ok) {
         setOldSections(() => {
           return response.contents.map((e: any, i: number) => {
+            if (!e.givenName) return null
             const lastThreeChar = String(e.givenName).slice(-3).split("")
             const isDuplicate = lastThreeChar[0] === "(" && typeof (lastThreeChar[1]) === "number" && lastThreeChar[2] === ")"
             const postsuffix = isDuplicate ? `(${lastThreeChar[1] + 1})` : "(1)"
@@ -91,7 +92,7 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
             return {
               value: e.id, label: givenName
             }
-          })
+          }).filter(Boolean)
         })
       }
     }

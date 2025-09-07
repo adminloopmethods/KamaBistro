@@ -2,7 +2,7 @@
 import { randomUUID } from "node:crypto";
 import { createWebpageService } from "../src/modules/content/content.service.js";
 
-import Catering from "./templates/catering.json" assert {type: "json"}
+// import Catering from "./templates/catering.json" assert {type: "json"}
 // import CateringLocationOne from "./templates/cateringLocationone.json" assert {type: "json"}
 // import CateringLocationTwo from "./templates/cateringLocationtwo.json" assert {type: "json"}
 // import CateringLocationThree from "./templates/cateringLocationthree.json" assert {type: "json"}
@@ -24,7 +24,8 @@ import Catering from "./templates/catering.json" assert {type: "json"}
 // import reserveTableLocationThree from "./templates/reserveTableLocationthree.json" assert {type: "json"}
 // import Catering from "./templates/catering.json" assert {type: "json"}
 // import Catering from "./templates/catering.json" assert {type: "json"}
-import HomePage from "./templatesBase/Home.json" assert {type: "json"}
+// import HomePage from "./templatesBase/Home.json" assert {type: "json"}
+import HomeLanding from "./templateLandingPage/HomeLanding.json" assert {type: "json"}
 
 // Put them in an array
 const webpages = [
@@ -48,7 +49,8 @@ const webpages = [
   // reserveTableLocationOne,
   // reserveTableLocationTwo,
   // reserveTableLocationThree
-  HomePage
+  // HomePage
+  HomeLanding
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs

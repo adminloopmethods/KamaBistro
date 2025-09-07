@@ -6,6 +6,7 @@ import Division from "../_component/Elements/Division";
 import HeadingTwo from "../_component/Elements/Headingtwo";
 import HeadingThree from "../_component/Elements/HeadingThree";
 import Anchor from "../_component/Elements/Anchor";
+import VideoElemComponent from "../_component/Elements/VideoElement";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -124,6 +125,21 @@ class ButtonElementClass extends Element implements ButtonElement {
   }
 }
 
+export interface VideoElementType extends BaseElement {
+  alt?: string;             // optional, like description
+  captionsSrc?: string;     // URL to caption file (vtt)
+  transcript?: string;      // full transcript text
+}
+
+export class VideoElement extends Element implements VideoElementType {
+  alt?: string;
+
+  constructor(name: string, content: string, alt?: string) {
+    super(name, content);
+    this.alt = alt;
+  }
+}
+
 // LinkElement class with href and target
 export class LinkElementClass extends Element implements LinkElement {
   href: string;
@@ -149,10 +165,12 @@ export function generateElementData(
   content: string,
   altOrHrefOrAction?: string,
   extraItems?: string[]
-): BaseElement | ImageElementType | ListElement | ButtonElement | LinkElement {
+): BaseElement | ImageElementType | VideoElementType | ListElement | ButtonElement | LinkElement {
   switch (name) {
     case "img":
       return new ImageElement(name, content, altOrHrefOrAction || "Image");
+    case "video":
+      return new VideoElement(name, content, altOrHrefOrAction);
     case "ul":
     case "ol":
       return new ListElementClass(name as "ul" | "ol", extraItems || []);
@@ -163,11 +181,12 @@ export function generateElementData(
     case "p":
       return new ParagraphElementClass(content);
     case "division":
-      return new DivisionClass(name, "cotent")
+      return new DivisionClass(name, "content");
     default:
       return new Element(name, content);
   }
 }
+
 
 // Shortcut alias
 const gED = generateElementData;
@@ -179,6 +198,7 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   headingThree: () => gED("h3", "New 3rd Heading"),
   paragraph: () => gED("p", "New Paragraph"),
   image: () => gED("img", "", "Placeholder Image"),
+  video: () => gED("video", "", "New Video"),
   ul: () => gED("ul", "", undefined, ["List item 1", "List item 2"]),
   ol: () => gED("ol", "", undefined, ["First", "Second"]),
   button: () => gED("button", "Click me", "doSomething"),
@@ -200,5 +220,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   p: Paragraph,
   a: Anchor,
   img: ImageElemComponent,
+  video: VideoElemComponent,
   division: Division
 };
