@@ -5,7 +5,7 @@
         "route": "/landingpage",
         "locationId": null,
         "createdAt": "2025-09-04T09:47:01.080Z",
-        "updatedAt": "2025-09-07T07:25:52.716Z",
+        "updatedAt": "2025-09-07T07:44:17.253Z",
         "editedWidth": "1280px",
         "Status": true,
         "editorId": null,
@@ -4799,8 +4799,8 @@
                                 "position": "absolute"
                             },
                             "md": {
-                                "top": "-208.928%",
-                                "left": "62.3156%",
+                                "top": "-157.765%",
+                                "left": "66.9979%",
                                 "width": "55vw",
                                 "filter": "brightness(0)",
                                 "height": "34vw",
@@ -4882,12 +4882,13 @@
                         "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(174,144,96,0.81))"
                     },
                     "md": {
-                        "gap": "38px",
+                        "gap": "20px",
                         "top": "0",
                         "left": "0",
                         "color": "rgba(255,255,255,1)",
                         "width": "",
                         "height": "auto",
+                        "zIndex": "",
                         "display": "flex",
                         "minWidth": "2px",
                         "overflow": "hidden",
@@ -4900,7 +4901,7 @@
                         "paddingLeft": "20px",
                         "marginBottom": "0",
                         "paddingRight": "20px",
-                        "paddingBottom": "20px",
+                        "paddingBottom": "80px",
                         "justifyContent": "center",
                         "backgroundImage": "linear-gradient(to right, rgba(255,255,255,1), rgba(174,144,96,0.81))"
                     },
@@ -5119,13 +5120,12 @@
                                     },
                                     "md": {
                                         "display": "none",
-                                        "fontSize": "14px",
+                                        "fontSize": "16px",
                                         "textAlign": "center",
-                                        "fontFamily": "var(--font-poppins)",
                                         "fontWeight": "300"
                                     },
                                     "sm": {
-                                        "display": "none",
+                                        "display": "block",
                                         "fontSize": "16px",
                                         "textAlign": "center",
                                         "fontWeight": "300"
@@ -5406,10 +5406,10 @@
                                 "backgroundImage": "linear-gradient(to bottom, rgba(174,144,96,0.58), rgba(174,144,96,0.52))"
                             },
                             "md": {
-                                "width": "20px",
-                                "height": "5px",
+                                "width": "1px",
+                                "height": "31vw",
                                 "backgroundColor": "transparent",
-                                "backgroundImage": "linear-gradient(to right, red, blue)"
+                                "backgroundImage": "linear-gradient(to bottom, rgba(174,144,96,0.58), rgba(174,144,96,0.52))"
                             },
                             "sm": {
                                 "width": "1px",
@@ -5672,8 +5672,8 @@
                                 "position": "absolute"
                             },
                             "md": {
-                                "top": "-65.6577%",
-                                "left": "62.4631%",
+                                "top": "-70.4823%",
+                                "left": "2.09521%",
                                 "width": "55vw",
                                 "filter": "brightness(0)",
                                 "height": "34vw",
