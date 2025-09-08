@@ -8,13 +8,13 @@ import logo from "@/assets/favicon.png";
 // Example nav links
 const navLinksLeft = [
   { label: "Our Group", href: "/our-group" },
-  { label: "Culture", href: "/culture" },
+  { label: "Culture", href: "/ourculture" },
   { label: "Private Events", href: "/private-events" },
 ];
 
 const navLinksRight = [
   { label: "Catering", href: "/catering" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/contact-us" },
   { label: "Career", href: "/career" },
 ];
 
@@ -24,7 +24,7 @@ const Header: React.FC = () => {
   return (
     <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 lg:px-10">
       <div className="lg:container lg:mx-auto w-full flex bg-black items-center justify-between px-4 lg:rounded-xl">
-        
+
         {/* Mobile & Tablet Layout */}
         <div className="flex items-center justify-between w-full lg:hidden">
           <a href="/" aria-label="Go to Home">
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
         {/* Desktop Layout (from 1024px up) */}
         <nav
-          className="hidden lg:flex gap-[40px] text-[17px] items-center justify-center space-x-6 w-full border border-amber-50 relative -translate-x-7"
+          className="hidden lg:flex gap-[40px] text-[17px] items-center justify-center space-x-6 w-full relative -translate-x-7"
           aria-label="Main navigation"
         >
           {/* Left links */}

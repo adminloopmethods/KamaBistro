@@ -134,6 +134,14 @@ model draft {
   @@index([userId])
 }
 
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}
+
 // A user can be an editor on one page and a verifier on another.
 // A webpage has exactly one editor and one verifier at a time.
 // A user cannot be both the editor and verifier of the same webpage.
