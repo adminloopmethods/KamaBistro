@@ -12,6 +12,8 @@ const UsersPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
+  console.log(userData, "userData");
+
   const fetchUsers = async (page: number = 1) => {
     try {
       setLoading(true);
@@ -70,6 +72,7 @@ const UsersPage: React.FC = () => {
             onPageChange={handlePageChange}
             onCreateUser={() => setIsModalOpen(true)}
             refreshUsers={refreshUsers}
+            // isCurrentUserAdmin={true} // Pass the required property
           />
 
           <AddUserModal

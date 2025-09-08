@@ -9,25 +9,17 @@ import multer from "multer";
 import mediaUploader from "../../helper/mediaUploader.js";
 import {requireSuperAdmin} from "../../helper/requireSuperAdmin.js";
 import {authenticateUser} from "../../helper/authMiddleware.js";
-const upload = multer({dest: "uploads/"}); // temporary folder
+const upload = multer({dest: "uploads/"});
 
 const router = Router();
 
-// const requiredPermissionsForUser = ["USER_MANAGEMENT"];
-
-// Soft delete a user
-router.delete("/:id", requireSuperAdmin, UserController.DeleteUser);
-
-// Restore a soft-deleted user
-router.patch(
-  "/restore/:id",
-  requireSuperAdmin,
-  UserController.RestoreDeletedUser
-);
+router.get("/locations", tryCatchWrap(UserController.GetAllLocations));
+router.get("/getRolesForUser", tryCatchWrap(UserController.GetRolesForUser));
+router.get("/getAllUsers", tryCatchWrap(UserController.GetAllUsers));
+router.get("/getUserProfile", tryCatchWrap(UserController.GetUserProfile));
 
 router.post(
   "/create",
-  // checkPermission(requiredPermissionsForUser),
   validate(userSchema),
   auditLogger,
   tryCatchWrap(UserController.CreateUserHandler)
@@ -41,44 +33,12 @@ router.post(
   tryCatchWrap(UserController.AssignRoleToWebpage)
 );
 
-// routes/user.ts
 router.delete(
   "/remove-page-role",
   authenticateUser,
   requireSuperAdmin,
   auditLogger,
   tryCatchWrap(UserController.RemoveRoleFromWebpage)
-);
-
-router.get("/locations", tryCatchWrap(UserController.GetAllLocations));
-
-router.get("/getRolesForUser", tryCatchWrap(UserController.GetRolesForUser));
-
-router.get(
-  "/getAllUserByRoleId/:roleId",
-  tryCatchWrap(UserController.GetAllUsersByRoleId)
-);
-
-router.get(
-  "/getAllUsers",
-  // checkPermission(requiredPermissionsForUser),
-  tryCatchWrap(UserController.GetAllUsers)
-);
-
-router.get("/getUserProfile", tryCatchWrap(UserController.GetUserProfile));
-
-router.get(
-  "/:id",
-  // checkPermission(requiredPermissionsForUser),
-  tryCatchWrap(UserController.GetUserById)
-);
-
-router.put(
-  "/updateUser/:id",
-  // checkPermission(requiredPermissionsForUser),
-  validate(updateUserSchema),
-  auditLogger,
-  tryCatchWrap(UserController.EditUserDetails)
 );
 
 router.put(
@@ -90,25 +50,44 @@ router.put(
 
 router.put(
   "/updateProfileImage",
-  upload.array("image", 1), // Assuming the image is sent as a form-data field named 'image'
+  upload.array("image", 1),
   mediaUploader,
   tryCatchWrap(UserController.EditProfileImage)
 );
 
 router.put(
   "/activate",
-  // checkPermission(requiredPermissionsForUser),
+  requireSuperAdmin,
   auditLogger,
   tryCatchWrap(UserController.ActivateUser)
 );
 
 router.put(
   "/deactivate",
-  // checkPermission(requiredPermissionsForUser),
+  requireSuperAdmin,
   auditLogger,
   tryCatchWrap(UserController.DeactivateUser)
 );
 
+router.get(
+  "/getAllUserByRoleId/:roleId",
+  tryCatchWrap(UserController.GetAllUsersByRoleId)
+);
 router.get("/userRoleType/:id", tryCatchWrap(UserController.UserRoleType));
+router.get("/:id", tryCatchWrap(UserController.GetUserById));
+
+router.put(
+  "/updateUser/:id",
+  validate(updateUserSchema),
+  auditLogger,
+  tryCatchWrap(UserController.EditUserDetails)
+);
+
+router.delete("/:id", requireSuperAdmin, UserController.DeleteUser);
+router.patch(
+  "/restore/:id",
+  requireSuperAdmin,
+  UserController.RestoreDeletedUser
+);
 
 export default router;

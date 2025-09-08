@@ -345,52 +345,13 @@ export const findUserByEmail = async (email) => {
       email,
       deletedAt: null,
     },
-    // include: {
-    //   roles: true,
-    //   // {
-    //   //   include: {
-    //   //     role: {
-    //   //       include: {
-    //   //         permissions: {
-    //   //           include: {
-    //   //             permission: true,
-    //   //           },
-    //   //         },
-    //   //         roleType: true,
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // },
-    // },
   });
 
   if (!user) {
-    return false; // Handle case where user is not found
+    return false;
   }
 
-  // const roles = user.roles?.map((role) => role.role.name) || [];
-  // const permissions =
-  //   user.roles?.flatMap((role) =>
-  //     role.role.permissions.map((permission) => permission.permission.name)
-  //   ) || [];
-
-  // const roleAndPermission =
-  //   user.roles?.map((role) => ({
-  //     id: role.role.id,
-  //     role: role.role.name,
-  //     // roleType: role.role.roleType.name,
-  //     status: role.role.status,
-  //     // permissions: role.role.permissions.map((perm) => perm.permission.name),
-  //   })) || [];
-  // const roles = user.roles?.map((role) => role.role.name) || [];
-  // const permissions =
-  //   user.roles?.flatMap((role) =>
-  //     role.role.permissions.map((permission) => permission.permission.name)
-  //   ) || [];
-
   return user;
-  // roles: roleAndPermission,
-  // permissions,
 };
 
 export const findUserById = async (id) => {
