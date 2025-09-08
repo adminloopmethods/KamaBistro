@@ -43,8 +43,9 @@ const AddElement: React.FC<AddElementProps> = ({ controller, canAddSection }) =>
         { label: "Paragraph", value: "paragraph" },
         { label: "Link", value: "link" },
         { label: "Image", value: "image" },
-        { label: "Line", value: "line" }
-        // { label: "Image", value: "image" },
+        { label: "Video", value: "video" },
+        { label: "Line", value: "line" },
+        { label: "Contact Form", value: "contactForm" },
     ];
 
     return (

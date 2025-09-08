@@ -38,7 +38,6 @@ export default function RootLayout({
         className={`${playfair.variable} ${poppins.variable} antialiased p-0`}
       >
         <Provider>
-          <Header />
           {/* <UserProvider> */}
             {children}
             {/* </UserProvider> */}

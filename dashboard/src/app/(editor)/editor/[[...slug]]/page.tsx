@@ -26,6 +26,7 @@ import { preSection } from "@/assets/preSection.js"
 import { useDraggable } from "../../_component/common/useDraggable";
 import HoverToolbar from "../../_component/common/HoverToolbar";
 import { useRouter } from "next/navigation";
+import ChildElements from "../../_component/common/ChildElements";
 
 const renderInput = (
     label: string,
@@ -64,7 +65,8 @@ const Editor = () => {
     const [showToolbar, setShowToolbar] = useState<boolean>(true)
     const router = useRouter();
 
-    const toolbarRef = useDraggable()
+    const childElementsRef = useRef<HTMLDivElement | null>(null);
+    const toolbarRef = useDraggable(childElementsRef)
 
     const {
         width, // {currentWidth, setCurrentWidth}
@@ -310,7 +312,7 @@ const Editor = () => {
                     onClick={() => router.back()}
                     className="cursor-pointer bg-stone-200 p-1 rounded-[50%]"
                 >
-                  <ArrowLeft color="#808080" />
+                    <ArrowLeft color="#808080" />
                 </button>
 
                 <div className="flex justify-end items-center gap-8">
@@ -462,6 +464,8 @@ const Editor = () => {
                                 <>
                                     <DimensionToolbar updateStyles={updateSectionStyles} />
                                     <StyleToolbar updateStyles={updateSectionStyles} rmSection={rmSection} />
+                                    <ChildElements ref={childElementsRef} />
+
                                 </>
                             ) : (
                                 imageEdit ?

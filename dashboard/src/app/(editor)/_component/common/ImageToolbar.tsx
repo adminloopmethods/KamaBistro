@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, ChangeEvent, useEffect } from "react";
+import React, { useRef, ChangeEvent, useEffect, useState } from "react";
 import { screenType, useMyContext } from "@/Context/EditorContext";
 import CustomSelect from "@/app/_common/CustomSelect";
 import ImageSelector from "./ImageSelector";
@@ -30,12 +30,11 @@ const boxShadowPresets: Record<string, string> = {
 const ImageStyleToolbar: React.FC = () => {
   const toolbarRef = useRef<HTMLDivElement | null>(null);
   const { imageContext, setImageEdit, setImageContext, contextRef, activeScreen, screenStyleObj } = useMyContext();
-
   if (!imageContext || !("element" in imageContext)) return null;
 
   const { element, style = {}, setElement, onClose, rmElement, imageRef, setSrcFn, openSelector } = imageContext;
 
-  // Unified input row with Tailwind styling
+  // unified input row
   const renderInputRow = (
     label: string,
     value: string | number = "",
@@ -60,7 +59,6 @@ const ImageStyleToolbar: React.FC = () => {
   );
 
   const handleInputStyles = (name: keyof StyleObject) => (value: string) => {
-
     setElement((prev: any) => ({
       ...prev,
       style: {
@@ -71,6 +69,44 @@ const ImageStyleToolbar: React.FC = () => {
         },
       },
     }));
+  };
+
+  // Unified transform handler
+  const handleTransformChange = (type: "scaleX" | "scaleY" | "rotate") => (value: string) => {
+    setElement((prev: any) => {
+      const prevStyle = prev.style?.[activeScreen] || {};
+      const prevTransform = prevStyle.transform || "";
+
+      // Parse existing transform
+      const transforms: Record<string, string> = {};
+      prevTransform.split(" ").forEach((t:any) => {
+        const match = t.match(/^(\w+)\(([^)]+)\)$/);
+        if (match) transforms[match[1]] = match[2];
+      });
+
+      // Update the specific transform
+      if (type === "rotate") {
+        transforms.rotate = `${value}deg`;
+      } else {
+        transforms[type] = value;
+      }
+
+      // Rebuild transform string
+      const newTransform = Object.entries(transforms)
+        .map(([k, v]) => `${k}(${v})`)
+        .join(" ");
+
+      return {
+        ...prev,
+        style: {
+          ...prev.style,
+          [activeScreen]: {
+            ...prevStyle,
+            transform: newTransform,
+          },
+        },
+      };
+    });
   };
 
   const handleInputValue = (name: keyof ElementType) => (value: string) => {
@@ -95,9 +131,7 @@ const ImageStyleToolbar: React.FC = () => {
 
       let newVal = value;
       if (filterName === "grayscale") {
-        newVal = `${parseFloat(value) * 100}%`; // keep 0–1 in slider, convert to %
-      } else if (filterName === "brightness") {
-        newVal = value; // keep as-is
+        newVal = `${parseFloat(value) * 100}%`; // 0–1 slider → %
       }
 
       filters[filterName] = newVal;
@@ -117,10 +151,7 @@ const ImageStyleToolbar: React.FC = () => {
     });
   };
 
-
-
   const handlePositionChange = (value: string) => {
-
     setElement((prev: any) => ({
       ...prev,
       style: {
@@ -128,9 +159,22 @@ const ImageStyleToolbar: React.FC = () => {
         [activeScreen]: {
           ...prev.style?.[activeScreen],
           position: value,
-          top: "20px",
-          left: "20px",
-          zIndex: "1"
+          top: prev.style?.[activeScreen]?.top || "20px",
+          left: prev.style?.[activeScreen]?.left || "20px",
+          zIndex: prev.style?.[activeScreen]?.zIndex || "1",
+        },
+      },
+    }));
+  };
+
+  const handleDisplay = (value: string) => {
+    setElement((prev: any) => ({
+      ...prev,
+      style: {
+        ...prev.style,
+        [activeScreen]: {
+          ...prev.style?.[activeScreen],
+          display: value,
         },
       },
     }));
@@ -143,11 +187,11 @@ const ImageStyleToolbar: React.FC = () => {
         ...prev.style,
         [activeScreen]: {
           ...prev.style?.[activeScreen],
-          objectFit: value
+          objectFit: value,
         },
       },
     }));
-  }
+  };
 
   const handleObjectSize = (value: string) => {
     setElement((prev: any) => ({
@@ -156,24 +200,22 @@ const ImageStyleToolbar: React.FC = () => {
         ...prev.style,
         [activeScreen]: {
           ...prev.style?.[activeScreen],
-          objectPosition: value
+          objectPosition: value,
         },
       },
     }));
-  }
+  };
 
   const removeElement = () => {
-    setImageEdit(false)
-    setImageContext(null)
-    contextRef.setReference(null)
-    rmElement()
-  }
+    setImageEdit(false);
+    setImageContext(null);
+    contextRef.setReference(null);
+    rmElement();
+  };
 
   const closeSelector = () => {
-    setImageContext((prev) => {
-      return ({ ...prev, openSelector: false })
-    })
-  }
+    setImageContext((prev) => ({ ...prev, openSelector: false }));
+  };
 
   const handleShadowChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
@@ -189,73 +231,35 @@ const ImageStyleToolbar: React.FC = () => {
     }));
   };
 
-  const handleQuickRotate = (deg: number) => {
-    setElement((prev: any) => {
-      const prevStyle = prev.style?.[activeScreen] || {};
-
-      return {
-        ...prev,
-        style: {
-          ...prev.style,
-          [activeScreen]: {
-            ...prevStyle,
-            transform: `rotate(${deg}deg)`,
-          },
-        },
-      };
-    });
-  };
-
   const copyTheStyle = (screenSize: screenType) => {
-
     if (screenStyleObj.screenStyles?.[screenSize]) {
-
       setElement((prev: any) => ({
         ...prev,
         style: {
           ...prev.style,
-          [activeScreen]: screenStyleObj.screenStyles?.[screenSize]
+          [activeScreen]: screenStyleObj.screenStyles?.[screenSize],
         },
       }));
     }
-  }
+  };
 
-
-  // useEffect(() => {
-  //   function handleClickOutside(event: MouseEvent) {
-  //     if (toolbarRef.current && !toolbarRef.current.contains(event.target as Node) &&
-  //       !imageRef.current.contains(event.target as Node)) {
-  //       onClose();
-  //       setImageEdit(false)
-  //     }
-  //   }
-  //   document.addEventListener("mousedown", handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [onClose]);
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       const target = event.target as Node;
-
       const clickedInsideToolbar = toolbarRef.current?.contains(target);
       const clickedOnActiveImage = imageRef.current?.contains(target);
-
-      // ✅ NEW: check if clicked on any image element
-      const clickedOnAnyImage = (target instanceof HTMLElement) && target.closest("img");
+      const clickedOnAnyImage = target instanceof HTMLElement && target.closest("img");
 
       if (!clickedInsideToolbar && !clickedOnActiveImage && !clickedOnAnyImage) {
         onClose();
         setImageEdit(false);
       }
     }
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [onClose, setImageEdit, imageRef]);
 
+  const prevTransform = style?.[activeScreen]?.transform || "";
 
   return (
     <div
@@ -267,14 +271,29 @@ const ImageStyleToolbar: React.FC = () => {
     >
       <h3 className="font-bold border-t pt-2">Image Style Controls</h3>
 
-      <button onClick={removeElement}
-        className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100">
-        Remove this Image</button>
+      <button
+        onClick={removeElement}
+        className="px-3 py-2 rounded-md bg-red-100 hover:bg-red-200 text-red-700 text-sm font-medium border border-red-300 dark:bg-red-800 dark:border-red-600 dark:text-red-100"
+      >
+        Remove this Image
+      </button>
 
       {renderInputRow("Alternate text:", element.alt || "", "text", handleInputValue("alt"))}
 
-      {renderInputRow("Width:", style?.[activeScreen]?.width, "text", handleInputStyles("width"))}
+      <CustomSelect
+        options={[
+          { label: "Block/Show", value: "block" },
+          { label: "Consume sized space", value: "inline-block" },
+          { label: "Hide", value: "none" },
+        ]}
+        Default={style?.[activeScreen]?.display}
+        onChange={handleDisplay}
+        disableFirstValue
+        firstOption="Display"
+        firstValue=""
+      />
 
+      {renderInputRow("Width:", style?.[activeScreen]?.width, "text", handleInputStyles("width"))}
       {renderInputRow("Height:", style?.[activeScreen]?.height, "text", handleInputStyles("height"))}
 
       <label className="text-xs font-bold text-stone-700 dark:text-stone-300 mb-[-10px]">Image Fit</label>
@@ -284,8 +303,8 @@ const ImageStyleToolbar: React.FC = () => {
           { value: "contain", label: "Contain" },
           { value: "fill", label: "Fill" },
         ]}
-        Default={style?.[activeScreen]?.position}
-        onChange={(value) => handleObjectFit(value)}
+        Default={style?.[activeScreen]?.objectFit}
+        onChange={handleObjectFit}
         firstOption="Default"
         firstValue="auto"
       />
@@ -295,17 +314,15 @@ const ImageStyleToolbar: React.FC = () => {
           { value: "left top", label: "left top" },
           { value: "left center", label: "left center" },
           { value: "left bottom", label: "left bottom" },
-
           { value: "center top", label: "center top" },
           { value: "center center", label: "center center" },
           { value: "center bottom", label: "center bottom" },
-
           { value: "right top", label: "right top" },
           { value: "right center", label: "right center" },
-          { value: "right bottom", label: "right bottom" }
+          { value: "right bottom", label: "right bottom" },
         ]}
-        Default={style?.[activeScreen]?.position}
-        onChange={(value) => handleObjectSize(value)}
+        Default={style?.[activeScreen]?.objectPosition}
+        onChange={handleObjectSize}
         firstOption="Default"
         firstValue="auto"
       />
@@ -313,7 +330,6 @@ const ImageStyleToolbar: React.FC = () => {
       <div>
         <label className="text-xs font-bold text-gray-700 dark:text-gray-200">Margin</label>
         <div className="grid grid-cols-2 gap-2">
-
           {renderInputRow("Top:", style?.[activeScreen]?.marginTop, "text", handleInputStyles("marginTop"))}
           {renderInputRow("Bottom:", style?.[activeScreen]?.marginBottom, "text", handleInputStyles("marginBottom"))}
           {renderInputRow("Left:", style?.[activeScreen]?.marginLeft, "text", handleInputStyles("marginLeft"))}
@@ -331,13 +347,39 @@ const ImageStyleToolbar: React.FC = () => {
         </div>
       </div>
 
-
       {renderInputRow("Radius:", style?.[activeScreen]?.borderRadius, "text", handleInputStyles("borderRadius"))}
 
-      <div className="flex flex-col">
-        {/* <label className="text-sm font-medium mb-1 text-stone-700 dark:text-stone-300">Box Shadow:</label> */}
-        <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Box Shadow</h4>
+      {/* Transform Controls */}
+      {renderInputRow(
+        "Scale - X:",
+        parseFloat(prevTransform.match(/scaleX\(([^)]+)\)/)?.[1] || "1"),
+        "number",
+        handleTransformChange("scaleX"),
+        "-1.1",
+        "10",
+        "0.1"
+      )}
+      {renderInputRow(
+        "Scale - Y:",
+        parseFloat(prevTransform.match(/scaleY\(([^)]+)\)/)?.[1] || "1"),
+        "number",
+        handleTransformChange("scaleY"),
+        "-1.1",
+        "10",
+        "0.1"
+      )}
+      {renderInputRow(
+        "Rotate:",
+        parseFloat(prevTransform.match(/rotate\(([^)]+)deg\)/)?.[1] || "0"),
+        "number",
+        handleTransformChange("rotate"),
+        "-360",
+        "360",
+        "1"
+      )}
 
+      <div className="flex flex-col">
+        <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Box Shadow</h4>
         <select
           className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm text-stone-900 dark:text-stone-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           value={
@@ -365,9 +407,11 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow(
         "Grayscale:",
-        parseFloat(style?.[activeScreen]?.filter?.match(/grayscale\(([^)]+)\)/)?.[1]?.replace('%', '') || "0") / 100, // normalize
+        Number(
+          (style?.[activeScreen]?.filter?.match(/grayscale\(([^)]+)\)/)?.[1] || "0").replace("%", "")
+        ) / 100,
         "range",
-        (val) => handleFilterChange("grayscale")(val), // val is 0–1
+        (val) => handleFilterChange("grayscale")(val),
         "0",
         "1",
         "0.1"
@@ -375,9 +419,7 @@ const ImageStyleToolbar: React.FC = () => {
 
       {renderInputRow(
         "Brightness:",
-        parseFloat(
-          style?.[activeScreen]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"
-        ),
+        Number(style?.[activeScreen]?.filter?.match(/brightness\(([^)]+)\)/)?.[1] || "1"),
         "range",
         (val) => handleFilterChange("brightness")(val),
         "0",
@@ -386,14 +428,10 @@ const ImageStyleToolbar: React.FC = () => {
       )}
 
       <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Position</h4>
-
       <CustomSelect
-        options={[
-          // { value: "relative", label: "Just Stack" },
-          { value: "absolute", label: "Drag" }
-        ]}
+        options={[{ value: "absolute", label: "Drag" }]}
         Default={style?.[activeScreen]?.position}
-        onChange={(value) => handlePositionChange(value)}
+        onChange={handlePositionChange}
         firstOption="No Drag"
         firstValue="static"
       />
@@ -401,48 +439,10 @@ const ImageStyleToolbar: React.FC = () => {
       {renderInputRow("top:", style?.[activeScreen]?.top, "text", handleInputStyles("top"))}
       {renderInputRow("left:", style?.[activeScreen]?.left, "text", handleInputStyles("left"))}
 
-      <h4 className="font-semibold border-t pt-2 text-stone-700 dark:text-stone-300">Quick Rotate</h4>
-      <div className="flex gap-2 flex-wrap">
-        {[0, 45, 90, 135, 180].map((deg) => (
-          <button
-            key={deg}
-            onClick={() => handleQuickRotate(deg)}
-            className="px-2 py-1 rounded-md bg-gray-100 hover:bg-gray-200 
-                 dark:bg-zinc-700 dark:hover:bg-zinc-600 
-                 border text-sm"
-          >
-            {deg}°
-          </button>
-        ))}
-      </div>
-
-      {/* <label htmlFor="" className="text-xs mt-2 font-bold border-t pt-2"> Copy Style from</label>
-      <div className="flex gap-2">
-        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("xl") }}>
-          XL
-        </button>
-
-        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("lg") }}>
-          LG
-        </button>
-        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("md") }}>
-          MD
-        </button>
-        <button className='cursor-pointer border p-2 rounded-md w-[40px] font-bold' onClick={() => { copyTheStyle("sm") }}>
-          SM
-        </button>
-
-      </div> */}
       <CopyStylesUI copyTheStyle={copyTheStyle} />
 
-
-      {/* Image Selector Modal */}
       {openSelector && (
-        <ImageSelector
-          onSelectImage={setSrcFn}
-          onClose={() => closeSelector()}
-          type="IMAGE"
-        />
+        <ImageSelector onSelectImage={setSrcFn} onClose={closeSelector} type="IMAGE" />
       )}
     </div>
   );

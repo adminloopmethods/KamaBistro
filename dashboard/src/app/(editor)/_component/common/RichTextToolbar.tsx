@@ -5,20 +5,37 @@ import { screenType, useMyContext } from '@/Context/EditorContext';
 import CustomSelect from '@/app/_common/CustomSelect';
 import CopyStylesUI from './CopyStyleUI';
 import toolbarStyles from "./dimensionToolbar.module.css"
+import { ColorPickerWithAlpha } from './ColorPickerWithAlpha';
 
 type StylesState = React.CSSProperties | Record<string, any>;
 
 const fontFamilyOptions = [
-    { label: 'Courier New', value: '"Courier New", monospace' },
-    { label: 'Serif', value: 'serif' },
-    { label: 'System UI', value: 'system-ui' },
-    { label: 'Trebuchet MS', value: '"Trebuchet MS", sans-serif' },
-    { label: 'Monospace', value: 'monospace' },
-    { label: 'Poppins', value: 'var(--font-poppins)' },
     { label: 'Playfair Display', value: 'var(--font-playfair)' },
+    { label: 'Poppins', value: 'var(--font-poppins)' },
+    // { label: 'System UI', value: 'system-ui' },
+    // { label: 'Courier New', value: '"Courier New", monospace' },
+    // { label: 'Monospace', value: 'monospace' },
+    // { label: 'Serif', value: 'serif' },
 ];
 
-const fontSizeOptions = [12, 14, 16, 18, 24, 32, 36, 40, 48, 54, 64].map(size => ({
+// Add options for Display property
+const displayOptions = [
+    { label: "Block/Show", value: "block" },
+    { label: "Consume sized space", value: "inline-block" },
+    { label: "Hide", value: "none" },
+];
+
+//  Position Options
+const positionOptions = [
+    { label: "Static", value: "static" },
+    // { label: "Relative", value: "relative" },
+    { label: "Absolute", value: "absolute" },
+    // { label: "Fixed", value: "fixed" },
+    // { label: "Sticky", value: "sticky" },
+]
+
+
+const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24, 32, 36, 40, 48, 54, 64].map(size => ({ // add number to have the font size option
     label: `${size}px`,
     value: `${size}px`
 }));
@@ -29,138 +46,6 @@ const alignmentIcons: Record<string, React.FC<any>> = {
     right: AlignRight,
     justify: AlignJustify,
 };
-
-// ✅ helper: hex → rgba
-// function hexToRgba(hex: string, alpha: number = 1): string {
-//     let r = 0, g = 0, b = 0;
-//     if (hex.length === 4) {
-//         r = parseInt(hex[1] + hex[1], 16);
-//         g = parseInt(hex[2] + hex[2], 16);
-//         b = parseInt(hex[3] + hex[3], 16);
-//     } else if (hex.length === 7) {
-//         r = parseInt(hex.slice(1, 3), 16);
-//         g = parseInt(hex.slice(3, 5), 16);
-//         b = parseInt(hex.slice(5, 7), 16);
-//     }
-//     return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-// }
-
-// ✅ helper: hex → rgba
-function hexToRgba(hex: string, alpha: number = 1): string {
-    let r = 0, g = 0, b = 0;
-    if (hex.length === 4) {
-        r = parseInt(hex[1] + hex[1], 16);
-        g = parseInt(hex[2] + hex[2], 16);
-        b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-        r = parseInt(hex.slice(1, 3), 16);
-        g = parseInt(hex.slice(3, 5), 16);
-        b = parseInt(hex.slice(5, 7), 16);
-    }
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-}
-
-// ✅ helper: rgba → hex
-function rgbaToHex(rgba: string): string {
-    const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
-    if (!match) return "#000000";
-    const r = parseInt(match[1]).toString(16).padStart(2, "0");
-    const g = parseInt(match[2]).toString(16).padStart(2, "0");
-    const b = parseInt(match[3]).toString(16).padStart(2, "0");
-    return `#${r}${g}${b}`;
-}
-
-export const ColorPickerWithAlpha: React.FC<{
-    label: string;
-    styleKey: keyof StylesState;
-    localStyle: Partial<StylesState>;
-    applyStyle: (key: keyof StylesState, val: string | number) => void;
-    liveUpdate: (value: string) => void;
-}> = ({ label, styleKey, localStyle, applyStyle, liveUpdate }) => {
-    const currentValue = localStyle[styleKey] as string;
-
-    const rgbaMatch = currentValue?.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-    const initialAlpha = rgbaMatch ? parseFloat(rgbaMatch[4] || "1") : 1;
-    const hexValue = rgbaMatch ? rgbaToHex(currentValue) : (currentValue || "#000000");
-
-    // ✅ keep alpha in state so slider moves immediately
-    const [alpha, setAlpha] = useState(initialAlpha);
-
-    // sync local alpha when style changes outside
-    useEffect(() => {
-        if (rgbaMatch) {
-            setAlpha(parseFloat(rgbaMatch[4] || "1"));
-        } else {
-            setAlpha(1);
-        }
-    }, [currentValue]);
-
-    return (
-        <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
-            <div className="flex items-center gap-2 relative">
-                {/* Color Input */}
-                <input
-                    type="color"
-                    value={hexValue}
-                    onChange={(e) => {
-                        const rgba = hexToRgba(e.target.value, alpha);
-                        applyStyle(styleKey, rgba);
-                        liveUpdate(rgba);
-                    }}
-                    className={`w-10 h-10 border rounded cursor-pointer ${toolbarStyles.colorInput}`}
-                />
-
-                {/* Alpha Slider */}
-                <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={alpha}
-                    onChange={(e) => {
-                        const newAlpha = parseFloat(e.target.value);
-                        setAlpha(newAlpha); // ✅ move thumb instantly
-
-                        let r = 0, g = 0, b = 0;
-                        if (rgbaMatch) {
-                            r = parseInt(rgbaMatch[1]);
-                            g = parseInt(rgbaMatch[2]);
-                            b = parseInt(rgbaMatch[3]);
-                        } else {
-                            const tmp = hexToRgba(hexValue, newAlpha);
-                            const m = tmp.match(/rgba\((\d+),\s*(\d+),\s*(\d+)/);
-                            if (m) {
-                                r = parseInt(m[1]);
-                                g = parseInt(m[2]);
-                                b = parseInt(m[3]);
-                            }
-                        }
-
-                        const rgba = `rgba(${r}, ${g}, ${b}, ${newAlpha})`;
-                        applyStyle(styleKey, rgba);
-                        liveUpdate(rgba);
-                    }}
-                    className="flex-1 accent-stone-600"
-                />
-
-                <span className="text-xs text-right">{alpha.toFixed(2)}</span>
-
-                {/* Clear Button */}
-                <button
-                    type="button"
-                    onClick={() => applyStyle(styleKey, "")}
-                    className="px-1 cursor-pointer py-1 text-xs rounded-md bg-red-500 text-white hover:bg-red-600 absolute -top-3 right-1"
-                >
-                    <X size={10} />
-                </button>
-            </div>
-        </div>
-    );
-};
-
-
-
 
 const RichTextToolBar: React.FC = () => {
     const { element, activeScreen, elementSetter, toolbarRef, rmElementFunc, activeRef, screenStyleObj } = useMyContext();
@@ -243,6 +128,15 @@ const RichTextToolBar: React.FC = () => {
             >
                 Remove Element
             </button>
+
+            {/* ✅ Display Property */}
+            <CustomSelect
+                options={displayOptions}
+                firstOption="display"
+                disableFirstValue
+                Default={localStyle.display?.toString()}
+                onChange={(val) => applyStyle("display", val)}
+            />
 
             {/* Font Family / Size */}
             <CustomSelect
@@ -337,7 +231,7 @@ const RichTextToolBar: React.FC = () => {
                 ))}
             </div>
 
-            {/* ✅ Letter Spacing Slider */}
+            {/*  Letter Spacing Slider */}
             <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
                     Letter Spacing
@@ -355,6 +249,26 @@ const RichTextToolBar: React.FC = () => {
                     {localStyle.letterSpacing || "0px"}
                 </span>
             </div>
+
+            {/*  Line Height Slider */}
+            <div className="flex flex-col gap-1">
+                <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+                    Line Height
+                </label>
+                <input
+                    type="range"
+                    min={1}
+                    max={2.5}
+                    step={0.1}
+                    value={localStyle.lineHeight ? parseFloat(localStyle.lineHeight.toString()) : 1.2}
+                    onChange={(e) => applyStyle("lineHeight", e.target.value)}
+                    className="w-full accent-stone-600"
+                />
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                    {localStyle.lineHeight || "1.2"}
+                </span>
+            </div>
+
 
 
             {/* Dimensions */}
@@ -395,17 +309,25 @@ const RichTextToolBar: React.FC = () => {
             />
 
             <CopyStylesUI copyTheStyle={copyTheStyle} />
+
+            {/* Position */}
+            <h4 className="text-xs font-semibold mt-2">Position</h4>
+            <CustomSelect
+                options={positionOptions}
+                firstOption="position"
+                disableFirstValue
+                Default={localStyle.position?.toString()}
+                onChange={(val) => applyStyle("position", val)}
+            />
+
+            <div className="grid grid-cols-2 gap-2">
+                {["top", "left", "bottom", "right"].map((key) =>
+                    renderInput(key, key as keyof StylesState, key, "text", "px")
+                )}
+            </div>
+
         </div>
     );
 };
 
 export default RichTextToolBar;
-
-// function rgbaToHex(rgba: string): string {
-//     const match = rgba.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*[\d.]+)?\)/);
-//     if (!match) return "#000000";
-//     const r = parseInt(match[1]).toString(16).padStart(2, "0");
-//     const g = parseInt(match[2]).toString(16).padStart(2, "0");
-//     const b = parseInt(match[3]).toString(16).padStart(2, "0");
-//     return `#${r}${g}${b}`;
-// }

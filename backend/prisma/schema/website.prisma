@@ -23,7 +23,7 @@ model Webpage {
   @@index([locationId])
   @@index([editorId])
   @@index([verifierId])
-} 
+}
 
 model Content {
   id        String  @id @default(uuid())
@@ -66,9 +66,11 @@ model Element {
   style   Style  @relation("ElementStyle", fields: [styleId], references: [id], onDelete: Cascade)
   styleId String @unique
 
-  hover Json?
-  href  String?
-  aria  String?
+  hover      Json?
+  href       String?
+  aria       String?
+  captions   String? // URL to .vtt or caption file
+  transcript String? // text transcript of the video
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -130,6 +132,14 @@ model draft {
 
   @@index([webpageId])
   @@index([userId])
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
 }
 
 // A user can be an editor on one page and a verifier on another.

@@ -31,11 +31,11 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const [isEditing, setEditing] = useState<boolean>(false);
 
   // Set innerHTML when content updates
-  // useEffect(() => {
-  //   if (elementRef.current && (element.content || element.content === "")) {
-  //     elementRef.current.innerHTML = element.content;
-  //   }
-  // }, [element.content]);
+  useEffect(() => {
+    if (elementRef.current && (element.content || element.content === "")) {
+      elementRef.current.innerHTML = element.content;
+    }
+  }, [element.content]);
 
   const activateTheEditing = (e: any) => {
     e.stopPropagation()
@@ -101,7 +101,6 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
 
-  console.log(element.content)
   return (
     <p
       className="hover:outline-dashed hover:outline"
@@ -110,11 +109,11 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={{ ...runningStyle, position: "relative", zIndex: "2" }}
+      style={{ ...runningStyle, position: runningStyle?.position === "absolute" ? "absolute": "relative", zIndex: "2" }}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
-      dangerouslySetInnerHTML={{ __html: thisElement.content }}
+      // dangerouslySetInnerHTML={{ __html: thisElement.content }}
     />
   );
 };

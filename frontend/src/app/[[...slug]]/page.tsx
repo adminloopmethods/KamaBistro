@@ -5,6 +5,7 @@ import Section from "../_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
+import Header from "../_elements/Header";
 
 const Editor = () => {
   const params = useParams()
@@ -16,7 +17,7 @@ const Editor = () => {
   const {
     width,
     websiteContent,
-    currentWidth,
+    currentWidth: activeScreen,
   } = useMyContext();
 
 
@@ -50,7 +51,7 @@ const Editor = () => {
     async function getContentfromServer() {
       try {
         const response: any = await getContentReq(page)
-        console.log(response)
+        console.log(JSON.stringify(response))
         if (response.ok) {
           websiteContent.setWebpage(response.webpage)
           width.setEditedWidth(response.webpage.editedWidth)
@@ -69,24 +70,26 @@ const Editor = () => {
   return (
     <div
       ref={containerRef}
-      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1 }}
+      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1,  overflowX: "hidden" }}
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
+        <Header />
+
 
         <div
           ref={containerRef}
           style={{
             // position: "relative",
             flex: 1,
-            // width: pageWidth,
+            width: "100%",
             margin: "0 auto",
             minHeight: "100vh",
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
             backgroundSize: "15px 15px", // size of grid squares
-            
+
           }}
           className="bg-stone-200 poppins-text"
         >
@@ -97,13 +100,15 @@ const Editor = () => {
                 key={i}
                 element={section.elements}
                 section={section}
-                style={section.style[currentWidth]}
+                style={section.style[activeScreen]}
                 lastSection={lastSection}
-                currentWidth={currentWidth}
+                activeScreen={activeScreen}
               />
             );
           })}
         </div>
+
+
       </div>
 
     </div>

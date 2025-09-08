@@ -31,8 +31,6 @@ const styleClasses = `
 
 const sectionsOptions: Option[] = [
   { label: "Section", value: "section" },
-  { label: "Header", value: "header" },
-  { label: "Navigationbar", value: "navigationbar" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
@@ -84,14 +82,15 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
       if (response.ok) {
         setOldSections(() => {
           return response.contents.map((e: any, i: number) => {
+            if (!e.givenName) return null
             const lastThreeChar = String(e.givenName).slice(-3).split("")
             const isDuplicate = lastThreeChar[0] === "(" && typeof (lastThreeChar[1]) === "number" && lastThreeChar[2] === ")"
             const postsuffix = isDuplicate ? `(${lastThreeChar[1] + 1})` : "(1)"
-            const givenName: string = e.givenName ? `${e.givenName} duplicate${postsuffix}` : ("random" + (i + 1))
+            const givenName: string = e.givenName ? `${e.givenName}` : ("random" + (i + 1))
             return {
               value: e.id, label: givenName
             }
-          })
+          }).filter(Boolean)
         })
       }
     }

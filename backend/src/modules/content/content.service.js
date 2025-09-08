@@ -202,8 +202,8 @@ export const getWebpageByIdService = async (id) => {
         name: child.name,
         givenName: child.givenName,
         style: child.style,
-        hover: child.hover, // ✅ now included
-        aria: child.aria, // ✅ now included
+        hover: child.hover, 
+        aria: child.aria, 
         order: child.order,
         type: "section",
         elements: transformSection(child).elements, // recurse
@@ -213,9 +213,9 @@ export const getWebpageByIdService = async (id) => {
         name: el.name,
         style: el.style,
         content: el.content,
-        hover: el.hover, // ✅ already included
+        hover: el.hover, 
         href: el.href,
-        aria: el.aria, // ✅ already included
+        aria: el.aria, 
         order: el.order,
         type: "element",
       })) || []),
@@ -229,8 +229,8 @@ export const getWebpageByIdService = async (id) => {
       name: section.name,
       givenName: section.givenName,
       style: section.style,
-      hover: section.hover, // ✅ added
-      aria: section.aria, // ✅ added
+      hover: section.hover,
+      aria: section.aria,
       elements: merged.map(({ order, type, ...rest }) => rest), // clean output
     };
   };
