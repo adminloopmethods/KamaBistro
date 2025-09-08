@@ -7,6 +7,7 @@ import HeadingTwo from "../_component/Elements/Headingtwo";
 import HeadingThree from "../_component/Elements/HeadingThree";
 import Anchor from "../_component/Elements/Anchor";
 import VideoElemComponent from "../_component/Elements/VideoElement";
+import ContactForm from "../_component/Elements/ContactForm";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -203,7 +204,8 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   ol: () => gED("ol", "", undefined, ["First", "Second"]),
   button: () => gED("button", "Click me", "doSomething"),
   link: () => gED("a", "Link text", "https://example.com"),
-  line: () => gED("division", "")
+  line: () => gED("division", ""),
+  contactForm: () => gED("contact", "")
 };
 
 export default {
@@ -221,5 +223,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   a: Anchor,
   img: ImageElemComponent,
   video: VideoElemComponent,
-  division: Division
+  division: Division,
+  contact: ContactForm
 };
