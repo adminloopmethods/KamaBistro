@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, CSSProperties } from "react";
+import React, { useRef, useState, CSSProperties, useEffect } from "react";
 import { useMyContext } from "@/Context/ApiContext";
 import { mapElement } from "@/functionalities/createElement";
 
@@ -95,6 +95,10 @@ const Section: React.FC<SectionProps> = ({
       setHiddenChildList([]); // reset
     }
   };
+
+  useEffect(() => {
+    setElements(element)
+  }, [element])
 
   return (
     <div

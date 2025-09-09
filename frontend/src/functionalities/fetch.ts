@@ -100,7 +100,7 @@ const ContentType = {
 // API Calls
 
 export async function getContentReq(id: string): Promise<ApiResponse> {
-
+    console.log("weqrqwer")
     return await makerequest(
         endpoint.route("content") + (id === "" ? "home" : id),
         "GET",
