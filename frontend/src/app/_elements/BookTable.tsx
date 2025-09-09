@@ -9,7 +9,7 @@ interface BookTableProps {
   restref?: string;
 }
 
-const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
+const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
   const [time, setTime] = useState<string>("19:00");
 
   // Store date as Date object
@@ -30,16 +30,13 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
   // The “profile//reserve” URL // accepts datetime without timezone; OpenTable resolves it server-side.
   // For stronger TZ control, we still compute a best-effort ISO.
   const deepLink = useMemo(() => {
-    const base = `https://www.opentable.com/restaurant/profile/${encodeURIComponent(
-      restref
-    )}/reserve`;
+    const base = `https://www.opentable.com/booking/restref/availability?rid=${encodeURIComponent(restref)}`;
 
-    // Option A (recommended): profile/<restref>/reserve?cover=2&datetime=2025-06-02T19:00
     const params = new URLSearchParams();
-    params.set("cover", String(covers));
+    params.set("partySize", String(covers));
     params.set("datetime", dtLocal); // “YYYY-MM-DDTHH:mm”
 
-    return `${base}?${params.toString()}`;
+    return `${base}&${params.toString()}`;
   }, [covers, dtLocal, restref]);
 
   // ---- UI helpers
