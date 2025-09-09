@@ -9,7 +9,7 @@ import {
   getWebpageById,
   getWebpageByRoute,
   proposeWebpageUpdate,
-  proposeWebpageVersion,
+  // proposeWebpageVersion,
   updateWebpageById,
   // clearWebpagesTablesController
 } from "./content.controller.js";

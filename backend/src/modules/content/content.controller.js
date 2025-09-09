@@ -8,7 +8,7 @@ import {
   getAllContentsService,
   getContentByIdService,
   getAssignedWebpagesService,
-  proposeWebpageVersionService,
+  // proposeWebpageVersionService,
   createProposedVersionService,
 } from "./content.service.js";
 
