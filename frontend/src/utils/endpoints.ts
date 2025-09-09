@@ -4,10 +4,15 @@ export const cloudinaryApiPoint = process.env.NEXT_PUBLIC_CLOUDINARY_API as stri
 
 
 const content = "/content";
+const contact = "contact"
+
 
 const endpointMap = {
     // content
     content: `${content}/route/`,
+
+    contact: `${contact}/`
+
 } as const;
 
 type EndpointKey = keyof typeof endpointMap;

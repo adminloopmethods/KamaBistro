@@ -170,3 +170,7 @@
   background: none;
   cursor: pointer;
 }
+
+.placeholderCustom::placeholder{
+  font-weight: 300;
+}

@@ -1,7 +1,6 @@
 // components/users/EditUserModal.tsx
 import React, {useState, useEffect} from "react";
 import {getLocationsReq, updateUserReq} from "@/functionality/fetch";
-// import {toast} from "react-toastify";
 import {toast, Toaster} from "sonner";
 
 interface Location {
@@ -25,6 +24,12 @@ interface EditUserModalProps {
   onUserUpdated: () => void;
 }
 
+interface FormErrors {
+  name?: string;
+  phone?: string;
+  password?: string;
+}
+
 const EditUserModal: React.FC<EditUserModalProps> = ({
   user,
   isOpen,
@@ -37,6 +42,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [locations, setLocations] = useState<Location[]>([]);
+  const [errors, setErrors] = useState<FormErrors>({});
 
   useEffect(() => {
     if (isOpen && user) {
@@ -44,17 +50,16 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
       setPhone(user.phone);
       setLocationId(user.locationId);
       setPassword("");
+      setErrors({});
     }
   }, [user, isOpen]);
 
   // Fetch locations when modal opens
   useEffect(() => {
-    // toast.success("Test toast - EditUserModal loaded");
     const fetchLocations = async () => {
       try {
         const response = await getLocationsReq();
 
-        // console.log(response, "edit response");
         if (response.ok && response.location) {
           setLocations(response.location);
         } else {
@@ -72,27 +77,159 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
     }
   }, [isOpen]);
 
+  // Validate form fields
+  const validateForm = (): boolean => {
+    const newErrors: FormErrors = {};
+
+    // Name validation
+    if (!name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (name.trim().length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    }
+
+    // Phone validation
+    if (!phone.trim()) {
+      newErrors.phone = "Phone number is required";
+    } else {
+      // Remove any non-digit characters for validation
+      const cleanedPhone = phone.replace(/\D/g, "");
+      if (cleanedPhone.length < 10) {
+        newErrors.phone = "Please enter a valid phone number";
+      }
+    }
+
+    // Password validation (only if provided)
+    if (password) {
+      if (password.length < 8) {
+        newErrors.password = "Password must be at least 8 characters";
+      } else if (!/(?=.*[a-z])/.test(password)) {
+        newErrors.password =
+          "Password must contain at least one lowercase letter";
+      } else if (!/(?=.*[A-Z])/.test(password)) {
+        newErrors.password =
+          "Password must contain at least one uppercase letter";
+      } else if (!/(?=.*\d)/.test(password)) {
+        newErrors.password = "Password must contain at least one number";
+      } else if (!/(?=.*[@$!%*?&])/.test(password)) {
+        newErrors.password =
+          "Password must contain at least one special character (@$!%*?&)";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Validate individual field on blur
+  const validateField = (fieldName: keyof FormErrors, value: string) => {
+    const newErrors = {...errors};
+
+    switch (fieldName) {
+      case "name":
+        if (!value.trim()) {
+          newErrors.name = "Name is required";
+        } else if (value.trim().length < 2) {
+          newErrors.name = "Name must be at least 2 characters";
+        } else {
+          delete newErrors.name;
+        }
+        break;
+
+      case "phone":
+        if (!value.trim()) {
+          newErrors.phone = "Phone number is required";
+        } else {
+          const cleanedPhone = value.replace(/\D/g, "");
+          if (cleanedPhone.length < 10) {
+            newErrors.phone = "Please enter a valid phone number";
+          } else {
+            delete newErrors.phone;
+          }
+        }
+        break;
+
+      case "password":
+        if (value) {
+          if (value.length < 8) {
+            newErrors.password = "Password must be at least 8 characters";
+          } else if (!/(?=.*[a-z])/.test(value)) {
+            newErrors.password =
+              "Password must contain at least one lowercase letter";
+          } else if (!/(?=.*[A-Z])/.test(value)) {
+            newErrors.password =
+              "Password must contain at least one uppercase letter";
+          } else if (!/(?=.*\d)/.test(value)) {
+            newErrors.password = "Password must contain at least one number";
+          } else if (!/(?=.*[@$!%*?&])/.test(value)) {
+            newErrors.password =
+              "Password must contain at least one special character (@$!%*?&)";
+          } else {
+            delete newErrors.password;
+          }
+        } else {
+          delete newErrors.password;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+  };
+
+  // Format phone number as user types
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digit characters
+    const cleaned = value.replace(/\D/g, "");
+
+    // Format based on length
+    if (cleaned.length <= 3) {
+      return cleaned;
+    } else if (cleaned.length <= 6) {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    } else {
+      return `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(
+        6,
+        10
+      )}`;
+    }
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedPhone = formatPhoneNumber(e.target.value);
+    setPhone(formattedPhone);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error("Please fix the validation errors before submitting");
+      return;
+    }
+
     setIsLoading(true);
+
+    // Clean phone number for storage (remove non-digits)
+    const cleanedPhone = phone.replace(/\D/g, "");
 
     const updateData = {
       name,
-      phone,
+      phone: cleanedPhone,
       locationId: locationId || null,
       ...(password ? {password} : {}),
     };
 
     try {
       const response = await updateUserReq(user.id, updateData);
-      console.log("Update response:", response); // Add this for debugging
 
       if (response.ok) {
         toast.success("User updated successfully!");
         onUserUpdated();
         onClose();
       } else {
-        // Check if response has an error message
         const errorMessage =
           response.error || response.message || "Failed to update user";
         toast.error(errorMessage);
@@ -109,7 +246,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
 
   return (
     <>
-      <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex  items-center justify-center z-50 p-4">
+      <div className="fixed inset-0 backdrop-blur-sm bg-opacity-50 flex items-center justify-center z-50 p-4">
         <div className="bg-white shadow dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold dark:text-white">Edit User</h2>
@@ -137,15 +274,24 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Name
+                Name *
               </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                maxLength={100}
+                onBlur={() => validateField("name", name)}
+                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white ${
+                  errors.name
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
+                }`}
                 required
               />
+              {errors.name && (
+                <p className="mt-1 text-sm text-red-500">{errors.name}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -162,15 +308,24 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
 
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Phone
+                Phone *
               </label>
               <input
                 type="tel"
                 value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                onChange={handlePhoneChange}
+                onBlur={() => validateField("phone", phone)}
+                placeholder="(123) 456-7890"
+                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white ${
+                  errors.phone
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
+                }`}
                 required
               />
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-500">{errors.phone}</p>
+              )}
             </div>
 
             <div className="mb-4">
@@ -199,9 +354,22 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => validateField("password", password)}
                 placeholder="Leave blank to keep current"
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white"
+                className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:text-white ${
+                  errors.password
+                    ? "border-red-500"
+                    : "border-gray-300 dark:border-gray-600"
+                }`}
               />
+              {errors.password && (
+                <p className="mt-1 text-sm text-red-500">{errors.password}</p>
+              )}
+              {password && !errors.password && (
+                <p className="mt-1 text-sm text-green-500">
+                  Password meets requirements
+                </p>
+              )}
             </div>
 
             <div className="flex justify-end space-x-3">
@@ -224,7 +392,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({
           </form>
         </div>
       </div>
-      {/* <Toaster position="top-right" /> */}
     </>
   );
 };

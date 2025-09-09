@@ -343,58 +343,20 @@ export const findUserByEmail = async (email) => {
   const user = await prismaClient.user.findUnique({
     where: {
       email,
+      deletedAt: null,
     },
-    // include: {
-    //   roles: true,
-    //   // {
-    //   //   include: {
-    //   //     role: {
-    //   //       include: {
-    //   //         permissions: {
-    //   //           include: {
-    //   //             permission: true,
-    //   //           },
-    //   //         },
-    //   //         roleType: true,
-    //   //       },
-    //   //     },
-    //   //   },
-    //   // },
-    // },
   });
 
   if (!user) {
-    return false; // Handle case where user is not found
+    return false;
   }
 
-  // const roles = user.roles?.map((role) => role.role.name) || [];
-  // const permissions =
-  //   user.roles?.flatMap((role) =>
-  //     role.role.permissions.map((permission) => permission.permission.name)
-  //   ) || [];
-
-  // const roleAndPermission =
-  //   user.roles?.map((role) => ({
-  //     id: role.role.id,
-  //     role: role.role.name,
-  //     // roleType: role.role.roleType.name,
-  //     status: role.role.status,
-  //     // permissions: role.role.permissions.map((perm) => perm.permission.name),
-  //   })) || [];
-  // const roles = user.roles?.map((role) => role.role.name) || [];
-  // const permissions =
-  //   user.roles?.flatMap((role) =>
-  //     role.role.permissions.map((permission) => permission.permission.name)
-  //   ) || [];
-
   return user;
-  // roles: roleAndPermission,
-  // permissions,
 };
 
 export const findUserById = async (id) => {
   const user = await prismaClient.user.findUnique({
-    where: {id},
+    where: {id, deletedAt: null},
     // include: {
     //   roles: {
     //     include: {
@@ -916,5 +878,30 @@ export const removeUserFromWebpageRole = async (webpageId, roleId) => {
       where: {id: webpageId},
       data: updateData,
     });
+  });
+};
+
+// Soft Delete a user
+export const softDeleteUser = async (id) => {
+  return await prismaClient.user.update({
+    where: {id},
+    data: {deletedAt: new Date()},
+  });
+};
+
+// Restore a soft-deleted user
+export const restoreUser = async (id) => {
+  return await prismaClient.user.update({
+    where: {id},
+    data: {deletedAt: null},
+  });
+};
+
+// Find user by ID including soft-deleted users
+export const findUserByIdIncludingDeleted = async (userId) => {
+  // Use findFirst instead of findUnique to bypass middleware filtering
+  return await prismaClient.user.findFirst({
+    where: {id: userId},
+    // No deletedAt filter here
   });
 };
