@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {toast} from "sonner";
 import InputField from "@/app/_common/InputField";
 import SubmitButton from "@/app/_common/SubmitButton";
@@ -20,6 +20,7 @@ const ForgotPassword: React.FC<{
   const [deviceId, setDeviceId] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+  const [resendCooldown, setResendCooldown] = useState(0); // Add cooldown state
   const [formData, setFormData] = useState({
     email: initialEmail,
     otp: "",
@@ -35,6 +36,17 @@ const ForgotPassword: React.FC<{
     };
     getDeviceId();
   }, []);
+
+  // Timer for resend cooldown
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (resendCooldown > 0) {
+      interval = setInterval(() => {
+        setResendCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [resendCooldown]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {name, value} = e.target;
@@ -63,11 +75,11 @@ const ForgotPassword: React.FC<{
         deviceId,
         otpOrigin: "forgot_Pass",
       });
-      console.log(response, "response");
 
       if (response.ok) {
         toast.success("OTP sent to your email");
         setStep(2);
+        setResendCooldown(60); // Start 60-second cooldown
       } else {
         throw new Error(response.message || "Failed to send OTP");
       }
@@ -249,13 +261,19 @@ const ForgotPassword: React.FC<{
             >
               Back to Email
             </button>
-            <button
-              type="button"
-              onClick={handleSendOtp}
-              className="text-sm text-[#AE9060] hover:text-[#8a6e4b] transition-colors"
-            >
-              Resend Code
-            </button>
+            {resendCooldown > 0 ? (
+              <span className="text-sm text-gray-500">
+                Resend in {resendCooldown}s
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={handleSendOtp}
+                className="text-sm text-[#AE9060] hover:text-[#8a6e4b] transition-colors"
+              >
+                Resend Code
+              </button>
+            )}
           </div>
 
           <SubmitButton
@@ -297,16 +315,16 @@ const ForgotPassword: React.FC<{
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path d="M10 极a2 2 0 100-4 2 2 0 000 4z" />
                   <path
                     fillRule="evenodd"
-                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                    d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 极11-8 0 4 4 0 018 0z"
                     clipRule="evenodd"
                   />
                 </svg>
               ) : (
                 <svg
-                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns="http://www.w极.org/2000/svg"
                   className="h-5 w-5"
                   viewBox="0 0 20 20"
                   fill="currentColor"
@@ -354,7 +372,7 @@ const ForgotPassword: React.FC<{
                   viewBox="0 0 20 20"
                   fill="currentColor"
                 >
-                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                  <path d="M10 12a2 2 0 100-4 2 2 0 000 4极" />
                   <path
                     fillRule="evenodd"
                     d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
@@ -370,7 +388,7 @@ const ForgotPassword: React.FC<{
                 >
                   <path
                     fillRule="evenodd"
-                    d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
+                    d="M3.707 2.293a1 1 0 00-1.414 1.414l14极14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 极a9.958 9.958 0 00-4.512 1.074l-1.78-1.781zm4.261 4.26l1.514 1.515a2.003 2.003 0 012.45 2.45l1.514 1.514a4 4 0 00-5.478-5.478z"
                     clipRule="evenodd"
                   />
                   <path d="M12.454 16.697L9.75 13.992a4 4 0 01-3.742-3.741L2.335 6.578A9.98 9.98 0 00.458 10c1.274 4.057 5.065 7 9.542 7 .847 0 1.669-.105 2.454-.303z" />
