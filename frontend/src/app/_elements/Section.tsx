@@ -104,8 +104,8 @@ const Section: React.FC<SectionProps> = ({
     <div
       style={{
         position: thisStyle?.position,
-        left: style.left || 0,
-        top: style.top || 0,
+        left: style?.left || 0,
+        top: style?.top || 0,
       }}
     >
       <section

@@ -57,3 +57,8 @@ export function toCamelCase(str: string): string {
     )
     .join("");
 }
+// utils/utils.ts
+export const formatWithCommas = (num: number | string): string => {
+  if (num === null || num === undefined) return "";
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};

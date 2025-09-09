@@ -7,6 +7,7 @@ import HeadingThree from "@/app/_elements/HeadingThree";
 import Anchor from "@/app/_elements/Anchor";
 import ContactForm from "@/app/_elements/ContactForm";
 import BookTable from "@/app/_elements/BookTable";
+import HotelTimings from "@/app/_elements/RestaurantTimings";
 
 // Define screen sizes for style keys
 type ScreenSize = "xl" | "lg" | "md" | "sm";
@@ -35,5 +36,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
     img: ImageElemComponent,
     division: Division,
     contact: ContactForm,
-    bookTable: BookTable
+    bookTable: BookTable,
+    contactCard: HotelTimings
 };

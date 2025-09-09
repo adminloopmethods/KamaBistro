@@ -4,6 +4,10 @@ import "@/app/globals.css";
 import { Provider } from "@/Context/EditorContext";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 
+import { Provider as ProviderRedux } from "react-redux";
+import { store } from "../redux/store";
+
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -42,11 +46,13 @@ export default function EditorLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${playfair.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
-        <ThemeProvider>
-          <Provider>
-            <div className="flex-1 h-full">{children}</div>
-          </Provider>
-        </ThemeProvider>
+        <ProviderRedux store={store}>
+          <ThemeProvider>
+            <Provider>
+              <div className="flex-1 h-full">{children}</div>
+            </Provider>
+          </ThemeProvider>
+        </ProviderRedux>
       </body>
     </html>
   );

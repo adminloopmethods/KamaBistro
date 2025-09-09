@@ -9,6 +9,8 @@ import Anchor from "../_component/Elements/Anchor";
 import VideoElemComponent from "../_component/Elements/VideoElement";
 import ContactForm from "../_component/Elements/ContactForm";
 import BookTable from "../_component/Elements/BookedTable";
+import Mapview from "../_component/Elements/Mapp";
+import HotelTimings from "../_component/Elements/RestaurantTimings";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -209,6 +211,7 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   contactForm: () => gED("contact", ""),
   bookTable: () => gED("bookTable", ""),
   contactCard: () => gED("contactCard", ""),
+  mapView: () => gED("map", ""),
 };
 
 export default {
@@ -228,5 +231,7 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   video: VideoElemComponent,
   division: Division,
   contact: ContactForm,
-  bookTable: BookTable
+  bookTable: BookTable,
+  contactCard: HotelTimings,
+  map: Mapview
 };
