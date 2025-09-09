@@ -6,6 +6,7 @@ import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 import Header from "../_elements/Header";
+import Footer from "../_elements/Footer";
 
 const Editor = () => {
   const params = useParams()
@@ -108,8 +109,8 @@ const Editor = () => {
             );
           })}
         </div>
-
-
+        {/* footer  */}
+        <Footer />
       </div>
 
     </div>
