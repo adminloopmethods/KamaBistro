@@ -8,8 +8,9 @@ import {
   getAllContentsService,
   getContentByIdService,
   getAssignedWebpagesService,
-  proposeWebpageVersionService,
+  // proposeWebpageVersionService,
   createProposedVersionService,
+  getProposedVersionsService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -145,7 +146,7 @@ export const getContentByIdController = async (req, res) => {
 export const proposeWebpageUpdate = async (req, res) => {
   try {
     const {id} = req.params;
-    const {name, contents, route, editedWidth} = req.body;
+    const {data} = req.body;
     const userId = req.user.id;
 
     const webpage = await getWebpageByIdService(id);
@@ -161,12 +162,11 @@ export const proposeWebpageUpdate = async (req, res) => {
     }
 
     // Create proposed version
-    const proposedVersion = await createProposedVersionService(id, userId, {
-      name,
-      contents,
-      route,
-      editedWidth,
-    });
+    const proposedVersion = await createProposedVersionService(
+      id,
+      userId,
+      data
+    );
 
     res.json({
       message: "Changes submitted for verification",
@@ -175,5 +175,20 @@ export const proposeWebpageUpdate = async (req, res) => {
   } catch (error) {
     logger.error(`Error proposing webpage update: ${error.message}`, {error});
     res.status(500).json({error: "Failed to propose webpage update."});
+  }
+};
+
+export const getProposedVersions = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    console.log(userId);
+
+    // Get proposed versions assigned to this verifier
+    const proposedVersions = await getProposedVersionsService(userId);
+
+    res.json(proposedVersions);
+  } catch (error) {
+    logger.error(`Error fetching proposed versions: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to fetch proposed versions."});
   }
 };

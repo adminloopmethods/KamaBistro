@@ -11,7 +11,7 @@ const users = "user";
 const content = "content";
 const media = "media";
 const role = "role";
-const contact = "contact"
+const contact = "contact";
 
 const endpointMap = {
   login: `${auth}/login`,
@@ -41,6 +41,7 @@ const endpointMap = {
   // content
   createContent: `${content}/`,
   getSection: `${content}/section/`,
+  proposeUpdate: `${content}/propose/`,
 
   // Media
   uploadMedia: `${media}/upload`,
@@ -48,7 +49,7 @@ const endpointMap = {
   getMedia: `${media}/getMedia`,
 
   //Message
-  contact: `${contact}/`
+  contact: `${contact}/`,
 } as const;
 
 type EndpointKey = keyof typeof endpointMap;

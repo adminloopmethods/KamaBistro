@@ -324,7 +324,7 @@ const ForgotPassword: React.FC<{
                 </svg>
               ) : (
                 <svg
-                  xmlns="http://www.w极.org/2000/svg"
+                  xmlns="http://www.w3.org/2000/svg"
                   className="h-5 w-5"
                   viewBox="0 0 20 20"
                   fill="currentColor"

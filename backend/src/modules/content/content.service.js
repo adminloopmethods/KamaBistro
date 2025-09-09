@@ -585,8 +585,9 @@ export const getContentByIdService = async (id) => {
 export const createProposedVersionService = async (
   webpageId,
   editorId,
-  {name, contents, editedWidth, route}
+  data
 ) => {
+  const {name, contents, editedWidth, route} = data;
   const webpage = await prismaClient.webpage.findUnique({
     where: {id: webpageId},
     include: {
@@ -649,4 +650,27 @@ const sendVerificationNotification = async (
   console.log(
     `Notification sent to verifier ${verifierId} about proposal ${proposalId} for webpage ${webpageId}`
   );
+};
+
+export const getProposedVersionsService = async (verifierId) => {
+  return await prismaClient.proposedVersion.findMany({
+    where: {verifierId},
+    include: {
+      webpage: {
+        select: {
+          id: true,
+          name: true,
+          route: true,
+        },
+      },
+      editor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {createdAt: "desc"},
+  });
 };
