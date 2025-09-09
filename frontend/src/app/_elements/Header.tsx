@@ -15,7 +15,7 @@ const navLinksLeft = [
 const navLinksRight = [
   { label: "Catering", href: "/catering" },
   { label: "Contact", href: "/contact-us" },
-  { label: "Career", href: "/career" },
+  // { label: "Career", href: "/career" },
 ];
 
 const Header: React.FC = () => {
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
         {/* Desktop Layout (from 1024px up) */}
         <nav
-          className="hidden lg:flex gap-[40px] text-[17px] items-center justify-center space-x-6 w-full relative -translate-x-7"
+          className="hidden lg:flex gap-[40px] text-[17px] items-center justify-center space-x-6 w-full relative"
           aria-label="Main navigation"
         >
           {/* Left links */}
@@ -73,8 +73,8 @@ const Header: React.FC = () => {
 
           {/* CTA Button */}
           <a
-            href="/gift-cards"
-            className="ml-4 px-5 py-3 bg-[#AE9060] text-white hover:bg-gray-800 transition absolute xl:block hidden right-9"
+            href="https://www.toasttab.com/kama-bistro/giftcards"
+            className="ml-4 px-5 py-3 bg-[#AE9060] text-white hover:bg-gray-800 transition xl:block"
           >
             Gift Cards
           </a>

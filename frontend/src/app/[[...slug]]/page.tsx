@@ -47,11 +47,12 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
+    console.log(page)
     // if (page) {
     async function getContentfromServer() {
       try {
         const response: any = await getContentReq(page)
-        console.log(JSON.stringify(response))
+        // console.log(JSON.stringify(response))
         if (response.ok) {
           websiteContent.setWebpage(response.webpage)
           width.setEditedWidth(response.webpage.editedWidth)

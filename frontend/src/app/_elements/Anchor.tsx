@@ -40,4 +40,4 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
     );
 };
 
-export default React.memo(LinkComponent);
+export default LinkComponent;
