@@ -101,7 +101,6 @@ const Paragraph: React.FC<ParagraphProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(style || {}, parentRef) : style
 
-  console.log(element.content)
   return (
     <p
       className="hover:outline-dashed hover:outline"
@@ -110,7 +109,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
       onBlur={handleBlur}
       contentEditable={editable}
       suppressContentEditableWarning={true}
-      style={{ ...runningStyle, position: "relative", zIndex: "2" }}
+      style={{ ...runningStyle, position: runningStyle?.position === "absolute" ? "absolute": "relative", zIndex: "2" }}
       onFocus={activateTheEditing}
       onClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}
       onDoubleClick={(e: React.MouseEvent<HTMLHeadingElement>) => { e.stopPropagation() }}

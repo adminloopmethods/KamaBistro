@@ -71,11 +71,11 @@ const Editor = () => {
   return (
     <div
       ref={containerRef}
-      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1 }}
+      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1,  overflowX: "hidden" }}
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
         <Header />
 
 
@@ -84,7 +84,7 @@ const Editor = () => {
           style={{
             // position: "relative",
             flex: 1,
-            // width: pageWidth,
+            width: "100%",
             margin: "0 auto",
             minHeight: "100vh",
             transition: ".1s linear all",

@@ -18,15 +18,21 @@ const fontFamilyOptions = [
     // { label: 'Serif', value: 'serif' },
 ];
 
-// ✅ Add options for Display property
+// Add options for Display property
 const displayOptions = [
-    { label: "Block", value: "block" },
-    { label: "Inline", value: "inline" },
-    { label: "Inline Block", value: "inline-block" },
-    { label: "Flex", value: "flex" },
-    { label: "Grid", value: "grid" },
-    { label: "None", value: "none" },
+    { label: "Block/Show", value: "block" },
+    { label: "Consume sized space", value: "inline-block" },
+    { label: "Hide", value: "none" },
 ];
+
+//  Position Options
+const positionOptions = [
+    { label: "Static", value: "static" },
+    // { label: "Relative", value: "relative" },
+    { label: "Absolute", value: "absolute" },
+    // { label: "Fixed", value: "fixed" },
+    // { label: "Sticky", value: "sticky" },
+]
 
 
 const fontSizeOptions = [12, 14, 16, 18, 20, 22, 24, 32, 36, 40, 48, 54, 64].map(size => ({ // add number to have the font size option
@@ -303,6 +309,23 @@ const RichTextToolBar: React.FC = () => {
             />
 
             <CopyStylesUI copyTheStyle={copyTheStyle} />
+
+            {/* Position */}
+            <h4 className="text-xs font-semibold mt-2">Position</h4>
+            <CustomSelect
+                options={positionOptions}
+                firstOption="position"
+                disableFirstValue
+                Default={localStyle.position?.toString()}
+                onChange={(val) => applyStyle("position", val)}
+            />
+
+            <div className="grid grid-cols-2 gap-2">
+                {["top", "left", "bottom", "right"].map((key) =>
+                    renderInput(key, key as keyof StylesState, key, "text", "px")
+                )}
+            </div>
+
         </div>
     );
 };

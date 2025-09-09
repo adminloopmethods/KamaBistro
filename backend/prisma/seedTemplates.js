@@ -2,53 +2,37 @@
 import { randomUUID } from "node:crypto";
 import { createWebpageService } from "../src/modules/content/content.service.js";
 
-import Catering from "./templates/catering.json" assert {type: "json"}
-// import CateringLocationOne from "./templates/cateringLocationone.json" assert {type: "json"}
-// import CateringLocationTwo from "./templates/cateringLocationtwo.json" assert {type: "json"}
-// import CateringLocationThree from "./templates/cateringLocationthree.json" assert {type: "json"}
-// import ContactUs from "./templates/contactUs.json" assert {type: "json"}
-// import LandingPageLocationOne from "./templates/landingPageLocationone.json" assert {type: "json"}
-// import LandingPageLocationTwo from "./templates/landingPageLocationtwo.json" assert {type: "json"}
-// import LandingPageLocationThree from "./templates/landingPageLocationthree.json" assert {type: "json"}
-// import orderOnlineLocationOne from "./templates/orderOnlineLocationone.json" assert {type: "json"}
-// import orderOnlineLocationTwo from "./templates/orderOnlineLocationtwo.json" assert {type: "json"}
-// import orderOnlineLocationThree from "./templates/orderOnlineLocationthree.json" assert {type: "json"}
-// import ourCulture from "./templates/ourCulture.json" assert {type: "json"}
-// import ourGroup from "./templates/ourGroup.json" assert {type: "json"}
-// import privateDinning from "./templates/privateDinning.json" assert {type: "json"}
-// import privateDinningLocationOne from "./templates/privateDinningLocationone.json" assert {type: "json"}
-// import privateDinningLocationTwo from "./templates/privateDinningLocationtwo.json" assert {type: "json"}
-// import privateDinningLocationThree from "./templates/privateDinningLocationthree.json" assert {type: "json"}
-// import reserveTableLocationOne from "./templates/reserveTableLocationone.json" assert {type: "json"}
-// import reserveTableLocationTwo from "./templates/reserveTableLocationtwo.json" assert {type: "json"}
-// import reserveTableLocationThree from "./templates/reserveTableLocationthree.json" assert {type: "json"}
-// import Catering from "./templates/catering.json" assert {type: "json"}
-// import Catering from "./templates/catering.json" assert {type: "json"}
-import HomePage from "./templatesBase/Home.json" assert {type: "json"}
+// import pages
+import home from "./templatesBase/Home.json" assert {type: "json"}
+import OurGroup from "./templatesBase/OurGroup.json" assert {type: "json"}
+import OurCulture from "./templatesBase/OurCulture.json" assert {type: "json"}
+import PrivateDinning from "./templatesBase/PrivateDinning.json" assert {type: "json"}
+import Catering from "./templatesBase/Catering.json" assert {type: "json"}
+import ContactUs from "./templatesBase/Contact-us.json" assert { type: "json" }
+// import pages for landing
+import homeLanding from "./templateLandingPage/HomeLanding.json" assert {type: "json"}
+import orderOnline from "./templateLandingPage/OrderOnline.json" assert {type: "json"}
+import privateDinning from "./templateLandingPage/PrivateDinning.json" assert {type: "json"}
+import landingCatering from "./templateCateringPage/LandingCatering.json" assert {type: "json"}
+import reserveTable from "./templateReserveTablePage/ReserveTable.json" assert {type: "json"}
+
 
 // Put them in an array
 const webpages = [
-  // Catering,
-  // CateringLocationOne,
-  // CateringLocationTwo,
-  // CateringLocationThree,
-  // ContactUs,
-  // LandingPageLocationOne,
-  // LandingPageLocationTwo,
-  // LandingPageLocationThree,
-  // orderOnlineLocationOne,
-  // orderOnlineLocationTwo,
-  // orderOnlineLocationThree,
-  // ourCulture,
-  // ourGroup,
-  // privateDinning,
-  // privateDinningLocationOne,
-  // privateDinningLocationTwo,
-  // privateDinningLocationThree,
-  // reserveTableLocationOne,
-  // reserveTableLocationTwo,
-  // reserveTableLocationThree
-  HomePage
+  // bases
+  home,
+  OurGroup,
+  OurCulture,
+  PrivateDinning,
+  Catering,
+  ContactUs,
+
+  // landing pages
+  homeLanding,
+  orderOnline,
+  privateDinning,
+  landingCatering,
+  reserveTable
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs
