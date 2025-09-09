@@ -234,6 +234,11 @@ export async function getLocationsReq(): Promise<ApiResponse> {
   return await makerequest(endpoint.route("getLocations"), "GET");
 }
 
+//delete user
+export async function deleteUserReq(id: string): Promise<ApiResponse> {
+  return await makerequest(endpoint.route("deleteUser") + id, "DELETE");
+}
+
 //get audit logs
 export async function getAuditLogsReq(): Promise<
   ApiResponse<AuditLogsResponse>

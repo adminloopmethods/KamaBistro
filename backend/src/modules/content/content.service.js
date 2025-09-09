@@ -94,23 +94,23 @@ export const createWebpageService = async ({
                 sm: section.style?.sm,
               },
             },
-            children: { create: childrenCreate },
-            elements: { create: elementsCreate },
+            children: {create: childrenCreate},
+            elements: {create: elementsCreate},
           };
         }),
       },
     },
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
           children: {
-            orderBy: { order: "asc" },
+            orderBy: {order: "asc"},
             include: {
               style: true,
-              elements: { orderBy: { order: "asc" }, include: { style: true } },
+              elements: {orderBy: {order: "asc"}, include: {style: true}},
             },
           },
         },
@@ -118,7 +118,7 @@ export const createWebpageService = async ({
     },
   });
 
-  return { webpage, id };
+  return {webpage, id};
 };
 
 // ---------------- GET ALL WEBPAGES ----------------
@@ -128,12 +128,12 @@ export const getAllWebpagesService = async () => {
       editor: true,
       verifier: true,
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
           elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            orderBy: {order: "asc"},
+            include: {style: true},
           },
         },
       },
@@ -145,18 +145,18 @@ export const getAllWebpagesService = async () => {
 export const getAssignedWebpagesService = async (userId) => {
   return await prismaClient.webpage.findMany({
     where: {
-      OR: [{ editorId: userId }, { verifierId: userId }],
+      OR: [{editorId: userId}, {verifierId: userId}],
     },
     include: {
       editor: true,
       verifier: true,
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
           elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            orderBy: {order: "asc"},
+            include: {style: true},
           },
         },
       },
@@ -167,23 +167,23 @@ export const getAssignedWebpagesService = async (userId) => {
 // ---------------- GET WEBPAGE BY ID ----------------
 export const getWebpageByIdService = async (id) => {
   const webpage = await prismaClient.webpage.findUnique({
-    where: { id },
+    where: {id},
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
           elements: {
-            orderBy: { order: "asc" },
-            include: { style: true },
+            orderBy: {order: "asc"},
+            include: {style: true},
           },
           children: {
-            orderBy: { order: "asc" },
+            orderBy: {order: "asc"},
             include: {
               style: true,
               elements: {
-                orderBy: { order: "asc" },
-                include: { style: true },
+                orderBy: {order: "asc"},
+                include: {style: true},
               },
             },
           },
@@ -202,8 +202,8 @@ export const getWebpageByIdService = async (id) => {
         name: child.name,
         givenName: child.givenName,
         style: child.style,
-        hover: child.hover, 
-        aria: child.aria, 
+        hover: child.hover,
+        aria: child.aria,
         order: child.order,
         type: "section",
         elements: transformSection(child).elements, // recurse
@@ -213,9 +213,9 @@ export const getWebpageByIdService = async (id) => {
         name: el.name,
         style: el.style,
         content: el.content,
-        hover: el.hover, 
+        hover: el.hover,
         href: el.href,
-        aria: el.aria, 
+        aria: el.aria,
         order: el.order,
         type: "element",
       })) || []),
@@ -231,7 +231,7 @@ export const getWebpageByIdService = async (id) => {
       style: section.style,
       hover: section.hover,
       aria: section.aria,
-      elements: merged.map(({ order, type, ...rest }) => rest), // clean output
+      elements: merged.map(({order, type, ...rest}) => rest), // clean output
     };
   };
 
@@ -244,24 +244,24 @@ export const getWebpageByIdService = async (id) => {
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (
   id,
-  { name, contents, editedWidth, route }
+  {name, contents, editedWidth, route}
 ) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
-    where: { id },
+    where: {id},
     data: {
       name,
       route,
-      ...(editedWidth !== undefined && { editedWidth }),
+      ...(editedWidth !== undefined && {editedWidth}),
     },
   });
 
   // Step 2: Fetch existing contents
   const existingContents = await prismaClient.content.findMany({
-    where: { webpageId: id },
+    where: {webpageId: id},
     include: {
-      elements: { include: { style: true } },
-      children: { include: { elements: { include: { style: true } }, style: true } },
+      elements: {include: {style: true}},
+      children: {include: {elements: {include: {style: true}}, style: true}},
       style: true,
     },
   });
@@ -296,7 +296,7 @@ export const updateWebpageByIdService = async (
 
   if (sectionsToDeleteIds.length) {
     await prismaClient.content.deleteMany({
-      where: { id: { in: sectionsToDeleteIds } },
+      where: {id: {in: sectionsToDeleteIds}},
     });
   }
 
@@ -309,7 +309,7 @@ export const updateWebpageByIdService = async (
         for (const el of content.elements) {
           existingElementMap.set(el.id, el);
           if (el.name === "section" && el.elements) {
-            flattenExisting([{ ...el, elements: el.elements }]);
+            flattenExisting([{...el, elements: el.elements}]);
           }
         }
       }
@@ -333,7 +333,7 @@ export const updateWebpageByIdService = async (
 
   if (elementsToDeleteIds.length) {
     await prismaClient.element.deleteMany({
-      where: { id: { in: elementsToDeleteIds } },
+      where: {id: {in: elementsToDeleteIds}},
     });
   }
 
@@ -343,15 +343,15 @@ export const updateWebpageByIdService = async (
       const el = elementsArray[i];
       if (el.name === "section") {
         await prismaClient.content.upsert({
-          where: { id: el.id },
+          where: {id: el.id},
           update: {
             name: el.name,
             givenName: el.givenName || null,
             hover: el.hover || null,
             aria: el.aria || null,
             order: i,
-            parent: { connect: { id: parentId } },
-            style: { update: el.style || {} },
+            parent: {connect: {id: parentId}},
+            style: {update: el.style || {}},
           },
           create: {
             id: el.id,
@@ -360,14 +360,14 @@ export const updateWebpageByIdService = async (
             hover: el.hover || null,
             aria: el.aria || null,
             order: i,
-            parent: { connect: { id: parentId } },
-            style: { create: el.style || {} },
+            parent: {connect: {id: parentId}},
+            style: {create: el.style || {}},
           },
         });
         if (el.elements?.length) await upsertElements(el.id, el.elements);
       } else {
         await prismaClient.element.upsert({
-          where: { id: el.id },
+          where: {id: el.id},
           update: {
             name: el.name,
             content: el.content,
@@ -375,7 +375,7 @@ export const updateWebpageByIdService = async (
             href: el.href,
             aria: el.aria,
             order: i,
-            style: { update: el.style || {} },
+            style: {update: el.style || {}},
           },
           create: {
             id: el.id,
@@ -385,8 +385,8 @@ export const updateWebpageByIdService = async (
             href: el.href,
             aria: el.aria,
             order: i,
-            contentRef: { connect: { id: parentId } },
-            style: { create: el.style || {} },
+            contentRef: {connect: {id: parentId}},
+            style: {create: el.style || {}},
           },
         });
       }
@@ -397,14 +397,14 @@ export const updateWebpageByIdService = async (
   for (let i = 0; i < contents.length; i++) {
     const section = contents[i];
     await prismaClient.content.upsert({
-      where: { id: section.id },
+      where: {id: section.id},
       update: {
         name: section.name,
         givenName: section.givenName || null,
         hover: section.hover || null,
         aria: section.aria || null,
         order: i,
-        style: { update: section.style || {} },
+        style: {update: section.style || {}},
       },
       create: {
         id: section.id,
@@ -413,27 +413,28 @@ export const updateWebpageByIdService = async (
         hover: section.hover || null,
         aria: section.aria || null,
         order: i,
-        webpage: { connect: { id } },
-        style: { create: section.style || {} },
+        webpage: {connect: {id}},
+        style: {create: section.style || {}},
       },
     });
-    if (section.elements?.length) await upsertElements(section.id, section.elements);
+    if (section.elements?.length)
+      await upsertElements(section.id, section.elements);
   }
 
   // Step 3: Return updated snapshot
   const finalWebpage = await prismaClient.webpage.findUnique({
-    where: { id },
+    where: {id},
     include: {
       contents: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
           children: {
-            orderBy: { order: "asc" },
+            orderBy: {order: "asc"},
             include: {
               style: true,
-              elements: { orderBy: { order: "asc" }, include: { style: true } },
+              elements: {orderBy: {order: "asc"}, include: {style: true}},
             },
           },
         },
@@ -443,18 +444,17 @@ export const updateWebpageByIdService = async (
 
   // Step 4: Save version snapshot
   await prismaClient.version.create({
-    data: { webpageId: id, version: finalWebpage },
+    data: {webpageId: id, version: finalWebpage},
   });
 
   return finalWebpage;
 };
 
-
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {
   return await prismaClient.version.findMany({
-    where: { webpageId },
-    orderBy: { id: "desc" },
+    where: {webpageId},
+    orderBy: {id: "desc"},
   });
 };
 
@@ -462,8 +462,8 @@ export const getWebpageVersionsService = async (webpageId) => {
 export const findWebpageIdByRouteService = async (route) => {
   console.log(route);
   const page = await prismaClient.webpage.findUnique({
-    where: { route },
-    select: { id: true },
+    where: {route},
+    select: {id: true},
   });
 
   return page ? page.id : null;
@@ -492,18 +492,18 @@ export const getAllContentsService = async () => {
 // ---------------- GET CONTENT BY ID (regenerate IDs) ----------------
 export const getContentByIdService = async (id) => {
   const section = await prismaClient.content.findUnique({
-    where: { id },
+    where: {id},
     include: {
       style: true,
       elements: {
-        orderBy: { order: "asc" },
-        include: { style: true },
+        orderBy: {order: "asc"},
+        include: {style: true},
       },
       children: {
-        orderBy: { order: "asc" },
+        orderBy: {order: "asc"},
         include: {
           style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
+          elements: {orderBy: {order: "asc"}, include: {style: true}},
         },
       },
     },
@@ -520,7 +520,7 @@ export const getContentByIdService = async (id) => {
         hover: child.hover || null,
         aria: child.aria || null,
         style: child.style
-          ? { ...child.style, id: undefined } // clear id
+          ? {...child.style, id: undefined} // clear id
           : null,
         order: child.order,
         type: "section",
@@ -533,7 +533,7 @@ export const getContentByIdService = async (id) => {
         hover: el.hover || null,
         aria: el.aria || null,
         style: el.style
-          ? { ...el.style, id: undefined } // clear id
+          ? {...el.style, id: undefined} // clear id
           : null,
         order: el.order,
         type: "element",
@@ -549,11 +549,104 @@ export const getContentByIdService = async (id) => {
       hover: section.hover || null,
       aria: section.aria || null,
       style: section.style
-        ? { ...section.style, id: undefined } // clear id
+        ? {...section.style, id: undefined} // clear id
         : null,
-      elements: merged.map(({ order, type, ...rest }) => rest), // drop order/type
+      elements: merged.map(({order, type, ...rest}) => rest), // drop order/type
     };
   };
 
   return transformSection(section);
+};
+
+// export async function clearAllTables() {
+//   await prismaClient.element.deleteMany({});
+//   await prismaClient.content.deleteMany({});
+//   await prismaClient.style.deleteMany({});
+//   await prismaClient.version.deleteMany({});
+//   await prismaClient.proposedVersion.deleteMany({});
+//   await prismaClient.draft.deleteMany({});
+//   await prismaClient.webpage.deleteMany({});
+// }
+
+// async function clearWebpagesData() {
+
+//   clearAllTables()
+//     .then(() => {
+//       console.log("✅ All tables cleared successfully!");
+//     })
+//     .catch((err) => {
+//       console.error("❌ Error clearing tables:", err);
+//     })
+//     .finally(async () => {
+//       await prismaClient.$disconnect();
+//     });
+// }
+
+export const createProposedVersionService = async (
+  webpageId,
+  editorId,
+  {name, contents, editedWidth, route}
+) => {
+  const webpage = await prismaClient.webpage.findUnique({
+    where: {id: webpageId},
+    include: {
+      verifier: true,
+    },
+  });
+
+  if (!webpage) {
+    throw new Error("Webpage not found");
+  }
+
+  // Create the proposed version
+  const proposedVersion = await prismaClient.proposedVersion.create({
+    data: {
+      version: {
+        name,
+        contents,
+        editedWidth,
+        route,
+      },
+      webpage: {connect: {id: webpageId}},
+      editor: {connect: {id: editorId}},
+      verifier: {connect: {id: webpage.verifierId}},
+    },
+    include: {
+      editor: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      verifier: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
+
+  // return proposedVersion;
+  await sendVerificationNotification(
+    webpage.verifierId,
+    webpageId,
+    proposedVersion.id
+  );
+
+  return proposedVersion;
+};
+
+// Helper function to send notification (implement based on your notification system)
+const sendVerificationNotification = async (
+  verifierId,
+  webpageId,
+  proposalId
+) => {
+  // This could be an email, in-app notification, etc.
+  console.log(
+    `Notification sent to verifier ${verifierId} about proposal ${proposalId} for webpage ${webpageId}`
+  );
 };
