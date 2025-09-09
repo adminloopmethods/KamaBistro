@@ -11,6 +11,10 @@
 }
 
 section{
-    /* word-break: break-all; */
     word-wrap: break-word;
+}
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100% !important;
 }
