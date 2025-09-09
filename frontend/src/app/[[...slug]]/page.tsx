@@ -3,16 +3,18 @@
 import { useRef, useEffect, useState } from "react";
 import Section from "../_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { notFound, useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 import Header from "../_elements/Header";
 import Footer from "../_elements/Footer";
+import NotFound from "./not-found";
 
 const Editor = () => {
   const params = useParams()
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter()
   const page: string = params.slug ? params.slug[0] : ""
+  const [pageNotFound, setPageNotFound] = useState(false);
   // const [widthSize, setWidthSize] = useState<number>(0)
 
   const {
@@ -58,9 +60,12 @@ const Editor = () => {
           websiteContent.setWebpage(response.webpage)
           width.setEditedWidth(response.webpage.editedWidth)
         } else {
+          // router.push("/not-found")
+          setPageNotFound(true);
           throw new Error("error while fetch the page")
         }
       } catch (err) {
+        notFound()
         console.error(err)
       }
     }
@@ -69,10 +74,20 @@ const Editor = () => {
     // }
   }, [page])
 
+  if (pageNotFound) {
+    return (
+      // <div className="text-center mt-20">
+      //   <h1>404 - Page Not Found</h1>
+      //   <p>The page you are looking for does not exist.</p>
+      // </div>
+      <NotFound />
+    );
+  }
+
   return (
     <div
       ref={containerRef}
-      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1,  overflowX: "hidden" }}
+      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1, overflowX: "hidden" }}
       className=""
     >
       {/* website */}
