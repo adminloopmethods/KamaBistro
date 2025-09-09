@@ -87,7 +87,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
             aria-label="Select time"
           >
             {timeOptions.map((t) => (
-              <option key={t} value={t}>
+              <option className="bg-amber-100/20" key={t} value={t}>
                 {to12h(t)}
               </option>
             ))}
@@ -108,7 +108,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
             aria-label="Select number of guests"
           >
             {peopleOptions.map((p) => (
-              <option key={p} value={p}>
+              <option className="bg-amber-100/20" key={p} value={p}>
                 {p} {p === 1 ? "Person" : "People"}
               </option>
             ))}
