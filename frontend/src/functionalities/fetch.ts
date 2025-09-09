@@ -1,6 +1,6 @@
 import endpoint from "@/utils/endpoints";
 
-type methods = "GET" | "OTPTIONS"
+type methods = "GET" | "POST" | "OTPTIONS"
 
 // Interface for generic response
 interface ApiResponse<T = any> {
@@ -105,4 +105,13 @@ export async function getContentReq(id: string): Promise<ApiResponse> {
         endpoint.route("content") + (id === "" ? "home" : id),
         "GET",
     );
+}
+
+export async function sendMessageReq(formData: Record<string, any>) {
+    return await makerequest(
+        endpoint.route("contact"),
+        "POST",
+        JSON.stringify(formData),
+        ContentType.json
+    )
 }

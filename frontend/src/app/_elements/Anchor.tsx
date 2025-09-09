@@ -17,6 +17,7 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
             <a
                 href={element.href}
                 aria-label={element.aria || ""}
+                title={element.aria}
                 id={element.id}
                 style={{ ...style }}
                 target="_blank"

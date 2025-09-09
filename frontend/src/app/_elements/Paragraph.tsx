@@ -39,7 +39,7 @@ const Paragraph = ({
             id={element.id}
             ref={elementRef}
             suppressContentEditableWarning={true}
-            style={{...style, position: "relative", zIndex: "2"}}
+            style={{ ...style, position: style?.position === "absolute" ? "absolute" : "relative", zIndex: "2" }}
         />
     );
 };

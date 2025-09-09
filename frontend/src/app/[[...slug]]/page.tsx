@@ -17,7 +17,7 @@ const Editor = () => {
   const {
     width,
     websiteContent,
-    currentWidth,
+    currentWidth: activeScreen,
   } = useMyContext();
 
 
@@ -70,11 +70,11 @@ const Editor = () => {
   return (
     <div
       ref={containerRef}
-      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1 }}
+      style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1,  overflowX: "hidden" }}
       className=""
     >
       {/* website */}
-      <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
+      <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
         <Header />
 
 
@@ -83,7 +83,7 @@ const Editor = () => {
           style={{
             // position: "relative",
             flex: 1,
-            // width: pageWidth,
+            width: "100%",
             margin: "0 auto",
             minHeight: "100vh",
             transition: ".1s linear all",
@@ -100,13 +100,15 @@ const Editor = () => {
                 key={i}
                 element={section.elements}
                 section={section}
-                style={section.style[currentWidth]}
+                style={section.style[activeScreen]}
                 lastSection={lastSection}
-                currentWidth={currentWidth}
+                activeScreen={activeScreen}
               />
             );
           })}
         </div>
+
+
       </div>
 
     </div>

@@ -1,10 +1,10 @@
 import rateLimit from "express-rate-limit";
-import { findOtpAttempts, blockUser } from "../repository/user.repository.js";
+import {findOtpAttempts, blockUser} from "../repository/user.repository.js";
 
 // Global rate limiter
 const globalRateLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hour
-  max: 100000, // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
   message: {
     message: "Too many requests from this IP, please try again after an hour",
   },
@@ -54,7 +54,7 @@ const resendOtpRateLimiter = async (req, res, next) => {
       message += `${hours > 0 || minutes > 0 ? " and " : ""}${seconds} second${
         seconds > 1 ? "s" : ""
       }`;
-    return res.status(429).json({ message });
+    return res.status(429).json({message});
   }
   if (user.attempts >= 15) {
     await blockUser(userId, new Date(now.getTime() + BLOCK_TIME_24H));
@@ -87,14 +87,12 @@ const resendOtpRateLimiter = async (req, res, next) => {
     const remainingTime = Math.ceil(
       (lastAttemptDate.getTime() + BLOCK_TIME_1M - now.getTime()) / 1000
     );
-    return res
-      .status(429)
-      .json({
-        message: `Wait ${remainingTime} seconds before requesting again.`,
-      });
+    return res.status(429).json({
+      message: `Wait ${remainingTime} seconds before requesting again.`,
+    });
   }
 
   next();
 };
 
-export { globalRateLimiter, generateOtpRateLimiter, resendOtpRateLimiter };
+export {globalRateLimiter, generateOtpRateLimiter, resendOtpRateLimiter};

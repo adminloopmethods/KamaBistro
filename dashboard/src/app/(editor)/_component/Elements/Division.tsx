@@ -24,7 +24,10 @@ const Division = ({
 }: DivisionProps) => {
     const elementRef = useRef<HTMLDivElement | null>(null);
     const [divStyle, setDivStyle] = useState<React.CSSProperties>(style);
-    const { contextElement, toolbarRef, contextForSection, activeScreen, screenStyleObj } = useMyContext();
+    const { contextElement, toolbarRef, contextForSection, activeScreen, screenStyleObj
+        , setSectionChildElements,
+        setSectionChildElementsSetterFull
+    } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
 
     const isAbsolute = divStyle.position === "absolute";
@@ -38,6 +41,9 @@ const Division = ({
         contextForSection.setCurrentSectionSetter(() => setDivStyle);
         contextForSection.setSectionRef(elementRef);
         screenStyleObj.setScreenStyle(element.style)
+
+        setSectionChildElements(null)
+        setSectionChildElementsSetterFull(null)
     };
 
     // click outside

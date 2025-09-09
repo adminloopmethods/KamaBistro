@@ -217,3 +217,8 @@ input[type="search"]::-ms-clear {
 /* image{
   object-position: ;
 } */
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container {
+  width: 100% !important;
+}

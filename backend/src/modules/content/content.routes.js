@@ -8,6 +8,8 @@ import {
   getContentByIdController,
   getWebpageById,
   getWebpageByRoute,
+  proposeWebpageUpdate,
+  // proposeWebpageVersion,
   updateWebpageById,
   // clearWebpagesTablesController
 } from "./content.controller.js";
@@ -29,6 +31,11 @@ router.get("/section/:id", authenticateUser, getContentByIdController);
 router.get("/:id", authenticateUser, tryCatchWrap(getWebpageById));
 router.post("/", authenticateUser, tryCatchWrap(createWebpage));
 router.put("/:id", authenticateUser, tryCatchWrap(updateWebpageById));
+router.post(
+  "/propose/:id",
+  authenticateUser,
+  tryCatchWrap(proposeWebpageUpdate)
+);
 // router.delete("/", clearWebpagesTablesController)
 
 // router.post(
