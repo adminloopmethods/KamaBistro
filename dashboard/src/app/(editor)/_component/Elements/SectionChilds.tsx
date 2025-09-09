@@ -7,7 +7,7 @@ import { ElementTypeCustom } from "./Section";
 
 const SectionChilds: React.FC<any> = () => {
     const { sectionChildElements, sectionChildElementsSetter, activeScreen } = useMyContext()
-    const [stateOfChildElements, setStateOfChildElements] = useState<ElementTypeCustom[]>(sectionChildElements)
+    const [stateOfChildElements, setStateOfChildElements] = useState<ElementTypeCustom[]>(sectionChildElements || [])
 
 
     const handleHideAndSeek = (id: string, checked: boolean) => {
@@ -35,7 +35,7 @@ const SectionChilds: React.FC<any> = () => {
     };
 
     useEffect(() => {
-        setStateOfChildElements(sectionChildElements)
+        setStateOfChildElements(sectionChildElements || [])
     }, [sectionChildElements])
 
     return (

@@ -7,10 +7,10 @@ import HeadingTwo from "../_component/Elements/Headingtwo";
 import HeadingThree from "../_component/Elements/HeadingThree";
 import Anchor from "../_component/Elements/Anchor";
 import VideoElemComponent from "../_component/Elements/VideoElement";
-import ContactForm from "../_component/Elements/ContactForm";
-import BookTable from "../_component/Elements/BookedTable";
-import Mapview from "../_component/Elements/Mapp";
-import HotelTimings from "../_component/Elements/RestaurantTimings";
+// import ContactForm from "../_component/Elements/ContactForm";
+// import BookTable from "../_component/Elements/BookedTable";
+// import Mapview from "../_component/Elements/Mapp";
+// import HotelTimings from "../_component/Elements/RestaurantTimings";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -230,8 +230,8 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   img: ImageElemComponent,
   video: VideoElemComponent,
   division: Division,
-  contact: ContactForm,
-  bookTable: BookTable,
-  contactCard: HotelTimings,
-  map: Mapview
+  // contact: ContactForm,
+  // bookTable: BookTable,
+  // contactCard: HotelTimings,
+  // map: Mapview
 };

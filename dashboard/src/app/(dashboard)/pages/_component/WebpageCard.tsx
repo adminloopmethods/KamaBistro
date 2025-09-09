@@ -1,3 +1,4 @@
+"use client"
 // webpagecard.tsx
 import React from "react";
 import {Edit, UserPlus, X} from "lucide-react";

@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { BaseElement } from "../../_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
