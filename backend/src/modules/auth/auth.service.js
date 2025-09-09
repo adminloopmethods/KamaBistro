@@ -76,9 +76,9 @@ const refreshToken = async (user) => {
 };
 
 const forgotPassword = async (email, deviceId, otpOrigin) => {
-  const user = await getUser(email);
+  const user = await getUser(email, false);
   const otp = await generateOtpAndSendOnEmail(user, deviceId, otpOrigin);
-  return {message: `OTP has been Sent`, otp: otp};
+  return {message: `OTP sent to your registered email`, otp: otp};
 };
 
 const forgotPasswordVerify = async (email, deviceId, otp, otpOrigin) => {
@@ -115,6 +115,7 @@ const updatePassword = async (
   await deleteOTP(otp.id);
   return {message: "Passwords has been updated successfully"};
 };
+
 const resendOTP = async (email, deviceId, otpOrigin, userId) => {
   const user = await getUser(email);
   const otp = await generateOtpAndSendOnEmail(user, deviceId, otpOrigin);
@@ -158,16 +159,20 @@ const resetPass = async (
 
 // SUPPORT FUNCTIONS
 //Returns user data if found and error if not found
-const getUser = async (email) => {
+const getUser = async (email, checkStatus = true) => {
   const user = await findUserByEmail(email);
   // if user not exist throw an error
   assert(user, "NOT_FOUND", "invalid email");
-  // if user is blocked throw an error
-  assert(
-    user.status === "ACTIVE",
-    "UNAUTHORIZED",
-    "User is blocked by the super admin."
-  );
+
+  if (checkStatus) {
+    // if user is blocked throw an error
+    assert(
+      user.status === "ACTIVE",
+      "UNAUTHORIZED",
+      "User is blocked by the super admin."
+    );
+  }
+
   return user;
 };
 
