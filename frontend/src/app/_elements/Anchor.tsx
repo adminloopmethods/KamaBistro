@@ -19,7 +19,7 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
                 aria-label={element.aria || ""}
                 title={element.aria}
                 id={element.id}
-                style={{ ...style }}
+                style={{ ...style, position: "relative", zIndex:"2" }}
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -33,7 +33,7 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
             href={element.href || "#"}
             aria-label={element.aria || ""}
             id={element.id}
-            style={{ ...style }}
+            style={{ ...style, position: "relative", zIndex:"2" }}
         >
             {element.content || "Link Text"}
         </Link>

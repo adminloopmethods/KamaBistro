@@ -8,7 +8,7 @@ import HeadingThree from "../_component/Elements/HeadingThree";
 import Anchor from "../_component/Elements/Anchor";
 import VideoElemComponent from "../_component/Elements/VideoElement";
 import ContactForm from "../_component/Elements/ContactForm";
-import BookTable from "../_component/Elements/BookedTable";
+import BookTable from "../_component/Elements/BookTable";
 import Mapview from "../_component/Elements/Mapp";
 import HotelTimings from "../_component/Elements/RestaurantTimings";
 

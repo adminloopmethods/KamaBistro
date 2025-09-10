@@ -60,7 +60,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
+    <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] z-[10] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
 
       {/* Date */}
       <div className="block relative w-full">
@@ -73,7 +73,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
             shouldCloseOnSelect={true}   // 👈 this is the key
             className="w-full rounded-[16px] pl-15 border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
             aria-label="Select date"
-            dateFormat="yyyy-MM-dd"
+            dateFormat="MMMM d, yyyy"
           />
           <CalendarClock className="absolute left-4 top-10 pointer-events-none" />
         </div>

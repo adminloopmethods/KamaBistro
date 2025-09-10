@@ -73,7 +73,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
                         onChange={(date: Date | null) => setDate(date || new Date())} // Handle date change
                         className="w-full rounded-[16px] pl-15 border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
                         aria-label="Select date"
-                        dateFormat="yyyy-MM-dd"
+                        dateFormat="MMMM d, yyyy"
                     />
                     <CalendarClock className="absolute left-4 top-10 pointer-events-none" />
                 </div>
