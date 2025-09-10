@@ -99,12 +99,18 @@ const ContentType = {
 
 // API Calls
 
-export async function getContentReq(id: string): Promise<ApiResponse> {
-    console.log("weqrqwer")
-    return await makerequest(
-        endpoint.route("content") + (id === "" ? "home" : id),
-        "GET",
-    );
+export async function getContentReq(id: string, location?: boolean): Promise<ApiResponse> {
+    let routeId: string;
+
+    if (id === "") {
+        routeId = location ? "landingpage" : "home";
+    } else {
+        routeId = id;
+    }
+
+    const url = `${endpoint.route("content")}${routeId}?location=${location ?? false}`;
+
+    return await makerequest(url, "GET");
 }
 
 export async function sendMessageReq(formData: Record<string, any>) {

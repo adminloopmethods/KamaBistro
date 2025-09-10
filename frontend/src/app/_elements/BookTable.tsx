@@ -63,12 +63,12 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
     <div className="bg-transparent backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
       {/* Date */}
       <label className="block relative w-full">
-        <span className="text-sm font-medium text-amber-900">Date</span>
+        <span className="text-sm font-medium text-[black]">Date</span>
         <div className="mt-1 w-full">
           <DatePicker
             selected={date} // Pass Date object here
             onChange={(date: Date | null) => setDate(date || new Date())} // Handle date change
-            className="w-full rounded-[16px] pl-15 border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
+            className="w-full rounded-[16px] pl-15 border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
             aria-label="Select date"
             dateFormat="yyyy-MM-dd"
           />
@@ -78,12 +78,12 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
 
       {/* Time */}
       <label className="block relative">
-        <span className="text-sm font-medium text-amber-900">Time</span>
+        <span className="text-sm font-medium text-[black]">Time</span>
         <div className="mt-1">
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select time"
           >
             {timeOptions.map((t) => (
@@ -99,12 +99,12 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
 
       {/* People */}
       <label className="block relative">
-        <span className="text-sm font-medium text-amber-900">Guests</span>
+        <span className="text-sm font-medium text-[black]">Guests</span>
         <div className="mt-1">
           <select
             value={covers}
             onChange={(e) => setCovers(Number(e.target.value))}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select number of guests"
           >
             {peopleOptions.map((p) => (

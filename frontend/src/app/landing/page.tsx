@@ -6,12 +6,15 @@ import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 import Header from "../_elements/LandinHeader";
+import NotFound from "./not-found";
 
 const Editor = () => {
     const params = useParams()
     const containerRef = useRef<HTMLDivElement | null>(null);
     const router = useRouter()
     const page: string = params.slug ? params.slug[0] : ""
+    const [pageNotFound, setPageNotFound] = useState(false);
+
     // const [widthSize, setWidthSize] = useState<number>(0)
 
     const {
@@ -50,12 +53,13 @@ const Editor = () => {
         // if (page) {
         async function getContentfromServer() {
             try {
-                const response: any = await getContentReq(page)
-                console.log(response)
+                const response: any = await getContentReq(page, true)
                 if (response.ok) {
+                    console.log(JSON.stringify(response))
                     websiteContent.setWebpage(response.webpage)
                     width.setEditedWidth(response.webpage.editedWidth)
                 } else {
+                    setPageNotFound(true);
                     throw new Error("error while fetch the page")
                 }
             } catch (err) {
@@ -67,6 +71,11 @@ const Editor = () => {
         // }
     }, [page])
 
+    if (pageNotFound) {
+        return (
+            <NotFound />
+        );
+    }
     return (
         <div
             ref={containerRef}
