@@ -20,19 +20,19 @@ import reserveTable from "./templateReserveTablePage/ReserveTable.json" assert {
 // Put them in an array
 const webpages = [
   // bases
-  home,
-  OurGroup,
-  OurCulture,
-  PrivateDinning,
-  Catering,
-  ContactUs,
+  // home,
+  // OurGroup,
+  // OurCulture,
+  // PrivateDinning,
+  // Catering,
+  // ContactUs,
 
   // landing pages
-  homeLanding,
-  orderOnline,
-  privateDinning,
-  landingCatering,
-  reserveTable
+  // homeLanding,
+  // orderOnline,
+  // privateDinning,
+  // landingCatering,
+  // reserveTable
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs

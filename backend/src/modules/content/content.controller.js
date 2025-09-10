@@ -1,4 +1,4 @@
-import {logger} from "../../config/logConfig.js";
+import { logger } from "../../config/logConfig.js";
 import {
   createWebpageService,
   getAllWebpagesService,
@@ -14,8 +14,8 @@ import {
 
 export const createWebpage = async (req, res) => {
   try {
-    const {name, contents, route, editedWidth} = req.body;
-    const {webpage} = await createWebpageService({
+    const { name, contents, route, editedWidth } = req.body;
+    const { webpage } = await createWebpageService({
       name,
       contents,
       route,
@@ -23,8 +23,8 @@ export const createWebpage = async (req, res) => {
     });
     res.json(webpage);
   } catch (error) {
-    logger.error(`Error creating webpage: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to create webpage."});
+    logger.error(`Error creating webpage: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to create webpage." });
   }
 };
 
@@ -41,39 +41,39 @@ export const getAllWebpages = async (req, res) => {
       webpages = await getAssignedWebpagesService(req.user.id);
     }
 
-    res.json({webpages});
+    res.json({ webpages });
   } catch (error) {
-    logger.error(`Error fetching webpages: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to fetch webpages."});
+    logger.error(`Error fetching webpages: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to fetch webpages." });
   }
 };
 
 export const getWebpageById = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const webpage = await getWebpageByIdService(id);
 
     if (!webpage) {
       logger.warn(`Webpage with ID '${id}' not found.`);
-      return res.status(404).json({error: "Webpage not found."});
+      return res.status(404).json({ error: "Webpage not found." });
     }
 
-    res.json({webpage});
+    res.json({ webpage });
   } catch (error) {
-    logger.error(`Error fetching webpage: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to fetch webpage."});
+    logger.error(`Error fetching webpage: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to fetch webpage." });
   }
 };
 
 export const updateWebpageById = async (req, res) => {
   try {
-    const {id} = req.params;
-    const {name, contents, route, editedWidth} = req.body;
+    const { id } = req.params;
+    const { name, contents, route, editedWidth, locationId } = req.body;
 
     const existing = await getWebpageByIdService(id);
     if (!existing) {
       logger.warn(`Webpage with ID '${id}' not found.`);
-      return res.status(404).json({error: "Webpage not found."});
+      return res.status(404).json({ error: "Webpage not found." });
     }
 
     const updatedWebpage = await updateWebpageByIdService(id, {
@@ -81,19 +81,21 @@ export const updateWebpageById = async (req, res) => {
       contents,
       route,
       editedWidth,
+      locationId
     });
     res.json(updatedWebpage);
   } catch (error) {
-    logger.error(`Error updating webpage: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to update webpage."});
+    logger.error(`Error updating webpage: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to update webpage." });
   }
 };
 
 // ---------------- GET WEBPAGE BY ROUTE ----------------
 export const getWebpageByRoute = async (req, res) => {
   try {
-    const {route} = req.params;
-    console.log(route);
+    const { route } = req.params;
+    const { location } = req.query; // frontend sends ?location=true or ?location=false
+
     // Get the ID from route
     const id = await findWebpageIdByRouteService(
       route === "home" ? "/" : `/${route}`
@@ -101,18 +103,34 @@ export const getWebpageByRoute = async (req, res) => {
 
     if (!id) {
       logger.warn(`Webpage with route '${route}' not found.`);
-      return res.status(404).json({error: "Webpage not found."});
+      return res.status(404).json({ error: "Webpage not found." });
     }
 
-    // Reuse existing ID-based service
+    // Fetch webpage
     const webpage = await getWebpageByIdService(id);
 
-    res.json({webpage});
+    if (!webpage) {
+      return res.status(404).json({ error: "Webpage not found." });
+    }
+
+    // Apply location filter
+    if (location === "true" && !webpage.locationId) {
+      // frontend asked for location pages but this one has no location
+      return res.status(404).json({ error: "Webpage not found for location:true." });
+    }
+
+    if (location === "false" && webpage.locationId) {
+      // frontend asked for non-location pages but this one has locationId
+      return res.status(404).json({ error: "Webpage not found for location:false." });
+    }
+
+    res.json({ webpage });
   } catch (error) {
-    logger.error(`Error fetching webpage by route: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to fetch webpage by route."});
+    logger.error(`Error fetching webpage by route: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to fetch webpage by route." });
   }
 };
+
 
 // ---------------- GET ALL CONTENTS ----------------
 export const getAllContentsController = async (req, res) => {
@@ -120,44 +138,44 @@ export const getAllContentsController = async (req, res) => {
 
   try {
     const contents = await getAllContentsService();
-    res.json({contents});
+    res.json({ contents });
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Failed to fetch contents"});
+    res.status(500).json({ error: "Failed to fetch contents" });
   }
 };
 
 // ---------------- GET CONTENT BY ID ----------------
 export const getContentByIdController = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     const content = await getContentByIdService(id);
     if (!content) {
-      return res.status(404).json({error: "Content not found"});
+      return res.status(404).json({ error: "Content not found" });
     }
-    res.json({section: content});
+    res.json({ section: content });
   } catch (error) {
     console.error(error);
-    res.status(500).json({error: "Failed to fetch content"});
+    res.status(500).json({ error: "Failed to fetch content" });
   }
 };
 
 export const proposeWebpageUpdate = async (req, res) => {
   try {
-    const {id} = req.params;
-    const {name, contents, route, editedWidth} = req.body;
+    const { id } = req.params;
+    const { name, contents, route, editedWidth } = req.body;
     const userId = req.user.id;
 
     const webpage = await getWebpageByIdService(id);
     if (!webpage) {
       logger.warn(`Webpage with ID '${id}' not found.`);
-      return res.status(404).json({error: "Webpage not found."});
+      return res.status(404).json({ error: "Webpage not found." });
     }
 
     if (webpage.editorId !== userId) {
       return res
         .status(403)
-        .json({error: "You are not the editor of this webpage."});
+        .json({ error: "You are not the editor of this webpage." });
     }
 
     // Create proposed version
@@ -173,7 +191,7 @@ export const proposeWebpageUpdate = async (req, res) => {
       proposedVersion,
     });
   } catch (error) {
-    logger.error(`Error proposing webpage update: ${error.message}`, {error});
-    res.status(500).json({error: "Failed to propose webpage update."});
+    logger.error(`Error proposing webpage update: ${error.message}`, { error });
+    res.status(500).json({ error: "Failed to propose webpage update." });
   }
 };

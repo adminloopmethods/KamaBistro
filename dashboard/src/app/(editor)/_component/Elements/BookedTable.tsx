@@ -59,14 +59,14 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
     ];
 
     const handleBook = () => {
-        window.open(deepLink, "_blank", "noopener,noreferrer");
+        // window.open(deepLink, "_blank", "noopener,noreferrer");
     };
 
     return (
-        <div className="bg-[#DED1BE80] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
+        <div className="bg-[#DED1BE80] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 relative z-[50]">
             {/* Date */}
             <label className="block relative w-full">
-                <span className="text-sm font-medium text-amber-900">Date</span>
+                <span className="text-sm font-medium text-black">Date</span>
                 <div className="mt-1 w-full">
                     <DatePicker
                         selected={date} // Pass Date object here
@@ -81,7 +81,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
             {/* Time */}
             <label className="block relative">
-                <span className="text-sm font-medium text-amber-900">Time</span>
+                <span className="text-sm font-medium text-black">Time</span>
                 <div className="mt-1">
                     <select
                         value={time}
@@ -102,7 +102,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
             {/* People */}
             <label className="block relative">
-                <span className="text-sm font-medium text-amber-900">Guests</span>
+                <span className="text-sm font-medium text-black">Guests</span>
                 <div className="mt-1">
                     <select
                         value={covers}
@@ -123,7 +123,8 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
             <button
                 onClick={handleBook}
-                className="w-full rounded-[16px] px-6 py-4 font-semibold bg-[#AE9060] text-white hover:bg-amber-800 active:bg-amber-900 transition"
+                className="w-full rounded-[16px] px-6 py-4 font-[400] bg-[#AE9060] cursor-pointer text-white hover:bg-[#9c6e24] active:bg-amber-900 transition"
+                aria-label="Book Table"
             >
                 Book Now
             </button>

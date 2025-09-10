@@ -444,8 +444,11 @@ const Editor = () => {
                         {renderInput("Name", "name", "text", "", webpage?.name, setMetaOfPage)}
                         {renderInput("Route", "route", "text", "", webpage?.route, setMetaOfPage)}
                         <CustomSelect
-                            options={locations?.map(e => ({ label: e.name, value: e.id })) || []}
-                            firstOption="Set Location"
+                            options={
+                                // locations?.map(e => ({ label: e.name, value: e.id })) ||
+                                [{ label: "True", value: locations[0].id }]
+                            }
+                            firstOption="Set Landing Page"
                             disableFirstValue={true}
                             onChange={(value) => {
                                 setWebpage((prev: webpageType | null) => {

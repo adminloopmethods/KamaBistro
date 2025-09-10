@@ -244,7 +244,7 @@ export const getWebpageByIdService = async (id) => {
 // ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (
   id,
-  {name, contents, editedWidth, route}
+  {name, contents, editedWidth, route, locationId}
 ) => {
   // Step 1: Update webpage info
   const updatedWebpage = await prismaClient.webpage.update({
@@ -252,6 +252,7 @@ export const updateWebpageByIdService = async (
     data: {
       name,
       route,
+      locationId,
       ...(editedWidth !== undefined && {editedWidth}),
     },
   });
