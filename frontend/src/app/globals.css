@@ -7,11 +7,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
 .poppins-text {
-    font-family: var(--font-poppins), sans-serif;
+  font-family: var(--font-poppins), sans-serif;
 }
 
-section{
-    word-wrap: break-word;
+section {
+  word-wrap: break-word;
 }
 
 .react-datepicker-wrapper,
@@ -21,4 +21,14 @@ section{
 
 .react-datepicker__month-container {
   background: #FEEBC8;
+}
+
+.scroll-one::-webkit-scrollbar {
+  width: 8px;
+  background-color: #483C28;
+}
+
+.scroll-one::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #AE9060;
 }

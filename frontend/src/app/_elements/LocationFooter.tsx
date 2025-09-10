@@ -27,7 +27,7 @@ export default function Footer({ Locations }: FooterProps) {
 
             {/* SVG texture overlay */}
             <div
-                className="absolute hidden lg:block inset-0 opacity-[0.09] bg-multiply"
+                className="absolute hidden lg:block inset-0 opacity-[0.05] bg-multiply"
                 style={{ backgroundImage: `url(${footerTexture.src})` }}
                 aria-hidden="true"
             />
@@ -147,20 +147,20 @@ export default function Footer({ Locations }: FooterProps) {
                             <ul className="space-y-1 mt-28">
                                 <li className="text-xl font-medium">Hours</li>
                                 <li className="text-base font-normal">Mon: Closed</li>
-                                <li className="text-base font-normal">Tue–Thu: 5pm – 9pm</li>
-                                <li className="text-base font-normal">Fri: 5pm – 10pm</li>
-                                <li className="text-base font-normal">Sat: 12pm – 10pm</li>
-                                <li className="text-base font-normal">Sun: 12pm – 9pm</li>
+                                <li className="text-base font-normal">Tue-Thu: 5pm - 9pm</li>
+                                <li className="text-base font-normal">Fri: 5pm - 10pm</li>
+                                <li className="text-base font-normal">Sat: 12pm - 10pm</li>
+                                <li className="text-base font-normal">Sun: 12pm - 9pm</li>
                             </ul>
                             <ul className="space-y-2 mt-32">
                                 <li className="text-base font-light">
-                                    <span className="text-base font-normal">Happy Hours:</span> <br />Mon–Fri: 5pm – 9pm
+                                    <span className="text-base font-normal">Happy Hours:</span> <br />Mon-Fri: 5pm - 9pm
                                 </li>
                                 <li className="text-base font-light">
-                                    <span className="text-base font-normal">Brunch Hours:</span> <br />Sat–Sun: 12pm – 3pm
+                                    <span className="text-base font-normal">Brunch Hours:</span> <br />Sat-Sun: 12pm - 3pm
                                 </li>
                                 <li className="text-base font-light">
-                                    <span className="text-base font-normal">Business Hours:</span> <br />Mon–Fri: 4pm – 12am
+                                    <span className="text-base font-normal">Business Hours:</span> <br />Mon-Fri: 4pm - 12am
                                 </li>
                             </ul>
                         </div>

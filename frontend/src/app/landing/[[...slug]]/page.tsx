@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import Section from "../_elements/Section";
+import Section from "@/app/_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
-import Header from "../_elements/LandinHeader";
 import NotFound from "./not-found";
+import Header from "@/app/_elements/LandinHeader";
+import Footer from "@/app/_elements/LocationFooter";
 
 const Editor = () => {
     const params = useParams()
@@ -16,6 +17,7 @@ const Editor = () => {
     const [pageNotFound, setPageNotFound] = useState(false);
 
     // const [widthSize, setWidthSize] = useState<number>(0)
+    const [locationObject, setLocationObject] = useState("")
 
     const {
         width,
@@ -53,6 +55,7 @@ const Editor = () => {
         // if (page) {
         async function getContentfromServer() {
             try {
+                console.log(page)
                 const response: any = await getContentReq(page, true)
                 if (response.ok) {
                     console.log(JSON.stringify(response))
@@ -80,10 +83,10 @@ const Editor = () => {
         <div
             ref={containerRef}
             style={{ display: "flex", height: "100vh", position: "relative", zIndex: 1 }}
-            className=""
+            className=" "
         >
             {/* website */}
-            <div className="scroll-one bg-zinc-800" style={{ flex: 1, overflowX: "hidden" }}>
+            <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
                 <Header />
 
 
@@ -98,7 +101,7 @@ const Editor = () => {
                         transition: ".1s linear all",
                         backgroundColor: "#e7e5e4", // stone-200
                         backgroundSize: "15px 15px", // size of grid squares
-
+                        paddingTop: "50px"
                     }}
                     className="bg-stone-200 poppins-text"
                 >
@@ -116,6 +119,7 @@ const Editor = () => {
                         );
                     })}
                 </div>
+                <Footer Locations="134" />
             </div>
 
         </div>

@@ -23,7 +23,7 @@ export default function Footer() {
 
             {/* SVG texture overlay */}
             <div
-                className="absolute hidden lg:block inset-0 opacity-[0.09] bg-multiply"
+                className="absolute hidden lg:block inset-0 opacity-[0.05] bg-multiply"
                 style={{ backgroundImage: `url(${footerTexture.src})` }}
                 aria-hidden="true"
             />

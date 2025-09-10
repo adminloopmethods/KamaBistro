@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${poppins.variable} antialiased p-0`}
+        className={`${playfair.variable} ${poppins.variable} antialiased p-0 overflow-x-hidden overflow-y-auto scroll-one`}
       >
         <Provider>
           {/* <UserProvider> */}
