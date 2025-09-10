@@ -34,8 +34,6 @@ const LinkComponent: React.FC<LinkProps> = ({
 
     const href = thisElement.href
 
-    console.log(href)
-
     // Set text from element.content
     useEffect(() => {
         if (elementRef.current && (element.content || element.content === "")) {
