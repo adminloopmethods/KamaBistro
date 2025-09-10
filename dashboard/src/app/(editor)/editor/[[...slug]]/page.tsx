@@ -446,10 +446,14 @@ const Editor = () => {
                         <CustomSelect
                             options={
                                 // locations?.map(e => ({ label: e.name, value: e.id })) ||
-                                [{ label: "True", value: locations[0].id }]
+                                [
+                                    { label: "True", value: locations[0].id },
+                                    { label: "False", value: "" }
+                                ]
                             }
                             firstOption="Set Landing Page"
                             disableFirstValue={true}
+                            Default={webpage?.locationId || "true"}
                             onChange={(value) => {
                                 setWebpage((prev: webpageType | null) => {
                                     if (!prev) return null

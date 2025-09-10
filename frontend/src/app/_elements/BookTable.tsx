@@ -60,21 +60,24 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
   };
 
   return (
-    <div className="bg-transparent backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
+    <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
+
       {/* Date */}
-      <label className="block relative w-full">
+      <div className="block relative w-full">
         <span className="text-sm font-medium text-[black]">Date</span>
-        <div className="mt-1 w-full">
+        <div className="mt-1 w-full ">
           <DatePicker
-            selected={date} // Pass Date object here
-            onChange={(date: Date | null) => setDate(date || new Date())} // Handle date change
-            className="w-full rounded-[16px] pl-15 border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
+            selected={date}
+            onChange={(date: Date | null) => setDate(date || new Date())}
+            onSelect={() => { }} // triggers when a date is selected
+            shouldCloseOnSelect={true}   // 👈 this is the key
+            className="w-full rounded-[16px] pl-15 border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
             aria-label="Select date"
             dateFormat="yyyy-MM-dd"
           />
           <CalendarClock className="absolute left-4 top-10 pointer-events-none" />
         </div>
-      </label>
+      </div>
 
       {/* Time */}
       <label className="block relative">
@@ -83,7 +86,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select time"
           >
             {timeOptions.map((t) => (
@@ -104,7 +107,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
           <select
             value={covers}
             onChange={(e) => setCovers(Number(e.target.value))}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-[] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select number of guests"
           >
             {peopleOptions.map((p) => (
@@ -120,7 +123,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "59356" }) => {
 
       <button
         onClick={handleBook}
-        className="w-full rounded-[16px] px-6 py-4 font-semibold bg-amber-700 text-white hover:bg-amber-800 active:bg-amber-900 transition"
+        className="w-full rounded-[16px] px-6 py-4 font-semibold bg-[#AE9060] text-white hover:bg-[#9e7a40] active:bg-[#9e7a40] transition cursor-pointer"
       >
         Book Now
       </button>

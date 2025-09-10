@@ -63,7 +63,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
     };
 
     return (
-        <div className="bg-[#DED1BE80] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 relative z-[50]">
+        <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 z-[50]">
             {/* Date */}
             <label className="block relative w-full">
                 <span className="text-sm font-medium text-black">Date</span>
@@ -123,7 +123,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
             <button
                 onClick={handleBook}
-                className="w-full rounded-[16px] px-6 py-4 font-[400] bg-[#AE9060] cursor-pointer text-white hover:bg-[#9c6e24] active:bg-amber-900 transition"
+                className="w-full rounded-[16px] px-6 py-4 font-semibold bg-[#AE9060] text-white hover:bg-[#9e7a40] active:bg-[#9e7a40] transition cursor-pointer"
                 aria-label="Book Table"
             >
                 Book Now
