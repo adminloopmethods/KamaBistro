@@ -14,7 +14,6 @@ type LinkProps = {
     updateElement: (id: string, updatedElement: BaseElement) => void;
     rmElement: (id: string) => void;
     parentRef: HTMLElement | null;
-
 };
 
 const LinkComponent: React.FC<LinkProps> = ({

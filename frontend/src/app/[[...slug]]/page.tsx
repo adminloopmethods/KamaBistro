@@ -65,7 +65,6 @@ const Editor = () => {
           throw new Error("error while fetch the page")
         }
       } catch (err) {
-        notFound()
         console.error(err)
       }
     }

@@ -30,7 +30,7 @@ export default function NotFound(): JSX.Element {
       <h1 style={{ fontSize: "6rem", margin: "0" }}>404</h1>
       <h2 style={{ fontSize: "2rem", margin: "10px 0" }}>Oops! Page Not Found</h2>
       <p style={{ maxWidth: "400px", fontSize: "1.2rem", lineHeight: "1.5" }}>
-        Looks like you wandered off the menu. Don’t worry, we’ve got plenty of delicious pages to explore!
+        Looks like you wandered off the menu. Don't worry, we've got plenty of delicious pages to explore!
       </p>
       <Link href="/landing">
         <button

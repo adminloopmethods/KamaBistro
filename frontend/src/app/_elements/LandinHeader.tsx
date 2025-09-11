@@ -10,7 +10,7 @@ import logo from "@/assets/favicon.png";
 // Top header nav
 const topNavLinks = [
   { label: "Our Group", href: "/our-group" },
-  { label: "Culture", href: "/culture" },
+  { label: "Culture", href: "/our-culture" },
   { label: "Private Events", href: "/private-dinning" },
   { label: "Catering", href: "/catering" },
   { label: "Contact", href: "/contact" },

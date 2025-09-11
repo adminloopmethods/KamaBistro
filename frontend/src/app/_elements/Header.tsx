@@ -8,7 +8,7 @@ import logo from "@/assets/favicon.png";
 // Example nav links
 const navLinksLeft = [
   { label: "Our Group", href: "/our-group" },
-  { label: "Culture", href: "/ourculture" },
+  { label: "Culture", href: "/our-culture" },
   { label: "Private Events", href: "/private-events" },
 ];
 
