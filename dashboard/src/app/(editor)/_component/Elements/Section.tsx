@@ -401,29 +401,13 @@ const Section: React.FC<SectionProps> = ({
                 createSection={createSection}
               />)
 
-          } else if (Element.name === "map") {
-            return <Mapview
-              key={Element.id}
-              width="100%"
-              height="100%"
-              data={[
-                {
-                  _id: "1",
-                  images: ["https://picsum.photos/200"],
-                  title: "Villa",
-                  price: 12000,
-                  address: { geometry: { location: { coordinates: [-76.8, 17.97] } } },
-                  createdByDoc: { firstName: "John" },
-                },
-                {
-                  _id: "2",
-                  images: ["https://picsum.photos/201"],
-                  title: "Apartment",
-                  address: { geometry: { location: { coordinates: [-76.79, 17.98] } } },
-                },
-              ]}
-            />
-          } else {
+          } 
+          // else if (Element.name === "map") {
+          //   return <Mapview
+          //     key={Element.id}
+          //   />
+          // } 
+          else {
             const Component = mapElement[Element.name];
             return (
               <Component

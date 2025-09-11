@@ -185,3 +185,31 @@ const Mapview: React.FC<MapviewProps> = ({
 };
 
 export default Mapview;
+
+
+
+
+{/* way to call */ }
+// <Mapview
+//     width="100%"
+//     height="400px"
+//     data={{
+//         _id: "lagrange",
+//         images: ["https://via.placeholder.com/150x200.png?text=LA+GRANGE"],
+//         title: "LA GRANGE",
+//         price: undefined,
+//         address: {
+//             geometry: {
+//                 location: {
+//                     coordinates: [-87.8690, 41.8130], // [lng, lat]
+//                 },
+//             },
+//         },
+//         createdByDoc: {
+//             firstName: "Admin",
+//         },
+//     }}
+//     fullScreen={false}
+//     center={{ lat: 41.8130, lng: -87.8690 }}
+//     isSingleBookDetails={true}
+// />

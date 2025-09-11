@@ -4,7 +4,7 @@ import React from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { googleApi } from "@/utils/endpoints";
 
-const DEFAULT_CENTER = { lat: 41.9096921, lng: -87.6767843 }; // LA GRANGE
+const DEFAULT_CENTER = { lat: 41.8130, lng: -87.8690 }; // LA GRANGE
 
 export default function SingleLocationMap() {
     return (
