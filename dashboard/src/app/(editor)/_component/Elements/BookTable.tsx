@@ -63,7 +63,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
     };
 
     return (
-        <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 z-[50]">
+        <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 z-[50] w-[100%]">
             {/* Date */}
             <label className="block relative w-full">
                 <span className="text-sm font-medium text-black">Date</span>

@@ -27,6 +27,8 @@ import { useDraggable } from "../../_component/common/useDraggable";
 import HoverToolbar from "../../_component/common/HoverToolbar";
 import { useRouter } from "next/navigation";
 import ChildElements from "../../_component/common/ChildElements";
+import Mapview from "../../_component/Elements/Mapp";
+
 
 const renderInput = (
     label: string,
@@ -390,6 +392,7 @@ const Editor = () => {
                         }}
                         className="bg-stone-200"
                     >
+
                         {webpage?.contents?.map((section: any, i: number, a: any[]) => {
                             const lastSection = i === a.length - 1;
 

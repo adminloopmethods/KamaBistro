@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/app/redux/hooks";
 import { formatWithCommas } from "../../_functionality/commons";
+import { googleApi } from "@/utils/endpoints";
 
 // Default map settings
 const DEFAULT_CENTER = { lat: 17.9714, lng: -76.7931 }; // Jamaica center
@@ -152,7 +153,7 @@ const Mapview: React.FC<MapviewProps> = ({
         };
 
     return (
-        <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_NEW_API_KEY || ""}>
+        <APIProvider apiKey={googleApi || ""}>
             <Map
                 defaultCenter={mapCenter}
                 defaultZoom={DEFAULT_ZOOM}

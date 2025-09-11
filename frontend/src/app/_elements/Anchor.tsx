@@ -12,6 +12,8 @@ type LinkProps = {
 const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
     const isExternal = element.href?.startsWith("http");
 
+    const display = style?.display ? style?.display : "inline-block"
+
     if (isExternal) {
         return (
             <a
@@ -19,7 +21,7 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
                 aria-label={element.aria || ""}
                 title={element.aria}
                 id={element.id}
-                style={{ ...style, position: "relative", zIndex:"2" }}
+                style={{ ...style, position: "relative", zIndex: "2", display }}
                 target="_blank"
                 rel="noopener noreferrer"
             >
@@ -33,7 +35,7 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
             href={element.href || "#"}
             aria-label={element.aria || ""}
             id={element.id}
-            style={{ ...style, position: "relative", zIndex:"2" }}
+            style={{ ...style, position: "relative", zIndex: "2", display }}
         >
             {element.content || "Link Text"}
         </Link>
