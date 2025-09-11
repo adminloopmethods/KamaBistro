@@ -35,7 +35,7 @@ const Header: React.FC = () => {
   return (
     <header className="w-full fixed z-50">
       {/* ===== Top Header ===== */}
-      <div className="hidden lg:flex justify-between items-center bg-gradient-to-r from-[#AE9060] to-[#483C28] text-white px-10 py-3">
+      <div className="hidden lg:flex justify-between items-center bg-gradient-to-r from-[#AE9060] to-[#483C28] text-white px-10 py-2">
         {/* Logo */}
         <Link href="/" aria-label="Go to Home">
           <Image src={logo} alt="Company Logo" className="h-12 w-auto" />

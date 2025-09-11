@@ -101,7 +101,7 @@ const Editor = () => {
                         transition: ".1s linear all",
                         backgroundColor: "#e7e5e4", // stone-200
                         backgroundSize: "15px 15px", // size of grid squares
-                        paddingTop: "50px"
+                        paddingTop: "100px"
                     }}
                     className="bg-stone-200 poppins-text"
                 >
