@@ -14,7 +14,7 @@ const topNavLinks = [
   { label: "Private Events", href: "/private-dinning" },
   { label: "Catering", href: "/catering" },
   { label: "Contact", href: "/contact" },
-  { label: "Career", href: "/career" },
+  // { label: "Career", href: "/career" },
 ];
 
 // Bottom header nav
@@ -52,12 +52,12 @@ const Header: React.FC = () => {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/gift-cards"
-            className="ml-4 px-4 py-2 bg-[#AE9060] text-white hover:bg-gray-800 transition"
+          <a
+            href="/https://www.toasttab.com/kama-bistro/giftcards"
+            className="hover:text-gray-300 transition"
           >
             Gift Cards
-          </Link>
+          </a>
         </nav>
       </div>
 
