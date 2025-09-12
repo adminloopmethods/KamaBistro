@@ -674,3 +674,15 @@ export const getProposedVersionsService = async (verifierId) => {
     orderBy: {createdAt: "desc"},
   });
 };
+
+export const getProposedVersionByIdService = async (id) => {
+  return await prismaClient.proposedVersion.findUnique({
+    where: {id},
+  });
+};
+
+export const deleteProposedVersionService = async (id) => {
+  return await prismaClient.proposedVersion.delete({
+    where: {id},
+  });
+};

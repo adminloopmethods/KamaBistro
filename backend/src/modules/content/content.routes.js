@@ -2,6 +2,7 @@ import {Router} from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
 import {
+  approveProposedVersion,
   createWebpage,
   getAllContentsController,
   getAllWebpages,
@@ -45,6 +46,11 @@ router.post(
   "/propose/:id",
   authenticateUser,
   tryCatchWrap(proposeWebpageUpdate)
+);
+router.post(
+  "/proposed-versions/approve/:id",
+  authenticateUser,
+  tryCatchWrap(approveProposedVersion)
 );
 
 // router.delete("/", clearWebpagesTablesController)

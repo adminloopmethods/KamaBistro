@@ -11,6 +11,8 @@ import {
   // proposeWebpageVersionService,
   createProposedVersionService,
   getProposedVersionsService,
+  deleteProposedVersionService,
+  getProposedVersionByIdService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -190,5 +192,42 @@ export const getProposedVersions = async (req, res) => {
   } catch (error) {
     logger.error(`Error fetching proposed versions: ${error.message}`, {error});
     res.status(500).json({error: "Failed to fetch proposed versions."});
+  }
+};
+
+export const approveProposedVersion = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const userId = req.user.id;
+
+    // Check if user is the verifier for this proposed version
+    const proposedVersion = await getProposedVersionByIdService(id);
+
+    if (!proposedVersion) {
+      return res.status(404).json({error: "Proposed version not found."});
+    }
+
+    if (proposedVersion.verifierId !== userId) {
+      return res
+        .status(403)
+        .json({error: "You are not the verifier for this proposed version."});
+    }
+
+    // Apply the proposed changes
+    const updatedWebpage = await updateWebpageByIdService(
+      proposedVersion.webpageId,
+      proposedVersion.version
+    );
+
+    // Delete the proposed version
+    await deleteProposedVersionService(id);
+
+    res.json({
+      message: "Changes approved and published",
+      webpage: updatedWebpage,
+    });
+  } catch (error) {
+    logger.error(`Error approving proposed version: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to approve proposed version."});
   }
 };
