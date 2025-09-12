@@ -3,10 +3,21 @@
 import React from "react";
 import { APIProvider, Map, Marker } from "@vis.gl/react-google-maps";
 import { googleApi } from "@/utils/endpoints";
+import { BaseElement } from "../../_functionality/createElement";
 
 const DEFAULT_CENTER = { lat: 41.8130, lng: -87.8690 }; // LA GRANGE
 
-export default function SingleLocationMap() {
+type DivisionProps = {
+    element: BaseElement;
+    editable?: boolean;
+    style: React.CSSProperties;
+    updateContent: (id: string, property: string, value: any) => void;
+    updateElement: (id: string, updatedElement: BaseElement) => void;
+    rmElement: (id: string) => void;
+    parentRef: HTMLElement | null;
+};
+
+export default function SingleLocationMap({ }) {
     return (
         <APIProvider apiKey={googleApi || ""}>
             <Map

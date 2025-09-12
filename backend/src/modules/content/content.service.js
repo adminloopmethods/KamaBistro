@@ -431,7 +431,6 @@ export const updateWebpageByIdService = async (
   return finalWebpage;
 };
 
-
 // ---------------- GET WEBPAGE VERSIONS ----------------
 export const getWebpageVersionsService = async (webpageId) => {
   return await prismaClient.version.findMany({

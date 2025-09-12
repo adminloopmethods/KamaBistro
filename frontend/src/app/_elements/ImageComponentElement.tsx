@@ -54,6 +54,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
     element?.style?.[currentWidth]?.height
   );
 
+  console.log(element.style?.[currentWidth]?.width)
+
   return (
     <div
       style={{

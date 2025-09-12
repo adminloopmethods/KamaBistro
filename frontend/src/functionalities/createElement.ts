@@ -8,6 +8,7 @@ import Anchor from "@/app/_elements/Anchor";
 import ContactForm from "@/app/_elements/ContactForm";
 import BookTable from "@/app/_elements/BookTable";
 import HotelTimings from "@/app/_elements/RestaurantTimings";
+import SingleLocationMap from "@/app/_elements/MappSimple";
 
 // Define screen sizes for style keys
 type ScreenSize = "xl" | "lg" | "md" | "sm";
@@ -37,5 +38,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
     division: Division,
     contact: ContactForm,
     bookTable: BookTable,
-    contactCard: HotelTimings
+    contactCard: HotelTimings,
+    map: SingleLocationMap
 };

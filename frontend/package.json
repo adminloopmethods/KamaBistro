@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@vis.gl/react-google-maps": "^1.5.5",
     "axios": "^1.11.0",
     "framer-motion": "^12.23.12",
     "lodash": "^4.17.21",
