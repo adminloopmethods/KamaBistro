@@ -9,8 +9,9 @@ import Anchor from "../_component/Elements/Anchor";
 import VideoElemComponent from "../_component/Elements/VideoElement";
 import ContactForm from "../_component/Elements/ContactForm";
 import BookTable from "../_component/Elements/BookTable";
-import Mapview from "../_component/Elements/Mapp";
 import HotelTimings from "../_component/Elements/RestaurantTimings";
+import SingleLocationMap from "../_component/Elements/MappSimple";
+// import Mapview from "../_component/Elements/Mapp";
 
 // Define screen sizes for style keys
 // elements.ts
@@ -233,5 +234,5 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   contact: ContactForm,
   bookTable: BookTable,
   contactCard: HotelTimings,
-  map: Mapview
+  map: SingleLocationMap
 };

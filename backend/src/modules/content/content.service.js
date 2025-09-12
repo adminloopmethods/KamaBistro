@@ -481,18 +481,34 @@ export const getContentByIdService = async (id) => {
         orderBy: { order: "asc" },
         include: { style: true },
       },
-      children: {
-        orderBy: { order: "asc" },
-        include: {
-          style: true,
-          elements: { orderBy: { order: "asc" }, include: { style: true } },
-        },
-      },
+      // remove children here (we'll fetch recursively) or leave it — it's not required
     },
   });
 
   if (!section) return null;
 
+  // recursive loader
+  const loadChildren = async (parentId) => {
+    const children = await prismaClient.content.findMany({
+      where: { parentId },
+      orderBy: { order: "asc" },
+      include: {
+        style: true,
+        elements: { orderBy: { order: "asc" }, include: { style: true } },
+      },
+    });
+
+    for (const child of children) {
+      child.children = await loadChildren(child.id); // recurse
+    }
+
+    return children;
+  };
+
+  // attach full tree under the root section
+  section.children = await loadChildren(section.id);
+
+  // same transformSection you already have (keeps your random UUID regeneration)
   const transformSection = (section) => {
     const merged = [
       ...(section.children?.map((child) => ({
@@ -501,12 +517,10 @@ export const getContentByIdService = async (id) => {
         givenName: child.givenName,
         hover: child.hover || null,
         aria: child.aria || null,
-        style: child.style
-          ? { ...child.style, id: undefined } // clear id
-          : null,
+        style: child.style ? { ...child.style, id: undefined } : null,
         order: child.order,
         type: "section",
-        elements: transformSection(child).elements,
+        elements: transformSection(child).elements, // recurse
       })) || []),
       ...(section.elements?.map((el) => ({
         id: crypto.randomUUID(),
@@ -514,9 +528,7 @@ export const getContentByIdService = async (id) => {
         content: el.content,
         hover: el.hover || null,
         aria: el.aria || null,
-        style: el.style
-          ? { ...el.style, id: undefined } // clear id
-          : null,
+        style: el.style ? { ...el.style, id: undefined } : null,
         order: el.order,
         type: "element",
       })) || []),
@@ -530,10 +542,8 @@ export const getContentByIdService = async (id) => {
       givenName: section.givenName,
       hover: section.hover || null,
       aria: section.aria || null,
-      style: section.style
-        ? { ...section.style, id: undefined } // clear id
-        : null,
-      elements: merged.map(({ order, type, ...rest }) => rest), // drop order/type
+      style: section.style ? { ...section.style, id: undefined } : null,
+      elements: merged.map(({ order, type, ...rest }) => rest),
     };
   };
 

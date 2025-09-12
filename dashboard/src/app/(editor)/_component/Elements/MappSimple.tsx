@@ -12,7 +12,7 @@ export default function SingleLocationMap() {
             <Map
                 defaultCenter={DEFAULT_CENTER}
                 defaultZoom={15}
-                style={{ width: "100%", height: "400px", borderRadius: "12px" }}
+                style={{ width: "100%", height: "100%", borderRadius: "12px" }}
             >
                 <Marker position={DEFAULT_CENTER} title="LA GRANGE, 9 South La Grange Road IL 60525" />
             </Map>

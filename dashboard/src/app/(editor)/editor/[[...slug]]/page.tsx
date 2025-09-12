@@ -183,7 +183,7 @@ const Editor = () => {
 
           // Find the role for this specific page
           const pageRole = response.user.pageRoles?.find(
-            (pr) => pr.webpageId === currentPageId
+            (pr: any) => pr.webpageId === currentPageId
           );
 
           console.log("Page role for current page:", pageRole);
@@ -195,7 +195,7 @@ const Editor = () => {
           } else {
             // If no specific role found for this page, check if user is a verifier for any page
             const isVerifierUser = response.user.pageRoles?.some(
-              (pr) => pr.role?.name === "VERIFIER"
+              (pr: any) => pr.role?.name === "VERIFIER"
             );
             setIsVerifier(isVerifierUser);
             setUserRole(isVerifierUser ? "VERIFIER" : "EDITOR");
