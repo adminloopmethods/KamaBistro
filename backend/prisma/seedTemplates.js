@@ -33,20 +33,20 @@ import reserveTableThree from "./templateLocationPage3/ReserveTable.json" assert
 
 // Put them in an array
 const webpages = [
-  // // bases
-  // home,
-  // OurGroup,
-  // OurCulture,
-  // PrivateDinning,
-  // Catering,
-  // ContactUs,
+  // bases
+  home,
+  OurGroup,
+  OurCulture,
+  PrivateDinning,
+  Catering,
+  ContactUs,
 
-  // // location 1 pages
-  // homeLanding,
-  // orderOnline,
-  // privateDinning,
-  // landingCatering,
-  // reserveTable,
+  // location 1 pages
+  homeLanding,
+  orderOnline,
+  privateDinning,
+  landingCatering,
+  reserveTable,
 
   // location 2 pages
   homeLandingTwo,
