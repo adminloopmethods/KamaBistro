@@ -2,10 +2,12 @@ import {Router} from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
 import {
+  approveProposedVersion,
   createWebpage,
   getAllContentsController,
   getAllWebpages,
   getContentByIdController,
+  getProposedVersions,
   getWebpageById,
   getWebpageByRoute,
   proposeWebpageUpdate,
@@ -23,12 +25,21 @@ const router = Router();
 
 // router.use(authenticateUser);
 
-router.get("/", authenticateUser, tryCatchWrap(getAllWebpages));
-router.get("/route/:route", getWebpageByRoute);
+// Static routes first
 router.get("/section", authenticateUser, getAllContentsController);
-router.get("/section/:id", authenticateUser, getContentByIdController);
+router.get(
+  "/proposed-versions",
+  authenticateUser,
+  tryCatchWrap(getProposedVersions)
+);
 
+// Parameterized routes in order of specificity
+router.get("/section/:id", authenticateUser, getContentByIdController);
+router.get("/route/:route", getWebpageByRoute);
 router.get("/:id", authenticateUser, tryCatchWrap(getWebpageById));
+
+// CRUD operations
+router.get("/", authenticateUser, tryCatchWrap(getAllWebpages));
 router.post("/", authenticateUser, tryCatchWrap(createWebpage));
 router.put("/:id", authenticateUser, tryCatchWrap(updateWebpageById));
 router.post(
@@ -36,6 +47,12 @@ router.post(
   authenticateUser,
   tryCatchWrap(proposeWebpageUpdate)
 );
+router.post(
+  "/proposed-versions/approve/:id",
+  authenticateUser,
+  tryCatchWrap(approveProposedVersion)
+);
+
 // router.delete("/", clearWebpagesTablesController)
 
 // router.post(

@@ -357,6 +357,13 @@ export const findUserByEmail = async (email) => {
 export const findUserById = async (id) => {
   const user = await prismaClient.user.findUnique({
     where: {id, deletedAt: null},
+    include: {
+      pageRoles: {
+        include: {
+          role: true,
+        },
+      },
+    },
     // include: {
     //   roles: {
     //     include: {
