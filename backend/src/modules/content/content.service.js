@@ -226,12 +226,11 @@ export const getWebpageByIdService = async (id) => {
 };
 
 
-// ---------------- UPDATE WEBPAGE BY ID ----------------
 export const updateWebpageByIdService = async (
   id,
   { name, contents, editedWidth, route, locationId }
 ) => {
-  // Step 1: Update webpage info
+  // 1) Update webpage meta
   await prismaClient.webpage.update({
     where: { id },
     data: {
@@ -242,8 +241,7 @@ export const updateWebpageByIdService = async (
     },
   });
 
-  // ---------------- DELETE MISSING ----------------
-  // collect all incoming section + element IDs
+  // ---------------- COLLECT INCOMING ----------------
   const incomingSectionIds = new Set();
   const incomingElementIds = new Set();
 
@@ -253,7 +251,7 @@ export const updateWebpageByIdService = async (
       if (s.elements) {
         for (const el of s.elements) {
           if (el.name === "section") {
-            collectIncoming([el]); // recurse as section
+            collectIncoming([el]); // nested-as-element
           } else {
             incomingElementIds.add(el.id);
           }
@@ -266,21 +264,81 @@ export const updateWebpageByIdService = async (
   }
   collectIncoming(contents);
 
-  // delete all sections not in incoming
-  await prismaClient.content.deleteMany({
-    where: {
-      webpageId: id,
-      id: { notIn: Array.from(incomingSectionIds) },
-    },
+  // ---------------- FETCH ALL EXISTING SECTIONS (ARBITRARY DEPTH) ----------------
+  // We'll collect {id, parentId} for every Content node that belongs to this webpage
+  const allNodesMap = new Map(); // id -> { id, parentId }
+
+  // Seed: top-level sections (webpageId = id)
+  let seed = await prismaClient.content.findMany({
+    where: { webpageId: id },
+    select: { id: true, parentId: true },
   });
 
-  // delete all elements not in incoming
-  await prismaClient.element.deleteMany({
-    where: {
-      contentRef: { webpageId: id },
-      id: { notIn: Array.from(incomingElementIds) },
-    },
-  });
+  seed.forEach((n) => allNodesMap.set(n.id, n));
+  let queueIds = seed.map((n) => n.id);
+
+  // BFS: repeatedly fetch children of the last level
+  while (queueIds.length) {
+    const children = await prismaClient.content.findMany({
+      where: { parentId: { in: queueIds } },
+      select: { id: true, parentId: true },
+    });
+
+    const newChildren = children.filter((c) => !allNodesMap.has(c.id));
+    if (newChildren.length === 0) break;
+
+    newChildren.forEach((c) => allNodesMap.set(c.id, c));
+    queueIds = newChildren.map((c) => c.id);
+  }
+
+  const allSectionIds = Array.from(allNodesMap.keys());
+
+  // ---------------- FIND SECTIONS TO DELETE ----------------
+  const toDeleteIds = allSectionIds.filter((sid) => !incomingSectionIds.has(sid));
+  if (toDeleteIds.length) {
+    // Build parent -> children map for nodes we fetched
+    const childrenMap = new Map(); // parentId -> [childId,...]
+    for (const node of allNodesMap.values()) {
+      const p = node.parentId || null;
+      if (!childrenMap.has(p)) childrenMap.set(p, []);
+      childrenMap.get(p).push(node.id);
+    }
+
+    // Delete in leaf-first batches to satisfy onDelete: Restrict
+    const toDeleteSet = new Set(toDeleteIds);
+    while (toDeleteSet.size > 0) {
+      const leaves = [];
+      for (const candidate of toDeleteSet) {
+        const kids = childrenMap.get(candidate) || [];
+        // if none of its children are also in toDeleteSet, it's a leaf (safe to delete)
+        const hasChildInDeleteSet = kids.some((k) => toDeleteSet.has(k));
+        if (!hasChildInDeleteSet) leaves.push(candidate);
+      }
+
+      // Safety fallback (shouldn't happen for a tree) to avoid infinite loop:
+      if (leaves.length === 0) {
+        // fallback: delete whatever remains (best-effort) — but normally we should always find leaves
+        leaves.push(...Array.from(toDeleteSet));
+      }
+
+      await prismaClient.content.deleteMany({
+        where: { id: { in: leaves } },
+      });
+
+      leaves.forEach((l) => toDeleteSet.delete(l));
+    }
+  }
+
+  // ---------------- DELETE ELEMENTS NOT INCOMING (FOR ALL SECTIONS) ----------------
+  // Use contentId IN allSectionIds so nested-section elements are also considered
+  if (allSectionIds.length) {
+    await prismaClient.element.deleteMany({
+      where: {
+        contentId: { in: allSectionIds },
+        id: { notIn: Array.from(incomingElementIds) },
+      },
+    });
+  }
 
   // ---------------- UPSERT HELPERS ----------------
   async function upsertSection(section, parentId, order, webpageId) {
@@ -333,12 +391,12 @@ export const updateWebpageByIdService = async (
       },
     });
 
-    // process children and elements
+    // elements & nested-as-elements
     if (section.elements?.length) {
       for (let i = 0; i < section.elements.length; i++) {
         const el = section.elements[i];
         if (el.name === "section") {
-          await upsertSection(el, section.id, i, webpageId); // nested section
+          await upsertSection(el, section.id, i, webpageId);
         } else {
           await prismaClient.element.upsert({
             where: { id: el.id },
@@ -389,7 +447,7 @@ export const updateWebpageByIdService = async (
       }
     }
 
-    // also handle explicit children array if present
+    // explicit children array
     if (section.children?.length) {
       for (let j = 0; j < section.children.length; j++) {
         await upsertSection(section.children[j], section.id, j, webpageId);
@@ -416,6 +474,7 @@ export const updateWebpageByIdService = async (
             include: {
               style: true,
               elements: { orderBy: { order: "asc" }, include: { style: true } },
+              // UI depth in findUnique is mainly for returning to caller; upsert traversal already handled
             },
           },
         },
