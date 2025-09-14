@@ -4,7 +4,7 @@
     "route": "/",
     "locationId": null,
     "createdAt": "2025-09-12T11:30:05.999Z",
-    "updatedAt": "2025-09-14T09:46:53.419Z",
+    "updatedAt": "2025-09-14T11:45:27.598Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
@@ -1398,7 +1398,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "/ourCulture",
+                            "href": "/our-culture",
                             "aria": "Go to Our Culture page."
                         }
                     ]
@@ -2552,7 +2552,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "httpshttps://www.toasttab.com/invoice/lead?rx=7c48efbb-7d54-4b2e-94fc-54d9d3a83fa7&ot=68468485-6c2a-4895-bc77-b26676f24c77://www.toasttabrgba(98, 64, 184, 1).com/invoice/lead?rx=7c48efbb-7d54-4b2e-94fc-54d9d3a83fa7&ot=68468485-6c2a-4895-bc77-b26676f24c77",
+                            "href": "https://www.toasttab.com/invoice/lead?rx=7c48efbb-7d54-4b2e-94fc-54d9d3a83fa7&ot=68468485-6c2a-4895-bc77-b26676f24c77://www.toasttabrgba(98, 64, 184, 1).com/invoice/lead?rx=7c48efbb-7d54-4b2e-94fc-54d9d3a83fa7&ot=68468485-6c2a-4895-bc77-b26676f24c77",
                             "aria": "Go to the inquiry form page"
                         },
                         {
@@ -3403,7 +3403,7 @@
                         "sm": {},
                         "xl": {}
                     },
-                    "href": "/private-dinning",
+                    "href": "/private-events",
                     "aria": "go to private events page"
                 }
             ]
@@ -4774,7 +4774,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": null,
+                            "href": "/catering",
                             "aria": "Go to the inquiry form page"
                         },
                         {
@@ -5528,7 +5528,7 @@
                     "paddingLeft": "20px",
                     "marginBottom": "0",
                     "paddingRight": "20px",
-                    "paddingBottom": "84px",
+                    "paddingBottom": "20px",
                     "justifyContent": "center",
                     "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
                 },
@@ -5929,6 +5929,155 @@
                             "aria": ""
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "id": "cddc48aa-834f-43d9-b31e-7ac517b14835",
+            "name": "section",
+            "givenName": "Know More",
+            "style": {
+                "id": "dd1d1055-cdf4-4522-b428-c05f7fb55176",
+                "xl": {
+                    "top": "0",
+                    "left": "0",
+                    "width": "100%",
+                    "height": "auto",
+                    "display": "flex",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "30px",
+                    "marginRight": "0",
+                    "paddingLeft": "20px",
+                    "marginBottom": "0",
+                    "paddingRight": "20px",
+                    "paddingBottom": "60px",
+                    "justifyContent": "center",
+                    "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
+                },
+                "lg": {
+                    "top": "0",
+                    "left": "0",
+                    "width": "100%",
+                    "height": "auto",
+                    "display": "flex",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "10px",
+                    "marginRight": "0",
+                    "paddingLeft": "20px",
+                    "marginBottom": "0",
+                    "paddingRight": "20px",
+                    "paddingBottom": "60px",
+                    "justifyContent": "center",
+                    "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
+                },
+                "md": {
+                    "top": "0",
+                    "left": "0",
+                    "width": "100%",
+                    "height": "auto",
+                    "display": "flex",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "10px",
+                    "marginRight": "0",
+                    "paddingLeft": "20px",
+                    "marginBottom": "0",
+                    "paddingRight": "20px",
+                    "paddingBottom": "60px",
+                    "justifyContent": "center",
+                    "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
+                },
+                "sm": {
+                    "top": "0",
+                    "left": "0",
+                    "width": "100%",
+                    "height": "auto",
+                    "display": "flex",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "10px",
+                    "marginRight": "0",
+                    "paddingLeft": "20px",
+                    "marginBottom": "0",
+                    "paddingRight": "20px",
+                    "paddingBottom": "60px",
+                    "justifyContent": "center",
+                    "backgroundImage": "linear-gradient(to right, rgba(244,236,227,1), rgba(244,236,227,1))"
+                }
+            },
+            "hover": {
+                "lg": {},
+                "md": {},
+                "sm": {},
+                "xl": {}
+            },
+            "aria": null,
+            "elements": [
+                {
+                    "id": "b373d607-03af-40c5-bdd4-1fc84c374245",
+                    "name": "a",
+                    "style": {
+                        "id": "f12cd079-be27-4a15-ac22-0d96e4cc6015",
+                        "xl": {
+                            "color": "rgba(255, 255, 255, 1)",
+                            "paddingTop": "12px",
+                            "paddingLeft": "30px",
+                            "paddingRight": "30px",
+                            "paddingBottom": "12px",
+                            "backgroundColor": "rgba(174, 144, 96, 1)"
+                        },
+                        "lg": {
+                            "color": "rgba(255, 255, 255, 1)",
+                            "paddingTop": "12px",
+                            "paddingLeft": "30px",
+                            "paddingRight": "30px",
+                            "paddingBottom": "12px",
+                            "backgroundColor": "rgba(174, 144, 96, 1)"
+                        },
+                        "md": {
+                            "color": "rgba(255, 255, 255, 1)",
+                            "paddingTop": "12px",
+                            "paddingLeft": "30px",
+                            "paddingRight": "30px",
+                            "paddingBottom": "12px",
+                            "backgroundColor": "rgba(174, 144, 96, 1)"
+                        },
+                        "sm": {
+                            "color": "rgba(255, 255, 255, 1)",
+                            "paddingTop": "12px",
+                            "paddingLeft": "30px",
+                            "paddingRight": "30px",
+                            "paddingBottom": "12px",
+                            "backgroundColor": "rgba(174, 144, 96, 1)"
+                        }
+                    },
+                    "content": "Know More",
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "href": "/catering",
+                    "aria": null
                 }
             ]
         }
