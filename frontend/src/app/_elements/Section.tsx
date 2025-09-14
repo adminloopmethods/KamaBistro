@@ -150,7 +150,7 @@ const Section: React.FC<SectionProps> = ({
           const Component = mapElement[Element.name];
           return (
             <Component
-              key={i}
+              key={Element.id}
               element={Element}
               style={Element.style?.[activeScreen]}
               currentWidth={activeScreen}
