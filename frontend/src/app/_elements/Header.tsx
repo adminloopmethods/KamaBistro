@@ -22,8 +22,8 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 lg:px-10">
-      <div className="lg:container lg:mx-auto w-full flex bg-black items-center justify-between px-4 lg:rounded-xl">
+    <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 xl:px-10">
+      <div className="xl:container lg:mx-auto w-full flex bg-black items-center justify-between px-4 lg:rounded-xl">
 
         {/* Mobile & Tablet Layout */}
         <div className="flex items-center justify-between w-full lg:hidden">
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
         {/* Desktop Layout (from 1024px up) */}
         <nav
-          className="hidden lg:flex gap-[40px] text-[17px] items-center justify-center space-x-6 w-full relative"
+          className="hidden lg:flex gap-[clamp(10px,4vw,50px)] text-[17px] items-center justify-center w-full relative"
           aria-label="Main navigation"
         >
           {/* Left links */}
