@@ -8,14 +8,42 @@ import { getContentReq } from "@/functionalities/fetch";
 import Header from "../_elements/Header";
 import Footer from "../_elements/Footer";
 import NotFound from "./not-found";
+import HeaderTwo from "../_elements/LandinHeader";
 
-const Editor = () => {
+
+
+const locations: Record<string, string> = {
+  "location1": "e3e1077b-bfd3-468a-b260-58819005fdaa",
+  "location2": "c994612d-9e5d-47a2-afb8-5388e5e7583e",
+  "location3": "255cdf30-db19-4277-a550-27374d008dd2"
+}
+
+const locationNames = new Set(["location1", "location2", "location3"])
+
+
+function detectSlug(slug?: string | string[]): string[] {
+  if (!slug) return [];
+
+  const arr = Array.isArray(slug) ? slug : [slug];
+
+  if (arr.length > 1) {
+    return [arr[1], arr[0]];
+  } else {
+    return [arr[0]];
+  }
+}
+
+
+const RenderPage = () => {
   const params = useParams()
   const containerRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter()
-  const page: string = params.slug ? params.slug[0] : ""
+  const routeLength: number = params.slug ? params.slug.length : 0
+  const singleRoute = routeLength === 1
+  const [page, location] = detectSlug(params.slug) as [string, string?]
+  const isLandingPage = singleRoute && locationNames.has(page)
+
   const [pageNotFound, setPageNotFound] = useState(false);
-  // const [widthSize, setWidthSize] = useState<number>(0)
 
   const {
     width,
@@ -50,11 +78,13 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
-    console.log(page)
-    // if (page) {
     async function getContentfromServer() {
       try {
-        const response: any = await getContentReq(page)
+        const response: any =
+          await ((isLandingPage) ?
+            getContentReq("", locations[page]) :
+            getContentReq(page ?? "", location ? locations[location] : undefined));
+
         console.log(JSON.stringify(response))
         if (response.ok) {
           websiteContent.setWebpage(response.webpage)
@@ -70,7 +100,6 @@ const Editor = () => {
     }
 
     getContentfromServer()
-    // }
   }, [page])
 
   if (pageNotFound) {
@@ -87,7 +116,11 @@ const Editor = () => {
     >
       {/* website */}
       <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
-        <Header />
+        {
+          (isLandingPage) ?
+            <HeaderTwo /> :
+            <Header />
+        }
 
 
         <div
@@ -101,7 +134,7 @@ const Editor = () => {
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4", // stone-200
             backgroundSize: "15px 15px", // size of grid squares
-
+            ...(isLandingPage ? { paddingTop: width.widthSize > 800 ?"100px":"50px" } : {})
           }}
           className="bg-stone-200 poppins-text"
         >
@@ -127,4 +160,4 @@ const Editor = () => {
   );
 };
 
-export default Editor;
+export default RenderPage;

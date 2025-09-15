@@ -315,26 +315,30 @@
 // export default seedDB;
 
 import prismaClient from "../src/config/dbConfig.js";
-import {EncryptData} from "../src/helper/bcryptManager.js";
-import {randomUUID} from "crypto";
+import { EncryptData } from "../src/helper/bcryptManager.js";
+import { randomUUID } from "crypto";
 
 const email = process.env.SUPER_ADMIN_EMAIL;
 const pass = process.env.SUPER_ADMIN_PASSWORD;
 
-const roles = [{name: "EDITOR"}, {name: "VERIFIER"}];
-const locations = [{name: "Location1"}, {name: "Location2"}, {name: "Location3"}];
+const roles = [{ name: "EDITOR" }, { name: "VERIFIER" }];
+const locations = [
+  { name: "Location1" },
+  { name: "Location2" },
+  { name: "Location3" }
+];
 const webpages = [
-  {name: "Home", route: "/"},
-  {name: "About", route: "/about"},
-  {name: "Contact", route: "/contact"},
+  { name: "Home", route: "/" },
+  { name: "About", route: "/about" },
+  { name: "Contact", route: "/contact" },
 ];
 
 // Helper function to upsert roles
 const upsertRole = async (role) => {
   await prismaClient.role.upsert({
-    where: {name: role.name},
+    where: { name: role.name },
     update: {},
-    create: {name: role.name},
+    create: { name: role.name },
   });
   console.log(`Ensured role: ${role.name}`);
 };
@@ -342,12 +346,12 @@ const upsertRole = async (role) => {
 // Helper fuction to upsert location
 const upsertLocation = async (location) => {
   const existingLocation = await prismaClient.location.findFirst({
-    where: {name: location.name},
+    where: { name: location.name },
   });
 
   if (!existingLocation) {
     await prismaClient.location.create({
-      data: {name: location.name},
+      data: { name: location.name },
     });
     console.log(`Created location: ${location.name}`);
   } else {
@@ -390,7 +394,7 @@ const seedDB = async () => {
 
     // Upsert super admin user
     await prismaClient.user.upsert({
-      where: {email},
+      where: { email },
       update: {
         password: hashedPassword,
         isSuperUser: true,

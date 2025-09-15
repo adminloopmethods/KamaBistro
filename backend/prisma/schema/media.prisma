@@ -5,7 +5,7 @@ model Media {
   type       MediaType
   width      Int?
   height     Int?
-  altText    Json? // { en: "Alt text", ar: "نص بديل" }
+  altText    Json? 
   createdAt  DateTime  @default(now())
   // Relation
   // resource   Resource  @relation(fields: [resourceId], references: [id], onDelete: Cascade)

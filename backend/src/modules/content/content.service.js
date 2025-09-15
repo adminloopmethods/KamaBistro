@@ -499,15 +499,33 @@ export const getWebpageVersionsService = async (webpageId) => {
 };
 
 // ---------------- FIND WEBPAGE ID BY ROUTE ----------------
-export const findWebpageIdByRouteService = async (route) => {
-  console.log(route);
-  const page = await prismaClient.webpage.findUnique({
-    where: { route },
-    select: { id: true },
-  });
+export const findWebpageIdByRouteService = async (route, location) => {
+  let page;
+
+  // Normalize falsey location values
+  const isNoLocation =
+    !location || location === "false" || location === "null" || location === "";
+
+  if (isNoLocation) {
+    // Case: general (non-location) page
+    page = await prismaClient.webpage.findFirst({
+      where: {
+        route,
+        OR: [{ locationId: null }, { locationId: "" }],
+      },
+      select: { id: true },
+    });
+  } else {
+    // Case: specific location page
+    page = await prismaClient.webpage.findFirst({
+      where: { route, locationId: location },
+      select: { id: true },
+    });
+  }
 
   return page ? page.id : null;
 };
+
 
 // get sections
 // ---------------- GET ALL CONTENTS ----------------
@@ -615,7 +633,7 @@ export const createProposedVersionService = async (
   editorId,
   data
 ) => {
-  const {name, contents, editedWidth, route} = data;
+  const { name, contents, editedWidth, route } = data;
   const webpage = await prismaClient.webpage.findUnique({
     where: { id: webpageId },
     include: {
@@ -682,7 +700,7 @@ const sendVerificationNotification = async (
 
 export const getProposedVersionsService = async (verifierId) => {
   return await prismaClient.proposedVersion.findMany({
-    where: {verifierId},
+    where: { verifierId },
     include: {
       webpage: {
         select: {
@@ -699,18 +717,18 @@ export const getProposedVersionsService = async (verifierId) => {
         },
       },
     },
-    orderBy: {createdAt: "desc"},
+    orderBy: { createdAt: "desc" },
   });
 };
 
 export const getProposedVersionByIdService = async (id) => {
   return await prismaClient.proposedVersion.findUnique({
-    where: {id},
+    where: { id },
   });
 };
 
 export const deleteProposedVersionService = async (id) => {
   return await prismaClient.proposedVersion.delete({
-    where: {id},
+    where: { id },
   });
 };

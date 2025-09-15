@@ -1,11 +1,13 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/favicon.png";
+import CustomSelect from "./Select";
+import { useRouter } from "next/navigation";
 
 // Top header nav
 const topNavLinks = [
@@ -27,10 +29,21 @@ const bottomNavLinks = [
   { label: "Catering", href: "/landing/caterings" },
 ];
 
-const Header: React.FC = () => {
+const address: Record<string, string> = {
+  "location1": "9 South La, Grange Road, IL",
+  "location2": "9 South La, Grange Road, GL",
+  "location3": "9 South La, Grange Road, OL",
+}
+
+const HeaderTwo: React.FC = () => {
   const [topMenuOpen, setTopMenuOpen] = useState(false);
   const [bottomMenuOpen, setBottomMenuOpen] = useState(false);
-  const [location, setLocation] = useState("Select Location");
+  const [location, setLocation] = useState<string>("")
+  const router = useRouter()
+
+  useEffect(() => {
+    setLocation(localStorage.getItem("location") || "")
+  }, [])
 
   return (
     <header className="w-full fixed z-50">
@@ -62,21 +75,29 @@ const Header: React.FC = () => {
       </div>
 
       {/* ===== Bottom Header ===== */}
-      <div className="flex flex-col lg:flex-row justify-between items-center bg-black text-white px-4 lg:px-10 py-2">
+      <div className="flex lg:flex-row justify-between items-center bg-black text-white px-4 lg:px-10 py-2">
         {/* Left: Location selector */}
-        <div className="flex items-center space-x-2 w-full lg:w-auto mb-2 lg:mb-0">
-          <span className="font-semibold">Location:</span>
-          <select
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            className="px-3 py-1 rounded border border-gray-300"
-          >
-            <option>Select Location</option>
-            <option>New York</option>
-            <option>Los Angeles</option>
-            <option>Chicago</option>
-            <option>San Francisco</option>
-          </select>
+        <div className="flex flex-col items-center space-x-2 w-full lg:w-auto mb-2 lg:mb-0">
+
+          <CustomSelect options={[
+            { value: "location1", label: "Wicker Park" },
+            { value: "location2", label: "location2" },
+            { value: "location3", label: "location3" },
+          ]}
+            onChange={(value) => {
+              localStorage.setItem("location", value)
+              setLocation(value)
+              router.push(value)
+            }}
+            firstOption="Select Location"
+            Default={location || ""}
+            // baseClasses="flex"
+            addStyleClass="flex-row"
+            styleClasses="bg-transparent text-white flex justify-between gap-2 items-center border border-stone-300/30 min-w-[200px]"
+            listItemClass="text-black hover:bg-blue-100 rounded-lg"
+            selectedDisplayClass="text-white font-semibold text-lg"
+          />
+          <span className="text-white">{address[location]}</span>
         </div>
 
         {/* Right: Nav links */}
@@ -142,4 +163,4 @@ const Header: React.FC = () => {
   );
 };
 
-export default Header;
+export default HeaderTwo;

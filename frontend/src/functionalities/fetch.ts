@@ -99,13 +99,13 @@ const ContentType = {
 
 // API Calls
 
-export async function getContentReq(id: string, location?: boolean): Promise<ApiResponse> {
+export async function getContentReq(route: string, location?: string | undefined): Promise<ApiResponse> {
     let routeId: string;
 
-    if (id === "") {
+    if (route === "") {
         routeId = location ? "landingpage" : "home";
     } else {
-        routeId = id;
+        routeId = route;
     }
 
     const url = `${endpoint.route("content")}${routeId}?location=${location ?? false}`;
