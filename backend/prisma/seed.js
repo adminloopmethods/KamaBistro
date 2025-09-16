@@ -323,9 +323,9 @@ const pass = process.env.SUPER_ADMIN_PASSWORD;
 
 const roles = [{ name: "EDITOR" }, { name: "VERIFIER" }];
 const locations = [
-  { name: "Location1" },
-  { name: "Location2" },
-  { name: "Location3" }
+  { name: "wicker-park" },
+  { name: "la-grange" },
+  { name: "west-loop" }
 ];
 const webpages = [
   { name: "Home", route: "/" },

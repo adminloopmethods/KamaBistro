@@ -1,19 +1,19 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, JSX } from "react";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/favicon.png";
 import CustomSelect from "./Select";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 // Top header nav
 const topNavLinks = [
   { label: "Our Group", href: "/our-group" },
   { label: "Culture", href: "/our-culture" },
-  { label: "Private Events", href: "/private-dinning" },
+  { label: "Private Events", href: "/private-events" },
   { label: "Catering", href: "/catering" },
   { label: "Contact", href: "/contact" },
   // { label: "Career", href: "/career" },
@@ -21,29 +21,46 @@ const topNavLinks = [
 
 // Bottom header nav
 const bottomNavLinks = [
-  { label: "Homepage", href: "/landing" },
-  { label: "Menu", href: "/landing/menu" },
-  { label: "Reserve", href: "/landing/reservetable" },
-  { label: "Order Online", href: "/landing/order-online" },
-  { label: "Private Events", href: "/landing/privatedinning" },
-  { label: "Catering", href: "/landing/caterings" },
+  { label: "Homepage", href: "/", },
+  { label: "Menu", href: "/menu", },
+  { label: "Reserve", href: "/reserve-table", },
+  { label: "Order Online", href: "/order-online", },
+  { label: "Private Events", href: "/private-events", },
+  { label: "Catering", href: "/caterings", },
 ];
 
 const address: Record<string, string> = {
-  "location1": "9 South La, Grange Road, IL",
-  "location2": "9 South La, Grange Road, GL",
-  "location3": "9 South La, Grange Road, OL",
+  "wicker-park": "1560 N. Milwaykee Ave., Chicago, IL",
+  "la-grange": "9 South La Grange Road, La Grange, IL",
+  "west-loop": "812 W Randolph St, Chicago, IL",
 }
 
 const HeaderTwo: React.FC = () => {
+  const router = useRouter()
+  const params = useParams()
   const [topMenuOpen, setTopMenuOpen] = useState(false);
   const [bottomMenuOpen, setBottomMenuOpen] = useState(false);
   const [location, setLocation] = useState<string>("")
-  const router = useRouter()
+  const [navLinks, setNavLinks] = useState<{ label: string, href: string }[]>(
+    bottomNavLinks.map((e) => ({
+      ...e,
+      href: `/${params.slug ? params.slug[0] : ""}${e.href}`,
+    }))
+  );
+
 
   useEffect(() => {
     setLocation(localStorage.getItem("location") || "")
   }, [])
+
+  useEffect(() => {
+    setNavLinks(
+      bottomNavLinks.map((e) => ({
+        ...e,
+        href: `/${params.slug ? params.slug[0] : ""}${e.href}`,
+      }))
+    );
+  }, [params.slug]);
 
   return (
     <header className="w-full fixed z-50">
@@ -77,12 +94,12 @@ const HeaderTwo: React.FC = () => {
       {/* ===== Bottom Header ===== */}
       <div className="flex lg:flex-row justify-between items-center bg-black text-white px-4 lg:px-10 py-2">
         {/* Left: Location selector */}
-        <div className="flex flex-col items-center space-x-2 w-full lg:w-auto mb-2 lg:mb-0">
+        <div className="flex flex-col justify-start space-x-2 w-full lg:w-auto mb-2 lg:mb-0">
 
           <CustomSelect options={[
-            { value: "location1", label: "Wicker Park" },
-            { value: "location2", label: "location2" },
-            { value: "location3", label: "location3" },
+            { value: "wicker-park", label: "Wicker Park" },
+            { value: "la-grange", label: "La Grange" },
+            { value: "west-loop", label: "West Loop" },
           ]}
             onChange={(value) => {
               localStorage.setItem("location", value)
@@ -91,18 +108,18 @@ const HeaderTwo: React.FC = () => {
             }}
             firstOption="Select Location"
             Default={location || ""}
-            // baseClasses="flex"
+            // baseClasses="border"
             addStyleClass="flex-row"
-            styleClasses="bg-transparent text-white flex justify-between gap-2 items-center border border-stone-300/30 min-w-[200px]"
+            styleClasses="bg-transparent text-white flex justify-between gap-2 items-center  min-w-[200px]"
             listItemClass="text-black hover:bg-blue-100 rounded-lg"
             selectedDisplayClass="text-white font-semibold text-lg"
           />
-          <span className="text-white">{address[location]}</span>
+          <span className="text-white/60 text-[11px]">{address[location]}</span>
         </div>
 
         {/* Right: Nav links */}
         <div className="hidden lg:flex items-center space-x-6">
-          {bottomNavLinks.map((link) => (
+          {navLinks.map((link) => (
             <Link
               key={link.label}
               href={link.href}
@@ -140,7 +157,7 @@ const HeaderTwo: React.FC = () => {
             className="lg:hidden bg-white shadow-md overflow-hidden"
           >
             <div className="flex flex-col space-y-4 px-4 py-4">
-              {bottomNavLinks.map((link) => (
+              {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   href={link.href}
