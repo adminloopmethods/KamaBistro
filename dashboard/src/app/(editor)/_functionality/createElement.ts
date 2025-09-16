@@ -211,6 +211,7 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   line: () => gED("division", ""),
   contactForm: () => gED("contact", ""),
   bookTable: () => gED("bookTable", ""),
+  bookTableLa: () => gED("bookTableLa", ""),
   contactCard: () => gED("contactCard", ""),
   mapView: () => gED("map", ""),
 };
@@ -233,6 +234,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   division: Division,
   contact: ContactForm,
   bookTable: BookTable,
-  contactCard: HotelTimings,
+  bookTableLa: BookTable,
   map: SingleLocationMap
 };

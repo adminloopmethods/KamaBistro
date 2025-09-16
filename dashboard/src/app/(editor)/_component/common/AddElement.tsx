@@ -46,7 +46,8 @@ const AddElement: React.FC<AddElementProps> = ({ controller, canAddSection }) =>
         { label: "Video", value: "video" },
         { label: "Line", value: "line" },
         { label: "Contact Form", value: "contactForm" },
-        { label: "Table Booking", value: "bookTable" },
+        { label: "Table Booking at Wicker Park", value: "bookTable" },
+        { label: "Table Booking at La Grange", value: "bookTableLa" },
         { label: "Contact Card", value: "contactCard" },
         { label: "Map", value: "mapView" },
     ];

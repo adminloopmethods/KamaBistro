@@ -405,7 +405,7 @@ const Section: React.FC<SectionProps> = ({
             const Component = mapElement[Element.name];
             return (
               <Component
-                key={i}
+                key={i + Element.id}
                 element={Element}
                 updateContent={updateTheDataOfElement}
                 updateElement={updateElement}

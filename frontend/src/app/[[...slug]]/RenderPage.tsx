@@ -8,6 +8,14 @@ import NotFound from "./not-found";
 import HeaderTwo from "../_elements/LandinHeader";
 import { MoonLoader } from "react-spinners";
 
+
+const locations: Record<string, string> = {
+  "wicker-park": "e3e1077b-bfd3-468a-b260-58819005fdaa",
+  "la-grange": "c994612d-9e5d-47a2-afb8-5388e5e7583e",
+  "west-loop": "255cdf30-db19-4277-a550-27374d008dd2",
+};
+
+
 const Section = lazy(() => import("../_elements/Section"));
 
 const classifyWidth = (w: number) => {
@@ -26,12 +34,15 @@ export default function RenderPage({
 }) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [pageNotFound, setPageNotFound] = useState(!initialData);
+  const locationsSet = new Set(Object.keys(locations))
 
   const {
     width,
     websiteContent,
     currentWidth: activeScreen,
   } = useMyContext();
+
+  console.log(websiteContent.webpage)
 
   // Load initial server data into context
   useEffect(() => {
@@ -76,6 +87,10 @@ export default function RenderPage({
     [websiteContent, activeScreen]
   );
 
+  const basePagesCondition = (slugParams && slugParams.length === 1 && !locationsSet.has(slugParams[0])) || slugParams === undefined
+
+  console.log(slugParams)
+
   if (pageNotFound) {
     return <NotFound />;
   }
@@ -84,7 +99,7 @@ export default function RenderPage({
     <div ref={containerRef} className="flex h-screen relative z-10 overflow-x-hidden">
       <div className="scroll-one bg-zinc-800 flex-1">
         {/* Header based on landing vs normal */}
-        {slugParams && slugParams.length === 1 ? <HeaderTwo /> : <Header />}
+        {basePagesCondition ? <Header /> : <HeaderTwo />}
 
         <div
           style={{
@@ -95,7 +110,7 @@ export default function RenderPage({
             transition: ".1s linear all",
             backgroundColor: "#e7e5e4",
             backgroundSize: "15px 15px",
-            paddingTop: width.widthSize > 800 ? "100px" : "50px",
+            ...(basePagesCondition ? {} : { paddingTop: width.widthSize > 800 ? "100px" : "50px" }),
           }}
           className="bg-stone-200 poppins-text"
         >

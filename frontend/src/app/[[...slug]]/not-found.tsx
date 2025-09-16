@@ -1,4 +1,6 @@
 // app/404.tsx
+"use client"
+
 import Link from "next/link";
 import { JSX, MouseEvent } from "react";
 
