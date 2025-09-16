@@ -15,7 +15,7 @@ const topNavLinks = [
   { label: "Culture", href: "/our-culture" },
   { label: "Private Events", href: "/private-events" },
   { label: "Catering", href: "/catering" },
-  { label: "Contact", href: "/contact" },
+  { label: "Contact", href: "/contact-us" },
   // { label: "Career", href: "/career" },
 ];
 
