@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useState, CSSProperties } from "react";
-import { useMyContext, webpageType } from "@/Context/EditorContext";
-import { useParams } from "next/navigation";
+import React, {useRef, useEffect, useState, CSSProperties} from "react";
+import {useMyContext, webpageType} from "@/Context/EditorContext";
+import {useParams} from "next/navigation";
 import {
   createContentReq,
   getLocationsReq,
@@ -11,7 +11,7 @@ import {
   proposeUpdateReq,
   saveContentReq,
 } from "@/functionality/fetch";
-import { toastWithUpdate } from "@/functionality/ToastWithUpdate";
+import {toastWithUpdate} from "@/functionality/ToastWithUpdate";
 import Section from "../../_component/Elements/Section";
 import {
   CreateSection,
@@ -24,24 +24,23 @@ import DimensionToolbar, {
   updateStylesType,
 } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
-import { test } from "@/assets/test";
-import { ArrowLeft } from "lucide-react";
+import {test} from "@/assets/test";
+import {ArrowLeft} from "lucide-react";
 
-import { CiMobile1 } from "react-icons/ci";
-import { IoIosTabletPortrait } from "react-icons/io";
-import { CiLaptop } from "react-icons/ci";
-import { CiDesktop } from "react-icons/ci";
-import { toast, Toaster } from "sonner";
-import { LocationType } from "@/app/(dashboard)/users/CreateNewUser";
+import {CiMobile1} from "react-icons/ci";
+import {IoIosTabletPortrait} from "react-icons/io";
+import {CiLaptop} from "react-icons/ci";
+import {CiDesktop} from "react-icons/ci";
+import {toast, Toaster} from "sonner";
+import {LocationType} from "@/app/(dashboard)/users/CreateNewUser";
 import CustomSelect from "@/app/_common/CustomSelect";
-import { preSection } from "@/assets/preSection.js";
-import { useDraggable } from "../../_component/common/useDraggable";
+import {preSection} from "@/assets/preSection.js";
+import {useDraggable} from "../../_component/common/useDraggable";
 import HoverToolbar from "../../_component/common/HoverToolbar";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 import ChildElements from "../../_component/common/ChildElements";
-import { isAdmin, verifyAdminStatus } from "@/utils/isAdmin";
+import {isAdmin, verifyAdminStatus} from "@/utils/isAdmin";
 import Mapview from "../../_component/Elements/Mapp";
-
 
 const renderInput = (
   label: string,
@@ -75,7 +74,7 @@ const Editor = () => {
   const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
   const [pageWidth, setPageWidth] = useState<number | string>("100%"); // decides the width/screen of the page
   const [locations, setLocations] = useState<LocationType[]>([
-    { id: "", name: "" },
+    {id: "", name: ""},
   ]);
   const [currentWidth, setCurrentWidth] = useState<string>("");
   const [onHoverToolbar, setOnHoverToolbar] = useState<boolean>(false);
@@ -98,7 +97,7 @@ const Editor = () => {
     setContainerRef,
   } = useMyContext();
 
-  const { webpage, setWebpage } = websiteContent;
+  const {webpage, setWebpage} = websiteContent;
 
   console.log("webpage", webpage);
 
@@ -115,7 +114,7 @@ const Editor = () => {
   const handleSave = async () => {
     saveAllSection();
 
-    const bodyPayload: Record<string, any> = { data: { ...webpage } };
+    const bodyPayload: Record<string, any> = {data: {...webpage}};
     if (!bodyPayload.data.name) {
       toast.error("Webpage name is required");
       return;
@@ -275,12 +274,12 @@ const Editor = () => {
       if (!prev) return null;
       const newArray = prev.contents.map((e: any) => {
         if (e.id === id) {
-          return { ...e, givenName: name };
+          return {...e, givenName: name};
         } else {
           return e;
         }
       });
-      return { ...prev, contents: newArray };
+      return {...prev, contents: newArray};
     });
   };
 
@@ -290,7 +289,7 @@ const Editor = () => {
       const newSet = prev.contents.filter(
         (element: any) => element.id !== sectionId
       );
-      return { ...prev, contents: newSet };
+      return {...prev, contents: newSet};
     });
   };
 
@@ -300,7 +299,7 @@ const Editor = () => {
     }
     if (sectionStyleSetter) {
       sectionStyleSetter((prev: CSSProperties) => {
-        return { ...prev, ...newStyle };
+        return {...prev, ...newStyle};
       });
     }
   };
@@ -346,7 +345,7 @@ const Editor = () => {
   useEffect(() => {
     ///// update and save logic
     async function updateData() {
-      const bodyPayload: Record<string, any> = { ...webpage };
+      const bodyPayload: Record<string, any> = {...webpage};
       // console.log(JSON.stringify(bodyPayload))
       if (!bodyPayload.name) return toast.error("Webpage name is required");
       if (!bodyPayload.route) return toast.error("Webpage route is required");
@@ -367,7 +366,7 @@ const Editor = () => {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         console.log("Successfully sent content:", response);
-      } catch (error) { }
+      } catch (error) {}
     }
 
     if (saveData) {
@@ -437,7 +436,7 @@ const Editor = () => {
           [name]: value,
         };
 
-      return { ...prev, [name]: value };
+      return {...prev, [name]: value};
     });
   };
 
@@ -459,32 +458,36 @@ const Editor = () => {
           <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
             <button
               onClick={() => applyXLScreen()}
-              className={`${styleForScreenIcons} ${activeScreen === "xl" && "bg-stone-500"
-                }`}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "xl" && "bg-stone-500"
+              }`}
               title="1200px+"
             >
               <CiDesktop />
             </button>
             <button
               onClick={() => applyLGScreen()}
-              className={`${styleForScreenIcons} ${activeScreen === "lg" && "bg-stone-500"
-                }`}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "lg" && "bg-stone-500"
+              }`}
               title="1024px"
             >
               <CiLaptop />
             </button>
             <button
               onClick={() => applyMDScreen()}
-              className={`${styleForScreenIcons} ${activeScreen === "md" && "bg-stone-500"
-                }`}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "md" && "bg-stone-500"
+              }`}
               title="600px"
             >
               <IoIosTabletPortrait />
             </button>
             <button
               onClick={() => applySMScreen()}
-              className={`${styleForScreenIcons} ${activeScreen === "sm" && "bg-stone-500"
-                }`}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "sm" && "bg-stone-500"
+              }`}
               title="390px"
             >
               <CiMobile1 />
@@ -649,7 +652,9 @@ const Editor = () => {
               )}
               <CustomSelect
                 options={
-                  locations?.map((e) => ({ label: e.name, value: e.id })).concat([{ label: "Base Page", value: "" }]) || []
+                  locations
+                    ?.map((e) => ({label: e.name, value: e.id}))
+                    .concat([{label: "Base Page", value: ""}]) || []
                 }
                 firstOption="Set Location"
                 disableFirstValue={true}

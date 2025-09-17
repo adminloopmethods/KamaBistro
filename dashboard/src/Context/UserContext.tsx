@@ -31,7 +31,7 @@ export const UserProvider: React.FC<{children: React.ReactNode}> = ({
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // console.log(user, "user in context");
+  console.log(user, "user in context");
 
   useEffect(() => {
     // Fetch user data on component mount
@@ -43,7 +43,7 @@ export const UserProvider: React.FC<{children: React.ReactNode}> = ({
           // For now, we'll just set a mock user
           // In a real app, you would make an API call to get user info
           const userData = await getUserProfileReq(); // Implement this function
-          // console.log(userData, "fetched user data");
+          console.log(userData, "fetched user data");
           setUser({
             id: userData?.user?.id,
             name: userData?.user?.name,

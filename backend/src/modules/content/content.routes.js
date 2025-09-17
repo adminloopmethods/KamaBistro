@@ -23,36 +23,31 @@ import {authenticateUser} from "../../helper/authMiddleware.js";
 
 const router = Router();
 
-// router.use(authenticateUser);
-
-// Static routes first
-router.get("/section", authenticateUser, getAllContentsController);
-router.get(
-  "/proposed-versions",
-  authenticateUser,
-  tryCatchWrap(getProposedVersions)
-);
-
-// Parameterized routes in order of specificity
-router.get("/section/:id", authenticateUser, getContentByIdController);
+/// Public route (no authentication)
 router.get("/route/:route", getWebpageByRoute);
-router.get("/:id", authenticateUser, tryCatchWrap(getWebpageById));
 
-// CRUD operations
-router.get("/", authenticateUser, tryCatchWrap(getAllWebpages));
-router.post("/", authenticateUser, tryCatchWrap(createWebpage));
-router.put("/:id", authenticateUser, tryCatchWrap(updateWebpageById));
-router.post(
-  "/propose/:id",
-  authenticateUser,
-  tryCatchWrap(proposeWebpageUpdate)
-);
+// Authenticated routes
+router.use(authenticateUser);
+
+// Collection routes
+router.get("/", tryCatchWrap(getAllWebpages));
+router.post("/", tryCatchWrap(createWebpage));
+
+// Section routes
+router.get("/section", getAllContentsController);
+router.get("/section/:id", getContentByIdController);
+
+// Proposed versions routes
+router.get("/proposed-versions", tryCatchWrap(getProposedVersions));
 router.post(
   "/proposed-versions/approve/:id",
-  authenticateUser,
   tryCatchWrap(approveProposedVersion)
 );
 
+// Individual webpage routes
+router.get("/:id", tryCatchWrap(getWebpageById));
+router.put("/:id", tryCatchWrap(updateWebpageById));
+router.post("/propose/:id", tryCatchWrap(proposeWebpageUpdate));
 // router.delete("/", clearWebpagesTablesController)
 
 // router.post(
