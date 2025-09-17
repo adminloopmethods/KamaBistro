@@ -590,7 +590,7 @@ const Editor = () => {
 
               return (
                 <Section
-                  key={i}
+                  key={section.id}
                   element={section.elements}
                   section={section}
                   style={section.style[activeScreen]}
