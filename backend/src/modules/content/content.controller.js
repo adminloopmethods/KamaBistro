@@ -97,34 +97,25 @@ export const updateWebpageById = async (req, res) => {
 export const getWebpageByRoute = async (req, res) => {
   try {
     const { route } = req.params;
-    const { location } = req.query; // frontend sends ?location=true or ?location=false
+    const { location } = req.query; // frontend sends ?location=<locationId> or nothing
 
-    // Get the ID from route
-    const id = await findWebpageIdByRouteService(
-      route === "home" ? "/" : `/${route}`
-    );
+    // Normalize route
+    const normalizedRoute = route === "home" ? "/" : `/${route}`;
+
+    // Get the ID from route + location handling
+    const id = await findWebpageIdByRouteService(normalizedRoute, location);
+    console.log(id)
 
     if (!id) {
-      logger.warn(`Webpage with route '${route}' not found.`);
+      logger.warn(`Webpage with route '${normalizedRoute}' not found.`);
       return res.status(404).json({ error: "Webpage not found." });
     }
 
-    // Fetch webpage
+    // Fetch webpage by ID
     const webpage = await getWebpageByIdService(id);
 
     if (!webpage) {
       return res.status(404).json({ error: "Webpage not found." });
-    }
-
-    // Apply location filter
-    if (location === "true" && !webpage.locationId) {
-      // frontend asked for location pages but this one has no location
-      return res.status(404).json({ error: "Webpage not found for location:true." });
-    }
-
-    if (location === "false" && webpage.locationId) {
-      // frontend asked for non-location pages but this one has locationId
-      return res.status(404).json({ error: "Webpage not found for location:false." });
     }
 
     res.json({ webpage });
@@ -133,7 +124,6 @@ export const getWebpageByRoute = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch webpage by route." });
   }
 };
-
 
 // ---------------- GET ALL CONTENTS ----------------
 export const getAllContentsController = async (req, res) => {

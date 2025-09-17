@@ -26,6 +26,9 @@ type CustomSelectProps = {
     baseClasses?: string;
     addStyleClass?: string;
     addBaseClass?: string;
+    listItemClass?: string; // NEW: classes for <li>
+    listItemStyle?: React.CSSProperties; // NEW: inline styles
+    selectedDisplayClass?: string;
 };
 
 const CustomSelect: React.FC<CustomSelectProps> = ({
@@ -39,6 +42,9 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     baseClasses,
     addStyleClass = "",
     addBaseClass = "",
+    listItemClass = "",
+    listItemStyle = {},
+    selectedDisplayClass
 }) => {
     const [selected, setSelected] = useState<string>(Default || firstValue);
     const [open, setOpen] = useState(false);
@@ -129,15 +135,17 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                     onClick={handleToggle}
                     className={
                         styleClasses ||
-                        `w-full text-left px-3 py-2 rounded-3xl border border-gray-300 shadow-sm bg-white flex items-center justify-between focus:outline-none ${addStyleClass}`
+                        `w-full text-left px-3 py-2 
+                        rounded-3xl border border-gray-50 
+                        shadow-sm bg-white flex items-center 
+                        justify-between focus:outline-none 
+                        ${addStyleClass}`
                     }
                 >
                     <span
-                        className={
-                            selected === firstValue
-                                ? "text-gray-500 dark:text-gray-500"
-                                : "text-stone-700 text-sm"
-                        }
+                        className={selectedDisplayClass || (selected === firstValue
+                            ? "text-gray-500 dark:text-gray-500"
+                            : "text-stone-700 text-sm")}
                     >
                         {getLabel(selected)}
                     </span>
@@ -146,33 +154,38 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
                 {open && (
                     <ul
-                        className={`absolute ${dropUp ? "bottom-full mb-1" : "top-full mt-1"
-                            } w-full overflow-auto bg-white border border-gray-300 rounded-2xl shadow-lg z-10`}
+                        className={`absolute ${dropUp ? "bottom-full mb-1" : "top-full mt-1"} w-full overflow-auto bg-white border border-gray-300 rounded-2xl shadow-lg z-10`}
                         style={{ maxHeight: dropdownMaxHeight }}
                     >
                         {disableFirstValue ? (
-                            <li className="px-3 py-2 text-gray-400 cursor-not-allowed select-none">
+                            <li className={`px-3 py-2 text-gray-400 cursor-not-allowed select-none ${listItemClass}`}
+                                style={listItemStyle}
+                            >
                                 {firstOption}
                             </li>
                         ) : (
                             <li
                                 onClick={() => handleSelect(firstValue)}
-                                className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                                className={`px-3 py-2 hover:bg-gray-100 cursor-pointer ${listItemClass}`}
+                                style={listItemStyle}
                             >
                                 {firstOption}
                             </li>
                         )}
+
                         {options.map((opt) => (
                             <li
                                 key={opt.value}
                                 onClick={() => handleSelect(opt.value, opt.onClick)}
-                                className={`px-3 py-2 hover:bg-gray-100 cursor-pointer dark:text-[black] ${selected === opt.value ? "bg-gray-100 font-medium" : ""
-                                    }`}
+                                className={`px-3 py-2 hover:bg-gray-100 cursor-pointer ${selected === opt.value ? "bg-gray-100 font-medium" : ""
+                                    } ${listItemClass}`}
+                                style={listItemStyle}
                             >
                                 {opt.label}
                             </li>
                         ))}
                     </ul>
+
                 )}
             </div>
         </div>

@@ -9,7 +9,7 @@ interface BookTableProps {
   restref?: string;
 }
 
-const BookTableWicker: React.FC<BookTableProps> = ({ restref = "1320541" }) => {
+const BookTableLaGrange: React.FC<BookTableProps> = ({ restref = "59356" }) => {
   const [time, setTime] = useState<string>("19:00");
 
   // Store date as Date object
@@ -139,4 +139,4 @@ function to12h(hhmm: string): string {
   return `${hh}:${m.toString().padStart(2, "0")} ${am ? "AM" : "PM"}`;
 }
 
-export default BookTableWicker;
+export default BookTableLaGrange;

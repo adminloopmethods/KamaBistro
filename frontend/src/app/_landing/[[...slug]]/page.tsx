@@ -6,7 +6,7 @@ import { useMyContext } from "@/Context/ApiContext";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 import NotFound from "./not-found";
-import Header from "@/app/_elements/LandinHeader";
+import HeaderTwo from "@/app/_elements/LandinHeader";
 import Footer from "@/app/_elements/LocationFooter";
 
 const Editor = () => {
@@ -56,7 +56,7 @@ const Editor = () => {
         async function getContentfromServer() {
             try {
                 console.log(page)
-                const response: any = await getContentReq(page, true)
+                const response: any = await getContentReq(page, "")
                 if (response.ok) {
                     console.log(JSON.stringify(response))
                     websiteContent.setWebpage(response.webpage)
@@ -87,7 +87,7 @@ const Editor = () => {
         >
             {/* website */}
             <div className="scroll-one bg-zinc-800" style={{ flex: 1, }}>
-                <Header />
+                <HeaderTwo />
 
 
                 <div

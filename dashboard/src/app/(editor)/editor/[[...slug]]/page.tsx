@@ -6,7 +6,9 @@ import {useParams} from "next/navigation";
 import {
   createContentReq,
   getLocationsReq,
+  getUserProfileReq,
   getWebpageReq,
+  proposeUpdateReq,
   saveContentReq,
 } from "@/functionality/fetch";
 import {toastWithUpdate} from "@/functionality/ToastWithUpdate";
@@ -37,6 +39,8 @@ import {useDraggable} from "../../_component/common/useDraggable";
 import HoverToolbar from "../../_component/common/HoverToolbar";
 import {useRouter} from "next/navigation";
 import ChildElements from "../../_component/common/ChildElements";
+import {isAdmin, verifyAdminStatus} from "@/utils/isAdmin";
+import Mapview from "../../_component/Elements/Mapp";
 
 const renderInput = (
   label: string,
@@ -75,6 +79,8 @@ const Editor = () => {
   const [currentWidth, setCurrentWidth] = useState<string>("");
   const [onHoverToolbar, setOnHoverToolbar] = useState<boolean>(false);
   const [showToolbar, setShowToolbar] = useState<boolean>(true);
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isVerifier, setIsVerifier] = useState(false);
   const router = useRouter();
 
   const childElementsRef = useRef<HTMLDivElement | null>(null);
@@ -93,6 +99,8 @@ const Editor = () => {
 
   const {webpage, setWebpage} = websiteContent;
 
+  console.log("webpage", webpage);
+
   const sectionStyleSetter = currentSectionSetter; //? currentSectionSetter : () => { };
 
   const saveAllSection = () => {
@@ -102,6 +110,107 @@ const Editor = () => {
       });
     }
   };
+
+  const handleSave = async () => {
+    saveAllSection();
+
+    const bodyPayload: Record<string, any> = {data: {...webpage}};
+    if (!bodyPayload.data.name) {
+      toast.error("Webpage name is required");
+      return;
+    }
+    if (!bodyPayload.data.route) {
+      toast.error("Webpage route is required");
+      return;
+    }
+
+    try {
+      let response;
+
+      // Check if user is super user (you'll need to get this from your auth context)
+      const isSuperUser = await verifyAdminStatus(); // Replace with actual check
+
+      console.log("isSuperUser", isSuperUser);
+
+      if (isSuperUser) {
+        // Super users can save directly
+        response = await toastWithUpdate(
+          () =>
+            page
+              ? saveContentReq(page, bodyPayload.data)
+              : createContentReq(bodyPayload.data),
+          {
+            loading: page ? "Updating content..." : "Saving Content...",
+            success: "Successfully saved the content!",
+            error: (err: any) => err?.message || "Failed to save content",
+          }
+        );
+
+        console.log(page, "page");
+      } else {
+        // Regular editors need to propose changes
+        response = await toastWithUpdate(
+          () => proposeUpdateReq(page, bodyPayload),
+          {
+            loading: "Submitting changes for review...",
+            success:
+              "Changes submitted successfully! Waiting for verification.",
+            error: (err: any) =>
+              err?.message || "Failed to submit changes for review",
+          }
+        );
+      }
+
+      if (response.ok) {
+        console.log("Operation successful:", response);
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkUserRole = async () => {
+      try {
+        const response = await getUserProfileReq();
+        console.log("User profile response:", response); // Debug log
+
+        if (response && response.ok && response.user) {
+          // Get the current page ID from the URL params
+          const currentPageId = page; // This comes from your useParams hook
+          console.log("Current page ID:", currentPageId);
+
+          // Find the role for this specific page
+          const pageRole = response.user.pageRoles?.find(
+            (pr: any) => pr.webpageId === currentPageId
+          );
+
+          console.log("Page role for current page:", pageRole);
+
+          if (pageRole) {
+            const isVerifierForThisPage = pageRole.role?.name === "VERIFIER";
+            setIsVerifier(isVerifierForThisPage);
+            setUserRole(pageRole.role?.name || "EDITOR");
+          } else {
+            // If no specific role found for this page, check if user is a verifier for any page
+            const isVerifierUser = response.user.pageRoles?.some(
+              (pr: any) => pr.role?.name === "VERIFIER"
+            );
+            setIsVerifier(isVerifierUser);
+            setUserRole(isVerifierUser ? "VERIFIER" : "EDITOR");
+          }
+        } else {
+          console.error("Failed to fetch user role - response not ok");
+          setIsVerifier(false);
+        }
+      } catch (error) {
+        console.error("Error checking user role:", error);
+        setIsVerifier(false);
+      }
+    };
+
+    checkUserRole();
+  }, [page]); // Add page as dependency to re-run when page changes
 
   ///////////// screen related functionality ///////////////////
   // Function to classify width
@@ -336,6 +445,7 @@ const Editor = () => {
   }, [containerRef.current]);
   return (
     <div className="flex flex-col overflow-hidden">
+      {/* {!isVerifier && ( */}
       <div className="h-[8vh] bg-slate-700 flex justify-between items-center p-2 gap-8">
         <button
           onClick={() => router.back()}
@@ -351,6 +461,7 @@ const Editor = () => {
               className={`${styleForScreenIcons} ${
                 activeScreen === "xl" && "bg-stone-500"
               }`}
+              title="1200px+"
             >
               <CiDesktop />
             </button>
@@ -359,6 +470,7 @@ const Editor = () => {
               className={`${styleForScreenIcons} ${
                 activeScreen === "lg" && "bg-stone-500"
               }`}
+              title="1024px"
             >
               <CiLaptop />
             </button>
@@ -367,6 +479,7 @@ const Editor = () => {
               className={`${styleForScreenIcons} ${
                 activeScreen === "md" && "bg-stone-500"
               }`}
+              title="600px"
             >
               <IoIosTabletPortrait />
             </button>
@@ -375,6 +488,7 @@ const Editor = () => {
               className={`${styleForScreenIcons} ${
                 activeScreen === "sm" && "bg-stone-500"
               }`}
+              title="390px"
             >
               <CiMobile1 />
             </button>
@@ -422,14 +536,16 @@ const Editor = () => {
             }}
             onClick={(e) => {
               e.stopPropagation();
-              saveAllSection();
-              setSaveData(true);
+              //   saveAllSection();
+              //   setSaveData(true);
+              handleSave();
             }}
           >
             Save Changes
           </button>
         </div>
       </div>
+      {/* )} */}
 
       <div
         style={{
@@ -495,76 +611,85 @@ const Editor = () => {
                 />
               );
             })}
-            {showToolbar && <AddSection controller={addSection} />}
+            {!isVerifier && showToolbar && (
+              <AddSection controller={addSection} />
+            )}
           </div>
         </div>
         {/* Sidebar/toolbars */}
         {/* {
                     showToolbar && */}
-        <div
-          ref={toolbarRef}
-          style={{
-            width: "250px",
-            backgroundColor: "#393E46",
-            height: "92vh",
-            overflowY: "scroll",
-            zIndex: 1000,
-            display: showToolbar ? "block" : "none", // 👈 hide instead of unmount
-          }}
-          className="scroll-one fixed top-[8vh] right-0"
-        >
-          <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-            {renderInput(
-              "Name",
-              "name",
-              "text",
-              "",
-              webpage?.name,
-              setMetaOfPage
-            )}
-            {renderInput(
-              "Route",
-              "route",
-              "text",
-              "",
-              webpage?.route,
-              setMetaOfPage
-            )}
-            <CustomSelect
-              options={
-                locations?.map((e) => ({label: e.name, value: e.id})) || []
-              }
-              firstOption="Set Location"
-              disableFirstValue={true}
-              onChange={(value) => {
-                setWebpage((prev: webpageType | null) => {
-                  if (!prev) return null;
-                  return {
-                    ...prev,
-                    locationId: value,
-                  };
-                });
-              }}
-            />
-          </div>
-          {/* toolbars */}
-          {onHoverToolbar ? (
-            <HoverToolbar />
-          ) : !contextRef.activeRef ? (
-            <>
-              <DimensionToolbar updateStyles={updateSectionStyles} />
-              <StyleToolbar
-                updateStyles={updateSectionStyles}
-                rmSection={rmSection}
+
+        {!isVerifier && showToolbar && (
+          <div
+            ref={toolbarRef}
+            style={{
+              width: "250px",
+              backgroundColor: "#393E46",
+              height: "92vh",
+              overflowY: "scroll",
+              zIndex: 1000,
+              display: showToolbar ? "block" : "none", // 👈 hide instead of unmount
+            }}
+            className="scroll-one fixed top-[8vh] right-0"
+          >
+            <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
+              {renderInput(
+                "Name",
+                "name",
+                "text",
+                "",
+                webpage?.name,
+                setMetaOfPage
+              )}
+              {renderInput(
+                "Route",
+                "route",
+                "text",
+                "",
+                webpage?.route,
+                setMetaOfPage
+              )}
+              <CustomSelect
+                options={
+                  locations
+                    ?.map((e) => ({label: e.name, value: e.id}))
+                    .concat([{label: "Base Page", value: ""}]) || []
+                }
+                firstOption="Set Location"
+                disableFirstValue={true}
+                Default={webpage?.locationId || ""}
+                onChange={(value) => {
+                  setWebpage((prev: webpageType | null) => {
+                    if (!prev) return null;
+                    return {
+                      ...prev,
+                      locationId: value,
+                    };
+                  });
+                }}
               />
-              <ChildElements ref={childElementsRef} />
-            </>
-          ) : imageEdit ? (
-            <ImageStyleToolbar />
-          ) : (
-            <RichTextToolBar />
-          )}
-        </div>
+            </div>
+            {/* toolbars */}
+            {onHoverToolbar ? (
+              <HoverToolbar />
+            ) : !contextRef.activeRef ? (
+              <>
+                <DimensionToolbar updateStyles={updateSectionStyles} />
+                <StyleToolbar
+                  updateStyles={updateSectionStyles}
+                  rmSection={rmSection}
+                />
+                <ChildElements ref={childElementsRef} />
+              </>
+            ) : imageEdit ? (
+              <ImageStyleToolbar />
+            ) : (
+              <RichTextToolBar />
+            )}
+          </div>
+        )}
+
         {/* } */}
         <Toaster position="top-right" />
       </div>

@@ -30,7 +30,7 @@ const styleClasses = `
 `;
 
 const sectionsOptions: Option[] = [
-  { label: "Section", value: "section" },
+  { label: "Container", value: "section" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {

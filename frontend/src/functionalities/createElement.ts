@@ -6,8 +6,10 @@ import HeadingTwo from "@/app/_elements/HeadingTwo";
 import HeadingThree from "@/app/_elements/HeadingThree";
 import Anchor from "@/app/_elements/Anchor";
 import ContactForm from "@/app/_elements/ContactForm";
-import BookTable from "@/app/_elements/BookTable";
+import BookTableWicker from "@/app/_elements/BookTable";
 import HotelTimings from "@/app/_elements/RestaurantTimings";
+import SingleLocationMap from "@/app/_elements/MappSimple";
+import BookTableLaGrange from "@/app/_elements/BookTableLaGrange";
 
 // Define screen sizes for style keys
 type ScreenSize = "xl" | "lg" | "md" | "sm";
@@ -36,6 +38,7 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
     img: ImageElemComponent,
     division: Division,
     contact: ContactForm,
-    bookTable: BookTable,
-    contactCard: HotelTimings
+    bookTable: BookTableWicker,
+    bookTableLa: BookTableLaGrange,
+    map: SingleLocationMap
 };

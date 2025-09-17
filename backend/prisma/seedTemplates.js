@@ -9,13 +9,27 @@ import OurCulture from "./templatesBase/OurCulture.json" assert {type: "json"}
 import PrivateDinning from "./templatesBase/PrivateDinning.json" assert {type: "json"}
 import Catering from "./templatesBase/Catering.json" assert {type: "json"}
 import ContactUs from "./templatesBase/Contact-us.json" assert { type: "json" }
-// import pages for landing
-import homeLanding from "./templateLandingPage/HomeLanding.json" assert {type: "json"}
-import orderOnline from "./templateLandingPage/OrderOnline.json" assert {type: "json"}
-import privateDinning from "./templateLandingPage/PrivateDinning.json" assert {type: "json"}
-import landingCatering from "./templateLandingPage/LandingCatering.json" assert {type: "json"}
-import reserveTable from "./templateLandingPage/ReserveTable.json" assert {type: "json"}
 
+// import pages for location 1
+import homeLanding from "./templateLocationPage/HomeLanding.json" assert {type: "json"}
+import orderOnline from "./templateLocationPage/OrderOnline.json" assert {type: "json"}
+import privateDinning from "./templateLocationPage/PrivateDinning.json" assert {type: "json"}
+import landingCatering from "./templateLocationPage/LandingCatering.json" assert {type: "json"}
+import reserveTable from "./templateLocationPage/ReserveTable.json" assert {type: "json"}
+
+// import pages for location 2
+import homeLandingTwo from "./templateLocationPage2/HomeLanding.json" assert {type: "json"}
+import orderOnlineTwo from "./templateLocationPage2/OrderOnline.json" assert {type: "json"}
+import privateDinningTwo from "./templateLocationPage2/PrivateDinning.json" assert {type: "json"}
+import landingCateringTwo from "./templateLocationPage2/LandingCatering.json" assert {type: "json"}
+import reserveTableTwo from "./templateLocationPage2/ReserveTable.json" assert {type: "json"}
+
+// import pages for location 3
+import homeLandingThree from "./templateLocationPage3/HomeLanding.json" assert {type: "json"}
+import orderOnlineThree from "./templateLocationPage3/OrderOnline.json" assert {type: "json"}
+import privateDinningThree from "./templateLocationPage3/PrivateDinning.json" assert {type: "json"}
+import landingCateringThree from "./templateLocationPage3/LandingCatering.json" assert {type: "json"}
+import reserveTableThree from "./templateLocationPage3/ReserveTable.json" assert {type: "json"}
 
 // Put them in an array
 const webpages = [
@@ -27,12 +41,26 @@ const webpages = [
   Catering,
   ContactUs,
 
-  // landing pages
+  // location 1 pages
   homeLanding,
   orderOnline,
   privateDinning,
   landingCatering,
-  reserveTable
+  reserveTable,
+
+  // location 2 pages
+  homeLandingTwo,
+  orderOnlineTwo,
+  privateDinningTwo,
+  landingCateringTwo,
+  reserveTableTwo,
+
+  // location 3 pages
+  homeLandingThree,
+  orderOnlineThree,
+  privateDinningThree,
+  landingCateringThree,
+  reserveTableThree,
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs

@@ -66,7 +66,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] mx-auto p-6 sm:p-8 shadow-lg rounded-md border bg-[#F4ECE3]"
+      className="w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] relative z-[50] mx-auto p-6 sm:p-8 shadow-lg rounded-md border bg-[#F4ECE3]"
       aria-label="Contact Form"
     >
       {/* Name */}

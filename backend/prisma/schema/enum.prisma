@@ -1,32 +1,27 @@
-// Enum for defining the status of a page
 enum PageStatus {
-  PUBLISHED // ACTIVE
-  ARCHIVED // INACTIVE
-  TRASHED // REMOVED
+  PUBLISHED
+  ARCHIVED
+  TRASHED
 }
 
-// Enum for defining the general status of an entity
 enum Status {
   ACTIVE
   INACTIVE
   TRASHED
 }
 
-// Enum for defining the origin of OTP
 enum otpOrigin {
   MFA_Login
   forgot_Pass
   NULL
 }
 
-// Enum for defining the log outcome
 enum logOutcome {
   Success
   Failure
   Unknown
 }
 
-// Enum for defining the action performed by user
 enum logAction {
   CREATE
   UPDATE
@@ -36,8 +31,6 @@ enum logAction {
   NULL
 }
 
-// RESOURCE ENUM==================
-// Enum for defining type of the resource
 enum ResourceType {
   MAIN_PAGE
   SUB_PAGE
@@ -48,7 +41,6 @@ enum ResourceType {
   NULL
 }
 
-// Enum for defining page type
 enum ResourceTag {
   HOME
   ABOUT
@@ -76,15 +68,12 @@ enum ResourceTag {
   NULL
 }
 
-// Enum for defining the relation type
 enum RelationType {
   PARENT
   CHILD
   NULL
 }
 
-// RESOURCE VERSION ENUM==================
-// Enum for defining the status of the version after assignment
 enum VersionStatus {
   EDITING
   DRAFT
@@ -96,8 +85,6 @@ enum VersionStatus {
   LIVE
   NULL
 }
-
-// SECTION ENUM==================
 
 enum ResourceRoleType {
   MANAGER

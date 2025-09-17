@@ -401,17 +401,11 @@ const Section: React.FC<SectionProps> = ({
                 createSection={createSection}
               />)
 
-          } 
-          // else if (Element.name === "map") {
-          //   return <Mapview
-          //     key={Element.id}
-          //   />
-          // } 
-          else {
+          } else {
             const Component = mapElement[Element.name];
             return (
               <Component
-                key={i}
+                key={i + Element.id}
                 element={Element}
                 updateContent={updateTheDataOfElement}
                 updateElement={updateElement}
