@@ -32,6 +32,7 @@ export default function RenderPage({
   initialData: any;
   slugParams?: string[];
 }) {
+  console.log(JSON.stringify(initialData))
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [pageNotFound, setPageNotFound] = useState(!initialData);
   const locationsSet = new Set(Object.keys(locations))
@@ -42,7 +43,6 @@ export default function RenderPage({
     currentWidth: activeScreen,
   } = useMyContext();
 
-  console.log(websiteContent.webpage)
 
   // Load initial server data into context
   useEffect(() => {
@@ -88,8 +88,6 @@ export default function RenderPage({
   );
 
   const basePagesCondition = (slugParams && slugParams.length === 1 && !locationsSet.has(slugParams[0])) || slugParams === undefined
-
-  console.log(slugParams)
 
   if (pageNotFound) {
     return <NotFound />;

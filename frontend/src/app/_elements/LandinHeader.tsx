@@ -28,7 +28,7 @@ const bottomNavLinks = [
   { label: "Private Events", href: "/private-events" },
 ];
 
-const address: Record<string, string> = {
+const addresses: Record<string, string> = {
   "wicker-park": "1560 N. Milwaykee Ave., Chicago, IL",
   "la-grange": "9 South La Grange Road, La Grange, IL",
   "west-loop": "812 W Randolph St, Chicago, IL",
@@ -81,7 +81,11 @@ const HeaderTwo: React.FC = () => {
   return (
     <header className="w-full fixed z-50">
       {/* ===== Top Header ===== */}
-      <div className="flex justify-between items-center bg-gradient-to-r from-[#AE9060] to-[#483C28] text-white px-4 lg:px-10 py-2">
+      <div className="flex justify-between items-center 
+        bg-black lg:bg-gradient-to-r lg:from-[#AE9060] lg:to-[#483C28] 
+        text-white px-4 lg:px-10 py-2"
+      >
+        {/* Logo (always left) */}
         <Link href="/" aria-label="Go to Home">
           <Image
             src={logo}
@@ -92,7 +96,7 @@ const HeaderTwo: React.FC = () => {
 
         {/* Desktop top nav */}
         <div className="hidden lg:flex items-center space-x-6">
-          {topNavLinks.map((link) => (
+          {topNavLinks.map((link) =>
             link.external ? (
               <a
                 key={link.label}
@@ -112,11 +116,38 @@ const HeaderTwo: React.FC = () => {
                 {link.label}
               </Link>
             )
-          ))}
+          )}
         </div>
 
-        {/* Mobile: menu toggle */}
+        {/* Right side: mobile location + hamburger */}
         <div className="lg:hidden flex items-center space-x-2">
+          <div>
+            <CustomSelect
+              options={[
+                { value: "wicker-park", label: "Wicker Park" },
+                { value: "la-grange", label: "La Grange" },
+                { value: "west-loop", label: "West Loop" },
+              ]}
+              onChange={(value) => {
+                localStorage.setItem("location", value);
+                setLocation(value);
+                router.push(value);
+              }}
+              firstOption="Select Location"
+              Default={location || ""}
+              addStyleClass="flex-row"
+              styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[130px]"
+              listItemClass="text-black hover:bg-blue-100 rounded-lg"
+              selectedDisplayClass="text-white font-semibold text-sm"
+            />
+            <span className="block text-[10px] text-white/60 truncate max-w-[130px]">
+  {addresses[location]}
+</span>
+
+          </div>
+
+
+          {/* Mobile: menu toggle */}
           <button
             className="p-2 rounded-lg hover:bg-gray-200"
             onClick={() => setTopMenuOpen(!topMenuOpen)}
@@ -165,24 +196,27 @@ const HeaderTwo: React.FC = () => {
       {/* ===== Desktop Bottom Header ===== */}
       <div className="hidden lg:flex justify-between items-center bg-black text-white px-10 py-2">
         {/* Desktop location */}
-        <CustomSelect
-          options={[
-            { value: "wicker-park", label: "Wicker Park" },
-            { value: "la-grange", label: "La Grange" },
-            { value: "west-loop", label: "West Loop" },
-          ]}
-          onChange={(value) => {
-            localStorage.setItem("location", value);
-            setLocation(value);
-            router.push(value);
-          }}
-          firstOption="Select Location"
-          Default={location || ""}
-          addStyleClass="flex-row"
-          styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[200px]"
-          listItemClass="text-black hover:bg-blue-100 rounded-lg"
-          selectedDisplayClass="text-white font-semibold text-lg"
-        />
+        <div>
+          <CustomSelect
+            options={[
+              { value: "wicker-park", label: "Wicker Park" },
+              { value: "la-grange", label: "La Grange" },
+              { value: "west-loop", label: "West Loop" },
+            ]}
+            onChange={(value) => {
+              localStorage.setItem("location", value);
+              setLocation(value);
+              router.push(value);
+            }}
+            firstOption="Select Location"
+            Default={location || ""}
+            addStyleClass="flex-row"
+            styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[200px]"
+            listItemClass="text-black hover:bg-blue-100 rounded-lg"
+            selectedDisplayClass="text-white font-semibold text-lg"
+          />
+          <span className="text-[13px] text-white/60">{addresses[location]}</span>
+        </div>
 
         <div className="flex items-center space-x-6">
           {navLinks.map((link) => (
@@ -204,20 +238,39 @@ const HeaderTwo: React.FC = () => {
       </div>
 
       {/* ===== Mobile Bottom Fixed Nav ===== */}
-      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-black border-t border-gray-700 z-50">
-        <div className="flex justify-between items-center px-4 py-2">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="flex flex-col items-center text-white text-xs hover:text-[#AE9060] transition"
-            >
-              {getIcon(link.label)}
-              <span className="mt-1">{link.label}</span>
-            </Link>
+      <nav
+        className="lg:hidden fixed bottom-0 left-0 w-full bg-black border-t border-gray-700 z-50"
+        aria-label="Mobile navigation"
+      >
+        <div className="flex items-center">
+          {navLinks.map((link, index) => (
+            <React.Fragment key={link.label}>
+              <Link
+                href={link.href}
+                className="flex-1 flex flex-col items-center py-2 text-white hover:text-[#AE9060] transition"
+                aria-label={link.label}
+                title={link.label}
+              >
+                {getIcon(link.label)}
+                <span
+                  className="mt-1 text-[clamp(0.5rem,3vw,0.85rem)] max-[290px]:hidden"
+                  aria-hidden="true"
+                >
+                  {link.label}
+                </span>
+              </Link>
+
+              {/* Divider between items */}
+              {index < navLinks.length - 1 && (
+                <div className="w-px h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-50" />
+              )}
+            </React.Fragment>
           ))}
         </div>
-      </div>
+      </nav>
+
+
+
     </header>
   );
 };

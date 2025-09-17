@@ -1,182 +1,162 @@
-"use client"
+"use client";
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
-import { BaseElement } from "../../_functionality/createElement";
-import { useMyContext } from "@/Context/EditorContext";
-import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
+import { toast } from "sonner";
+import { sendMessageReq } from "@/functionality/fetch";
+import DimesionCss from "@/app/(editor)/_component/common/dimensionToolbar.module.css";
 
-type DivisionProps = {
-    element: BaseElement;
-    editable?: boolean;
-    style: React.CSSProperties;
-    updateContent: (id: string, property: string, value: any) => void;
-    updateElement: (id: string, updatedElement: BaseElement) => void;
-    rmElement: (id: string) => void;
-    parentRef: HTMLElement | null;
+// -------------------- Types --------------------
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+type ContactFormProps = {
+  style?: React.CSSProperties;
+  parentRef?: HTMLElement | null;
 };
 
-const Division = ({
-    element,
-    editable = true,
-    style,
-    updateContent,
-    updateElement,
-    rmElement,
-    parentRef
-}: DivisionProps) => {
-    const elementRef = useRef<HTMLDivElement | null>(null);
-    const [divStyle, setDivStyle] = useState<React.CSSProperties>(style);
-    const { contextElement, toolbarRef, contextForSection, activeScreen, screenStyleObj
-        , setSectionChildElements,
-        setSectionChildElementsSetterFull
-    } = useMyContext();
-    const [isEditing, setEditing] = useState<boolean>(false);
+// -------------------- Form Group --------------------
+const FormGroup = ({
+  label,
+  htmlFor,
+  required = false,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) => (
+  <div className="mb-4 flex flex-col">
+    <label htmlFor={htmlFor} className="mb-1 font-[300]">
+      {label} {required && <span aria-hidden="true">*</span>}
+    </label>
+    {children}
+  </div>
+);
 
-    const isAbsolute = divStyle.position === "absolute";
-    const dragData = useRef<{ offsetX: number; offsetY: number } | null>(null);
+// -------------------- Contact Form --------------------
+const ContactForm = ({ style, parentRef }: ContactFormProps) => {
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-    const activateTheEditing = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setEditing(true);
-        contextForSection.setRmSection(() => () => rmElement(element.id));
-        contextForSection.setCurrentSection(divStyle);
-        contextForSection.setCurrentSectionSetter(() => setDivStyle);
-        contextForSection.setSectionRef(elementRef);
-        screenStyleObj.setScreenStyle(element.style)
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [formStyle, setFormStyle] = useState<React.CSSProperties>(style || {});
 
-        setSectionChildElements(null)
-        setSectionChildElementsSetterFull(null)
-    };
+  // ---- Sync style if parent updates ----
+  useEffect(() => {
+    if (style) setFormStyle(style);
+  }, [style]);
 
-    // click outside
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (!elementRef.current) return;
-            const clickedToolbar =
-                toolbarRef.current?.contains(e.target as Node) ?? false;
-            const clickedElement =
-                elementRef.current?.contains(e.target as Node) ?? false;
-            if (!clickedToolbar && !clickedElement) {
-                elementRef.current.style.outline = "none";
-                setEditing(false);
-            }
-        };
+  // ---- Handle input changes ----
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    },
+    []
+  );
 
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, [toolbarRef]);
+  // ---- Handle submit ----
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
 
-    // Sync style changes
-    useEffect(() => {
-        if (isEditing) {
-            contextElement.setElement(divStyle);
+      try {
+        const res = await sendMessageReq(formData);
+
+        if (res.success) {
+          toast.success("Message sent successfully!");
+          setFormData({ name: "", email: "", message: "" });
+        } else {
+          toast.error(res.error || "Failed to send message.");
         }
-        contextForSection.setCurrentSection(divStyle);
-        updateElement(element.id, {
-            ...element,
-            style: { ...element.style, [activeScreen]: divStyle },
-        });
-    }, [divStyle]);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.error("Something went wrong.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [formData]
+  );
 
-    // Sync content changes
-    useEffect(() => {
-        updateContent(element.id, "content", "null");
-    }, [divStyle.content]);
-
-    // ---- DRAG HANDLERS (outside of useEffect) ----
-    const handleMouseMove = useCallback(
-        (e: MouseEvent) => {
-            if (!dragData.current || !elementRef.current?.parentElement) return;
-
-            const { offsetX, offsetY } = dragData.current;
-            const parentRect = elementRef.current.parentElement.getBoundingClientRect();
-
-            // New position in px relative to parent
-            const newLeftPx = e.clientX - parentRect.left - offsetX;
-            const newTopPx = e.clientY - parentRect.top - offsetY;
-
-            // Convert to % relative to parent
-            const leftPercent = (newLeftPx / parentRect.width) * 100;
-            const topPercent = (newTopPx / parentRect.height) * 100;
-
-            setDivStyle((prev) => ({
-                ...prev,
-                left: `${leftPercent}%`,
-                top: `${topPercent}%`,
-            }));
-        },
-        []
-    );
-
-
-    const handleMouseUp = useCallback(() => {
-        dragData.current = null;
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-    }, [handleMouseMove]);
-
-    const handleMouseDown = useCallback(
-        (e: MouseEvent) => {
-            if (!isAbsolute || !elementRef.current) return;
-
-            let left = parseFloat(divStyle.left?.toString() || "NaN");
-            let top = parseFloat(divStyle.top?.toString() || "NaN");
-
-            const parentRect = elementRef.current.parentElement?.getBoundingClientRect();
-            if (!parentRect) return;
-
-            // If left/top are not set yet, calculate from DOM
-            if (isNaN(left) || isNaN(top)) {
-                const rect = elementRef.current.getBoundingClientRect();
-                left = ((rect.left - parentRect.left) / parentRect.width) * 100;
-                top = ((rect.top - parentRect.top) / parentRect.height) * 100;
-
-                setDivStyle((prev) => ({
-                    ...prev,
-                    left: `${left}%`,
-                    top: `${top}%`,
-                }));
-            }
-
-            dragData.current = {
-                offsetX: e.clientX - (parentRect.left + (left / 100) * parentRect.width),
-                offsetY: e.clientY - (parentRect.top + (top / 100) * parentRect.height),
-            };
-
-            document.addEventListener("mousemove", handleMouseMove);
-            document.addEventListener("mouseup", handleMouseUp);
-        },
-        [isAbsolute, divStyle.left, divStyle.top, handleMouseMove, handleMouseUp]
-    );
-
-
-
-    useEffect(() => {
-        const el = elementRef.current;
-        if (!el) return;
-        el.addEventListener("mousedown", handleMouseDown);
-        return () => el.removeEventListener("mousedown", handleMouseDown);
-    }, [handleMouseDown]);
-
-    useEffect(() => {
-        setDivStyle(style)
-    }, [activeScreen])
-
-    const runningWidth = activeScreen !== "xl";
-    const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(divStyle || {}, parentRef) : divStyle
-
-    return (
-        <div
-            style={{
-                ...runningStyle,
-
-            }}
-            id={element.id}
-            ref={elementRef}
-            onClick={activateTheEditing}
-            onDoubleClick={(e) => e.stopPropagation()}
+  return (
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      style={{ ...formStyle }}
+      className="w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] relative z-[50] mx-auto p-6 sm:p-8 shadow-lg rounded-md border bg-[#F4ECE3]"
+      aria-label="Contact Form"
+    >
+      {/* Name */}
+      <FormGroup label="Full Name" htmlFor="messengerName" required>
+        <input
+          id="messengerName"
+          type="text"
+          name="name"
+          placeholder="Full Name"
+          value={formData.name}
+          onChange={handleChange}
+          className={`w-full bg-white/40 border border-[#AE906080] ${DimesionCss.placeholderCustom} h-[45px] sm:h-[50px] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400`}
+          required
+          aria-required="true"
+          title="Enter your full name"
         />
-    );
+      </FormGroup>
+
+      {/* Email */}
+      <FormGroup label="Email" htmlFor="messengerEmail" required>
+        <input
+          id="messengerEmail"
+          type="email"
+          name="email"
+          placeholder="Your Email"
+          value={formData.email}
+          onChange={handleChange}
+          className={`w-full bg-white/40 border border-[#AE906080] ${DimesionCss.placeholderCustom} h-[45px] sm:h-[50px] p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400`}
+          required
+          aria-required="true"
+          title="Enter your email address"
+        />
+      </FormGroup>
+
+      {/* Message */}
+      <FormGroup
+        label="How can we help you?"
+        htmlFor="messengersMessage"
+        required
+      >
+        <textarea
+          id="messengersMessage"
+          name="message"
+          placeholder="Message"
+          value={formData.message}
+          onChange={handleChange}
+          className={`w-full bg-white/40 border border-[#AE906080] ${DimesionCss.placeholderCustom} p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-[300] placeholder-custom resize-none`}
+          rows={4}
+          required
+          aria-required="true"
+          title="Type your message here"
+        />
+      </FormGroup>
+
+      {/* Submit */}
+      <button
+        type="submit"
+        className="bg-[#AE9060] text-[18px] sm:text-[20px] text-white px-4 py-2 rounded-[4px] w-full mt-2 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
+        disabled={loading}
+      >
+        {loading ? "Sending..." : "Send Message"}
+      </button>
+    </form>
+  );
 };
 
-export default React.memo(Division);
+export default React.memo(ContactForm);

@@ -1,21 +1,21 @@
 {
-    "id": "841d5ece-a5ce-418f-996b-26481cb34228",
-    "name": "Order Online location 2",
-    "route": "/lo2",
-    "locationId": "",
-    "createdAt": "2025-09-10T04:48:05.329Z",
-    "updatedAt": "2025-09-11T04:45:24.392Z",
+    "id": "a5cc2c6b-3b7d-44d7-b306-57c4fb4f74c0",
+    "name": "Order Online - La Grange",
+    "route": "/order-online",
+    "locationId": "c994612d-9e5d-47a2-afb8-5388e5e7583e",
+    "createdAt": "2025-09-14T17:15:59.348Z",
+    "updatedAt": "2025-09-16T07:02:56.912Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
     "verifierId": null,
     "contents": [
         {
-            "id": "c9f66684-f4d7-4297-84da-248644108fbf",
+            "id": "0279423b-b7db-495a-a2c4-de5a1c41d69c",
             "name": "section",
             "givenName": "Our Culture Banner",
             "style": {
-                "id": "5305d926-7aac-4ed7-8a3d-7397743e7422",
+                "id": "ea924968-bf32-455a-8d13-c014f6c50079",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -134,10 +134,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "82692faf-82ed-45ca-9439-bae572f46d3e",
+                    "id": "9ae2cd56-d8bf-4dd8-99d8-d88877b9a0c8",
                     "name": "h3",
                     "style": {
-                        "id": "5115092b-b65d-442f-ae16-a1b4fbc52b90",
+                        "id": "b91b5f2c-0368-450c-95a6-0df6dfbb799d",
                         "xl": {
                             "letterSpacing": "9px"
                         },
@@ -162,10 +162,10 @@
                     "aria": null
                 },
                 {
-                    "id": "eb385d9f-be49-4366-8195-78affacad80d",
+                    "id": "ec7d48f6-bb02-4a02-9b56-8a6a5dc2c636",
                     "name": "h1",
                     "style": {
-                        "id": "826a1e22-4c85-4413-8324-973cacaf48b1",
+                        "id": "40f876c1-1fad-45c0-a92a-aebab4e798f5",
                         "xl": {
                             "width": "50vw",
                             "fontSize": "54px",
@@ -212,10 +212,10 @@
                     "aria": null
                 },
                 {
-                    "id": "e91c0ec1-9cf6-42d7-9d52-e540168a49ee",
+                    "id": "c7e7c2bc-c49d-46b9-946c-711e608182e8",
                     "name": "division",
                     "style": {
-                        "id": "64954338-8a54-4491-8074-1a8fdc8d9ab0",
+                        "id": "035bc1d3-7fb3-40f4-ab4d-1711f5947652",
                         "xl": {
                             "width": "40%",
                             "height": "2px",
@@ -252,10 +252,10 @@
                     "aria": null
                 },
                 {
-                    "id": "3e8479eb-ce17-4fed-b2a1-e56b84d96926",
+                    "id": "8b2a4985-b27b-498a-b768-6bb859af1015",
                     "name": "p",
                     "style": {
-                        "id": "508217ee-69da-4a92-b9d0-8464e6e96669",
+                        "id": "4ef22f1d-9910-4118-8488-f50ea8c039b8",
                         "xl": {
                             "color": "rgba(255, 216, 152, 1)",
                             "fontSize": "20px",
@@ -286,55 +286,11 @@
                     "aria": null
                 },
                 {
-                    "id": "bb2d1a8d-e773-4007-97ac-dbd61a6adb8d",
-                    "name": "img",
-                    "style": {
-                        "id": "5e31ee9e-9616-49b7-8b52-3f5808125ec5",
-                        "xl": {
-                            "top": "14.5253%",
-                            "left": "23.7057%",
-                            "filter": "brightness(0.6)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "lg": {
-                            "top": "-1.63259%",
-                            "left": "13.032%",
-                            "filter": "brightness(0.6)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "md": {
-                            "top": "14.5253%",
-                            "left": "4.15356%",
-                            "filter": "brightness(0.6)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "sm": {
-                            "top": "34.9177%",
-                            "left": "-1.04511%",
-                            "filter": "brightness(0.6)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        }
-                    },
-                    "content": "/file_1756101099159",
-                    "hover": {
-                        "lg": {},
-                        "md": {},
-                        "sm": {},
-                        "xl": {}
-                    },
-                    "href": null,
-                    "aria": null
-                },
-                {
-                    "id": "f9a3c110-3310-4e33-a059-852ee82f398c",
+                    "id": "9c1130f7-d216-43ca-9516-9875e70fe1fd",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "5c5f1da6-4466-445c-9d3c-6a2cade06e79",
+                        "id": "7875e661-4b2c-44b5-a29c-833b3b25d490",
                         "xl": {
                             "gap": "20px",
                             "top": "0",
@@ -426,10 +382,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "e65c73c5-64f0-4c6e-8f50-75a8294955af",
+                            "id": "4e3126ca-29b6-4059-83ff-30a996a3269b",
                             "name": "a",
                             "style": {
-                                "id": "8d188325-150d-4851-bc64-21054880ff42",
+                                "id": "95ebfaf6-6dfd-460a-8793-7c2a2268d536",
                                 "xl": {
                                     "paddingTop": "12px",
                                     "borderWidth": "1px",
@@ -473,14 +429,14 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "ahttps://example.comas`",
-                            "aria": ""
+                            "href": "https://www.order.store/store/kama-la-grange/z4d-sN_6SiepFvpCGA2lhw",
+                            "aria": "Order food from our Uber Eats window."
                         },
                         {
-                            "id": "dab15064-26d2-4fe6-8778-9c9216bd3f2d",
+                            "id": "dbbb0188-69ec-4561-97ea-1f40aeac747a",
                             "name": "a",
                             "style": {
-                                "id": "25817496-8d13-477a-bfbb-6a9f51efebc8",
+                                "id": "6c30cfe2-3b54-4d7c-907a-4ee244ae4042",
                                 "xl": {
                                     "width": "",
                                     "paddingTop": "12px",
@@ -524,19 +480,63 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://example.com",
-                            "aria": ""
+                            "href": "https://kamabistro.toast.site/order",
+                            "aria": "order the Food from toast window"
                         }
                     ]
+                },
+                {
+                    "id": "52fc3c86-7f54-46f9-ac80-38e06256a034",
+                    "name": "img",
+                    "style": {
+                        "id": "0767ef40-857f-4716-aa7d-314adc25b844",
+                        "xl": {
+                            "top": "14.5253%",
+                            "left": "23.7057%",
+                            "filter": "brightness(0.6)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "lg": {
+                            "top": "-1.63259%",
+                            "left": "13.032%",
+                            "filter": "brightness(0.6)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "md": {
+                            "top": "14.5253%",
+                            "left": "4.15356%",
+                            "filter": "brightness(0.6)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "sm": {
+                            "top": "34.9177%",
+                            "left": "-1.04511%",
+                            "filter": "brightness(0.6)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        }
+                    },
+                    "content": "/file_1756101099159",
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "href": null,
+                    "aria": null
                 }
             ]
         },
         {
-            "id": "8124d697-e47d-4b94-a01e-3d5ac9800137",
+            "id": "1e52b260-d414-400d-abaa-e8c5c0e2bcbd",
             "name": "section",
             "givenName": "Exp Flav Tradition",
             "style": {
-                "id": "4ba56e41-00c4-4fd3-ba34-b03f35e11c17",
+                "id": "fe398062-a111-4534-9b82-fe26b3c3feb4",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -629,11 +629,11 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "77105878-adac-4ab1-9609-c361f14d9bfe",
+                    "id": "01d705b3-7f07-4b30-9975-8a2fbee6424a",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "6ed067d4-8d4a-410b-a148-d9ec0264c8a0",
+                        "id": "c17076e0-cc21-4a25-8a6f-cdd1f6555af3",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -716,10 +716,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "76bcd8b1-5d4d-4cd0-964d-e599e18e2ec8",
+                            "id": "2c8bf353-d8d1-4405-87bf-1c7d72267aab",
                             "name": "h2",
                             "style": {
-                                "id": "8fb56f77-3094-46a2-a3ba-0cb3d270b490",
+                                "id": "64ca2a3d-4f2b-4cf0-a729-b1a58899f3e1",
                                 "xl": {
                                     "width": "23vw",
                                     "fontSize": "24px",
@@ -757,10 +757,10 @@
                             "aria": null
                         },
                         {
-                            "id": "2e0f8181-a9f6-406e-a218-87a184a35a2b",
+                            "id": "544fa3a8-5d4a-42c4-9b2d-aa4cdeb3b0c4",
                             "name": "division",
                             "style": {
-                                "id": "e7058797-7fc8-4e52-8973-995d33cd89dd",
+                                "id": "44dcb56d-048e-4e03-8bb2-d9c48d306e5c",
                                 "xl": {
                                     "width": "60%",
                                     "height": "2px",
@@ -797,10 +797,10 @@
                             "aria": null
                         },
                         {
-                            "id": "ee23dcc5-6e7d-49ff-9dd3-b3bfc60d275f",
+                            "id": "90709396-8aaf-4412-b495-08a60f12f73c",
                             "name": "p",
                             "style": {
-                                "id": "afa25846-13a8-418f-b098-27615084f591",
+                                "id": "eb3cfce1-87f6-4419-aff9-79ef02815c98",
                                 "xl": {
                                     "width": "23vw",
                                     "marginTop": "20px",
@@ -834,10 +834,10 @@
                             "aria": null
                         },
                         {
-                            "id": "e357fd55-9c6a-4605-9185-02ed37a8e4e2",
+                            "id": "3b567a73-04c6-413a-bc73-ca5f4e7d98a8",
                             "name": "division",
                             "style": {
-                                "id": "cf034974-ba9a-4d8c-a055-33279b765a15",
+                                "id": "09a6283a-fbf4-4213-ab1e-da5e398932c0",
                                 "xl": {
                                     "top": "0.3662137315103571%",
                                     "left": "0%",
@@ -886,10 +886,10 @@
                             "aria": null
                         },
                         {
-                            "id": "55b772b2-d436-4a55-a364-83b127d88e11",
+                            "id": "151d2f34-df17-4698-bda8-4482378d1871",
                             "name": "division",
                             "style": {
-                                "id": "8a1e082d-0e24-429f-b435-0d49c216143c",
+                                "id": "189d5e02-d5dc-4be4-a4b1-1c970b4d2ff8",
                                 "xl": {
                                     "top": "99.61089354462906%",
                                     "left": "0.18310826276035705%",
@@ -938,10 +938,10 @@
                             "aria": null
                         },
                         {
-                            "id": "1a250c97-6474-48cd-94e4-8b4a0e2ffa98",
+                            "id": "866c2859-1025-4ca4-a82c-d44f3b6253b0",
                             "name": "division",
                             "style": {
-                                "id": "a20e5ce6-9453-485a-8371-00396e071c3d",
+                                "id": "ada892bd-71de-4b17-a1c2-4803e975903e",
                                 "xl": {
                                     "top": "0.3662151285155252%",
                                     "left": "0%",
@@ -990,10 +990,10 @@
                             "aria": null
                         },
                         {
-                            "id": "481bcb59-ac19-4c08-bb16-f2ccb69d2ac6",
+                            "id": "81a8a3d2-267d-4066-9bf2-19020e7b5d4a",
                             "name": "p",
                             "style": {
-                                "id": "3451da3f-5c42-4a2c-8408-daa325e1cc15",
+                                "id": "160c1337-3915-4641-93e1-1a4a350daecc",
                                 "xl": {
                                     "marginTop": "10px",
                                     "fontWeight": "300"
@@ -1016,10 +1016,10 @@
                             "aria": ""
                         },
                         {
-                            "id": "52554e51-b612-4ef7-8a57-154b6551f9ce",
+                            "id": "e171e2ed-3998-41a7-93e7-0aae244b07f6",
                             "name": "p",
                             "style": {
-                                "id": "51984658-2333-446b-a76a-dd6e92239155",
+                                "id": "2c763da5-a26f-4f48-a52a-64cb44c1e5f0",
                                 "xl": {
                                     "marginTop": "10px",
                                     "fontWeight": "300"
@@ -1042,10 +1042,10 @@
                             "aria": ""
                         },
                         {
-                            "id": "bc190926-bb94-40c3-8f0e-5133dd0dccb5",
+                            "id": "81b41ece-e496-47a7-b923-a35a1a5a2798",
                             "name": "p",
                             "style": {
-                                "id": "89a95e55-8462-42cb-8a9c-e2c92ee62a62",
+                                "id": "0b6227c4-7f8f-49a0-a2f6-bd4bc50e78c3",
                                 "xl": {
                                     "marginTop": "10px",
                                     "fontWeight": "300"
@@ -1070,10 +1070,10 @@
                     ]
                 },
                 {
-                    "id": "216e22e9-2c3c-4ece-a385-9535e2d75633",
+                    "id": "d5b9a39a-aca9-405a-a58c-bafe4e26a848",
                     "name": "img",
                     "style": {
-                        "id": "9909036d-4332-40d9-ad15-1c42b30d661f",
+                        "id": "aee4e6a5-5f8e-472e-9dab-4c8cf866321f",
                         "xl": {
                             "width": "45vw",
                             "height": "32vw"
@@ -1098,11 +1098,11 @@
             ]
         },
         {
-            "id": "78e8120a-2c0b-4b95-b746-45ef900ce366",
+            "id": "87c14b49-b2f3-4c6a-b1da-b69a62c11747",
             "name": "section",
             "givenName": "Order Online",
             "style": {
-                "id": "2f97e557-994e-42ed-9f14-c2a6918dc47c",
+                "id": "aa26d2e4-cc73-4b28-a1a3-f75c5ee63694",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -1199,10 +1199,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "b73cb492-ff7e-40f0-9c5b-a9f3556cd765",
+                    "id": "0bbc1188-c2a8-467f-a0ad-3db34f56ec34",
                     "name": "img",
                     "style": {
-                        "id": "8337a155-9a4d-45a3-9c21-25bf22aba6cf",
+                        "id": "58bf6c9e-162d-4b32-9b83-cb5c73627c04",
                         "xl": {
                             "width": "63vw",
                             "height": "45vw"
@@ -1231,11 +1231,11 @@
                     "aria": null
                 },
                 {
-                    "id": "17cff1bb-20b9-4f50-8473-8a630bf78d0e",
+                    "id": "6c2491f2-2ccb-406a-93b5-419901d1aef8",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "e32a15b4-ae81-4369-bf1f-f12e227c4462",
+                        "id": "af3fec12-33f9-44a2-ac9c-8410cfe0bf1c",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -1326,10 +1326,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "983c9a0d-26a4-4766-8deb-7a426866eb0e",
+                            "id": "4a934c78-dc2c-4508-b56d-deb9d63fe01f",
                             "name": "h2",
                             "style": {
-                                "id": "dd4c5697-fc8b-4c59-8080-f028eca8e3b0",
+                                "id": "bae5abdf-e9c8-4645-b30e-5c1f8c58c650",
                                 "xl": {
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-playfair)",
@@ -1362,10 +1362,10 @@
                             "aria": null
                         },
                         {
-                            "id": "e60ff3b8-6aba-4d61-82c5-46831f7f9e4d",
+                            "id": "11c02ec7-4a99-4291-b9d4-954d3de0159d",
                             "name": "division",
                             "style": {
-                                "id": "f0bd2a69-14ab-4be8-a3e7-29a52271fdc3",
+                                "id": "b0b90d92-b8e5-48e9-a286-3457caf4650a",
                                 "xl": {
                                     "width": "11vw",
                                     "height": "2px",
@@ -1414,10 +1414,10 @@
                             "aria": null
                         },
                         {
-                            "id": "6b83cf12-4860-4d21-b11b-0b533180a47e",
+                            "id": "b6f17300-feb2-46c8-bb5d-182a7d56ea51",
                             "name": "p",
                             "style": {
-                                "id": "55bec71c-42ca-47fb-8daa-67c3da2b60a0",
+                                "id": "2570bcec-4158-4271-a10a-ca5247a93138",
                                 "xl": {
                                     "fontSize": "18px",
                                     "fontFamily": "var(--font-poppins)",
@@ -1455,10 +1455,10 @@
                             "aria": null
                         },
                         {
-                            "id": "8621e8da-ce9b-476f-9a34-909522fdb184",
+                            "id": "ad5695ca-347e-4e47-a036-f55edc1c452e",
                             "name": "img",
                             "style": {
-                                "id": "67eac9cf-d96d-47ff-a3cf-326e69244f13",
+                                "id": "77162dfb-dd3a-49a3-be14-cdbd280399ce",
                                 "xl": {
                                     "top": "18.4031%",
                                     "left": "15.1272%",
@@ -1503,10 +1503,10 @@
                             "aria": null
                         },
                         {
-                            "id": "bbcdcae6-7b13-42b4-86de-298887d5beff",
+                            "id": "ab03e0e2-c4b2-4436-bd70-5cd7b9d9070c",
                             "name": "a",
                             "style": {
-                                "id": "ae321379-6cb9-43be-bf95-e473db9c43d8",
+                                "id": "2b7dd733-8586-434e-898e-ce04e444785f",
                                 "xl": {
                                     "paddingTop": "12px",
                                     "borderWidth": "1px",
@@ -1547,19 +1547,19 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://example.com",
-                            "aria": ""
+                            "href": "https://order.kamabistro.com/order/kamabistro",
+                            "aria": "Order food from taost window"
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "56cbf5a9-5348-4002-bb63-6bce2086a67d",
+            "id": "6164c08f-a6c0-4109-9b47-0282389b2d63",
             "name": "section",
             "givenName": "Order Online",
             "style": {
-                "id": "f2456961-a1a0-43d3-8857-5ae31254d5c3",
+                "id": "cdcc4c12-d156-4f9f-bc34-e5680251d2d1",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -1658,10 +1658,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "df14d8b3-0629-4038-bb77-9ebf45b9899c",
+                    "id": "f879d5a5-1b68-41d9-92a1-6b628ebb925c",
                     "name": "img",
                     "style": {
-                        "id": "c6221d10-cb23-496c-8ff1-527b087829e2",
+                        "id": "aee22dc5-df91-42e3-8da6-ea3ef21b7d86",
                         "xl": {
                             "width": "63vw",
                             "height": "45vw"
@@ -1690,11 +1690,11 @@
                     "aria": null
                 },
                 {
-                    "id": "88d5f114-54b9-4ba0-acc3-acf7b018c4f8",
+                    "id": "66f5f0ae-45ea-4690-9efa-14e13a6ec334",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "64e69c12-3c68-42b7-831b-88d43a267630",
+                        "id": "27fd9f3e-e3c9-4aa2-a5c3-6c00aecafe26",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -1788,10 +1788,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "9c516a27-3fdb-4467-99e2-397379e890a7",
+                            "id": "f305b3d7-7e20-47d0-a9e3-c0b787bdd13d",
                             "name": "h2",
                             "style": {
-                                "id": "00337fcf-0139-41ee-9513-8eb0eff92a1d",
+                                "id": "8ecdbd97-4d0c-4b98-bf64-dbefa55dc8f5",
                                 "xl": {
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-playfair)",
@@ -1824,10 +1824,10 @@
                             "aria": null
                         },
                         {
-                            "id": "95eac844-11e3-4f67-921d-394fd9330b6e",
+                            "id": "3a28f629-5905-48cd-a61f-ff00a267d231",
                             "name": "division",
                             "style": {
-                                "id": "cb7c7452-0b5a-463c-a43b-59bf62d01bce",
+                                "id": "ea617fb2-a5c6-443f-af0a-6788eb7285f2",
                                 "xl": {
                                     "width": "11vw",
                                     "height": "2px",
@@ -1876,10 +1876,10 @@
                             "aria": null
                         },
                         {
-                            "id": "edcdc907-c92d-4e4a-9e9e-db4978f72ad8",
+                            "id": "27eeb4fe-eb48-4803-abfc-9945cb413c3b",
                             "name": "p",
                             "style": {
-                                "id": "acb5570e-e6ca-4775-907b-c40a03885f6a",
+                                "id": "350a4168-b962-4627-832a-9dabb2b4da35",
                                 "xl": {
                                     "fontSize": "18px",
                                     "fontFamily": "var(--font-poppins)",
@@ -1917,10 +1917,10 @@
                             "aria": null
                         },
                         {
-                            "id": "6a4b75f2-91d4-4560-b031-0a2a04bcfeef",
+                            "id": "d1a02144-a23e-47e6-8ee8-5aa8b834fd9e",
                             "name": "img",
                             "style": {
-                                "id": "3b3d4fe7-3d59-4c91-a0e7-63b415416687",
+                                "id": "cb893f65-1250-4110-9ad1-a5614226eda1",
                                 "xl": {
                                     "top": "9.93208%",
                                     "left": "45.9561%",
@@ -1965,10 +1965,10 @@
                             "aria": null
                         },
                         {
-                            "id": "873c99cc-0642-4e61-80fa-ed3a7f37940b",
+                            "id": "d6f05568-1de3-4ff1-b2a1-41fcf6f96753",
                             "name": "a",
                             "style": {
-                                "id": "147350ee-6d3e-4967-8bb6-a504e7993c0e",
+                                "id": "45d3b0f9-71fa-4ed5-a934-f54a907c2a41",
                                 "xl": {
                                     "display": "inline-block",
                                     "paddingTop": "12px",
@@ -2013,14 +2013,14 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": null,
-                            "aria": null
+                            "href": "https://www.order.store/store/kama-la-grange/z4d-sN_6SiepFvpCGA2lhw",
+                            "aria": "Order food on our Uber eats window"
                         },
                         {
-                            "id": "cb46b194-aad7-425c-893c-1bff7662ba5b",
+                            "id": "0a2ec4b0-4248-4c31-9238-89b779c7756c",
                             "name": "a",
                             "style": {
-                                "id": "6c9539d5-d7de-4aaa-bbad-64b69de57483",
+                                "id": "6adb2f85-e818-4f36-aa54-80585c523c92",
                                 "xl": {
                                     "display": "inline-block",
                                     "marginTop": "10px",
@@ -2069,19 +2069,19 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://example.com",
-                            "aria": ""
+                            "href": "https://www.order.store/store/kama-la-grange/z4d-sN_6SiepFvpCGA2lhw",
+                            "aria": "Order food on our Uber eats window"
                         }
                     ]
                 }
             ]
         },
         {
-            "id": "f32ab864-5df3-408c-bb9e-5bfedf8feae5",
+            "id": "ad2693f4-a9ac-4a88-84f4-40806f68cf81",
             "name": "section",
             "givenName": "book table section",
             "style": {
-                "id": "fcfc3f99-b2aa-411b-9bf6-001ba3265b78",
+                "id": "381fbb08-b7a3-441c-acb6-42f3e21ebc42",
                 "xl": {
                     "gap": "45px",
                     "top": "0",
@@ -2122,7 +2122,7 @@
                     "marginRight": "",
                     "paddingLeft": "80px",
                     "marginBottom": "0",
-                    "paddingRight": "20px",
+                    "paddingRight": "80px",
                     "flexDirection": "row",
                     "paddingBottom": "20px",
                     "justifyContent": "",
@@ -2184,11 +2184,11 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "1b6b2be2-023a-4a5b-84ce-c0af19e00c72",
+                    "id": "468d630d-ec9d-448b-b6dc-60187aaa665e",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "22b55a6b-e73c-424e-94c9-ffb41f9e7096",
+                        "id": "06b5ed34-62b4-4ab4-88ed-da4149d74d78",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -2271,10 +2271,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "6aa33cc9-21f7-4bb3-bbac-255ccdaf7de5",
+                            "id": "77261263-47ed-493f-8a06-ea40be446821",
                             "name": "h2",
                             "style": {
-                                "id": "e9fc23e7-bfef-43d6-a031-3a00b8df84b0",
+                                "id": "31292a4d-f22e-43c0-ad6f-6b5e463aae3e",
                                 "xl": {
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-playfair)",
@@ -2311,10 +2311,10 @@
                             "aria": null
                         },
                         {
-                            "id": "eaad2cd5-f577-4b2b-92de-5440e5acb0a2",
+                            "id": "ee9d9cca-3e8c-44d7-bd6b-258c8f71dcf6",
                             "name": "division",
                             "style": {
-                                "id": "916049c7-fc32-4c1d-a75d-214b65b727b7",
+                                "id": "ae96e24f-b835-4ba8-9512-3191e1efdc53",
                                 "xl": {
                                     "width": "148px",
                                     "height": "2px",
@@ -2351,10 +2351,10 @@
                             "aria": null
                         },
                         {
-                            "id": "0efbf40b-543b-4a18-895c-71d5e35d7051",
+                            "id": "28ad8e2b-42ff-4c6a-a75b-a85377238013",
                             "name": "p",
                             "style": {
-                                "id": "7d5c213d-2607-46f0-9e40-4845854a2344",
+                                "id": "2bf59a04-cdf9-405b-902a-0f4c836c1a00",
                                 "xl": {
                                     "color": "rgba(64, 64, 64, 1)",
                                     "width": "33vw",
@@ -2398,10 +2398,10 @@
                     ]
                 },
                 {
-                    "id": "a3defc5c-99e6-414b-a28b-a60f0f62718b",
+                    "id": "8bb35ad0-168e-434b-a92b-7131a4bebaec",
                     "name": "bookTable",
                     "style": {
-                        "id": "725709d0-ae0a-4ffd-88a2-7561b5075364",
+                        "id": "81bb3144-0100-4d41-b814-96bcb00da5c3",
                         "xl": {},
                         "lg": {},
                         "md": {},
@@ -2418,10 +2418,10 @@
                     "aria": null
                 },
                 {
-                    "id": "b3ba678c-d091-40c6-ac35-4c95db31c694",
+                    "id": "318fcea6-1907-4890-bc0d-4a539c220045",
                     "name": "img",
                     "style": {
-                        "id": "403617d1-431c-440e-be5e-26bc5632840b",
+                        "id": "af266449-e663-4943-85ee-247e391ef985",
                         "xl": {
                             "top": "4.64566%",
                             "left": "73.2449%",
