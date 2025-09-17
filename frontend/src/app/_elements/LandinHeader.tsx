@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useEffect, useState, JSX } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Menu, X, Calendar, Users, BookOpen, ShoppingCart, Coffee } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,42 +16,40 @@ const topNavLinks = [
   { label: "Private Events", href: "/private-events" },
   { label: "Catering", href: "/catering" },
   { label: "Contact", href: "/contact-us" },
-  // { label: "Career", href: "/career" },
+  { label: "Gift Cards", href: "https://www.toasttab.com/kama-bistro/giftcards", external: true },
 ];
 
-// Bottom header nav
+// Bottom header nav (reordered & no homepage)
 const bottomNavLinks = [
-  { label: "Homepage", href: "/", },
-  { label: "Menu", href: "/menu", },
-  { label: "Reserve", href: "/reserve-table", },
-  { label: "Order Online", href: "/order-online", },
-  { label: "Private Events", href: "/private-events", },
-  { label: "Catering", href: "/caterings", },
+  { label: "Reserve", href: "/reserve-table" },
+  { label: "Catering", href: "/caterings" },
+  { label: "Menu", href: "/menu" },
+  { label: "Order Online", href: "/order-online" },
+  { label: "Private Events", href: "/private-events" },
 ];
 
 const address: Record<string, string> = {
   "wicker-park": "1560 N. Milwaykee Ave., Chicago, IL",
   "la-grange": "9 South La Grange Road, La Grange, IL",
   "west-loop": "812 W Randolph St, Chicago, IL",
-}
+};
 
 const HeaderTwo: React.FC = () => {
-  const router = useRouter()
-  const params = useParams()
+  const router = useRouter();
+  const params = useParams();
   const [topMenuOpen, setTopMenuOpen] = useState(false);
-  const [bottomMenuOpen, setBottomMenuOpen] = useState(false);
-  const [location, setLocation] = useState<string>("")
-  const [navLinks, setNavLinks] = useState<{ label: string, href: string }[]>(
+  const [location, setLocation] = useState<string>("");
+
+  const [navLinks, setNavLinks] = useState(
     bottomNavLinks.map((e) => ({
       ...e,
       href: `/${params.slug ? params.slug[0] : ""}${e.href}`,
     }))
   );
 
-
   useEffect(() => {
-    setLocation(localStorage.getItem("location") || "")
-  }, [])
+    setLocation(localStorage.getItem("location") || "");
+  }, []);
 
   useEffect(() => {
     setNavLinks(
@@ -62,63 +60,131 @@ const HeaderTwo: React.FC = () => {
     );
   }, [params.slug]);
 
+  // Helper to get icon for mobile bottom nav
+  const getIcon = (label: string) => {
+    switch (label.toLowerCase()) {
+      case "reserve":
+        return <Calendar size={20} />;
+      case "catering":
+        return <Coffee size={20} />;
+      case "menu":
+        return <BookOpen size={20} />;
+      case "order online":
+        return <ShoppingCart size={20} />;
+      case "private events":
+        return <Users size={20} />;
+      default:
+        return <Menu size={20} />;
+    }
+  };
+
   return (
     <header className="w-full fixed z-50">
       {/* ===== Top Header ===== */}
-      <div className="hidden lg:flex justify-between items-center bg-gradient-to-r from-[#AE9060] to-[#483C28] text-white px-10 py-2">
-        {/* Logo */}
+      <div className="flex justify-between items-center bg-gradient-to-r from-[#AE9060] to-[#483C28] text-white px-4 lg:px-10 py-2">
         <Link href="/" aria-label="Go to Home">
-          <Image src={logo} alt="Company Logo" className="h-12 w-auto" />
+          <Image
+            src={logo}
+            alt="Company Logo"
+            className="h-12 w-auto sm:h-10 xs:h-4"
+          />
         </Link>
 
-        {/* Nav links */}
-        <nav className="flex items-center space-x-6">
+        {/* Desktop top nav */}
+        <div className="hidden lg:flex items-center space-x-6">
           {topNavLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="hover:text-gray-300 transition"
-            >
-              {link.label}
-            </Link>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-gray-300 transition"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="hover:text-gray-300 transition"
+              >
+                {link.label}
+              </Link>
+            )
           ))}
-          <a
-            href="/https://www.toasttab.com/kama-bistro/giftcards"
-            className="hover:text-gray-300 transition"
+        </div>
+
+        {/* Mobile: menu toggle */}
+        <div className="lg:hidden flex items-center space-x-2">
+          <button
+            className="p-2 rounded-lg hover:bg-gray-200"
+            onClick={() => setTopMenuOpen(!topMenuOpen)}
           >
-            Gift Cards
-          </a>
-        </nav>
+            {topMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
+        </div>
       </div>
 
-      {/* ===== Bottom Header ===== */}
-      <div className="flex lg:flex-row justify-between items-center bg-black text-white px-4 lg:px-10 py-2">
-        {/* Left: Location selector */}
-        <div className="flex flex-col justify-start space-x-2 w-full lg:w-auto mb-2 lg:mb-0">
+      {/* Top mobile dropdown */}
+      <AnimatePresence>
+        {topMenuOpen && (
+          <motion.nav
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="lg:hidden bg-white shadow-md overflow-hidden"
+          >
+            <div className="flex flex-col space-y-4 px-4 py-4">
+              {topNavLinks.map((link) =>
+                link.external ? (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 hover:text-black transition"
+                  >
+                    {link.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={link.label}
+                    href={link.href}
+                    className="text-gray-700 hover:text-black transition"
+                  >
+                    {link.label}
+                  </Link>
+                )
+              )}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
 
-          <CustomSelect options={[
+      {/* ===== Desktop Bottom Header ===== */}
+      <div className="hidden lg:flex justify-between items-center bg-black text-white px-10 py-2">
+        {/* Desktop location */}
+        <CustomSelect
+          options={[
             { value: "wicker-park", label: "Wicker Park" },
             { value: "la-grange", label: "La Grange" },
             { value: "west-loop", label: "West Loop" },
           ]}
-            onChange={(value) => {
-              localStorage.setItem("location", value)
-              setLocation(value)
-              router.push(value)
-            }}
-            firstOption="Select Location"
-            Default={location || ""}
-            // baseClasses="border"
-            addStyleClass="flex-row"
-            styleClasses="bg-transparent text-white flex justify-between gap-2 items-center  min-w-[200px]"
-            listItemClass="text-black hover:bg-blue-100 rounded-lg"
-            selectedDisplayClass="text-white font-semibold text-lg"
-          />
-          <span className="text-white/60 text-[11px]">{address[location]}</span>
-        </div>
+          onChange={(value) => {
+            localStorage.setItem("location", value);
+            setLocation(value);
+            router.push(value);
+          }}
+          firstOption="Select Location"
+          Default={location || ""}
+          addStyleClass="flex-row"
+          styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[200px]"
+          listItemClass="text-black hover:bg-blue-100 rounded-lg"
+          selectedDisplayClass="text-white font-semibold text-lg"
+        />
 
-        {/* Right: Nav links */}
-        <div className="hidden lg:flex items-center space-x-6">
+        <div className="flex items-center space-x-6">
           {navLinks.map((link) => (
             <Link
               key={link.label}
@@ -135,47 +201,23 @@ const HeaderTwo: React.FC = () => {
             Book Now
           </Link>
         </div>
-
-        {/* Mobile menu toggle */}
-        <div className="lg:hidden flex justify-end w-full">
-          <button
-            className="p-2 rounded-lg hover:bg-gray-200"
-            onClick={() => setBottomMenuOpen(!bottomMenuOpen)}
-          >
-            {bottomMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
       </div>
 
-      {/* Bottom header mobile dropdown */}
-      <AnimatePresence>
-        {bottomMenuOpen && (
-          <motion.nav
-            initial={{ height: 0 }}
-            animate={{ height: "auto" }}
-            exit={{ height: 0 }}
-            className="lg:hidden bg-white shadow-md overflow-hidden"
-          >
-            <div className="flex flex-col space-y-4 px-4 py-4">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-gray-700 hover:text-black transition"
-                >
-                  {link.label}
-                </Link>
-              ))}
-              <Link
-                href="/book-now"
-                className="w-full px-4 py-2 rounded-2xl bg-black text-white hover:bg-gray-800 transition text-center"
-              >
-                Book Now
-              </Link>
-            </div>
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      {/* ===== Mobile Bottom Fixed Nav ===== */}
+      <div className="lg:hidden fixed bottom-0 left-0 w-full bg-black border-t border-gray-700 z-50">
+        <div className="flex justify-between items-center px-4 py-2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className="flex flex-col items-center text-white text-xs hover:text-[#AE9060] transition"
+            >
+              {getIcon(link.label)}
+              <span className="mt-1">{link.label}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
     </header>
   );
 };
