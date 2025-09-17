@@ -6,10 +6,12 @@ import {useParams} from "next/navigation";
 import {
   createContentReq,
   getLocationsReq,
+  getProposedUpdatesByIDReq,
   getUserProfileReq,
   getWebpageReq,
   proposeUpdateReq,
   saveContentReq,
+  approveProposedVersionReq,
 } from "@/functionality/fetch";
 import {toastWithUpdate} from "@/functionality/ToastWithUpdate";
 import Section from "../../_component/Elements/Section";
@@ -24,7 +26,6 @@ import DimensionToolbar, {
   updateStylesType,
 } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
-import {test} from "@/assets/test";
 import {ArrowLeft} from "lucide-react";
 
 import {CiMobile1} from "react-icons/ci";
@@ -40,7 +41,6 @@ import HoverToolbar from "../../_component/common/HoverToolbar";
 import {useRouter} from "next/navigation";
 import ChildElements from "../../_component/common/ChildElements";
 import {isAdmin, verifyAdminStatus} from "@/utils/isAdmin";
-import Mapview from "../../_component/Elements/Mapp";
 
 const renderInput = (
   label: string,
@@ -52,7 +52,6 @@ const renderInput = (
 ) => {
   return (
     <div className="flex flex-col gap-1" key={key}>
-      {/* <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label> */}
       <input
         type={type}
         value={value || ""}
@@ -70,9 +69,9 @@ const renderInput = (
 const Editor = () => {
   const params = useParams();
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const page = params.slug ? params.slug[0] : ""; // hold the id from param to bring the content from backend
-  const [saveData, setSaveData] = useState<Boolean>(false); // decides whether to allow save
-  const [pageWidth, setPageWidth] = useState<number | string>("100%"); // decides the width/screen of the page
+  const page = params.slug ? params.slug[0] : "";
+  const [saveData, setSaveData] = useState<Boolean>(false);
+  const [pageWidth, setPageWidth] = useState<number | string>("100%");
   const [locations, setLocations] = useState<LocationType[]>([
     {id: "", name: ""},
   ]);
@@ -81,27 +80,32 @@ const Editor = () => {
   const [showToolbar, setShowToolbar] = useState<boolean>(true);
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isVerifier, setIsVerifier] = useState(false);
+  const [proposedVersionId, setProposedVersionId] = useState<string | null>(
+    null
+  );
+  const [isApproving, setIsApproving] = useState(false);
+  const [isRejecting, setIsRejecting] = useState(false);
   const router = useRouter();
 
   const childElementsRef = useRef<HTMLDivElement | null>(null);
   const toolbarRef = useDraggable(childElementsRef);
 
   const {
-    width, // {currentWidth, setCurrentWidth}
-    websiteContent, // website object that has {name, id, route, createdAt, updatedAt, content: []} // where content is each section
-    contextRef, // if active then it toggle between the toolbar of text and section
-    imageEdit, // boolean value to switch between the rich text tool and image toolbar
-    activeScreen, // the active Screen
-    currentSectionSetter, // setter of the setter to set the section style
-    finalSubmit, // the array of the all section
+    width,
+    websiteContent,
+    contextRef,
+    imageEdit,
+    activeScreen,
+    currentSectionSetter,
+    finalSubmit,
     setContainerRef,
   } = useMyContext();
 
   const {webpage, setWebpage} = websiteContent;
 
-  console.log("webpage", webpage);
+  console.log(webpage, "webpage");
 
-  const sectionStyleSetter = currentSectionSetter; //? currentSectionSetter : () => { };
+  const sectionStyleSetter = currentSectionSetter;
 
   const saveAllSection = () => {
     if (Array.isArray(finalSubmit)) {
@@ -127,13 +131,9 @@ const Editor = () => {
     try {
       let response;
 
-      // Check if user is super user (you'll need to get this from your auth context)
-      const isSuperUser = await verifyAdminStatus(); // Replace with actual check
-
-      console.log("isSuperUser", isSuperUser);
+      const isSuperUser = await verifyAdminStatus();
 
       if (isSuperUser) {
-        // Super users can save directly
         response = await toastWithUpdate(
           () =>
             page
@@ -145,10 +145,7 @@ const Editor = () => {
             error: (err: any) => err?.message || "Failed to save content",
           }
         );
-
-        console.log(page, "page");
       } else {
-        // Regular editors need to propose changes
         response = await toastWithUpdate(
           () => proposeUpdateReq(page, bodyPayload),
           {
@@ -169,30 +166,56 @@ const Editor = () => {
     }
   };
 
+  const handleApprove = async () => {
+    if (!proposedVersionId) return;
+
+    setIsApproving(true);
+    try {
+      const response = await approveProposedVersionReq(proposedVersionId);
+
+      if (response.ok) {
+        toast.success("Changes approved successfully!");
+        router.push("/dashboard");
+      } else {
+        toast.error(response.error || "Failed to approve changes");
+      }
+    } catch (error) {
+      toast.error("Error approving changes");
+    } finally {
+      setIsApproving(false);
+    }
+  };
+
+  const handleReject = async () => {
+    if (!proposedVersionId) return;
+
+    setIsRejecting(true);
+    try {
+      // You'll need to implement a reject API endpoint
+      toast.error("Reject functionality not implemented yet");
+    } catch (error) {
+      toast.error("Error rejecting changes");
+    } finally {
+      setIsRejecting(false);
+    }
+  };
+
   useEffect(() => {
     const checkUserRole = async () => {
       try {
         const response = await getUserProfileReq();
-        console.log("User profile response:", response); // Debug log
 
         if (response && response.ok && response.user) {
-          // Get the current page ID from the URL params
-          const currentPageId = page; // This comes from your useParams hook
-          console.log("Current page ID:", currentPageId);
-
-          // Find the role for this specific page
+          const currentPageId = page;
           const pageRole = response.user.pageRoles?.find(
             (pr: any) => pr.webpageId === currentPageId
           );
-
-          console.log("Page role for current page:", pageRole);
 
           if (pageRole) {
             const isVerifierForThisPage = pageRole.role?.name === "VERIFIER";
             setIsVerifier(isVerifierForThisPage);
             setUserRole(pageRole.role?.name || "EDITOR");
           } else {
-            // If no specific role found for this page, check if user is a verifier for any page
             const isVerifierUser = response.user.pageRoles?.some(
               (pr: any) => pr.role?.name === "VERIFIER"
             );
@@ -210,10 +233,8 @@ const Editor = () => {
     };
 
     checkUserRole();
-  }, [page]); // Add page as dependency to re-run when page changes
+  }, [page]);
 
-  ///////////// screen related functionality ///////////////////
-  // Function to classify width
   const classifyWidth = (w: number) => {
     if (w > 1200) return "xl";
     if (w >= 1024) return "lg";
@@ -257,7 +278,6 @@ const Editor = () => {
 
     return () => observer.disconnect();
   }, []);
-  //////////////////////////////////////////////////////////////////
 
   const addSection = (section = "section") => {
     setWebpage((prev: webpageType | null) => {
@@ -323,9 +343,8 @@ const Editor = () => {
 
     if (lastSection) setSaveData(false);
   };
-  /////////////////////////////////////////Effects//////////////////////////////////////////
+
   useEffect(() => {
-    //// get Locations
     const fetchLocations = async () => {
       try {
         const response = await getLocationsReq();
@@ -343,10 +362,8 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
-    ///// update and save logic
     async function updateData() {
       const bodyPayload: Record<string, any> = {...webpage};
-      // console.log(JSON.stringify(bodyPayload))
       if (!bodyPayload.name) return toast.error("Webpage name is required");
       if (!bodyPayload.route) return toast.error("Webpage route is required");
 
@@ -376,38 +393,46 @@ const Editor = () => {
   }, [saveData]);
 
   useEffect(() => {
-    ///// get the Website page
     if (page) {
       const id: string = page;
-      async function getContentfromServer(): Promise<void> {
-        try {
-          const response: any = await getWebpageReq(id); // bringing the content from backend
 
-          if (response.ok) {
-            // if successfull
-            // console.log(JSON.stringify(response.webpage, null, 2));
-            setWebpage(response.webpage); // then store in the contextApi. The object structure is similar to related else block
-            // setWebpage({
-            //     id: crypto.randomUUID(),
-            //     route: test.route,
-            //     locationId: test.locationId,
-            //     name: test.name,
-            //     contents: test.contents,
-            //     createdAt: "",
-            //     updatedAt: "",
-            //     editedWidth: currentWidth ? currentWidth : "1280px"
-            // })
+      const fetchData = async () => {
+        try {
+          let response: any;
+
+          if (isVerifier) {
+            // Fetch proposed version for verifier
+            response = await getProposedUpdatesByIDReq(id);
+            console.log("Proposed version response.version:", response.webpage);
+
+            if (response.ok) {
+              // Store the proposed version ID for approval
+              setProposedVersionId(response.id);
+              // Set the webpage data from the version property of the proposed version
+              setWebpage(response.webpage); // Changed from response.webpage || response
+            } else {
+              toast.error(response.error || "Failed to fetch proposed version");
+            }
           } else {
-            throw new Error("error while fetch the page");
+            // Fetch regular webpage for editor
+            response = await getWebpageReq(id);
+
+            console.log("Webpage response:", response.webpage);
+
+            if (response.ok) {
+              setWebpage(response.webpage);
+            } else {
+              toast.error(response.error || "Failed to fetch webpage");
+            }
           }
         } catch (err) {
           console.error(err);
+          toast.error("Error fetching data");
         }
-      }
+      };
 
-      getContentfromServer();
+      fetchData();
     } else {
-      // if the page is not there then create from  fresh
       setWebpage({
         id: crypto.randomUUID(),
         route: "",
@@ -419,7 +444,7 @@ const Editor = () => {
         editedWidth: currentWidth ? currentWidth : "1280px",
       });
     }
-  }, [page]);
+  }, [page, isVerifier]);
 
   const setMetaOfPage = (name: string, value: string) => {
     setWebpage((prev: webpageType | null) => {
@@ -443,9 +468,9 @@ const Editor = () => {
   useEffect(() => {
     setContainerRef(containerRef.current);
   }, [containerRef.current]);
+
   return (
     <div className="flex flex-col overflow-hidden">
-      {/* {!isVerifier && ( */}
       <div className="h-[8vh] bg-slate-700 flex justify-between items-center p-2 gap-8">
         <button
           onClick={() => router.back()}
@@ -455,97 +480,127 @@ const Editor = () => {
         </button>
 
         <div className="flex justify-end items-center gap-8">
-          <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
-            <button
-              onClick={() => applyXLScreen()}
-              className={`${styleForScreenIcons} ${
-                activeScreen === "xl" && "bg-stone-500"
-              }`}
-              title="1200px+"
-            >
-              <CiDesktop />
-            </button>
-            <button
-              onClick={() => applyLGScreen()}
-              className={`${styleForScreenIcons} ${
-                activeScreen === "lg" && "bg-stone-500"
-              }`}
-              title="1024px"
-            >
-              <CiLaptop />
-            </button>
-            <button
-              onClick={() => applyMDScreen()}
-              className={`${styleForScreenIcons} ${
-                activeScreen === "md" && "bg-stone-500"
-              }`}
-              title="600px"
-            >
-              <IoIosTabletPortrait />
-            </button>
-            <button
-              onClick={() => applySMScreen()}
-              className={`${styleForScreenIcons} ${
-                activeScreen === "sm" && "bg-stone-500"
-              }`}
-              title="390px"
-            >
-              <CiMobile1 />
-            </button>
-          </div>
-          <button
-            className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-            style={{
-              border: "none",
-              padding: "6px 8px",
-              borderRadius: "2px",
-              color: "white",
-              top: 0,
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setOnHoverToolbar(!onHoverToolbar);
-            }}
-          >
-            {onHoverToolbar ? "Styles" : "Hover styles"}
-          </button>
+          {isVerifier ? (
+            <>
+              <button
+                className="text-sm cursor-pointer bg-green-600 w-[150px]"
+                style={{
+                  border: "none",
+                  padding: "6px 8px",
+                  borderRadius: "2px",
+                  color: "white",
+                }}
+                onClick={handleApprove}
+                disabled={isApproving}
+              >
+                {isApproving ? "Approving..." : "Approve Changes"}
+              </button>
+              <button
+                className="text-sm cursor-pointer bg-red-600 w-[150px]"
+                style={{
+                  border: "none",
+                  padding: "6px 8px",
+                  borderRadius: "2px",
+                  color: "white",
+                }}
+                onClick={handleReject}
+                disabled={isRejecting}
+              >
+                {isRejecting ? "Rejecting..." : "Reject Changes"}
+              </button>
+            </>
+          ) : (
+            <>
+              <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
+                <button
+                  onClick={() => applyXLScreen()}
+                  className={`${styleForScreenIcons} ${
+                    activeScreen === "xl" && "bg-stone-500"
+                  }`}
+                  title="1200px+"
+                >
+                  <CiDesktop />
+                </button>
+                <button
+                  onClick={() => applyLGScreen()}
+                  className={`${styleForScreenIcons} ${
+                    activeScreen === "lg" && "bg-stone-500"
+                  }`}
+                  title="1024px"
+                >
+                  <CiLaptop />
+                </button>
+                <button
+                  onClick={() => applyMDScreen()}
+                  className={`${styleForScreenIcons} ${
+                    activeScreen === "md" && "bg-stone-500"
+                  }`}
+                  title="600px"
+                >
+                  <IoIosTabletPortrait />
+                </button>
+                <button
+                  onClick={() => applySMScreen()}
+                  className={`${styleForScreenIcons} ${
+                    activeScreen === "sm" && "bg-stone-500"
+                  }`}
+                  title="390px"
+                >
+                  <CiMobile1 />
+                </button>
+              </div>
+              <button
+                className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                style={{
+                  border: "none",
+                  padding: "6px 8px",
+                  borderRadius: "2px",
+                  color: "white",
+                  top: 0,
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOnHoverToolbar(!onHoverToolbar);
+                }}
+              >
+                {onHoverToolbar ? "Styles" : "Hover styles"}
+              </button>
 
-          <button
-            className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-            style={{
-              border: "none",
-              padding: "6px 8px",
-              borderRadius: "2px",
-              color: "white",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowToolbar(!showToolbar);
-            }}
-          >
-            {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
-          </button>
-          <button
-            className="text-sm cursor-pointer"
-            style={{
-              backgroundColor: "#007bff",
-              border: "none",
-              padding: "6px 8px",
-              borderRadius: "2px",
-              color: "white",
-            }}
-            onClick={(e) => {
-              e.stopPropagation();
-              //   saveAllSection();
-              //   setSaveData(true);
-              handleSave();
-            }}
-          >
-            Save Changes
-          </button>
+              <button
+                className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+                style={{
+                  border: "none",
+                  padding: "6px 8px",
+                  borderRadius: "2px",
+                  color: "white",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowToolbar(!showToolbar);
+                }}
+              >
+                {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
+              </button>
+              <button
+                className="text-sm cursor-pointer"
+                style={{
+                  backgroundColor: "#007bff",
+                  border: "none",
+                  padding: "6px 8px",
+                  borderRadius: "2px",
+                  color: "white",
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSave();
+                }}
+              >
+                Save Changes
+              </button>
+            </>
+          )}
         </div>
       </div>
-      {/* )} */}
 
       <div
         style={{
@@ -556,7 +611,6 @@ const Editor = () => {
           overflow: "hidden",
         }}
       >
-        {/* website */}
         <div
           className="scroll-one bg-zinc-800"
           style={{
@@ -576,12 +630,12 @@ const Editor = () => {
               transform: activeScreen !== "xl" ? "translateX(-120px)" : "",
               minHeight: "100vh",
               transition: ".1s linear all",
-              backgroundColor: "#e7e5e4", // stone-200
+              backgroundColor: "#e7e5e4",
               backgroundImage: `
                                 linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
                                 linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
                                 `,
-              backgroundSize: "15px 15px", // size of grid squares
+              backgroundSize: "15px 15px",
               position: "relative",
               zIndex: 1,
               overflow: "hidden",
@@ -608,6 +662,7 @@ const Editor = () => {
                   createSection={CreateSection}
                   setGivenName={setGivenName}
                   parentRef={containerRef.current}
+                  readOnly={isVerifier}
                 />
               );
             })}
@@ -616,9 +671,6 @@ const Editor = () => {
             )}
           </div>
         </div>
-        {/* Sidebar/toolbars */}
-        {/* {
-                    showToolbar && */}
 
         {!isVerifier && showToolbar && (
           <div
@@ -629,7 +681,7 @@ const Editor = () => {
               height: "92vh",
               overflowY: "scroll",
               zIndex: 1000,
-              display: showToolbar ? "block" : "none", // 👈 hide instead of unmount
+              display: showToolbar ? "block" : "none",
             }}
             className="scroll-one fixed top-[8vh] right-0"
           >
@@ -670,7 +722,6 @@ const Editor = () => {
                 }}
               />
             </div>
-            {/* toolbars */}
             {onHoverToolbar ? (
               <HoverToolbar />
             ) : !contextRef.activeRef ? (
@@ -690,7 +741,6 @@ const Editor = () => {
           </div>
         )}
 
-        {/* } */}
         <Toaster position="top-right" />
       </div>
     </div>

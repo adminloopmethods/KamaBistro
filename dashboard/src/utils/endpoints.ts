@@ -45,6 +45,7 @@ const endpointMap = {
   getSection: `${content}/section/`,
   proposeUpdate: `${content}/propose/`,
   getProposedVersions: `${content}/proposed-versions`,
+  getProposedVersionsByID: `${content}/proposed-versions/`,
   getProposedUpdates: `${content}/proposed-updates`,
   approveProposedVersion: `${content}/proposed-versions/approve/`,
 

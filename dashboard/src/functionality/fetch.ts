@@ -360,11 +360,20 @@ export async function getProposedUpdatesReq(
   );
 }
 
-export async function approveProposedVersionReq(
-  updateId: string
+export async function getProposedUpdatesByIDReq(
+  webpageId: string
 ): Promise<ApiResponse> {
   return await makerequest(
-    endpoint.route("approveProposedVersion") + updateId,
+    endpoint.route("getProposedVersionsByID") + webpageId,
+    "GET"
+  );
+}
+
+export async function approveProposedVersionReq(
+  proposedVersionId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("approveProposedVersion") + proposedVersionId,
     "POST"
   );
 }
