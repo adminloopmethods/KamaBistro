@@ -351,6 +351,24 @@ export async function proposeUpdateReq(
   );
 }
 
+export async function getProposedUpdatesReq(
+  webpageId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("getProposedVersions")}?webpageId=${webpageId}`,
+    "GET"
+  );
+}
+
+export async function approveProposedVersionReq(
+  updateId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("approveProposedVersion") + updateId,
+    "POST"
+  );
+}
+
 // Save content (update)
 export async function saveContentReq(
   id: string,

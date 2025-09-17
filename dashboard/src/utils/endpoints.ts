@@ -2,7 +2,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
 export const cloudinaryApiPoint = process.env
   .NEXT_PUBLIC_CLOUDINARY_API as string;
 
-export const googleApi = process.env.NEXT_PUBLIC_GOOGLE_MAPS_NEW_API_KEY
+export const googleApi = process.env.NEXT_PUBLIC_GOOGLE_MAPS_NEW_API_KEY;
 
 if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
@@ -44,6 +44,9 @@ const endpointMap = {
   createContent: `${content}/`,
   getSection: `${content}/section/`,
   proposeUpdate: `${content}/propose/`,
+  getProposedVersions: `${content}/proposed-versions`,
+  getProposedUpdates: `${content}/proposed-updates`,
+  approveProposedVersion: `${content}/proposed-versions/approve/`,
 
   // Media
   uploadMedia: `${media}/upload`,
