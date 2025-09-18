@@ -11,6 +11,7 @@ import ContactForm from "../_component/Elements/ContactForm";
 import BookTable from "../_component/Elements/BookTable";
 import HotelTimings from "../_component/Elements/RestaurantTimings";
 import SingleLocationMap from "../_component/Elements/MappSimple";
+import MenuTabs from "../_component/Elements/Menu";
 // import Mapview from "../_component/Elements/Mapp";
 
 // Define screen sizes for style keys
@@ -214,6 +215,7 @@ export const CreateElement: Record<string, () => BaseElement | ImageElementType>
   bookTableLa: () => gED("bookTableLa", ""),
   contactCard: () => gED("contactCard", ""),
   mapView: () => gED("map", ""),
+  menu: () => gED("menu", "")
 };
 
 export default {
@@ -235,5 +237,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
   contact: ContactForm,
   bookTable: BookTable,
   bookTableLa: BookTable,
-  map: SingleLocationMap
+  map: SingleLocationMap,
+  menu: MenuTabs
 };
