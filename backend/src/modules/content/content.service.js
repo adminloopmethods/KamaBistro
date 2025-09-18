@@ -45,16 +45,37 @@ export const getAssignedWebpagesService = async (userId) => {
 };
 
 // ---------------- CREATE WEBPAGE ----------------
-export const createWebpageService = async ({
-  name,
-  contents,
-  route,
-  editedWidth,
-}) => {
+export const createWebpageService = async ({ name, contents, route, editedWidth }) => {
   const id = crypto.randomUUID();
 
-  // Recursive function to build Content (section) structure
   const buildContentCreate = (section, orderIndex) => {
+    const elementsArray = [];
+    const childrenArray = [];
+
+    section.elements.forEach((el, index) => {
+      if (el.name === "section") {
+        childrenArray.push(buildContentCreate(el, index));
+      } else {
+        elementsArray.push({
+          id: el.id,
+          name: el.name,
+          content: el.content,
+          hover: el.hover,
+          href: el.href,
+          aria: el.aria,
+          order: index,
+          style: {
+            create: {
+              xl: el.style?.xl,
+              lg: el.style?.lg,
+              md: el.style?.md,
+              sm: el.style?.sm,
+            },
+          },
+        });
+      }
+    });
+
     return {
       id: section.id,
       name: section.name,
@@ -70,34 +91,8 @@ export const createWebpageService = async ({
           sm: section.style?.sm,
         },
       },
-      elements: {
-        create: section.elements
-          .filter((el) => el.name !== "section") // normal elements
-          .map((el, elIndex) => ({
-            id: el.id,
-            name: el.name,
-            content: el.content,
-            hover: el.hover,
-            href: el.href,
-            aria: el.aria,
-            order: elIndex,
-            style: {
-              create: {
-                xl: el.style?.xl,
-                lg: el.style?.lg,
-                md: el.style?.md,
-                sm: el.style?.sm,
-              },
-            },
-          })),
-      },
-      children: {
-        create: section.elements
-          .filter((el) => el.name === "section") // nested sections
-          .map((childSection, childIndex) =>
-            buildContentCreate(childSection, childIndex)
-          ),
-      },
+      elements: { create: elementsArray },
+      children: { create: childrenArray },
     };
   };
 
@@ -124,7 +119,7 @@ export const createWebpageService = async ({
             include: {
               style: true,
               elements: { orderBy: { order: "asc" }, include: { style: true } },
-              children: true, // will recursively fetch deeper
+              children: true, // recursively fetch deeper
             },
           },
         },
@@ -134,6 +129,7 @@ export const createWebpageService = async ({
 
   return { webpage, id };
 };
+
 
 
 // ---------------- GET WEBPAGE BY ID ----------------

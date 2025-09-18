@@ -31,7 +31,7 @@ type SectionProps = {
     id: string;
     [key: string]: any;
   };
-  finalUpdate?: (id: string, element: any, lS: Boolean) => void,
+  finalUpdate?: ((id: string, element: any, lS: Boolean) => void) | any,
   createSection?: any,
   parentIsSection?: Boolean,
   updateParentElement?: (id: string, element: any, lS: Boolean) => void,
