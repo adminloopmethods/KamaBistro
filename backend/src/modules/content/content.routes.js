@@ -7,6 +7,7 @@ import {
   getAllContentsController,
   getAllWebpages,
   getContentByIdController,
+  getProposedVersionbyID,
   getProposedVersions,
   getWebpageById,
   getWebpageByRoute,
@@ -39,6 +40,7 @@ router.get("/section/:id", getContentByIdController);
 
 // Proposed versions routes
 router.get("/proposed-versions", tryCatchWrap(getProposedVersions));
+router.get("/proposed-versions/:id", tryCatchWrap(getProposedVersionbyID));
 router.post(
   "/proposed-versions/approve/:id",
   tryCatchWrap(approveProposedVersion)

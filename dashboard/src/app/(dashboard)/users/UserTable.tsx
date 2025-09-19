@@ -42,7 +42,8 @@ interface UserTableProps {
   onPageChange: (page: number) => void;
   onCreateUser: () => void;
   refreshUsers: () => void;
-  // isCurrentUserAdmin: boolean;
+  filters: any;
+  onFilterChange: (filters: any) => void;
 }
 
 const UserTable: React.FC<UserTableProps> = ({
@@ -50,7 +51,8 @@ const UserTable: React.FC<UserTableProps> = ({
   onPageChange,
   onCreateUser,
   refreshUsers,
-  // isCurrentUserAdmin,
+  filters,
+  onFilterChange,
 }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -172,6 +174,11 @@ const UserTable: React.FC<UserTableProps> = ({
     }
   };
 
+  const handleFilterInputChange = (key: string, value: string) => {
+    const newFilters = {...filters, [key]: value};
+    onFilterChange(newFilters);
+  };
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
@@ -196,6 +203,73 @@ const UserTable: React.FC<UserTableProps> = ({
           </svg>
           New User
         </button>
+      </div>
+
+      <div className="px-6 py-4 grid grid-cols-1 md:grid-cols-5 gap-4 bg-gray-50 dark:bg-gray-700">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Name
+          </label>
+          <input
+            type="text"
+            value={filters.name}
+            onChange={(e) => handleFilterInputChange("name", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:text-white"
+            placeholder="Filter by name"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Email
+          </label>
+          <input
+            type="text"
+            value={filters.email}
+            onChange={(e) => handleFilterInputChange("email", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:text-white"
+            placeholder="Filter by email"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Phone
+          </label>
+          <input
+            type="text"
+            value={filters.phone}
+            onChange={(e) => handleFilterInputChange("phone", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:text-white"
+            placeholder="Filter by phone"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Status
+          </label>
+          <select
+            value={filters.status}
+            onChange={(e) => handleFilterInputChange("status", e.target.value)}
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:text-white"
+          >
+            <option value="">All Status</option>
+            <option value="ACTIVE">Active</option>
+            <option value="INACTIVE">Inactive</option>
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+            Location
+          </label>
+          <input
+            type="text"
+            value={filters.location}
+            onChange={(e) =>
+              handleFilterInputChange("location", e.target.value)
+            }
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:text-white"
+            placeholder="Filter by location"
+          />
+        </div>
       </div>
 
       <div className="overflow-x-auto">
