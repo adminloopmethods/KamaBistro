@@ -175,7 +175,7 @@ const Editor = () => {
 
       if (response.ok) {
         toast.success("Changes approved successfully!");
-        router.push("/dashboard");
+        router.push("/pages");
       } else {
         toast.error(response.error || "Failed to approve changes");
       }
@@ -401,24 +401,18 @@ const Editor = () => {
           let response: any;
 
           if (isVerifier) {
-            // Fetch proposed version for verifier
             response = await getProposedUpdatesByIDReq(id);
-            console.log("Proposed version response.version:", response.webpage);
-
-            if (response.ok) {
-              // Store the proposed version ID for approval
-              setProposedVersionId(response.id);
-              // Set the webpage data from the version property of the proposed version
-              setWebpage(response.webpage); // Changed from response.webpage || response
+            console.log("Proposed version response:", response);
+            if (response?.ok) {
+              setProposedVersionId(response.proposedVersion.id);
+              setWebpage(response.proposedVersion.version);
+              console.log(response.proposedVersion.version, "version");
             } else {
               toast.error(response.error || "Failed to fetch proposed version");
             }
           } else {
-            // Fetch regular webpage for editor
             response = await getWebpageReq(id);
-
             console.log("Webpage response:", response.webpage);
-
             if (response.ok) {
               setWebpage(response.webpage);
             } else {

@@ -68,42 +68,46 @@ export const fetchAllUsers = async (
   email = "",
   phone = "",
   status = "",
+  location = "",
   page = 1,
-  limit = 1
+  limit = 40
 ) => {
   const skip = (page - 1) * limit;
 
-  const allUsers = await prismaClient.user.findMany({
-    where: {
-      name: {
-        not: "Super Admin",
-        contains: name,
-        mode: "insensitive",
+  const whereClause = {
+    name: {
+      not: "Super Admin",
+      contains: name,
+      mode: "insensitive",
+    },
+    email: email ? {contains: email, mode: "insensitive"} : undefined,
+    phone: phone ? {contains: phone} : undefined,
+    ...(status && {status: status}),
+    // Add location filter if provided
+    ...(location && {
+      location: {
+        name: {
+          contains: location,
+          mode: "insensitive",
+        },
       },
-      email: email ? {contains: email, mode: "insensitive"} : undefined,
-      phone: phone ? {contains: phone} : undefined,
-      ...(status ? {status: status} : {}),
-    },
-    include: {
-      location: true,
-    },
-    orderBy: {createdAt: "asc"},
-    skip,
-    take: limit,
-  });
+    }),
+  };
 
-  const totalUser = await prismaClient.user.count({
-    where: {
-      name: {
-        not: "Super Admin",
-        contains: name,
-        mode: "insensitive",
+  const [allUsers, totalUser] = await Promise.all([
+    prismaClient.user.findMany({
+      where: whereClause,
+      include: {
+        location: true,
       },
-      email: email ? {contains: email, mode: "insensitive"} : undefined,
-      phone: phone ? {contains: phone} : undefined,
-      ...(status ? {status: status} : {}),
-    },
-  });
+      orderBy: {createdAt: "asc"},
+      skip,
+      take: limit,
+    }),
+    prismaClient.user.count({
+      where: whereClause,
+    }),
+  ]);
 
   return {
     allUsers,

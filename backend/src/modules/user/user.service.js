@@ -34,9 +34,24 @@ const createUser = async (name, email, password, phone, locationId) => {
   return {message: "user created successfully", user};
 };
 
-const getAllUsers = async (name, email, phone, status, page, limit) => {
-  const users = await fetchAllUsers(name, email, phone, status, page, limit);
-  // logger.info({response: "user fetched successfully", users: users});
+const getAllUsers = async (
+  name,
+  email,
+  phone,
+  status,
+  location,
+  page,
+  limit
+) => {
+  const users = await fetchAllUsers(
+    name,
+    email,
+    phone,
+    status,
+    location,
+    page,
+    limit
+  );
   return {message: "user fetched successfully", users};
 };
 

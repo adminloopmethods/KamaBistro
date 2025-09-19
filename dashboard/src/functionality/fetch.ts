@@ -222,8 +222,27 @@ export async function forgotPasswordUpdateReq(
 }
 
 // Get all users
-export async function getUsersReq(): Promise<ApiResponse> {
-  return await makerequest(endpoint.route("getUsers"), "GET");
+export async function getUsersReq(filters?: {
+  name?: string;
+  email?: string;
+  phone?: string;
+  status?: string;
+  location?: string;
+  page?: number;
+  limit?: number;
+}): Promise<ApiResponse> {
+  const queryParams = new URLSearchParams();
+
+  if (filters?.name) queryParams.append("name", filters.name);
+  if (filters?.email) queryParams.append("email", filters.email);
+  if (filters?.phone) queryParams.append("phone", filters.phone);
+  if (filters?.status) queryParams.append("status", filters.status);
+  if (filters?.location) queryParams.append("location", filters.location);
+  if (filters?.page) queryParams.append("page", filters.page.toString());
+  if (filters?.limit) queryParams.append("limit", filters.limit.toString());
+
+  const url = `${endpoint.route("getUsers")}?${queryParams.toString()}`;
+  return await makerequest(url, "GET");
 }
 
 export async function getUserProfileReq(): Promise<ApiResponse> {

@@ -215,6 +215,8 @@ export const getProposedVersionbyID = async (req, res) => {
       webpageId
     );
 
+    // console.log(proposedVersion, "proposedVersion");
+
     if (!proposedVersion) {
       return res.status(404).json({error: "Proposed version not found."});
     }
@@ -227,14 +229,18 @@ export const getProposedVersionbyID = async (req, res) => {
 
     // Return the version data at the root level for easier consumption
     const response = {
-      ...proposedVersion.version,
-      id: proposedVersion.id,
-      webpageId: proposedVersion.webpageId,
-      editorId: proposedVersion.editorId,
-      verifierId: proposedVersion.verifierId,
-      createdAt: proposedVersion.createdAt,
-      updatedAt: proposedVersion.updatedAt,
+      proposedVersion: {
+        id: proposedVersion.id,
+        webpageId: proposedVersion.webpageId,
+        editorId: proposedVersion.editorId,
+        verifierId: proposedVersion.verifierId,
+        createdAt: proposedVersion.createdAt,
+        updatedAt: proposedVersion.updatedAt,
+        version: proposedVersion.version,
+      },
     };
+
+    // console.log(response.proposedVersion.version, "response.verison");
 
     res.json(response);
   } catch (error) {

@@ -11,14 +11,24 @@ const UsersPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [filters, setFilters] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    status: "",
+    location: "",
+  });
 
   console.log(userData, "userData");
 
-  const fetchUsers = async (page: number = 1) => {
+  const fetchUsers = async (page: number = 1, filterParams: any = {}) => {
     try {
       setLoading(true);
-      // const response = await getUsersReq(page);
-      const response = await getUsersReq();
+      const response = await getUsersReq({
+        ...filterParams,
+        page,
+        limit: 40,
+      });
 
       if (response.ok) {
         setUserData(response);
@@ -36,11 +46,17 @@ const UsersPage: React.FC = () => {
   };
 
   const refreshUsers = () => {
-    fetchUsers(currentPage);
+    fetchUsers(currentPage, filters);
+  };
+
+  const handleFilterChange = (newFilters: any) => {
+    setFilters(newFilters);
+    setCurrentPage(1); // Reset to first page when filters change
+    fetchUsers(1, newFilters);
   };
 
   useEffect(() => {
-    fetchUsers(currentPage);
+    fetchUsers(currentPage, filters);
   }, [currentPage]);
 
   const handlePageChange = (page: number) => {
@@ -48,7 +64,7 @@ const UsersPage: React.FC = () => {
   };
 
   const handleUserCreated = () => {
-    fetchUsers(currentPage); // Refresh the user list
+    fetchUsers(currentPage, filters);
   };
 
   return (
@@ -72,7 +88,8 @@ const UsersPage: React.FC = () => {
             onPageChange={handlePageChange}
             onCreateUser={() => setIsModalOpen(true)}
             refreshUsers={refreshUsers}
-            // isCurrentUserAdmin={true} // Pass the required property
+            filters={filters}
+            onFilterChange={handleFilterChange}
           />
 
           <AddUserModal
