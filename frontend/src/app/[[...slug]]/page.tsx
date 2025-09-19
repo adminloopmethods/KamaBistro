@@ -22,6 +22,8 @@ export default async function Page({
   const resolvedParams = await params;
   const [page, location] = detectSlug(resolvedParams.slug);
 
+  console.log(page)
+
   const response: any =
     resolvedParams.slug?.length === 1 && locations[page]
       ? await getContentReq("", locations[page], { cache: "no-store" })

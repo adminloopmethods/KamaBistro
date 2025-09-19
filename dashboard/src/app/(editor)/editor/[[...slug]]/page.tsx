@@ -26,6 +26,7 @@ import DimensionToolbar, {
   updateStylesType,
 } from "../../_component/common/DimensionToolbar";
 import ImageStyleToolbar from "../../_component/common/ImageToolbar";
+import {test} from "@/assets/test";
 import {ArrowLeft} from "lucide-react";
 
 import {CiMobile1} from "react-icons/ci";
@@ -41,30 +42,7 @@ import HoverToolbar from "../../_component/common/HoverToolbar";
 import {useRouter} from "next/navigation";
 import ChildElements from "../../_component/common/ChildElements";
 import {isAdmin, verifyAdminStatus} from "@/utils/isAdmin";
-
-const renderInput = (
-  label: string,
-  key: string,
-  type: "text" | "number" = "text",
-  suffix = "",
-  value: string | undefined,
-  onChange: (name: string, val: string) => void
-) => {
-  return (
-    <div className="flex flex-col gap-1" key={key}>
-      <input
-        type={type}
-        value={value || ""}
-        onChange={(e) => {
-          const val = e.target.value;
-          onChange(key, val);
-        }}
-        placeholder={label}
-        className="p-2 rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-zinc-800 text-sm"
-      />
-    </div>
-  );
-};
+import {renderInput} from "./renderInput";
 
 const Editor = () => {
   const params = useParams();
@@ -103,7 +81,7 @@ const Editor = () => {
 
   const {webpage, setWebpage} = websiteContent;
 
-  console.log(webpage, "webpage");
+  console.log("webpage", webpage);
 
   const sectionStyleSetter = currentSectionSetter;
 
@@ -204,12 +182,19 @@ const Editor = () => {
     const checkUserRole = async () => {
       try {
         const response = await getUserProfileReq();
+        // console.log("User profile response:", response); // Debug log
 
         if (response && response.ok && response.user) {
-          const currentPageId = page;
+          // Get the current page ID from the URL params
+          const currentPageId = page; // This comes from your useParams hook
+          // console.log("Current page ID:", currentPageId);
+
+          // Find the role for this specific page
           const pageRole = response.user.pageRoles?.find(
             (pr: any) => pr.webpageId === currentPageId
           );
+
+          // console.log("Page role for current page:", pageRole);
 
           if (pageRole) {
             const isVerifierForThisPage = pageRole.role?.name === "VERIFIER";
@@ -261,23 +246,32 @@ const Editor = () => {
   useEffect(() => {
     if (!containerRef.current) return;
 
+    let prevWidth = containerRef.current.clientWidth;
+
     const observer = new ResizeObserver((entries) => {
       for (let entry of entries) {
         const newWidth = entry.contentRect.width;
-        width.setWidthValue(
-          classifyWidth(newWidth) === "xl" ? `${newWidth}px` : "1280px"
-        );
-        setCurrentWidth(
-          classifyWidth(newWidth) === "xl" ? `${newWidth}px` : "1280px"
-        );
-        width.setActiveScreen(classifyWidth(newWidth));
+
+        // Only update if width actually changed
+        if (newWidth !== prevWidth) {
+          prevWidth = newWidth;
+
+          const screenClass = classifyWidth(newWidth);
+          const widthValue = screenClass === "xl" ? `${newWidth}px` : "1280px";
+
+          width.setWidthValue(widthValue); // context state
+          setCurrentWidth(widthValue); // local state
+          width.setActiveScreen(screenClass);
+        }
       }
     });
 
     observer.observe(containerRef.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [width]);
+
+  //////////////////////////////////////////////////////////////////
 
   const addSection = (section = "section") => {
     setWebpage((prev: webpageType | null) => {
@@ -364,6 +358,7 @@ const Editor = () => {
   useEffect(() => {
     async function updateData() {
       const bodyPayload: Record<string, any> = {...webpage};
+      // console.log(JSON.stringify(bodyPayload))
       if (!bodyPayload.name) return toast.error("Webpage name is required");
       if (!bodyPayload.route) return toast.error("Webpage route is required");
 
@@ -394,6 +389,7 @@ const Editor = () => {
 
   useEffect(() => {
     if (page) {
+      ///// get the Website page
       const id: string = page;
 
       const fetchData = async () => {
@@ -624,9 +620,8 @@ const Editor = () => {
               transform: activeScreen !== "xl" ? "translateX(-120px)" : "",
               minHeight: "100vh",
               transition: ".1s linear all",
-              backgroundColor: "#e7e5e4",
-              backgroundImage: `
-                                linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
+              backgroundColor: "#e7e5e4", // stone-200
+              backgroundImage: `linear-gradient(to right, rgba(0,0,0,0.1) 1px, transparent 1px),
                                 linear-gradient(to bottom, rgba(0,0,0,0.1) 1px, transparent 1px)
                                 `,
               backgroundSize: "15px 15px",
@@ -656,7 +651,7 @@ const Editor = () => {
                   createSection={CreateSection}
                   setGivenName={setGivenName}
                   parentRef={containerRef.current}
-                  readOnly={isVerifier}
+                  // readOnly={isVerifier}
                 />
               );
             })}
@@ -675,19 +670,20 @@ const Editor = () => {
               height: "92vh",
               overflowY: "scroll",
               zIndex: 1000,
-              display: showToolbar ? "block" : "none",
+              display: showToolbar ? "block" : "none", //  hide instead of unmount
+              // display: showToolbar ? "block" : "none",
             }}
             className="scroll-one fixed top-[8vh] right-0"
           >
             <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-              {renderInput(
+              {/* {renderInput(
                 "Name",
                 "name",
                 "text",
                 "",
                 webpage?.name,
                 setMetaOfPage
-              )}
+              )} */}
               {renderInput(
                 "Route",
                 "route",

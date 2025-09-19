@@ -8,11 +8,13 @@ type Props = {};
 const ChildElements = forwardRef<HTMLDivElement, Props>((props, ref) => {
     const { sectionChildElements, sectionChildElementsSetterFull } = useMyContext();
 
-    const [elements, setElements] = useState<ElementTypeCustom[]>(sectionChildElements)
+    const [elements, setElements] = useState<ElementTypeCustom[]>(sectionChildElements || [ ])
 
     useEffect(() => {
-        setElements(sectionChildElements)
+        setElements(sectionChildElements || [])
     }, [sectionChildElements])
+
+    if (!elements) return null
 
     return (
         <div ref={ref} className="p-4 bg-gray-50 shadow-inner min-h-[200px]">

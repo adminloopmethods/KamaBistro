@@ -10,6 +10,7 @@ import BookTableWicker from "@/app/_elements/BookTable";
 import HotelTimings from "@/app/_elements/RestaurantTimings";
 import SingleLocationMap from "@/app/_elements/MappSimple";
 import BookTableLaGrange from "@/app/_elements/BookTableLaGrange";
+import MenuTabs from "@/app/_elements/Menu";
 
 // Define screen sizes for style keys
 type ScreenSize = "xl" | "lg" | "md" | "sm";
@@ -40,5 +41,6 @@ export const mapElement: Record<string, React.ComponentType<any>> = {
     contact: ContactForm,
     bookTable: BookTableWicker,
     bookTableLa: BookTableLaGrange,
-    map: SingleLocationMap
+    map: SingleLocationMap,
+    menu: MenuTabs
 };

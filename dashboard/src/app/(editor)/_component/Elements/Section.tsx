@@ -31,7 +31,7 @@ type SectionProps = {
     id: string;
     [key: string]: any;
   };
-  finalUpdate?: (id: string, element: any, lS: Boolean) => void,
+  finalUpdate?: ((id: string, element: any, lS: Boolean) => void) | any,
   createSection?: any,
   parentIsSection?: Boolean,
   updateParentElement?: (id: string, element: any, lS: Boolean) => void,
@@ -383,7 +383,7 @@ const Section: React.FC<SectionProps> = ({
 
             return (
               <Section
-                key={i}
+                key={Element.id}
                 element={Element.elements}
                 section={Element}
                 style={Element.style?.[activeScreen] || {}}
@@ -405,7 +405,7 @@ const Section: React.FC<SectionProps> = ({
             const Component = mapElement[Element.name];
             return (
               <Component
-                key={i + Element.id}
+                key={Element.id}
                 element={Element}
                 updateContent={updateTheDataOfElement}
                 updateElement={updateElement}
