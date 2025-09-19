@@ -20,8 +20,8 @@ const fontFamilyOptions = [
 
 // Add options for Display property
 const displayOptions = [
-    { label: "Block/Show", value: "block" },
-    { label: "Consume sized space", value: "inline-block" },
+    { label: "Full Block", value: "block" },
+    { label: "Sized Block", value: "inline-block" },
     { label: "Hide", value: "none" },
 ];
 

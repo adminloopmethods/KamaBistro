@@ -31,7 +31,7 @@ export const preSection = {
                             },
                             "name": "h1",
                             "content": "Welcome to your page editor!",
-                            "id": crypto.randomUUID()
+                            "id": Math.random()
                         },
                         {
                             "style": {
@@ -50,7 +50,7 @@ export const preSection = {
                             },
                             "name": "p",
                             "content": "Here you can easily create and customize web pages without needing any code.&nbsp;<div>Start by setting your page name and route, then add sections for text, images, or other content.&nbsp;</div><div>Use the sidebar tools to style and adjust your layout, and switch between&nbsp;</div><div>desktop, tablet, and mobile views to see how your page looks on different devices.&nbsp;</div><div>When you're happy with your design, just click <strong data-start=\"521\" data-end=\"537\">Save Changes</strong> and your updates will be ready.</div>",
-                            "id": crypto.randomUUID()
+                            "id": Math.random()
                         }
                     ],
                     "style": {
@@ -159,7 +159,7 @@ export const preSection = {
                             "boxShadow": "0 10px 15px rgba(0,0,0,0.3)"
                         }
                     },
-                    "id": crypto.randomUUID()
+                    "id": Math.random()
                 }
             ],
             "style": {
@@ -240,7 +240,7 @@ export const preSection = {
                     "backgroundImage": "linear-gradient(to right, rgba(178,174,174,1), rgba(182,182,195,1))"
                 }
             },
-            "id": crypto.randomUUID()
+            "id": Math.random()
         }
     ],
     "createdAt": "",
