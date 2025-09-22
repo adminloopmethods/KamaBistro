@@ -3,7 +3,7 @@
 import { useEffect, useRef, useMemo, Suspense, lazy, useState } from "react";
 import { useMyContext } from "@/Context/ApiContext";
 import Header from "../_elements/Header";
-import Footer from "../_elements/Footer";
+// import Footer from "../_elements/Footer";
 import NotFound from "./not-found";
 import HeaderTwo from "../_elements/LandinHeader";
 import { MoonLoader } from "react-spinners";
@@ -32,7 +32,7 @@ export default function RenderPage({
   initialData: any;
   slugParams?: string[];
 }) {
-  console.log(JSON.stringify(initialData))
+  // console.log(JSON.stringify(initialData))
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [pageNotFound, setPageNotFound] = useState(!initialData);
   const locationsSet = new Set(Object.keys(locations))

@@ -38,27 +38,15 @@ const HeaderTwo: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const [topMenuOpen, setTopMenuOpen] = useState(false);
-  const [location, setLocation] = useState<string>("");
 
-  const [navLinks, setNavLinks] = useState(
-    bottomNavLinks.map((e) => ({
-      ...e,
-      href: `/${params.slug ? params.slug[0] : ""}${e.href}`,
-    }))
-  );
+  // Get location from URL slug
+  const location = params.slug ? params.slug[0] : "";
 
-  useEffect(() => {
-    setLocation(localStorage.getItem("location") || "");
-  }, []);
-
-  useEffect(() => {
-    setNavLinks(
-      bottomNavLinks.map((e) => ({
-        ...e,
-        href: `/${params.slug ? params.slug[0] : ""}${e.href}`,
-      }))
-    );
-  }, [params.slug]);
+  // Update nav links dynamically based on URL
+  const navLinks = bottomNavLinks.map((e) => ({
+    ...e,
+    href: `/${location}${e.href}`,
+  }));
 
   // Helper to get icon for mobile bottom nav
   const getIcon = (label: string) => {
@@ -78,6 +66,8 @@ const HeaderTwo: React.FC = () => {
     }
   };
 
+  const address = addresses[location] || "";
+
   return (
     <header className="w-full fixed z-50">
       {/* ===== Top Header ===== */}
@@ -85,7 +75,7 @@ const HeaderTwo: React.FC = () => {
         bg-black lg:bg-gradient-to-r lg:from-[#AE9060] lg:to-[#483C28] 
         text-white px-4 lg:px-10 py-2"
       >
-        {/* Logo (always left) */}
+        {/* Logo */}
         <Link href="/" aria-label="Go to Home">
           <Image
             src={logo}
@@ -129,23 +119,19 @@ const HeaderTwo: React.FC = () => {
                 { value: "west-loop", label: "West Loop" },
               ]}
               onChange={(value) => {
-                localStorage.setItem("location", value);
-                setLocation(value);
-                router.push(value);
+                router.replace(`/${value}`);
               }}
               firstOption="Select Location"
-              Default={location || ""}
+              Default={location}
               addStyleClass="flex-row"
               styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[130px]"
               listItemClass="text-black hover:bg-blue-100 rounded-lg"
               selectedDisplayClass="text-white font-semibold text-sm"
             />
             <span className="block text-[10px] text-white/60 truncate max-w-[130px]">
-  {addresses[location]}
-</span>
-
+              {address}
+            </span>
           </div>
-
 
           {/* Mobile: menu toggle */}
           <button
@@ -195,7 +181,6 @@ const HeaderTwo: React.FC = () => {
 
       {/* ===== Desktop Bottom Header ===== */}
       <div className="hidden lg:flex justify-between items-center bg-black text-white px-10 py-2">
-        {/* Desktop location */}
         <div>
           <CustomSelect
             options={[
@@ -203,19 +188,15 @@ const HeaderTwo: React.FC = () => {
               { value: "la-grange", label: "La Grange" },
               { value: "west-loop", label: "West Loop" },
             ]}
-            onChange={(value) => {
-              localStorage.setItem("location", value);
-              setLocation(value);
-              router.push(value);
-            }}
+            onChange={(value) => router.push(`/${value}`)}
             firstOption="Select Location"
-            Default={location || ""}
+            Default={location}
             addStyleClass="flex-row"
             styleClasses="bg-transparent text-white flex justify-between gap-2 items-center min-w-[200px]"
             listItemClass="text-black hover:bg-blue-100 rounded-lg"
             selectedDisplayClass="text-white font-semibold text-lg"
           />
-          <span className="text-[13px] text-white/60">{addresses[location]}</span>
+          <span className="text-[13px] text-white/60">{address}</span>
         </div>
 
         <div className="flex items-center space-x-6">
@@ -259,8 +240,6 @@ const HeaderTwo: React.FC = () => {
                   {link.label}
                 </span>
               </Link>
-
-              {/* Divider between items */}
               {index < navLinks.length - 1 && (
                 <div className="w-px h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-50" />
               )}
@@ -268,9 +247,6 @@ const HeaderTwo: React.FC = () => {
           ))}
         </div>
       </nav>
-
-
-
     </header>
   );
 };
