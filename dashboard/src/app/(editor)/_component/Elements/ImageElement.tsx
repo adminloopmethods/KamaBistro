@@ -115,8 +115,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
 
     const topInPx =
       // thisElement.style?.[activeScreen]?.top?.toString().includes("%") ?
-        (currentTopPx / 100) * parentRect.height
-        // : currentTopPx;
+      (currentTopPx / 100) * parentRect.height
+    // : currentTopPx;
 
     elementStartPos.current = { x: leftInPx, y: topInPx };
 
@@ -231,6 +231,8 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(thisElement.style?.[activeScreen] || {}, parentRef) : style
 
+  const position = runningStyle.position === "absolute" ? "absolute" : "relative"
+
   return (
     <>
       <img
@@ -250,6 +252,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
                 ? "pointer"
                 : "default",
           backgroundColor: "transparent",
+          position
         }}
       />
     </>

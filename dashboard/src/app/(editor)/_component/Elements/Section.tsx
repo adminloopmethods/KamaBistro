@@ -265,7 +265,7 @@ const Section: React.FC<SectionProps> = ({
 
   useEffect(() => {
     if (divRef.current?.style) {
-      divRef.current.style.border = "1px dashed gray";
+      divRef.current.style.outline = "1px dashed gray";
     }
   }, [])
 

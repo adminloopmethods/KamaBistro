@@ -195,19 +195,6 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 onChange={(val) => { debouncedUpdateStyles({ backgroundRepeat: val }); }}
             />
 
-            {/* Background Attachment */}
-            <CustomSelect
-                options={[
-                    { label: "Scroll", value: "scroll" },
-                    { label: "Fixed", value: "fixed" },
-                    { label: "Local", value: "local" },
-                ]}
-                Default={currentSection?.backgroundAttachment}
-                firstOption='BG - Attachment'
-                disableFirstValue={true}
-                onChange={(val) => { debouncedUpdateStyles({ backgroundAttachment: val }); }}
-            />
-
             {/* Background Size */}
             <CustomSelect
                 options={[
@@ -233,6 +220,19 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 firstOption='Background Position'
                 disableFirstValue={true}
                 onChange={(val) => { debouncedUpdateStyles({ backgroundPosition: val }); }}
+            />
+
+            {/* Background Attachment */}
+            <CustomSelect
+                options={[
+                    { label: "Scroll", value: "scroll" },
+                    { label: "Fixed", value: "fixed" },
+                    { label: "Local", value: "local" },
+                ]}
+                Default={currentSection?.backgroundAttachment}
+                firstOption='BG - Attachment'
+                disableFirstValue={true}
+                onChange={(val) => { debouncedUpdateStyles({ backgroundAttachment: val }); }}
             />
 
             {/* Gradient */}
