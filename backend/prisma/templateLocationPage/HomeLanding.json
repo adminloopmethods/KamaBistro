@@ -1,10 +1,10 @@
 {
     "id": "7b2a3674-c9d5-4bef-8a68-0fe2916181f5",
-    "name": "LandingPage - Wicker Park",
-    "route": "/landingpage",
+    "name": "LandingPage - La Grange",
+    "route": "/lp",
     "locationId": "e3e1077b-bfd3-468a-b260-58819005fdaa",
     "createdAt": "2025-09-19T03:35:45.991Z",
-    "updatedAt": "2025-09-19T09:44:40.055Z",
+    "updatedAt": "2025-09-22T05:12:34.600Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
@@ -438,7 +438,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://order.kamabistro.com/order/kama-bistro",
+                            "href": "https://kamabistro.toast.site/order/kamabistro",
                             "aria": "Order food from our Toast window"
                         },
                         {
@@ -498,7 +498,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://www.opentable.com/booking/restref/availability?rid=1320541&correlationId=f4a0a73e-ebf3-4492-8449-c0c490b105c8&restRef=1320541",
+                            "href": "https://www.opentable.com/booking/restref/availability?rid=59356&correlationId=8b4305b9-fbb6-43e0-a206-11177f65ca5e&restRef=59356",
                             "aria": "Reserve table now on our Open Table window"
                         }
                     ]
@@ -2551,7 +2551,7 @@
                     "paddingLeft": "20px",
                     "marginBottom": "0",
                     "paddingRight": "20px",
-                    "paddingBottom": "20px",
+                    "paddingBottom": "80px",
                     "justifyContent": "center",
                     "backgroundImage": "linear-gradient(to right, rgba(231,223,215,1), rgba(218,206,189,1))"
                 },
@@ -4176,7 +4176,7 @@
                                 "sm": {},
                                 "xl": {}
                             },
-                            "href": "https://www.toasttab.com/invoice/lead?rx=458d5396-265b-434c-95c7-ce8b16738e3d&ot=c1dee3ee-6590-48aa-a044-e40eb82d6cb2",
+                            "href": "https://www.toasttab.com/invoice/lead?rx=7c48efbb-7d54-4b2e-94fc-54d9d3a83fa7&ot=9c919278-74b6-4f18-bfa9-32b31e55e95e",
                             "aria": "Go to the inquiry form page"
                         },
                         {
@@ -6182,22 +6182,14 @@
                     ]
                 },
                 {
-                    "id": "5a7ec460-2796-4867-9c50-aa88a3127d01",
+                    "id": "7d32d3fc-b0c9-4f8f-a3f3-e4ac9a4ea155",
                     "name": "bookTable",
                     "style": {
-                        "id": "16a52a07-263b-477b-b17c-381fe9a4d120",
-                        "xl": {
-                            "zIndex": "2"
-                        },
-                        "lg": {
-                            "zIndex": "2"
-                        },
-                        "md": {
-                            "zIndex": "2"
-                        },
-                        "sm": {
-                            "zIndex": "2"
-                        }
+                        "id": "5d1a0f58-e943-4d86-8c9c-d0d48fb963a0",
+                        "xl": {},
+                        "lg": {},
+                        "md": {},
+                        "sm": {}
                     },
                     "content": "",
                     "hover": {

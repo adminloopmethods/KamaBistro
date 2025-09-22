@@ -32,6 +32,7 @@ export default function RenderPage({
   initialData: any;
   slugParams?: string[];
 }) {
+  console.log(JSON.stringify(initialData))
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [pageNotFound, setPageNotFound] = useState(!initialData);
   const locationsSet = new Set(Object.keys(locations))
@@ -122,7 +123,7 @@ export default function RenderPage({
           </Suspense>
         </div>
 
-        <Footer />
+        {/* <Footer />*/}
       </div>
     </div>
   );
