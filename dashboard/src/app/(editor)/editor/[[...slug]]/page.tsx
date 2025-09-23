@@ -6,12 +6,10 @@ import {useParams} from "next/navigation";
 import {
   createContentReq,
   getLocationsReq,
-  getProposedUpdatesByIDReq,
   getUserProfileReq,
   getWebpageReq,
-  proposeUpdateReq,
   saveContentReq,
-  approveProposedVersionReq,
+  // saveDraftReq,
 } from "@/functionality/fetch";
 import {toastWithUpdate} from "@/functionality/ToastWithUpdate";
 import Section from "../../_component/Elements/Section";
@@ -57,12 +55,6 @@ const Editor = () => {
   const [onHoverToolbar, setOnHoverToolbar] = useState<boolean>(false);
   const [showToolbar, setShowToolbar] = useState<boolean>(true);
   const [userRole, setUserRole] = useState<string | null>(null);
-  const [isVerifier, setIsVerifier] = useState(false);
-  const [proposedVersionId, setProposedVersionId] = useState<string | null>(
-    null
-  );
-  const [isApproving, setIsApproving] = useState(false);
-  const [isRejecting, setIsRejecting] = useState(false);
   const router = useRouter();
 
   const childElementsRef = useRef<HTMLDivElement | null>(null);
@@ -93,7 +85,7 @@ const Editor = () => {
     }
   };
 
-  const handleSave = async () => {
+  const handleSave = async (isDraft: boolean = false) => {
     saveAllSection();
 
     const bodyPayload: Record<string, any> = {data: {...webpage}};
@@ -109,9 +101,20 @@ const Editor = () => {
     try {
       let response;
 
-      const isSuperUser = await verifyAdminStatus();
-
-      if (isSuperUser) {
+      if (isDraft) {
+        // Save as draft
+        // response = await toastWithUpdate(
+        //   // () => saveDraftReq(page, bodyPayload.data),
+        //   {
+        //     loading: "Saving draft...",
+        //     success: "Draft saved successfully!",
+        //     error: (err: any) => err?.message || "Failed to save draft",
+        //   }
+        // );
+        toast.error("Draft feature is currently disabled.");
+        return;
+      } else {
+        // Save to live
         response = await toastWithUpdate(
           () =>
             page
@@ -123,17 +126,6 @@ const Editor = () => {
             error: (err: any) => err?.message || "Failed to save content",
           }
         );
-      } else {
-        response = await toastWithUpdate(
-          () => proposeUpdateReq(page, bodyPayload),
-          {
-            loading: "Submitting changes for review...",
-            success:
-              "Changes submitted successfully! Waiting for verification.",
-            error: (err: any) =>
-              err?.message || "Failed to submit changes for review",
-          }
-        );
       }
 
       if (response.ok) {
@@ -143,82 +135,6 @@ const Editor = () => {
       console.error("Error:", error);
     }
   };
-
-  const handleApprove = async () => {
-    if (!proposedVersionId) return;
-
-    setIsApproving(true);
-    try {
-      const response = await approveProposedVersionReq(proposedVersionId);
-
-      if (response.ok) {
-        toast.success("Changes approved successfully!");
-        router.push("/pages");
-      } else {
-        toast.error(response.error || "Failed to approve changes");
-      }
-    } catch (error) {
-      toast.error("Error approving changes");
-    } finally {
-      setIsApproving(false);
-    }
-  };
-
-  const handleReject = async () => {
-    if (!proposedVersionId) return;
-
-    setIsRejecting(true);
-    try {
-      // You'll need to implement a reject API endpoint
-      toast.error("Reject functionality not implemented yet");
-    } catch (error) {
-      toast.error("Error rejecting changes");
-    } finally {
-      setIsRejecting(false);
-    }
-  };
-
-  useEffect(() => {
-    const checkUserRole = async () => {
-      try {
-        const response = await getUserProfileReq();
-        // console.log("User profile response:", response); // Debug log
-
-        if (response && response.ok && response.user) {
-          // Get the current page ID from the URL params
-          const currentPageId = page; // This comes from your useParams hook
-          // console.log("Current page ID:", currentPageId);
-
-          // Find the role for this specific page
-          const pageRole = response.user.pageRoles?.find(
-            (pr: any) => pr.webpageId === currentPageId
-          );
-
-          // console.log("Page role for current page:", pageRole);
-
-          if (pageRole) {
-            const isVerifierForThisPage = pageRole.role?.name === "VERIFIER";
-            setIsVerifier(isVerifierForThisPage);
-            setUserRole(pageRole.role?.name || "EDITOR");
-          } else {
-            const isVerifierUser = response.user.pageRoles?.some(
-              (pr: any) => pr.role?.name === "VERIFIER"
-            );
-            setIsVerifier(isVerifierUser);
-            setUserRole(isVerifierUser ? "VERIFIER" : "EDITOR");
-          }
-        } else {
-          console.error("Failed to fetch user role - response not ok");
-          setIsVerifier(false);
-        }
-      } catch (error) {
-        console.error("Error checking user role:", error);
-        setIsVerifier(false);
-      }
-    };
-
-    checkUserRole();
-  }, [page]);
 
   const classifyWidth = (w: number) => {
     if (w > 1200) return "xl";
@@ -394,26 +310,12 @@ const Editor = () => {
 
       const fetchData = async () => {
         try {
-          let response: any;
-
-          if (isVerifier) {
-            response = await getProposedUpdatesByIDReq(id);
-            console.log("Proposed version response:", response);
-            if (response?.ok) {
-              setProposedVersionId(response.proposedVersion.id);
-              setWebpage(response.proposedVersion.version);
-              console.log(response.proposedVersion.version, "version");
-            } else {
-              toast.error(response.error || "Failed to fetch proposed version");
-            }
+          const response = await getWebpageReq(id);
+          console.log("Webpage response:", response.webpage);
+          if (response.ok) {
+            setWebpage(response.webpage);
           } else {
-            response = await getWebpageReq(id);
-            console.log("Webpage response:", response.webpage);
-            if (response.ok) {
-              setWebpage(response.webpage);
-            } else {
-              toast.error(response.error || "Failed to fetch webpage");
-            }
+            toast.error(response.error || "Failed to fetch webpage");
           }
         } catch (err) {
           console.error(err);
@@ -434,7 +336,7 @@ const Editor = () => {
         editedWidth: currentWidth ? currentWidth : "1280px",
       });
     }
-  }, [page, isVerifier]);
+  }, [page]);
 
   const setMetaOfPage = (name: string, value: string) => {
     setWebpage((prev: webpageType | null) => {
@@ -470,125 +372,111 @@ const Editor = () => {
         </button>
 
         <div className="flex justify-end items-center gap-8">
-          {isVerifier ? (
-            <>
-              <button
-                className="text-sm cursor-pointer bg-green-600 w-[150px]"
-                style={{
-                  border: "none",
-                  padding: "6px 8px",
-                  borderRadius: "2px",
-                  color: "white",
-                }}
-                onClick={handleApprove}
-                disabled={isApproving}
-              >
-                {isApproving ? "Approving..." : "Approve Changes"}
-              </button>
-              <button
-                className="text-sm cursor-pointer bg-red-600 w-[150px]"
-                style={{
-                  border: "none",
-                  padding: "6px 8px",
-                  borderRadius: "2px",
-                  color: "white",
-                }}
-                onClick={handleReject}
-                disabled={isRejecting}
-              >
-                {isRejecting ? "Rejecting..." : "Reject Changes"}
-              </button>
-            </>
-          ) : (
-            <>
-              <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
-                <button
-                  onClick={() => applyXLScreen()}
-                  className={`${styleForScreenIcons} ${
-                    activeScreen === "xl" && "bg-stone-500"
-                  }`}
-                  title="1200px+"
-                >
-                  <CiDesktop />
-                </button>
-                <button
-                  onClick={() => applyLGScreen()}
-                  className={`${styleForScreenIcons} ${
-                    activeScreen === "lg" && "bg-stone-500"
-                  }`}
-                  title="1024px"
-                >
-                  <CiLaptop />
-                </button>
-                <button
-                  onClick={() => applyMDScreen()}
-                  className={`${styleForScreenIcons} ${
-                    activeScreen === "md" && "bg-stone-500"
-                  }`}
-                  title="600px"
-                >
-                  <IoIosTabletPortrait />
-                </button>
-                <button
-                  onClick={() => applySMScreen()}
-                  className={`${styleForScreenIcons} ${
-                    activeScreen === "sm" && "bg-stone-500"
-                  }`}
-                  title="390px"
-                >
-                  <CiMobile1 />
-                </button>
-              </div>
-              <button
-                className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-                style={{
-                  border: "none",
-                  padding: "6px 8px",
-                  borderRadius: "2px",
-                  color: "white",
-                  top: 0,
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setOnHoverToolbar(!onHoverToolbar);
-                }}
-              >
-                {onHoverToolbar ? "Styles" : "Hover styles"}
-              </button>
+          <div className=" text-white text-xl p-1 flex justify-evenly gap-2">
+            <button
+              onClick={() => applyXLScreen()}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "xl" && "bg-stone-500"
+              }`}
+              title="1200px+"
+            >
+              <CiDesktop />
+            </button>
+            <button
+              onClick={() => applyLGScreen()}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "lg" && "bg-stone-500"
+              }`}
+              title="1024px"
+            >
+              <CiLaptop />
+            </button>
+            <button
+              onClick={() => applyMDScreen()}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "md" && "bg-stone-500"
+              }`}
+              title="600px"
+            >
+              <IoIosTabletPortrait />
+            </button>
+            <button
+              onClick={() => applySMScreen()}
+              className={`${styleForScreenIcons} ${
+                activeScreen === "sm" && "bg-stone-500"
+              }`}
+              title="390px"
+            >
+              <CiMobile1 />
+            </button>
+          </div>
+          <button
+            className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+            style={{
+              border: "none",
+              padding: "6px 8px",
+              borderRadius: "2px",
+              color: "white",
+              top: 0,
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOnHoverToolbar(!onHoverToolbar);
+            }}
+          >
+            {onHoverToolbar ? "Styles" : "Hover styles"}
+          </button>
 
-              <button
-                className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
-                style={{
-                  border: "none",
-                  padding: "6px 8px",
-                  borderRadius: "2px",
-                  color: "white",
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setShowToolbar(!showToolbar);
-                }}
-              >
-                {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
-              </button>
-              <button
-                className="text-sm cursor-pointer"
-                style={{
-                  backgroundColor: "#007bff",
-                  border: "none",
-                  padding: "6px 8px",
-                  borderRadius: "2px",
-                  color: "white",
-                }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSave();
-                }}
-              >
-                Save Changes
-              </button>
-            </>
-          )}
+          <button
+            className="text-sm cursor-pointer bg-emerald-500 w-[120px]"
+            style={{
+              border: "none",
+              padding: "6px 8px",
+              borderRadius: "2px",
+              color: "white",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowToolbar(!showToolbar);
+            }}
+          >
+            {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
+          </button>
+
+          {/* Save as Draft button */}
+          <button
+            className="text-sm cursor-pointer bg-gray-600 w-[120px]"
+            style={{
+              border: "none",
+              padding: "6px 8px",
+              borderRadius: "2px",
+              color: "white",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSave(true); // Save as draft
+            }}
+          >
+            Save as Draft
+          </button>
+
+          {/* Publish button */}
+          <button
+            className="text-sm cursor-pointer"
+            style={{
+              backgroundColor: "#007bff",
+              border: "none",
+              padding: "6px 8px",
+              borderRadius: "2px",
+              color: "white",
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSave(false); // Publish to live
+            }}
+          >
+            Publish
+          </button>
         </div>
       </div>
 
@@ -651,17 +539,14 @@ const Editor = () => {
                   createSection={CreateSection}
                   setGivenName={setGivenName}
                   parentRef={containerRef.current}
-                  // readOnly={isVerifier}
                 />
               );
             })}
-            {!isVerifier && showToolbar && (
-              <AddSection controller={addSection} />
-            )}
+            {showToolbar && <AddSection controller={addSection} />}
           </div>
         </div>
 
-        {!isVerifier && showToolbar && (
+        {showToolbar && (
           <div
             ref={toolbarRef}
             style={{
@@ -670,20 +555,11 @@ const Editor = () => {
               height: "92vh",
               overflowY: "scroll",
               zIndex: 1000,
-              display: showToolbar ? "block" : "none", //  hide instead of unmount
-              // display: showToolbar ? "block" : "none",
+              display: showToolbar ? "block" : "none",
             }}
             className="scroll-one fixed top-[8vh] right-0"
           >
             <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
-              {/* {renderInput(
-                "Name",
-                "name",
-                "text",
-                "",
-                webpage?.name,
-                setMetaOfPage
-              )} */}
               {renderInput(
                 "Route",
                 "route",

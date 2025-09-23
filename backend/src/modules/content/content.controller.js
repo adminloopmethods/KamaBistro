@@ -1,3 +1,4 @@
+import prismaClient from "../../config/dbConfig.js";
 import {logger} from "../../config/logConfig.js";
 import {
   createWebpageService,
@@ -14,6 +15,7 @@ import {
   deleteProposedVersionService,
   getProposedVersionByIdService,
   getProposedVersionByWebpageIdService,
+  rollbackWebpageVersionService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -80,13 +82,17 @@ export const updateWebpageById = async (req, res) => {
       return res.status(404).json({error: "Webpage not found."});
     }
 
-    const updatedWebpage = await updateWebpageByIdService(id, {
-      name,
-      contents,
-      route,
-      editedWidth,
-      locationId,
-    });
+    const updatedWebpage = await updateWebpageByIdService(
+      id,
+      {
+        name,
+        contents,
+        route,
+        editedWidth,
+        locationId,
+      },
+      {createVersion: true}
+    );
     res.json(updatedWebpage);
   } catch (error) {
     logger.error(`Error updating webpage: ${error.message}`, {error});
@@ -283,5 +289,49 @@ export const approveProposedVersion = async (req, res) => {
   } catch (error) {
     logger.error(`Error approving proposed version: ${error.message}`, {error});
     res.status(500).json({error: "Failed to approve proposed version."});
+  }
+};
+
+export const getWebpageVersions = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const versions = await prismaClient.version.findMany({
+      where: {webpageId: id},
+      orderBy: {createdAt: "desc"},
+    });
+
+    res.json({versions});
+  } catch (error) {
+    logger.error(`Error fetching versions: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to fetch versions"});
+  }
+};
+
+export const rollbackWebpageVersion = async (req, res) => {
+  try {
+    const {id, versionId} = req.params;
+
+    // Get the version to roll back to
+    const version = await prismaClient.version.findUnique({
+      where: {id: versionId},
+    });
+
+    if (!version || version.webpageId !== id) {
+      return res.status(404).json({error: "Version not found"});
+    }
+
+    // Apply the version data to the webpage
+    const rolledBackWebpage = await rollbackWebpageVersionService(
+      id,
+      version.version
+    );
+
+    res.json({
+      message: "Webpage rolled back successfully",
+      webpage: rolledBackWebpage,
+    });
+  } catch (error) {
+    logger.error(`Error rolling back webpage: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to roll back webpage"});
   }
 };

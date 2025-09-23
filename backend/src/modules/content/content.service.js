@@ -17,6 +17,9 @@ export const getAllWebpagesService = async () => {
           },
         },
       },
+      _count: {
+        select: {versions: true},
+      },
     },
   });
 };
@@ -132,6 +135,13 @@ export const createWebpageService = async ({
     },
   });
 
+  await prismaClient.version.create({
+    data: {
+      webpageId: id,
+      version: webpage,
+    },
+  });
+
   return {webpage, id};
 };
 
@@ -226,8 +236,29 @@ export const getWebpageByIdService = async (id) => {
 
 export const updateWebpageByIdService = async (
   id,
-  {name, contents, editedWidth, route, locationId}
+  {name, contents, editedWidth, route, locationId},
+  options = {createVersion: true}
 ) => {
+  const currentWebpage = getWebpageByIdService(id);
+
+  if (options.createVersion && currentWebpage) {
+    const versionData = {
+      name: currentWebpage.name,
+      contents: currentWebpage.contents,
+      route: currentWebpage.route,
+      editedWidth: currentWebpage.editedWidth,
+      locationId: currentWebpage.locationId,
+      updatedAt: currentWebpage.updatedAt,
+    };
+
+    await prismaClient.version.create({
+      data: {
+        webpageId: id,
+        version: versionData,
+      },
+    });
+  }
+
   // 1) Update webpage meta
   await prismaClient.webpage.update({
     where: {id},
@@ -482,10 +513,12 @@ export const updateWebpageByIdService = async (
     },
   });
 
-  // Step 4: Save version snapshot
-  await prismaClient.version.create({
-    data: {webpageId: id, version: finalWebpage},
-  });
+  // // Step 4: Save version snapshot
+  // if (options.createVersion) {
+  //   await prismaClient.version.create({
+  //     data: {webpageId: id, version: finalWebpage},
+  //   });
+  // }
 
   return finalWebpage;
 };
@@ -736,5 +769,18 @@ export const getProposedVersionByWebpageIdService = async (webpageId) => {
 export const deleteProposedVersionService = async (id) => {
   return await prismaClient.proposedVersion.delete({
     where: {id},
+  });
+};
+
+export const rollbackWebpageVersionService = async (webpageId, versionData) => {
+  const currentWebpage = await getWebpageByIdService(webpageId);
+
+  if (!currentWebpage) {
+    throw new Error("Webpage not found");
+  }
+
+  // Update webpage without creating versions
+  return await updateWebpageByIdService(webpageId, versionData, {
+    createVersion: false,
   });
 };

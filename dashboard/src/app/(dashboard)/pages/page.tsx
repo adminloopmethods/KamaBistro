@@ -132,6 +132,7 @@ const CMSDashboard = () => {
             verifier,
             status: webpage.status,
             route: webpage.route,
+            count: webpage._count.versions,
           };
         });
 
@@ -148,7 +149,7 @@ const CMSDashboard = () => {
     fetchWebpages();
   }, []);
 
-  const handleUserAssigned = () => {
+  const handleDataRefresh = () => {
     fetchWebpages(); // Refresh the data after assignment
   };
 
@@ -248,7 +249,7 @@ const CMSDashboard = () => {
                 formatDate={formatDate}
                 getStatusStyle={getStatusStyle}
                 openAssignModal={openAssignModal}
-                onUserRemoved={handleUserAssigned}
+                onUserRemoved={handleDataRefresh}
               />
             ))}
       </div>
@@ -262,7 +263,7 @@ const CMSDashboard = () => {
           setCurrentPage(null);
           setAssigningRole(null);
         }}
-        onAssign={handleUserAssigned}
+        onAssign={handleDataRefresh}
       />
     </div>
   );
