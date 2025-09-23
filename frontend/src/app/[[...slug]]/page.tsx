@@ -4,9 +4,9 @@ import { getContentReq } from "@/functionalities/fetch";
 
 // Map for location IDs
 const locations: Record<string, string> = {
-  "wicker-park": "e3e1077b-bfd3-468a-b260-58819005fdaa",
-  "la-grange": "c994612d-9e5d-47a2-afb8-5388e5e7583e",
-  "west-loop": "255cdf30-db19-4277-a550-27374d008dd2",
+  "wicker-park": "d49e33be-6e64-4a67-8b29-808400df991d",
+  "la-grange": "7ff29022-fcbf-4206-b36b-c678b1bf4fea",
+  "west-loop": "529f4b30-463e-4d12-a116-1529418f6982",
 };
 
 function detectSlug(slug?: string[]): [string, string?] {
@@ -22,16 +22,14 @@ export default async function Page({
   const resolvedParams = await params;
   const [page, location] = detectSlug(resolvedParams.slug);
 
-  console.log(page)
-
   const response: any =
     resolvedParams.slug?.length === 1 && locations[page]
-      ? await getContentReq("", locations[page], { cache: "no-store" })
+      ? await getContentReq("", page, { cache: "no-store" })
       : await getContentReq(
-          page ?? "",
-          location ? locations[location] : undefined,
-          { cache: "no-store" }
-        );
+        page ?? "",
+        location ? location : undefined,
+        { cache: "no-store" }
+      );
 
   if (!response.ok) {
     return <NotFound />;

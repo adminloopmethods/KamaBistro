@@ -1,21 +1,22 @@
 {
-    "id": "14a5eba7-f359-4092-9dcd-80f61aa1253c",
+    "id": "ba3c25fe-58c9-4e0b-87fe-8987c07337b6",
     "name": "Reserve Table - wicker park",
     "route": "/reserve-table",
     "locationId": "e3e1077b-bfd3-468a-b260-58819005fdaa",
-    "createdAt": "2025-09-14T17:15:59.109Z",
-    "updatedAt": "2025-09-16T04:29:46.834Z",
+    "locationName" : "wicker-park",
+    "createdAt": "2025-09-17T06:47:03.282Z",
+    "updatedAt": "2025-09-22T05:01:29.897Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
     "verifierId": null,
     "contents": [
         {
-            "id": "e4e025b5-95fa-4e75-9b79-70966d8fe8bf",
+            "id": "4d507218-496f-4873-a788-4e062814f300",
             "name": "section",
             "givenName": "Home Banner",
             "style": {
-                "id": "e215e48a-41ee-47a9-b6bc-174e06e5da13",
+                "id": "af6f2572-55f6-492f-9992-b5a7a81ffa13",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -134,10 +135,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "7cc0e701-cdad-44c0-8ceb-ca19b1abc301",
+                    "id": "e2dce82a-aa51-4a0f-88d2-a493095e9058",
                     "name": "h3",
                     "style": {
-                        "id": "956b211f-a0dd-4ba0-8e95-ce4f8418ad6a",
+                        "id": "ecec108d-3dd6-43af-8d2f-f21ad22003c0",
                         "xl": {
                             "letterSpacing": "9px"
                         },
@@ -166,10 +167,10 @@
                     "aria": null
                 },
                 {
-                    "id": "35c6cf74-7d94-4079-a749-32ce0b6ce881",
+                    "id": "4f2add78-4d85-41b0-ae4d-090c2d620db9",
                     "name": "h1",
                     "style": {
-                        "id": "65ed4c41-47fc-4d22-b8b0-3ef720c1549a",
+                        "id": "012271d1-e0f9-473a-9d3e-366ff5367380",
                         "xl": {
                             "width": "50vw",
                             "fontSize": "54px",
@@ -215,10 +216,10 @@
                     "aria": null
                 },
                 {
-                    "id": "fd0bc903-3abe-42be-bfb8-9da6b19b9fc0",
+                    "id": "be6327e1-6aff-4855-9f6d-a276f01c50eb",
                     "name": "division",
                     "style": {
-                        "id": "e6b97cfc-5d09-46e0-a783-b2c6852c3fe0",
+                        "id": "2c6ba8a7-1b0e-412e-a1c7-6a996608862f",
                         "xl": {
                             "width": "40vw",
                             "height": "1px",
@@ -258,10 +259,10 @@
                     "aria": null
                 },
                 {
-                    "id": "dd864cf1-2b8f-4b78-acb1-473a067db684",
+                    "id": "fa9ed394-319a-4a59-81f8-5b38d8d6a975",
                     "name": "p",
                     "style": {
-                        "id": "2787145b-42b9-48df-87d0-997e034b435b",
+                        "id": "62e85f86-9fec-4152-bece-ea9ac4316454",
                         "xl": {
                             "color": "rgba(255, 216, 152, 1)",
                             "fontSize": "22px",
@@ -292,10 +293,10 @@
                     "aria": null
                 },
                 {
-                    "id": "038779f9-6fca-49a9-8233-d1889de3795f",
+                    "id": "9f08ceb9-2eb5-4c02-946a-64e7f2a3bc90",
                     "name": "img",
                     "style": {
-                        "id": "af8f9286-dc84-4dff-944c-1012e038d199",
+                        "id": "55ef271d-42e7-43eb-9ead-43181abbf82d",
                         "xl": {
                             "top": "6.49064%",
                             "left": "17.5705%",
@@ -342,11 +343,11 @@
             ]
         },
         {
-            "id": "5bf8b1d5-36cf-4712-8bd6-541e40d5d4a2",
+            "id": "ff2844cd-274c-4990-a659-3849ec3b5ad8",
             "name": "section",
             "givenName": "Founded By -Culture",
             "style": {
-                "id": "1c253e1d-bff3-4426-b1d7-dd25c6be5c3f",
+                "id": "a8794d86-f88e-41da-9359-6f533f3e413b",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -449,10 +450,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "5fa2c459-8ef0-401f-945a-6f2cd40fd0f8",
+                    "id": "3a67817b-ece8-44c4-89e5-f69ffacaed56",
                     "name": "h2",
                     "style": {
-                        "id": "da100953-1e52-4939-90ff-39ad631b27d1",
+                        "id": "6e393dba-49f6-43fe-bb01-e2055f8e434b",
                         "xl": {
                             "fontSize": "24px",
                             "fontFamily": "var(--font-playfair)",
@@ -482,10 +483,10 @@
                     "aria": ""
                 },
                 {
-                    "id": "26551ba1-cc39-4ad2-94c6-028d4fcc7421",
+                    "id": "0445e100-6320-44e6-be01-7a08c8463eca",
                     "name": "division",
                     "style": {
-                        "id": "f2a6895e-e147-4049-b27b-56cc31f66221",
+                        "id": "51a10097-f23a-4017-8dc6-c57edcec519f",
                         "xl": {
                             "width": "12%",
                             "height": "2px",
@@ -526,10 +527,10 @@
                     "aria": ""
                 },
                 {
-                    "id": "9ef66f87-9253-477e-8b56-993c999e8c01",
+                    "id": "b07a18aa-948e-4b3f-8c63-5dd9bd437091",
                     "name": "img",
                     "style": {
-                        "id": "29a94031-2a5a-4030-b662-16441f2624bd",
+                        "id": "9f41dedb-b543-44ef-b901-d020bda4d247",
                         "xl": {
                             "top": "-63.3451%",
                             "left": "-22.2077%",
@@ -574,10 +575,10 @@
                     "aria": null
                 },
                 {
-                    "id": "8e471919-71d2-48ab-8701-6e412e1208d2",
+                    "id": "efb56be2-be2d-45aa-acd5-c85fa3c7e86f",
                     "name": "img",
                     "style": {
-                        "id": "22aa6649-8d49-4cae-bcda-797d9fdf34a6",
+                        "id": "3e0803b8-4ca2-4b04-be1f-1728358d086d",
                         "xl": {
                             "top": "-19.8933%",
                             "left": "78.2233%",
@@ -622,10 +623,10 @@
                     "aria": null
                 },
                 {
-                    "id": "6b30a1f0-3b50-437d-807c-ec4b8500296b",
+                    "id": "29b41e8d-1acb-4528-af32-98c8573a726f",
                     "name": "img",
                     "style": {
-                        "id": "6d36f708-e279-4ea1-bb07-b14f1dd771dd",
+                        "id": "e0a14ee5-4037-43ce-9339-8aeef7566755",
                         "xl": {
                             "top": "78.1636%",
                             "left": "41.9776%",
@@ -670,10 +671,10 @@
                     "aria": null
                 },
                 {
-                    "id": "48a75511-42c7-4834-a29d-a300c2f0429a",
+                    "id": "4853f8e7-6aa0-4f84-8fa9-4ffd02bf0a0d",
                     "name": "p",
                     "style": {
-                        "id": "a559b457-7aad-458f-a863-1067d271c17f",
+                        "id": "a0b13f75-785f-45d6-908c-676b373530b1",
                         "xl": {
                             "width": "57vw",
                             "height": "",
@@ -721,11 +722,11 @@
             ]
         },
         {
-            "id": "68ca6bea-af41-4ff2-a268-6a74b5de5172",
+            "id": "5e983a46-8033-4e23-b0cc-92864d93bbcf",
             "name": "section",
             "givenName": "wok section",
             "style": {
-                "id": "0e8283b0-fca4-431d-8468-3f3889ddf428",
+                "id": "76e98a57-608d-4aa7-81e9-2274d5ea7c86",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -827,10 +828,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "6e6e55dc-841c-4fdb-b4d1-60820b1c7790",
+                    "id": "67dbbad5-7eca-49a9-ad0d-82a420ec609e",
                     "name": "img",
                     "style": {
-                        "id": "88f08761-3ec8-4951-8f19-d16662d06c24",
+                        "id": "33d81266-a14a-48a3-94af-a3b981c2059e",
                         "xl": {
                             "width": "61vw",
                             "height": "46vw",
@@ -867,11 +868,11 @@
                     "aria": null
                 },
                 {
-                    "id": "7c8c8012-8234-4cab-8fd1-ff114bfdf7d7",
+                    "id": "6b2e023d-a30f-42b9-ba46-e3a3af2d2970",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "7d2f530e-2448-4d80-8dd0-29cdff677ac3",
+                        "id": "45f23cf7-8359-41e1-a98b-0168754b989c",
                         "xl": {
                             "top": 0,
                             "left": 0,
@@ -958,10 +959,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "c354bcc3-92ad-46d8-975b-2125cef4a68c",
+                            "id": "71f85658-82d4-412c-a633-d381cb29de3a",
                             "name": "h2",
                             "style": {
-                                "id": "5774f720-f6d9-4dcb-ae79-3c245e673e07",
+                                "id": "5c29770d-7a48-4d6b-8397-ff8c80992506",
                                 "xl": {
                                     "color": "rgba(245, 245, 245, 1)",
                                     "fontSize": "24px",
@@ -1002,10 +1003,10 @@
                             "aria": null
                         },
                         {
-                            "id": "5c539324-802f-4400-ae6e-0ad4c1518253",
+                            "id": "b5e06644-0443-4099-a10b-ebe8f329c20c",
                             "name": "division",
                             "style": {
-                                "id": "4eadaa4d-0595-4aa0-92f9-009487b16f31",
+                                "id": "aa8fe7b7-246e-483e-b65f-d9b4b5a14246",
                                 "xl": {
                                     "width": "40%",
                                     "height": "2px",
@@ -1048,10 +1049,10 @@
                             "aria": ""
                         },
                         {
-                            "id": "cdf34acf-08b0-414e-a444-0695236e231e",
+                            "id": "53a037e6-c61b-441b-bb7f-c9423c747791",
                             "name": "p",
                             "style": {
-                                "id": "6aa5986c-fbc0-4cab-a7e7-2d08baf66181",
+                                "id": "79b85bf3-c933-4bf3-9f5a-2829aad9fa44",
                                 "xl": {
                                     "color": "rgba(255, 255, 255, 1)",
                                     "width": "",
@@ -1114,10 +1115,10 @@
                             "aria": null
                         },
                         {
-                            "id": "94ce7c59-73d3-45e9-b650-de6deed6f023",
+                            "id": "c3fab2d3-bce2-409a-910e-efa0e5666d94",
                             "name": "p",
                             "style": {
-                                "id": "61177afe-79cd-4b9d-a8d2-f52a6590ae02",
+                                "id": "f662c9fc-af3a-4f28-88e9-e90874184cb7",
                                 "xl": {
                                     "color": "rgba(81, 81, 81, 1)",
                                     "fontSize": "16px",
@@ -1156,10 +1157,10 @@
                             "aria": ""
                         },
                         {
-                            "id": "29335b55-81df-49d5-8376-9f64ec4fec0e",
+                            "id": "76a86826-9e1f-4df5-99d5-d43ba745e374",
                             "name": "img",
                             "style": {
-                                "id": "ec2ff281-fa0e-4005-932c-4a3007c4be9b",
+                                "id": "269ec1b9-7034-4dba-943c-b60a46cfcb2a",
                                 "xl": {
                                     "top": "33.5021%",
                                     "left": "23.8705%",
@@ -1212,10 +1213,10 @@
                             "aria": null
                         },
                         {
-                            "id": "ea249aba-8dcd-41f5-b93e-6a0259809fc5",
+                            "id": "8b2741ab-d58f-40b4-a8c8-ec89da925b84",
                             "name": "a",
                             "style": {
-                                "id": "dc9e736c-e46c-4cde-bb30-da470e7b7837",
+                                "id": "eda2989a-dcd3-478e-a2d0-261504c7d142",
                                 "xl": {
                                     "color": "rgba(255, 255, 255, 1)",
                                     "display": "inline-block",
@@ -1285,11 +1286,11 @@
             ]
         },
         {
-            "id": "1a7f1606-8480-4356-bce0-fbefb3ce1dc1",
+            "id": "c9ef61b4-8317-4a1e-8759-11f0b05ad46a",
             "name": "section",
             "givenName": "weekly special",
             "style": {
-                "id": "db81aaaa-2ce2-4167-85cc-50fe58487872",
+                "id": "0d28a508-f745-4c29-ab11-c79bb1ba271f",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -1376,10 +1377,10 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "4da2e964-271a-4ff9-b105-3e94f97e0bec",
+                    "id": "66b3f7f2-4090-4b27-a93b-93a1eabb4404",
                     "name": "h2",
                     "style": {
-                        "id": "438ff1ea-9798-4e11-a0fd-9f1151455347",
+                        "id": "4a391715-a7f7-4d35-87ed-09215fd7b771",
                         "xl": {
                             "fontSize": "24px",
                             "marginTop": "26px",
@@ -1424,11 +1425,11 @@
             ]
         },
         {
-            "id": "47656a52-3d1d-4870-83fd-2bdc4dac361c",
+            "id": "66c8febd-a223-488e-bce5-fd675ed09458",
             "name": "section",
             "givenName": "hover animation drinks",
             "style": {
-                "id": "26622d2f-4232-48ea-87a8-d6f4f81a4701",
+                "id": "bde166c1-93bb-447f-b3b1-ee46cfd9e318",
                 "xl": {
                     "gap": "16px",
                     "top": "0",
@@ -1537,11 +1538,11 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "9f23148c-a388-4d7f-a679-047bb5559bbd",
+                    "id": "600752f5-37c9-491a-bca5-0309158c3659",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "81042583-7559-4bcf-b5f7-3390c2fa26c6",
+                        "id": "6d409b25-18e6-497b-9dd5-1e8cf7f80b43",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -1672,10 +1673,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "6fa5418b-4ac9-4567-88ea-7ff8d0e365f0",
+                            "id": "5014fbb9-67ba-4c05-ba6c-2e35aef3e3a7",
                             "name": "h3",
                             "style": {
-                                "id": "deb28a4d-a371-4a59-9964-412719eca987",
+                                "id": "0be42d51-a677-4a2a-b1ef-5bff640b2464",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -1712,10 +1713,10 @@
                             "aria": null
                         },
                         {
-                            "id": "59777a93-cb98-48c2-b658-c4a34227c5b9",
+                            "id": "7a84c550-3b16-48f1-be17-5c6563cdda60",
                             "name": "p",
                             "style": {
-                                "id": "fc8616cf-d28a-4507-9e4a-e14b5cbe99d4",
+                                "id": "12783cce-032e-4a56-b518-60c56885b8ce",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -1748,10 +1749,10 @@
                     ]
                 },
                 {
-                    "id": "8bcd20e0-35ce-4459-b3aa-1ad4e4c9a038",
+                    "id": "4d159a7b-3530-449a-a402-981bdfbfe9fa",
                     "name": "img",
                     "style": {
-                        "id": "3699a743-2d69-4247-a305-2f8b6829bf98",
+                        "id": "1344d07e-76ef-47be-9caa-b2b6dbab1ffe",
                         "xl": {
                             "top": "76.6395%",
                             "left": "-12.8319%",
@@ -1796,11 +1797,11 @@
                     "aria": null
                 },
                 {
-                    "id": "651c19c8-c276-409b-a118-c057fdb56345",
+                    "id": "fc07f1e2-12f5-4c84-a5bc-90a8d20d9808",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "06af1bda-d4ac-4bd6-9c5c-928b47f1032d",
+                        "id": "700e024e-26e9-42dc-9a28-5fc0f1012415",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -1929,10 +1930,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "448cfdf2-821a-41ba-ab97-6d37d14558fb",
+                            "id": "0cf4ac01-6f3e-4cba-98f1-012126303600",
                             "name": "h3",
                             "style": {
-                                "id": "938b0f76-2c81-49bc-9679-3e54535ca579",
+                                "id": "75aa5ded-e727-492b-bdfd-c3fb8b2dded4",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -1969,10 +1970,10 @@
                             "aria": null
                         },
                         {
-                            "id": "7bd1d197-6f00-44d3-bee4-626387cc4969",
+                            "id": "02bda745-82ce-4510-87f9-7cdc483e444f",
                             "name": "p",
                             "style": {
-                                "id": "5f39f328-4a34-498c-990d-506337e35bf2",
+                                "id": "db67ca52-d2c7-485a-95d8-a3f8488d5eda",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -2005,10 +2006,10 @@
                     ]
                 },
                 {
-                    "id": "78740a4e-c7c6-40e1-8b98-869f371095fe",
+                    "id": "b5c47714-fe96-4d8a-8be5-2d26f9ab85a3",
                     "name": "img",
                     "style": {
-                        "id": "b15ac530-b0ff-49d7-9fc8-b0a068645dc7",
+                        "id": "a0dd453d-fec5-4500-ad52-ca8ba3f76893",
                         "xl": {
                             "top": "13.873%",
                             "left": "84.4395%",
@@ -2057,11 +2058,11 @@
                     "aria": null
                 },
                 {
-                    "id": "5dfac423-8786-4a7c-a4b3-375492dc49fc",
+                    "id": "581fa3f4-38c1-4207-a92a-33ba6924f9e1",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "67cc1511-1cfd-4437-ac0a-66c3fa8e0bc0",
+                        "id": "98fdfccb-a614-4cc4-9c78-1b4c75294f49",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -2192,10 +2193,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "2aa98986-e41e-4542-8d0d-ec761149c313",
+                            "id": "4cd57124-7f8b-472f-bfc7-e215eade7f82",
                             "name": "h3",
                             "style": {
-                                "id": "2dcafc31-cec7-40a1-b6ba-7e02a555ed8d",
+                                "id": "00b47e93-70c6-4441-b1cd-5b9f656770f2",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -2232,10 +2233,10 @@
                             "aria": null
                         },
                         {
-                            "id": "e9d4454d-019b-4e77-b524-9b0badaf87ca",
+                            "id": "92eae97d-7640-42b6-9988-811b9b24f509",
                             "name": "p",
                             "style": {
-                                "id": "6dfad83e-f0e9-46b0-88f2-a3ff42ccf363",
+                                "id": "f4381bfb-a055-4909-8104-1493cd949660",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -2268,11 +2269,11 @@
                     ]
                 },
                 {
-                    "id": "2ab2a333-09f6-4aff-bf72-2e5ada2db626",
+                    "id": "b5e5b4af-bd57-4802-b5af-3b18438ce05b",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "942ef254-6d6b-4652-8e17-7a3d30b0c126",
+                        "id": "616f5bfb-8069-43d3-bee6-26e73b5a99f0",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -2399,10 +2400,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "4b720711-a46f-45a7-9604-8afcd763922e",
+                            "id": "d829e402-d7f7-40ef-9021-01073229eb81",
                             "name": "h3",
                             "style": {
-                                "id": "3007d062-3624-4c2e-915a-4895627b9004",
+                                "id": "d83b53d2-8632-40ee-8109-a9bd1dcd2028",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -2439,10 +2440,10 @@
                             "aria": null
                         },
                         {
-                            "id": "827fef89-e272-4a2c-b8ba-96e110d89e5e",
+                            "id": "8e4868eb-290a-4b9b-8a62-813030e8b847",
                             "name": "p",
                             "style": {
-                                "id": "832335ef-b193-4516-914c-4160533374d8",
+                                "id": "061dfa8a-1b6f-429a-8bea-338e75d8f5aa",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -2475,11 +2476,11 @@
                     ]
                 },
                 {
-                    "id": "aee30486-0e59-4c58-a59b-4a5ee23d7906",
+                    "id": "21f9937b-0672-468a-88bb-9f9d7c7ded8f",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "d8c5227e-6660-48ea-9db2-8b563ed3c629",
+                        "id": "bdedd21d-aab5-4014-a122-ff5cec24504c",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -2612,10 +2613,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "a9ec17e5-4368-4270-aec5-555a267a0402",
+                            "id": "5007aa58-01c0-44fb-96f3-4f05e7432b2a",
                             "name": "h3",
                             "style": {
-                                "id": "eb4d54e6-1a21-4192-a9a6-ba24d69e47dd",
+                                "id": "49f9a203-9776-4a03-ab69-7eb8afd9ebb5",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -2652,10 +2653,10 @@
                             "aria": null
                         },
                         {
-                            "id": "7418d2bf-0d0b-4aaf-9694-6d01c162a068",
+                            "id": "69b8dc48-a8bb-49f8-bebf-67f960b6f0d9",
                             "name": "p",
                             "style": {
-                                "id": "45230f08-18b6-419c-bbd0-fafadde07def",
+                                "id": "e3f724e0-632f-4860-b0ca-7d2a97a9a060",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -2688,11 +2689,11 @@
                     ]
                 },
                 {
-                    "id": "ba659a02-ffb5-4ebe-a371-26de0da88985",
+                    "id": "c2067548-886c-4f49-abe7-5eec2b1a8167",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "4ba4a290-3374-4b0f-a64c-8193cf60a8a2",
+                        "id": "16e8720d-f0dc-4a91-98de-4f0c686c4cb9",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -2823,10 +2824,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "2b25b7a0-f54d-4065-a464-9e19a365e50a",
+                            "id": "96d87a47-326c-4847-8e2a-6bac36a69780",
                             "name": "h3",
                             "style": {
-                                "id": "2062d338-07d3-406e-aafa-8301b0029aba",
+                                "id": "905feca3-a8b0-44c3-b295-b4b3db2212a0",
                                 "xl": {
                                     "width": "150px",
                                     "display": "none",
@@ -2863,10 +2864,10 @@
                             "aria": null
                         },
                         {
-                            "id": "532df23d-1237-4c10-8c35-43cade36898a",
+                            "id": "7bc9451e-67ef-446d-b618-88e963628060",
                             "name": "p",
                             "style": {
-                                "id": "93170712-f9b8-48be-a84f-3e737acaf6aa",
+                                "id": "f3153cc7-c3eb-4844-803c-83285165a434",
                                 "xl": {
                                     "width": "290px",
                                     "display": "none"
@@ -2901,11 +2902,11 @@
             ]
         },
         {
-            "id": "fe2c6e6d-93c8-410f-9c86-55e6b0967495",
+            "id": "4de073d8-fc60-45d3-8797-d38df22adeb2",
             "name": "section",
             "givenName": "book table section",
             "style": {
-                "id": "e50d6e87-8b1c-462c-afd6-17a824c26721",
+                "id": "ef9f5b93-e304-4eae-a504-95951b0a2df5",
                 "xl": {
                     "gap": "45px",
                     "top": "0",
@@ -2921,9 +2922,9 @@
                     "marginLeft": "0px",
                     "paddingTop": "100px",
                     "marginRight": "",
-                    "paddingLeft": "185px",
+                    "paddingLeft": "160px",
                     "marginBottom": "0",
-                    "paddingRight": "20px",
+                    "paddingRight": "160px",
                     "flexDirection": "row",
                     "paddingBottom": "100px",
                     "justifyContent": "",
@@ -3008,11 +3009,11 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "35993a32-8db4-42d3-9694-f1eec3440ea8",
+                    "id": "659c2dde-ad50-4cf9-b243-5ffd81182696",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "35d3cfc7-e1f3-4a46-8caa-a848e7be6019",
+                        "id": "705c12a9-3268-4b2a-88c3-b36ea3078f23",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -3095,10 +3096,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "060952b7-3469-4cf3-ad0c-8964876e8414",
+                            "id": "0c2e4895-8c78-4cd0-b58f-e489a9522866",
                             "name": "h2",
                             "style": {
-                                "id": "22b9906b-b215-4020-97ab-bf6edc625e24",
+                                "id": "cb2cd8b9-1604-43a7-a808-ce5756251ef9",
                                 "xl": {
                                     "fontSize": "24px",
                                     "fontFamily": "var(--font-playfair)",
@@ -3135,10 +3136,10 @@
                             "aria": null
                         },
                         {
-                            "id": "9c113665-6efc-4443-8911-e5fcdbcfa54f",
+                            "id": "de8222ee-8948-4265-af79-d7adadb13f8f",
                             "name": "division",
                             "style": {
-                                "id": "00e474db-4cc1-4640-a8a1-4f83b0594938",
+                                "id": "a8f2981c-d860-4af6-8b72-ac0f5dae4db8",
                                 "xl": {
                                     "width": "148px",
                                     "height": "2px",
@@ -3175,10 +3176,10 @@
                             "aria": null
                         },
                         {
-                            "id": "6a0507ff-5d7c-4887-b9c0-d6473acbcbc9",
+                            "id": "c11ec8f4-4147-4303-986e-e73b10f546c3",
                             "name": "p",
                             "style": {
-                                "id": "ad837c7a-d4ef-4075-87d6-f26bc09b98b1",
+                                "id": "88d10f9b-5ba9-4516-b2ae-7f7622dab5e1",
                                 "xl": {
                                     "width": "33vw",
                                     "fontSize": "24px",
@@ -3221,11 +3222,13 @@
                     ]
                 },
                 {
-                    "id": "e51699c5-3b96-49a5-aac8-380c8f3e150b",
+                    "id": "a0c73b4f-e80f-4800-a5ef-8d0c6fe0fe78",
                     "name": "bookTable",
                     "style": {
-                        "id": "0600fcb3-a56d-45e2-8996-b526918bfe2f",
-                        "xl": {},
+                        "id": "5bd710f8-153c-4e31-bfde-7b0a51d3ed89",
+                        "xl": {
+                            "zIndex": "2"
+                        },
                         "lg": {},
                         "md": {},
                         "sm": {}
@@ -3241,10 +3244,10 @@
                     "aria": null
                 },
                 {
-                    "id": "aa33544c-fe59-4f68-a99a-22f8514e236f",
+                    "id": "d6b69835-0d5b-4600-bab2-80b65098fa24",
                     "name": "img",
                     "style": {
-                        "id": "e418bae0-f2c0-43d6-9650-4f857895c069",
+                        "id": "e0ba6e74-f8d3-4609-99ab-fbc5fd058fca",
                         "xl": {
                             "top": "4.64566%",
                             "left": "73.2449%",
@@ -3271,6 +3274,2111 @@
                         }
                     },
                     "content": "/file_1756981302460",
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "href": null,
+                    "aria": null
+                }
+            ]
+        },
+        {
+            "id": "e323ffb8-a73a-4f00-a614-828913458f84",
+            "name": "section",
+            "givenName": "Footer - Wicker Park",
+            "style": {
+                "id": "7f3f1dc7-7e21-4d93-a813-67a41a334051",
+                "xl": {
+                    "top": "0",
+                    "left": "0",
+                    "color": "rgba(255,255,255,1)",
+                    "width": "100%",
+                    "height": "",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "20px",
+                    "marginRight": "0",
+                    "paddingLeft": "",
+                    "marginBottom": "0",
+                    "paddingRight": "",
+                    "paddingBottom": "",
+                    "backgroundSize": "cover",
+                    "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(0,0,0,0.65)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758455846281)",
+                    "backgroundRepeat": "no-repeat",
+                    "backgroundPosition": "center"
+                },
+                "lg": {
+                    "top": "0",
+                    "left": "0",
+                    "color": "rgba(255,255,255,1)",
+                    "width": "100%",
+                    "height": "",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "20px",
+                    "marginRight": "0",
+                    "paddingLeft": "",
+                    "marginBottom": "0",
+                    "paddingRight": "",
+                    "paddingBottom": "",
+                    "backgroundSize": "cover",
+                    "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(0,0,0,0.65)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758455846281)",
+                    "backgroundRepeat": "no-repeat",
+                    "backgroundPosition": "center"
+                },
+                "md": {
+                    "top": "0",
+                    "left": "0",
+                    "color": "rgba(255,255,255,1)",
+                    "width": "100%",
+                    "height": "",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "20px",
+                    "marginRight": "0",
+                    "paddingLeft": "",
+                    "marginBottom": "0",
+                    "paddingRight": "",
+                    "paddingBottom": "",
+                    "backgroundSize": "cover",
+                    "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(0,0,0,0.65)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758455846281)",
+                    "backgroundRepeat": "no-repeat",
+                    "backgroundPosition": "center"
+                },
+                "sm": {
+                    "top": "0",
+                    "left": "0",
+                    "color": "rgba(255,255,255,1)",
+                    "width": "100%",
+                    "height": "",
+                    "minWidth": "2px",
+                    "overflow": "hidden",
+                    "position": "relative",
+                    "marginTop": "0",
+                    "minHeight": "1vh",
+                    "marginLeft": "0",
+                    "paddingTop": "20px",
+                    "marginRight": "0",
+                    "paddingLeft": "",
+                    "marginBottom": "0",
+                    "paddingRight": "",
+                    "paddingBottom": "",
+                    "backgroundSize": "cover",
+                    "backgroundImage": "linear-gradient(to right, rgba(0,0,0,0.05), rgba(0,0,0,0.65)), url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758455846281)",
+                    "backgroundRepeat": "no-repeat",
+                    "backgroundPosition": "center"
+                }
+            },
+            "hover": {
+                "lg": {},
+                "md": {},
+                "sm": {},
+                "xl": {}
+            },
+            "aria": null,
+            "elements": [
+                {
+                    "id": "c3cc4445-f457-45d1-97d8-6e079dbcb2bc",
+                    "name": "section",
+                    "givenName": null,
+                    "style": {
+                        "id": "f8d9844b-3449-4fe2-abb5-84f0c34926b7",
+                        "xl": {
+                            "gap": "100px",
+                            "top": "0",
+                            "left": "0",
+                            "width": "100vw",
+                            "height": "",
+                            "display": "flex",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "20px",
+                            "marginRight": "0",
+                            "paddingLeft": "100px",
+                            "marginBottom": "0",
+                            "paddingRight": "100px",
+                            "paddingBottom": "20px",
+                            "justifyContent": "flex-start"
+                        },
+                        "lg": {
+                            "gap": "0px",
+                            "top": "0",
+                            "left": "0",
+                            "width": "100vw",
+                            "height": "",
+                            "display": "flex",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "20px",
+                            "marginRight": "0",
+                            "paddingLeft": "54px",
+                            "marginBottom": "0",
+                            "paddingRight": "54px",
+                            "paddingBottom": "20px",
+                            "justifyContent": "flex-start"
+                        },
+                        "md": {
+                            "gap": "0px",
+                            "top": "0",
+                            "left": "0",
+                            "width": "100vw",
+                            "height": "",
+                            "display": "flex",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "20px",
+                            "marginRight": "0",
+                            "paddingLeft": "20px",
+                            "marginBottom": "0",
+                            "paddingRight": "20px",
+                            "flexDirection": "column",
+                            "paddingBottom": "",
+                            "justifyContent": "flex-start"
+                        },
+                        "sm": {
+                            "gap": "0px",
+                            "top": "0",
+                            "left": "0",
+                            "width": "100vw",
+                            "height": "",
+                            "display": "flex",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "20px",
+                            "marginRight": "0",
+                            "paddingLeft": "15px",
+                            "marginBottom": "0",
+                            "paddingRight": "15px",
+                            "flexDirection": "column",
+                            "paddingBottom": "",
+                            "justifyContent": "flex-start"
+                        }
+                    },
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "aria": null,
+                    "elements": [
+                        {
+                            "id": "c669cee7-0585-4415-9fad-2b9281d1c992",
+                            "name": "section",
+                            "givenName": null,
+                            "style": {
+                                "id": "3ff99bda-5461-4d30-b3cc-298687df1f97",
+                                "xl": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "",
+                                    "height": "100%",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "0",
+                                    "paddingRight": "20px",
+                                    "paddingBottom": "20px"
+                                },
+                                "lg": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "35vw",
+                                    "height": "100%",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                },
+                                "md": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "0",
+                                    "paddingRight": "20px",
+                                    "paddingBottom": "20px"
+                                },
+                                "sm": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                }
+                            },
+                            "hover": {
+                                "lg": {},
+                                "md": {},
+                                "sm": {},
+                                "xl": {}
+                            },
+                            "aria": null,
+                            "elements": [
+                                {
+                                    "id": "1553efc5-326c-4f9a-b554-03d055aa30c0",
+                                    "name": "img",
+                                    "style": {
+                                        "id": "e42fc522-69c6-40e7-b728-60677e5bfc80",
+                                        "xl": {
+                                            "width": "12vw",
+                                            "height": "5vw",
+                                            "zIndex": "2"
+                                        },
+                                        "lg": {
+                                            "width": "12vw",
+                                            "height": "5vw",
+                                            "zIndex": "2"
+                                        },
+                                        "md": {
+                                            "width": "184px",
+                                            "height": "",
+                                            "zIndex": "2"
+                                        },
+                                        "sm": {
+                                            "width": "184px",
+                                            "height": "",
+                                            "zIndex": "2"
+                                        }
+                                    },
+                                    "content": "/file_1758456429561",
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "href": null,
+                                    "aria": null
+                                },
+                                {
+                                    "id": "5e1eebda-03a6-4988-b616-1147f5d4b25b",
+                                    "name": "p",
+                                    "style": {
+                                        "id": "031fad3d-5941-403a-b50d-bb0536f38f0b",
+                                        "xl": {
+                                            "marginBottom": "8px"
+                                        },
+                                        "lg": {
+                                            "marginBottom": "8px"
+                                        },
+                                        "md": {},
+                                        "sm": {
+                                            "marginBottom": "8px"
+                                        }
+                                    },
+                                    "content": "<div>1560 N. Milwaukee Ave., Chicago, IL 60622</div>",
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "href": null,
+                                    "aria": null
+                                },
+                                {
+                                    "id": "9cffabac-fbbf-455f-b256-7c13a51f89e2",
+                                    "name": "p",
+                                    "style": {
+                                        "id": "583581a1-5dea-444e-ae20-75fa1692f7d9",
+                                        "xl": {
+                                            "marginBottom": "8px"
+                                        },
+                                        "lg": {
+                                            "marginBottom": "8px"
+                                        },
+                                        "md": {},
+                                        "sm": {
+                                            "marginBottom": "8px"
+                                        }
+                                    },
+                                    "content": "(708)352-3300 | Kama@kamabistro.com",
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "href": null,
+                                    "aria": null
+                                },
+                                {
+                                    "id": "25cdbc29-73d1-42e6-9289-1de936356f6f",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "b00b1da6-39e6-4693-8aab-7a8651f61287",
+                                        "xl": {
+                                            "gap": "10px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0px",
+                                            "paddingTop": "2px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": "2px"
+                                        },
+                                        "lg": {
+                                            "gap": "10px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0px",
+                                            "paddingTop": "2px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": "2px"
+                                        },
+                                        "md": {
+                                            "gap": "10px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0px",
+                                            "paddingTop": "2px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": "2px"
+                                        },
+                                        "sm": {
+                                            "gap": "10px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0px",
+                                            "paddingTop": "2px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": "2px"
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "06b1ffdc-55ff-4e45-9ddd-453ce1c026d9",
+                                            "name": "a",
+                                            "style": {
+                                                "id": "45b525bd-a9e2-45be-ae02-e60d25af135e",
+                                                "xl": {
+                                                    "display": "inline-block"
+                                                },
+                                                "lg": {
+                                                    "fontSize": "16px"
+                                                },
+                                                "md": {},
+                                                "sm": {
+                                                    "fontSize": "14px"
+                                                }
+                                            },
+                                            "content": "Privacy Policy",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": "Visit our privacy policy page"
+                                        },
+                                        {
+                                            "id": "6b6ac870-7f01-4b50-88d7-be2f5cf1f43c",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "058f6040-8b0d-45ab-9a1c-2abbd82ca951",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {}
+                                            },
+                                            "content": "|",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "f714fdbe-0dca-4ad1-89d9-330ef8957f75",
+                                            "name": "a",
+                                            "style": {
+                                                "id": "3fc2cede-a571-4459-9443-8f42fc58619f",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {
+                                                    "fontSize": "14px"
+                                                }
+                                            },
+                                            "content": "Terms of Use",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": "Visit our terms and condition page"
+                                        },
+                                        {
+                                            "id": "42135bdb-f58b-42dd-b371-b4a446952cf7",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "ecabcdae-fdbb-437b-bfcf-32b326ce7d2f",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {}
+                                            },
+                                            "content": "|",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "44d22e4a-821d-4041-a6af-4b2439377bc6",
+                                            "name": "a",
+                                            "style": {
+                                                "id": "9f16906f-9379-4e63-9359-b613d101f2e4",
+                                                "xl": {
+                                                    "paddingBottom": "px"
+                                                },
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {
+                                                    "fontSize": "14px"
+                                                }
+                                            },
+                                            "content": "Accessibility",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": "Visit our accessibility page"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "41b34db0-9d4a-4669-b153-ed8ab22d003a",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "79b0596b-f920-4e9e-88c7-71e5c34f2be6",
+                                        "xl": {
+                                            "gap": "15px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "10px",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "",
+                                            "borderWidth": "0px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        },
+                                        "lg": {
+                                            "gap": "15px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "10px",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "",
+                                            "borderWidth": "0px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        },
+                                        "md": {
+                                            "gap": "15px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "10px",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "",
+                                            "borderWidth": "0px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        },
+                                        "sm": {
+                                            "gap": "15px",
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "10px",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "",
+                                            "borderWidth": "0px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "42480657-be02-4fa2-ac19-9fa163e66841",
+                                            "name": "img",
+                                            "style": {
+                                                "id": "7e8370f8-4e5c-4e7a-868d-b05beda097c6",
+                                                "xl": {
+                                                    "width": "40px",
+                                                    "height": "40px",
+                                                    "zIndex": "2"
+                                                },
+                                                "lg": {
+                                                    "zIndex": "2"
+                                                },
+                                                "md": {
+                                                    "width": "40px",
+                                                    "height": "40px"
+                                                },
+                                                "sm": {}
+                                            },
+                                            "content": "/file_1758458932444",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "30476312-d874-434d-aed5-123de1e9b766",
+                                            "name": "img",
+                                            "style": {
+                                                "id": "d822fa69-e608-404f-9e4b-7ecd59add4dd",
+                                                "xl": {
+                                                    "width": "40px",
+                                                    "height": "40px",
+                                                    "zIndex": "2"
+                                                },
+                                                "lg": {
+                                                    "zIndex": "2"
+                                                },
+                                                "md": {
+                                                    "width": "40px",
+                                                    "height": "40px"
+                                                },
+                                                "sm": {}
+                                            },
+                                            "content": "/file_1758458932435",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "1202e49f-37a8-4582-be03-c41df51c5323",
+                                            "name": "img",
+                                            "style": {
+                                                "id": "02e5ad54-60fc-4866-bba9-be49d0104d61",
+                                                "xl": {
+                                                    "width": "40px",
+                                                    "height": "40px",
+                                                    "zIndex": "2"
+                                                },
+                                                "lg": {
+                                                    "zIndex": "2"
+                                                },
+                                                "md": {
+                                                    "width": "40px",
+                                                    "height": "40px"
+                                                },
+                                                "sm": {}
+                                            },
+                                            "content": "/file_1758458932425",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "053d623f-0145-459d-881c-539a35d5959e",
+                            "name": "section",
+                            "givenName": null,
+                            "style": {
+                                "id": "3a6fd3eb-4433-4010-a02c-827a7639efba",
+                                "xl": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "",
+                                    "height": "100%",
+                                    "display": "flex",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                },
+                                "lg": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "",
+                                    "height": "auto",
+                                    "display": "flex",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                },
+                                "md": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "display": "flex",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "",
+                                    "justifyContent": "space-between"
+                                },
+                                "sm": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "display": "flex",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "",
+                                    "justifyContent": "space-between"
+                                }
+                            },
+                            "hover": {
+                                "lg": {},
+                                "md": {},
+                                "sm": {},
+                                "xl": {}
+                            },
+                            "aria": null,
+                            "elements": [
+                                {
+                                    "id": "d00a8ca7-a4ba-4a9c-ad72-531774e417f5",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "1da15a14-3204-4e0d-b6f5-1b3ccb3477b3",
+                                        "xl": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "100%",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "20px",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "lg": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        },
+                                        "md": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "20px",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "sm": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "d483ba6a-684d-4cc1-9821-7438dfd46af5",
+                                            "name": "h3",
+                                            "style": {
+                                                "id": "1eba8fda-d92f-4d9f-b6de-6e4a96b55da1",
+                                                "xl": {
+                                                    "fontSize": "20px",
+                                                    "fontWeight": "500",
+                                                    "marginBottom": "10px"
+                                                },
+                                                "lg": {
+                                                    "fontSize": "20px",
+                                                    "fontWeight": "500",
+                                                    "marginBottom": "10px"
+                                                },
+                                                "md": {
+                                                    "fontSize": "20px",
+                                                    "fontWeight": "500",
+                                                    "marginBottom": "10px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "20px",
+                                                    "fontWeight": "500",
+                                                    "marginBottom": "10px"
+                                                }
+                                            },
+                                            "content": "Hours",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "dd0ad812-d837-4242-ab4e-1c954f69fa28",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "04037a57-b606-4841-8a4d-e777ef307c73",
+                                                "xl": {
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "marginBottom": "4px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                }
+                                            },
+                                            "content": "Mon : Closed",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "f0d93196-5cc0-4bcd-9a02-4f40d34bbcd2",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "8816851a-2d36-4184-8f7b-373ebd1bd555",
+                                                "xl": {
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "marginBottom": "4px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                }
+                                            },
+                                            "content": "Tue - Thr :&nbsp; 5pm - 9pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "d717e4db-5d5d-49b6-add7-52848e79da68",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "c957ac42-753d-459d-bad8-da5ead0437da",
+                                                "xl": {
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "marginBottom": "4px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                }
+                                            },
+                                            "content": "Fri : 5pm - 10pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "2c776fcd-5ac3-46ee-8168-85c293af9c73",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "7fea55a0-a573-42d5-8726-8300073d3ecd",
+                                                "xl": {
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "marginBottom": "4px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "4px"
+                                                }
+                                            },
+                                            "content": "Sat : 12pm - 10pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "288ac3eb-336a-4a17-8103-6c00d7835b5f",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "5befc031-e8ae-4485-9b74-a474696f2a34",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {
+                                                    "fontWeight": "300"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300"
+                                                }
+                                            },
+                                            "content": "Sun : 12pm - 9pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "1f868145-0d27-4e19-80fd-3f8294068d77",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "82a51fd5-c0fb-4171-af5b-d47f2de88257",
+                                        "xl": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "100%",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "20px",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "lg": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "15px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "20px",
+                                            "paddingBottom": ""
+                                        },
+                                        "md": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "20px",
+                                            "marginBottom": "0",
+                                            "paddingRight": "20px",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "sm": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "1f813aa8-4d53-4670-a44f-69d2f6cd4041",
+                                            "name": "h3",
+                                            "style": {
+                                                "id": "288d2669-e4c6-49d9-92f5-d4234c0f4844",
+                                                "xl": {
+                                                    "marginTop": "40px"
+                                                },
+                                                "lg": {
+                                                    "marginTop": "px"
+                                                },
+                                                "md": {},
+                                                "sm": {}
+                                            },
+                                            "content": "Happy Hours,",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "c1e8cb9e-360e-46ee-859b-9ef112bd3a19",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "275d4f23-9cf9-4051-a4fb-6326c8bed135",
+                                                "xl": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                }
+                                            },
+                                            "content": "Mon - Fri : 5pm - 9pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "47d90707-a4d0-40cc-be4b-9c3a855a57cf",
+                                            "name": "h3",
+                                            "style": {
+                                                "id": "f6c547ee-ad2b-4bf5-8c40-f63fc878ed79",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {}
+                                            },
+                                            "content": "Brunch Hours,",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "d34c7341-27de-4c05-8af7-b968c884ec05",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "aaa1949b-e162-4b41-8a26-f37eab13ffdc",
+                                                "xl": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "lg": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300",
+                                                    "marginBottom": "8px"
+                                                }
+                                            },
+                                            "content": "Mon - Fri : 4pm - 12pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "b6ba7fd6-190c-43ed-82da-19ae096f4944",
+                                            "name": "h3",
+                                            "style": {
+                                                "id": "5f3c2c6d-7924-4c6b-a197-6513e79a76e1",
+                                                "xl": {},
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {}
+                                            },
+                                            "content": "Business Hours,",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "6b999ada-559a-4f2c-bdd1-5bf8eb5bc728",
+                                            "name": "p",
+                                            "style": {
+                                                "id": "39aa3ed8-4b45-41ae-b4fe-f2afc9fc5442",
+                                                "xl": {
+                                                    "fontWeight": "300"
+                                                },
+                                                "lg": {
+                                                    "fontWeight": "300"
+                                                },
+                                                "md": {
+                                                    "fontWeight": "300"
+                                                },
+                                                "sm": {
+                                                    "fontSize": "14px",
+                                                    "fontWeight": "300"
+                                                }
+                                            },
+                                            "content": "Mon - Fri : 4pm - 12pm",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "id": "cf9de848-7dbb-44cc-80f9-3a6030ea1a8a",
+                            "name": "section",
+                            "givenName": null,
+                            "style": {
+                                "id": "3af085fc-4c13-45cb-90ae-3b1352bf84be",
+                                "xl": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "18vw",
+                                    "height": "100%",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "0",
+                                    "paddingRight": "20px",
+                                    "paddingBottom": "20px"
+                                },
+                                "lg": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "14vw",
+                                    "height": "100%",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                },
+                                "md": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "0",
+                                    "paddingRight": "20px",
+                                    "paddingBottom": "20px"
+                                },
+                                "sm": {
+                                    "top": "0",
+                                    "left": "0",
+                                    "width": "100%",
+                                    "height": "auto",
+                                    "minWidth": "2px",
+                                    "overflow": "hidden",
+                                    "position": "relative",
+                                    "marginTop": "0",
+                                    "minHeight": "1vh",
+                                    "marginLeft": "0",
+                                    "paddingTop": "20px",
+                                    "marginRight": "0",
+                                    "paddingLeft": "",
+                                    "marginBottom": "0",
+                                    "paddingRight": "",
+                                    "paddingBottom": "20px"
+                                }
+                            },
+                            "hover": {
+                                "lg": {},
+                                "md": {},
+                                "sm": {},
+                                "xl": {}
+                            },
+                            "aria": null,
+                            "elements": [
+                                {
+                                    "id": "00d18c81-f3cd-4ec1-b8db-05a0da1e3a2d",
+                                    "name": "h3",
+                                    "style": {
+                                        "id": "33b6a253-5331-4c1b-b835-ccfd679c985d",
+                                        "xl": {
+                                            "fontSize": "20px",
+                                            "marginTop": "15px",
+                                            "fontWeight": "500"
+                                        },
+                                        "lg": {
+                                            "fontSize": "20px",
+                                            "marginTop": "15px",
+                                            "fontWeight": "500"
+                                        },
+                                        "md": {
+                                            "fontSize": "20px",
+                                            "marginTop": "px",
+                                            "fontWeight": "500"
+                                        },
+                                        "sm": {
+                                            "fontSize": "20px",
+                                            "marginTop": "px",
+                                            "fontWeight": "500"
+                                        }
+                                    },
+                                    "content": "Locations",
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "href": null,
+                                    "aria": null
+                                },
+                                {
+                                    "id": "3fc50cb9-9047-4db6-a6db-2a55d89dc219",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "473c6ef4-1387-40c0-ae81-4ee4ecb3c6a3",
+                                        "xl": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
+                                        },
+                                        "lg": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "md": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "sm": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "cb7d5829-60e3-43ea-bb9d-4ac491cbe75f",
+                                            "name": "img",
+                                            "style": {
+                                                "id": "0a704e8c-061f-4056-8b56-13abc8247fc8",
+                                                "xl": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                },
+                                                "lg": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                },
+                                                "md": {},
+                                                "sm": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                }
+                                            },
+                                            "content": "/file_1758463741860",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "82643ef8-92c5-4072-a4c9-6a65b42c3933",
+                                            "name": "a",
+                                            "style": {
+                                                "id": "52307296-49ec-4e37-85be-a6f68ab7964d",
+                                                "xl": {
+                                                    "textDecoration": "underline"
+                                                },
+                                                "lg": {
+                                                    "fontSize": "14px",
+                                                    "textDecoration": "underline"
+                                                },
+                                                "md": {
+                                                    "fontSize": "14px",
+                                                    "textDecoration": "underline"
+                                                },
+                                                "sm": {
+                                                    "textDecoration": "underline"
+                                                }
+                                            },
+                                            "content": "9 South La Grange Road, La Grange, IL 60525",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": "Go to our La Grange webpage."
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": "659e4375-178f-4b2b-86f1-31152d8f860e",
+                                    "name": "section",
+                                    "givenName": null,
+                                    "style": {
+                                        "id": "0482e115-f1e0-4310-b6a6-9a0561fb912f",
+                                        "xl": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "lg": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "md": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        },
+                                        "sm": {
+                                            "top": "0",
+                                            "left": "0",
+                                            "width": "100%",
+                                            "height": "auto",
+                                            "display": "flex",
+                                            "minWidth": "2px",
+                                            "overflow": "hidden",
+                                            "position": "relative",
+                                            "marginTop": "0",
+                                            "minHeight": "1vh",
+                                            "marginLeft": "0",
+                                            "paddingTop": "20px",
+                                            "marginRight": "0",
+                                            "paddingLeft": "",
+                                            "marginBottom": "0",
+                                            "paddingRight": "",
+                                            "paddingBottom": "20px"
+                                        }
+                                    },
+                                    "hover": {
+                                        "lg": {},
+                                        "md": {},
+                                        "sm": {},
+                                        "xl": {}
+                                    },
+                                    "aria": null,
+                                    "elements": [
+                                        {
+                                            "id": "837b066e-aa8c-4e73-b05b-8981142d73bb",
+                                            "name": "img",
+                                            "style": {
+                                                "id": "dcae9dc4-e560-409e-a77f-0c10c552ca34",
+                                                "xl": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                },
+                                                "lg": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                },
+                                                "md": {},
+                                                "sm": {
+                                                    "width": "22px",
+                                                    "height": "22px"
+                                                }
+                                            },
+                                            "content": "/file_1758463741860",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": null
+                                        },
+                                        {
+                                            "id": "00510715-9278-47c7-ba4f-a297a4cbfcfa",
+                                            "name": "a",
+                                            "style": {
+                                                "id": "9a18c52b-9e96-4786-8412-b8ad68e41be8",
+                                                "xl": {
+                                                    "textDecoration": "underline"
+                                                },
+                                                "lg": {
+                                                    "fontSize": "14px",
+                                                    "textDecoration": "underline"
+                                                },
+                                                "md": {
+                                                    "fontSize": "14px",
+                                                    "textDecoration": "underline"
+                                                },
+                                                "sm": {
+                                                    "textDecoration": "underline"
+                                                }
+                                            },
+                                            "content": "812 W Randolph St, Chicago, IL 60607",
+                                            "hover": {
+                                                "lg": {},
+                                                "md": {},
+                                                "sm": {},
+                                                "xl": {}
+                                            },
+                                            "href": null,
+                                            "aria": "Go to our West Loop webpage."
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "27916faf-f6fb-4baf-b120-0ce5ec840261",
+                    "name": "section",
+                    "givenName": null,
+                    "style": {
+                        "id": "c31f5a30-b97d-4a91-9889-16f4577c4ee8",
+                        "xl": {
+                            "top": "0",
+                            "left": "0",
+                            "width": "100%",
+                            "height": "auto",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "",
+                            "marginRight": "0",
+                            "paddingLeft": "",
+                            "marginBottom": "0",
+                            "paddingRight": "",
+                            "paddingBottom": ""
+                        },
+                        "lg": {
+                            "top": "0",
+                            "left": "0",
+                            "width": "100%",
+                            "height": "auto",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "",
+                            "marginRight": "0",
+                            "paddingLeft": "",
+                            "marginBottom": "0",
+                            "paddingRight": "",
+                            "paddingBottom": ""
+                        },
+                        "md": {
+                            "top": "0",
+                            "left": "0",
+                            "width": "100%",
+                            "height": "auto",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "",
+                            "marginRight": "0",
+                            "paddingLeft": "",
+                            "marginBottom": "0",
+                            "paddingRight": "",
+                            "paddingBottom": ""
+                        },
+                        "sm": {
+                            "top": "0",
+                            "left": "0",
+                            "width": "100%",
+                            "height": "auto",
+                            "minWidth": "2px",
+                            "overflow": "hidden",
+                            "position": "relative",
+                            "marginTop": "0",
+                            "minHeight": "1vh",
+                            "marginLeft": "0",
+                            "paddingTop": "",
+                            "marginRight": "0",
+                            "paddingLeft": "",
+                            "marginBottom": "0",
+                            "paddingRight": "",
+                            "paddingBottom": ""
+                        }
+                    },
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "aria": null,
+                    "elements": [
+                        {
+                            "id": "65f33cdb-0305-4b1f-841f-763918187eeb",
+                            "name": "division",
+                            "style": {
+                                "id": "b6fae743-4b65-422a-b41f-5f4a620ac5a1",
+                                "xl": {
+                                    "width": "100%",
+                                    "height": "1px",
+                                    "backgroundColor": "transparent",
+                                    "backgroundImage": "linear-gradient(to right, rgba(255,255,255,0.33), rgba(255,255,255,0.36))"
+                                },
+                                "lg": {
+                                    "width": "100%",
+                                    "height": "1px",
+                                    "backgroundColor": "transparent",
+                                    "backgroundImage": "linear-gradient(to right, rgba(255,255,255,0.33), rgba(255,255,255,0.36))"
+                                },
+                                "md": {
+                                    "width": "100%",
+                                    "height": "1px",
+                                    "backgroundColor": "transparent",
+                                    "backgroundImage": "linear-gradient(to right, rgba(255,255,255,0.33), rgba(255,255,255,0.36))"
+                                },
+                                "sm": {
+                                    "width": "100%",
+                                    "height": "1px",
+                                    "backgroundColor": "transparent",
+                                    "backgroundImage": "linear-gradient(to right, rgba(255,255,255,0.33), rgba(255,255,255,0.36))"
+                                }
+                            },
+                            "content": "null",
+                            "hover": {
+                                "lg": {},
+                                "md": {},
+                                "sm": {},
+                                "xl": {}
+                            },
+                            "href": null,
+                            "aria": null
+                        },
+                        {
+                            "id": "5de81664-1eb3-4562-bf18-f653672a1719",
+                            "name": "p",
+                            "style": {
+                                "id": "bc6ce30e-ad66-44ea-83dc-7e8b15a61f07",
+                                "xl": {
+                                    "marginTop": "30px",
+                                    "textAlign": "right",
+                                    "fontWeight": "300",
+                                    "paddingLeft": "100px",
+                                    "marginBottom": "30px",
+                                    "paddingRight": "100px"
+                                },
+                                "lg": {
+                                    "marginTop": "30px",
+                                    "textAlign": "right",
+                                    "fontWeight": "300",
+                                    "paddingLeft": "54px",
+                                    "marginBottom": "30px",
+                                    "paddingRight": "54px"
+                                },
+                                "md": {
+                                    "marginTop": "30px",
+                                    "textAlign": "right",
+                                    "fontWeight": "300",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "30px",
+                                    "paddingRight": "20px"
+                                },
+                                "sm": {
+                                    "marginTop": "30px",
+                                    "textAlign": "right",
+                                    "fontWeight": "300",
+                                    "paddingLeft": "20px",
+                                    "marginBottom": "30px",
+                                    "paddingRight": "20px"
+                                }
+                            },
+                            "content": "© 2025 Kama Bistro – La Grange &amp; Wicker Park. All Rights Reserved.",
+                            "hover": {
+                                "lg": {},
+                                "md": {},
+                                "sm": {},
+                                "xl": {}
+                            },
+                            "href": null,
+                            "aria": null
+                        }
+                    ]
+                },
+                {
+                    "id": "6beef2e9-6820-44d0-8119-08dd226692d4",
+                    "name": "img",
+                    "style": {
+                        "id": "841a0d72-2faa-4ee3-a9d3-ecdd1b163c14",
+                        "xl": {
+                            "top": "-8.00006%",
+                            "left": "-14.9478%",
+                            "width": "750px",
+                            "filter": "brightness(0.3)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "lg": {
+                            "top": "-46.9599%",
+                            "left": "-30.6807%",
+                            "width": "750px",
+                            "filter": "brightness(0.3)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "md": {
+                            "top": "-46.9599%",
+                            "left": "-30.6807%",
+                            "width": "750px",
+                            "filter": "brightness(0.3)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "sm": {
+                            "top": "-46.9599%",
+                            "left": "-30.6807%",
+                            "width": "750px",
+                            "filter": "brightness(0.3)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        }
+                    },
+                    "content": "/file_1757929839941",
+                    "hover": {
+                        "lg": {},
+                        "md": {},
+                        "sm": {},
+                        "xl": {}
+                    },
+                    "href": null,
+                    "aria": null
+                },
+                {
+                    "id": "77a4a62e-5149-49e8-ae40-be2986b49d69",
+                    "name": "img",
+                    "style": {
+                        "id": "1fde74fd-ff57-4fb6-88bd-0eb7561d845b",
+                        "xl": {
+                            "top": "-6.82357%",
+                            "left": "62.0156%",
+                            "width": "800px",
+                            "filter": "brightness(0.4)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "lg": {
+                            "top": "-6.97594%",
+                            "left": "66.3125%",
+                            "width": "800px",
+                            "filter": "brightness(0.4)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "md": {
+                            "top": "-6.97594%",
+                            "left": "66.3125%",
+                            "width": "800px",
+                            "filter": "brightness(0.4)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        },
+                        "sm": {
+                            "top": "-6.97594%",
+                            "left": "66.3125%",
+                            "width": "800px",
+                            "filter": "brightness(0.4)",
+                            "zIndex": "1",
+                            "position": "absolute"
+                        }
+                    },
+                    "content": "/file_1757929839941",
                     "hover": {
                         "lg": {},
                         "md": {},

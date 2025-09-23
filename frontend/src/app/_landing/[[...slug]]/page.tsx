@@ -3,7 +3,7 @@
 import { useRef, useEffect, useState } from "react";
 import Section from "@/app/_elements/Section";
 import { useMyContext } from "@/Context/ApiContext";
-import { useParams, usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { getContentReq } from "@/functionalities/fetch";
 import NotFound from "./not-found";
 import HeaderTwo from "@/app/_elements/LandinHeader";
@@ -42,7 +42,6 @@ const Editor = () => {
                 const newWidth = entry.contentRect.width;
                 width.setWidthSize(newWidth)
                 width.setWidth(classifyWidth(newWidth));
-                // console.log(`Width: ${newWidth}, Size: ${classifyWidth(newWidth)}`);
             }
         });
 
@@ -55,7 +54,6 @@ const Editor = () => {
         // if (page) {
         async function getContentfromServer() {
             try {
-                console.log(page)
                 const response: any = await getContentReq(page, "")
                 if (response.ok) {
                     console.log(JSON.stringify(response))

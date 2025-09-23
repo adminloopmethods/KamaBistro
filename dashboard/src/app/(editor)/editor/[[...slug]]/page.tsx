@@ -73,8 +73,6 @@ const Editor = () => {
 
   const {webpage, setWebpage} = websiteContent;
 
-  console.log("webpage", webpage);
-
   const sectionStyleSetter = currentSectionSetter;
 
   const saveAllSection = () => {
@@ -158,6 +156,9 @@ const Editor = () => {
   const applyXLScreen = () => {
     setPageWidth("100%");
   };
+
+  const styleForScreenIcons =
+    "p-2 hover:bg-stone-500 cursor-pointer rounded-sm";
 
   useEffect(() => {
     if (!containerRef.current) return;
@@ -524,7 +525,7 @@ const Editor = () => {
 
               return (
                 <Section
-                  key={i}
+                  key={section.id}
                   element={section.elements}
                   section={section}
                   style={section.style[activeScreen]}
@@ -539,6 +540,7 @@ const Editor = () => {
                   createSection={CreateSection}
                   setGivenName={setGivenName}
                   parentRef={containerRef.current}
+                  // readOnly={isVerifier}
                 />
               );
             })}
@@ -560,6 +562,14 @@ const Editor = () => {
             className="scroll-one fixed top-[8vh] right-0"
           >
             <div className="p-2 w-[240px] px-4 flex gap-5 flex-col my-4">
+              {/* {renderInput(
+                "Name",
+                "name",
+                "text",
+                "",
+                webpage?.name,
+                setMetaOfPage
+              )} */}
               {renderInput(
                 "Route",
                 "route",
@@ -614,5 +624,3 @@ const Editor = () => {
 };
 
 export default Editor;
-
-const styleForScreenIcons = "p-2 hover:bg-stone-500 cursor-pointer rounded-sm";

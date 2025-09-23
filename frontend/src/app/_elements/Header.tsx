@@ -22,7 +22,7 @@ const Header: React.FC = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 xl:px-10">
+    <header className="fixed lg:top-2 left-0 w-full bg-transparent z-[50] lg:p-2 xl:px-10" style={{ fontFamily: "var(--font-poppins)" }}>
       <div className="xl:container lg:mx-auto w-full flex bg-black items-center justify-between px-4 lg:rounded-xl">
 
         {/* Mobile & Tablet Layout */}

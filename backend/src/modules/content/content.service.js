@@ -53,6 +53,7 @@ export const createWebpageService = async ({
   contents,
   route,
   editedWidth,
+  locationId,
 }) => {
   const id = crypto.randomUUID();
 
@@ -110,6 +111,7 @@ export const createWebpageService = async ({
       name,
       route,
       editedWidth,
+      locationId,
       contents: {
         create: contents.map((section, sectionIndex) =>
           buildContentCreate(section, sectionIndex)
@@ -532,12 +534,15 @@ export const getWebpageVersionsService = async (webpageId) => {
 };
 
 // ---------------- FIND WEBPAGE ID BY ROUTE ----------------
-export const findWebpageIdByRouteService = async (route, location) => {
+export const findWebpageIdByRouteService = async (route, locationName) => {
   let page;
 
   // Normalize falsey location values
   const isNoLocation =
-    !location || location === "false" || location === "null" || location === "";
+    !locationName ||
+    locationName === "false" ||
+    locationName === "null" ||
+    locationName === "";
 
   if (isNoLocation) {
     // Case: general (non-location) page
@@ -549,9 +554,14 @@ export const findWebpageIdByRouteService = async (route, location) => {
       select: {id: true},
     });
   } else {
-    // Case: specific location page
+    // Directly query webpage by related location name
     page = await prismaClient.webpage.findFirst({
-      where: {route, locationId: location},
+      where: {
+        route,
+        location: {
+          name: locationName, // filter by location name directly
+        },
+      },
       select: {id: true},
     });
   }

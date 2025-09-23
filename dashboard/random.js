@@ -73180,13 +73180,16 @@ const menu = {
 function simplifyMenu(menu) {
     return {
         menus: menu.menus.map(menuSection => ({
+            id: menuSection.guid,
             name: menuSection.name,
             menuGroups: menuSection.menuGroups.map(group => ({
+                id: group.guid,
                 name: group.name,
                 menuItems: group.menuItems.map(item => ({
+                    id: item.guid,
                     name: item.name,
-                    price: item.price,
-                    image: item.image,
+                    price: item.price || 0,
+                    image: item.image || "",
                     active: true
                 }))
             }))
