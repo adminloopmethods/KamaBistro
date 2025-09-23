@@ -7,6 +7,40 @@ import { screenType, useMyContext } from '@/Context/EditorContext';
 import { debounce } from "lodash";
 import CopyStylesUI from './CopyStyleUI';
 
+// Split a combined backgroundImage into gradient and URL
+function splitBackground(backgroundImage: string) {
+    let gradientPart = '';
+    let imagePart = '';
+
+    if (!backgroundImage) return { gradientPart, imagePart };
+
+    const parts = backgroundImage.split(/\s*,\s*(?=url\(|linear-gradient\()/);
+
+    parts.forEach(part => {
+        if (part.startsWith('linear-gradient')) gradientPart = part;
+        else if (part.startsWith('url(')) imagePart = part.match(/url\(([^)]+)\)/)?.[1] || '';
+    });
+
+    return { gradientPart, imagePart };
+}
+
+function parseGradient(gradient: string) {
+    // Example: "linear-gradient(to right, rgba(255,0,0,1), rgba(0,0,255,1))"
+    const match = gradient.match(/linear-gradient\(([^,]+),\s*([^,]+),\s*([^)]+)\)/);
+    if (!match) {
+        return {
+            direction: 'to right',
+            color1: 'rgba(255,0,0,1)',
+            color2: 'rgba(0,0,255,1)'
+        };
+    }
+
+    const [, direction, color1, color2] = match;
+    return { direction: direction.trim(), color1: color1.trim(), color2: color2.trim() };
+}
+
+
+
 const shadowPresets: Record<string, string> = {
     none: 'none',
     sm: '0 1px 3px rgba(0,0,0,0.1)',
@@ -73,11 +107,19 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     const { contextForSection, screenStyleObj } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
 
-    const [color1, setColor1] = useState<string>('rgba(255,0,0,1)');
-    const [color2, setColor2] = useState<string>('rgba(0,0,255,1)');
-    const [gradientDirection, setGradientDirection] = useState<string>('to right');
-    const [gradient, setGradient] = useState<string>('');
-    const [bgImage, setBgImage] = useState<string>('');
+    const { gradientPart, imagePart } = splitBackground(currentSection?.backgroundImage || '');
+
+    const initialGradient = gradientPart ? parseGradient(gradientPart) : {
+        direction: 'to right',
+        color1: 'rgba(255,0,0,1)',
+        color2: 'rgba(0,0,255,1)'
+    };
+
+    const [color1, setColor1] = useState(initialGradient.color1);
+    const [color2, setColor2] = useState(initialGradient.color2);
+    const [gradientDirection, setGradientDirection] = useState(initialGradient.direction);
+    const [gradient, setGradient] = useState(gradientPart);
+    const [bgImage, setBgImage] = useState(imagePart);
     const [boxShadow, setBoxShadow] = useState<string>(currentSection?.boxShadow || 'none');
     const [showImageSelector, setShowImageSelector] = useState<boolean>(false);
     const [textColor, setTextColor] = useState<string>(
@@ -85,11 +127,11 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
     );
 
     // ✅ Border states
-  const [borderWidth, setBorderWidth] = useState<string>(
-  typeof currentSection?.borderWidth === "number"
-    ? `${currentSection.borderWidth}px`
-    : currentSection?.borderWidth || "0px"
-);
+    const [borderWidth, setBorderWidth] = useState<string>(
+        typeof currentSection?.borderWidth === "number"
+            ? `${currentSection.borderWidth}px`
+            : currentSection?.borderWidth || "0px"
+    );
 
     const [borderStyle, setBorderStyle] = useState<string>(currentSection?.borderStyle || "none");
     const [borderColor, setBorderColor] = useState<string>(currentSection?.borderColor || "rgba(0,0,0,1)");

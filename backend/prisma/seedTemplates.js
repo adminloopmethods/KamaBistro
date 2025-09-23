@@ -93,7 +93,7 @@ async function getLocationId(locationName) {
   const location = await prismaClient.location.findFirst({
     where: { name: locationName }
   });
-  return location?.id; // ← matches your schema (`id` is PK, not `locationId`)
+  return location?.id;
 }
 
 // Main function to process all webpages
