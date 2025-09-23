@@ -45,17 +45,31 @@ export const getTokenByLoginToastPOS = async ({
 };
 
 
-
 export const getMenuFromToastPOS = async ({ hostname, restaurantGuid, token }) => {
-    const response = await fetch(hostname + "/menus/v2/menus/", {
-        method: "GET",
-        headers: {
-            "Toast-Restaurant-External-Id": restaurantGuid,
-            "Authorization": `Bearer ${token}`
-        }
-    })
+    const now = new Date();
+    const twentyFourHours = 24 * 60 * 60 * 1000;
 
-    return await response.json()
+    const latestMenu = await prismaClient.menu.findFirst({
+        orderBy: { lastFetchedAt: "desc" },
+        include: { menuGroups: { include: { menuItems: true } } },
+    });
+
+    if (!latestMenu || !latestMenu.lastFetchedAt || (now - new Date(latestMenu.lastFetchedAt) > twentyFourHours)) {
+        // fetch from Toast POS
+        const response = await fetch(hostname + "/menus/v2/menus/", {
+            method: "GET",
+            headers: {
+                "Toast-Restaurant-External-Id": restaurantGuid,
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const menu = await response.json();
+        return { cache: false, menu };
+    } else {
+        // return cached menu from DB
+        return { cache: true, menu: latestMenu };
+    }
 }
 
 export function simplifyMenu(menu) {

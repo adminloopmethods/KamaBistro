@@ -1,9 +1,10 @@
 model Menu {
-    id         String      @id @default(uuid())
-    name       String
-    createdAt  DateTime    @default(now())
-    updatedAt  DateTime    @updatedAt
-    menuGroups MenuGroup[]
+    id            String      @id @default(uuid())
+    name          String
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    lastFetchedAt DateTime?
+    menuGroups    MenuGroup[]
 }
 
 model MenuGroup {

@@ -445,7 +445,7 @@ const Editor = () => {
           </button>
 
           {/* Save as Draft button */}
-          <button
+          {/* <button
             className="text-sm cursor-pointer bg-gray-600 w-[120px]"
             style={{
               border: "none",
@@ -459,11 +459,11 @@ const Editor = () => {
             }}
           >
             Save as Draft
-          </button>
+          </button> */}
 
           {/* Publish button */}
           <button
-            className="text-sm cursor-pointer"
+            className="text-sm cursor-pointer w-[120px]"
             style={{
               backgroundColor: "#007bff",
               border: "none",
