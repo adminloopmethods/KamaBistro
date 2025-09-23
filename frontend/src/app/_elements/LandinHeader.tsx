@@ -8,7 +8,7 @@ import Link from "next/link";
 import logo from "@/assets/favicon.png";
 import CustomSelect from "./Select";
 import { useParams, useRouter } from "next/navigation";
-
+import { usePathname } from "next/navigation";
 // Top header nav
 const topNavLinks = [
   { label: "Our Group", href: "/our-group" },
@@ -21,6 +21,7 @@ const topNavLinks = [
 
 // Bottom header nav (reordered & no homepage)
 const bottomNavLinks = [
+  { label: "Home", href: "/" },
   { label: "Reserve", href: "/reserve-table" },
   { label: "Catering", href: "/caterings" },
   { label: "Menu", href: "/menu" },
@@ -34,10 +35,19 @@ const addresses: Record<string, string> = {
   "west-loop": "812 W Randolph St, Chicago, IL",
 };
 
+const orderNowUrl: Record<string, string> = {
+  "wicker-park": "https://kamabistro.toast.site/order/kama-bistro",
+  "la-grange": "https://kamabistro.toast.site/order/kamabistro",
+  "west-loop": "https://kamabistro.toast.site/order/kamabistro",
+}
+
 const HeaderTwo: React.FC = () => {
   const router = useRouter();
   const params = useParams();
+  const pathname = usePathname();
   const [topMenuOpen, setTopMenuOpen] = useState(false);
+
+  console.log(pathname.split("/"))
 
   // Get location from URL slug
   const location = params.slug ? params.slug[0] : "";
@@ -47,6 +57,30 @@ const HeaderTwo: React.FC = () => {
     ...e,
     href: `/${location}${e.href}`,
   }));
+
+
+  const getActiveLink = () => {
+    const parts = pathname.split("/");
+    // e.g. "/west-loop/caterings" -> ["", "west-loop", "caterings"]
+
+    const location = parts[1]; // "west-loop"
+    const section = parts[2]; // "caterings"
+
+    if (location && !section) {
+      // only location present -> highlight Home
+      return `/${location}/`;
+    }
+
+    if (location && section) {
+      // location + section -> highlight that nav link
+      return `/${location}/${section}`;
+    }
+
+    return "/"; // fallback for root "/"
+  };
+
+  const activeLink = getActiveLink();
+
 
   // Helper to get icon for mobile bottom nav
   const getIcon = (label: string) => {
@@ -69,7 +103,7 @@ const HeaderTwo: React.FC = () => {
   const address = addresses[location] || "";
 
   return (
-    <header className="w-full fixed z-50">
+    <header className="w-full fixed z-50" style={{ fontFamily: "var(--font-poppins)" }}>
       {/* ===== Top Header ===== */}
       <div className="flex justify-between items-center 
         bg-black lg:bg-gradient-to-r lg:from-[#AE9060] lg:to-[#483C28] 
@@ -200,21 +234,26 @@ const HeaderTwo: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-6">
-          {navLinks.map((link) => (
-            <Link
-              key={link.label}
-              href={link.href}
-              className="hover:text-[#AE9060] hover:underline underline-offset-4 transition"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <Link
-            href="/book-now"
+          {navLinks.map((link) => {
+            const isActive = link.href === activeLink;
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                className={`hover:text-[#AE9060] hover:underline underline-offset-4 transition ${isActive ? "text-[#AE9060] underline" : ""
+                  }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+          <a
+            href={orderNowUrl[location]}
+            target="_blank"
             className="ml-4 px-4 py-2 bg-[#AE9060] text-white hover:bg-gray-800 transition"
           >
-            Book Now
-          </Link>
+            Order Now
+          </a>
         </div>
       </div>
 
@@ -224,27 +263,29 @@ const HeaderTwo: React.FC = () => {
         aria-label="Mobile navigation"
       >
         <div className="flex items-center">
-          {navLinks.map((link, index) => (
-            <React.Fragment key={link.label}>
-              <Link
-                href={link.href}
-                className="flex-1 flex flex-col items-center py-2 text-white hover:text-[#AE9060] transition"
-                aria-label={link.label}
-                title={link.label}
-              >
-                {getIcon(link.label)}
-                <span
-                  className="mt-1 text-[clamp(0.5rem,3vw,0.85rem)] max-[290px]:hidden"
-                  aria-hidden="true"
+          {navLinks
+            .filter((link) => link.label.toLowerCase() !== "home") // remove Home for mobile
+            .map((link, index) => (
+              <React.Fragment key={link.label}>
+                <Link
+                  href={link.href}
+                  className="flex-1 flex flex-col items-center py-2 text-white hover:text-[#AE9060] transition"
+                  aria-label={link.label}
+                  title={link.label}
                 >
-                  {link.label}
-                </span>
-              </Link>
-              {index < navLinks.length - 1 && (
-                <div className="w-px h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-50" />
-              )}
-            </React.Fragment>
-          ))}
+                  {getIcon(link.label)}
+                  <span
+                    className="mt-1 text-[clamp(0.5rem,3vw,0.85rem)] max-[290px]:hidden"
+                    aria-hidden="true"
+                  >
+                    {link.label}
+                  </span>
+                </Link>
+                {index < navLinks.length - 1 && (
+                  <div className="w-px h-8 bg-gradient-to-b from-transparent via-white to-transparent opacity-50" />
+                )}
+              </React.Fragment>
+            ))}
         </div>
       </nav>
     </header>

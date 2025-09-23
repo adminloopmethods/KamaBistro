@@ -126,7 +126,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
         currentSection?.color || "rgba(0,0,0,1)"
     );
 
-    // ✅ Border states
+    // Border states
     const [borderWidth, setBorderWidth] = useState<string>(
         typeof currentSection?.borderWidth === "number"
             ? `${currentSection.borderWidth}px`
@@ -442,7 +442,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
                 />
             )}
 
-            {/* ✅ Border Controls */}
+            {/* Border Controls */}
             <div className="flex flex-col gap-3 border-t pt-3">
                 <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Border</label>
 
