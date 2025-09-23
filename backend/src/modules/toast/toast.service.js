@@ -4,21 +4,46 @@ export const getTokenByLoginToastPOS = async ({
     clientId,
     clientSecret,
     userAccessType,
-    hostname
+    hostname,
 }) => {
+    const existingToken = await prismaClient.toastToken.findFirst({
+        orderBy: { createdAt: "desc" },
+    });
+
+    const now = new Date();
+
+    if (existingToken) {
+        if (existingToken.expiresAt > now) {
+            return existingToken.token; // token still valid
+        } else {
+            // token expired, delete it
+            await prismaClient.toastToken.delete({ where: { id: existingToken.id } });
+        }
+    }
+
+    // fetch new token
     const response = await fetch(hostname + "/authentication/v1/authentication/login", {
         method: "POST",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            clientId, clientSecret, userAccessType
-        })
-    })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ clientId, clientSecret, userAccessType }),
+    });
 
-    const data = await response.json()
-    return data.token.accessToken
+    const data = await response.json();
+
+    if (!data?.token?.accessToken || !data?.token?.expiresIn) {
+        throw new Error("Invalid token response from Toast POS");
+    }
+
+    const accessToken = data.token.accessToken;
+    const expiresAt = new Date(Date.now() + data.token.expiresIn * 1000);
+
+    await prismaClient.toastToken.create({
+        data: { token: accessToken, expiresAt },
+    });
+
+    return accessToken;
 };
+
 
 
 export const getMenuFromToastPOS = async ({ hostname, restaurantGuid, token }) => {
