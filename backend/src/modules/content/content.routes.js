@@ -2,21 +2,24 @@ import {Router} from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
 import {
-  approveProposedVersion,
+  // approveProposedVersion,
   createWebpage,
   getAllContentsController,
   getAllWebpages,
   getContentByIdController,
-  getProposedVersionbyID,
-  getProposedVersions,
+  // getProposedVersionbyID,
+  // getProposedVersions,
   getWebpageById,
   getWebpageByRoute,
-  proposeWebpageUpdate,
+  getWebpageVersions,
+  rollbackWebpageVersion,
+  // proposeWebpageUpdate,
   // proposeWebpageVersion,
   updateWebpageById,
   // clearWebpagesTablesController
 } from "./content.controller.js";
 import {authenticateUser} from "../../helper/authMiddleware.js";
+// import {getWebpageVersions} from "../../repository/content.repository.js";
 // import ContentController from "./content.controller.js";
 // import validator from "../../validation/validator.js";
 // import {ContentSchema} from "../../validation/contentSchema.js";
@@ -39,17 +42,20 @@ router.get("/section", getAllContentsController);
 router.get("/section/:id", getContentByIdController);
 
 // Proposed versions routes
-router.get("/proposed-versions", tryCatchWrap(getProposedVersions));
-router.get("/proposed-versions/:id", tryCatchWrap(getProposedVersionbyID));
-router.post(
-  "/proposed-versions/approve/:id",
-  tryCatchWrap(approveProposedVersion)
-);
+// router.get("/proposed-versions", tryCatchWrap(getProposedVersions));
+// router.get("/proposed-versions/:id", tryCatchWrap(getProposedVersionbyID));
+// router.post(
+//   "/proposed-versions/approve/:id",
+//   tryCatchWrap(approveProposedVersion)
+// );
 
 // Individual webpage routes
 router.get("/:id", tryCatchWrap(getWebpageById));
 router.put("/:id", tryCatchWrap(updateWebpageById));
-router.post("/propose/:id", tryCatchWrap(proposeWebpageUpdate));
+
+router.get("/versions/:id", tryCatchWrap(getWebpageVersions));
+router.post("/rollback/:id/:versionId", tryCatchWrap(rollbackWebpageVersion));
+// router.post("/propose/:id", tryCatchWrap(proposeWebpageUpdate));
 // router.delete("/", clearWebpagesTablesController)
 
 // router.post(

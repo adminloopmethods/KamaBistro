@@ -44,9 +44,9 @@ export const createUserHandler = async (
   });
 
   // Use dynamic payload
-  // addEmailJob(
-  //   userAccountCreationPayload({name, email, password, dashboardUrl})
-  // );
+  addEmailJob(
+    userAccountCreationPayload({name, email, password, dashboardUrl})
+  );
 
   return newUser;
 };

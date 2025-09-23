@@ -48,6 +48,8 @@ const endpointMap = {
   getProposedVersionsByID: `${content}/proposed-versions/`,
   getProposedUpdates: `${content}/proposed-updates`,
   approveProposedVersion: `${content}/proposed-versions/approve/`,
+  getWebpageVersions: `${content}/versions/`,
+  rollbackWebpageVersion: `${content}/rollback/`,
 
   // Media
   uploadMedia: `${media}/upload`,

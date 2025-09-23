@@ -397,6 +397,25 @@ export async function approveProposedVersionReq(
   );
 }
 
+export async function getWebpageVersionsReq(
+  webpageId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("getWebpageVersions")}${webpageId}`,
+    "GET"
+  );
+}
+
+export async function rollbackWebpageVersionReq(
+  webpageId: string,
+  versionId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("rollbackWebpageVersion")}${webpageId}/${versionId}`,
+    "POST"
+  );
+}
+
 // Save content (update)
 export async function saveContentReq(
   id: string,
