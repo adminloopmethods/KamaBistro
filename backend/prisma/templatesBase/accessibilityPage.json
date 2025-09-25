@@ -4,7 +4,7 @@
     "route": "/accessibility",
     "locationId": null,
     "createdAt": "2025-09-24T07:27:02.922Z",
-    "updatedAt": "2025-09-24T09:13:44.852Z",
+    "updatedAt": "2025-09-24T11:26:40.196Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
@@ -39,6 +39,7 @@
                 "lg": {
                     "top": "0",
                     "left": "0",
+                    "color": "rgba(0,0,0,1)",
                     "width": "100%",
                     "height": "auto",
                     "minWidth": "2px",
@@ -47,16 +48,18 @@
                     "marginTop": "0",
                     "minHeight": "1vh",
                     "marginLeft": "0",
-                    "paddingTop": "20px",
+                    "paddingTop": "120px",
                     "marginRight": "0",
-                    "paddingLeft": "20px",
+                    "paddingLeft": "100px",
                     "marginBottom": "0",
-                    "paddingRight": "20px",
-                    "paddingBottom": "20px"
+                    "paddingRight": "100px",
+                    "paddingBottom": "80px",
+                    "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255, 255, 255, 1))"
                 },
                 "md": {
                     "top": "0",
                     "left": "0",
+                    "color": "rgba(0,0,0,1)",
                     "width": "100%",
                     "height": "auto",
                     "minWidth": "2px",
@@ -65,16 +68,18 @@
                     "marginTop": "0",
                     "minHeight": "1vh",
                     "marginLeft": "0",
-                    "paddingTop": "20px",
+                    "paddingTop": "120px",
                     "marginRight": "0",
-                    "paddingLeft": "20px",
+                    "paddingLeft": "56px",
                     "marginBottom": "0",
-                    "paddingRight": "20px",
-                    "paddingBottom": "20px"
+                    "paddingRight": "56px",
+                    "paddingBottom": "80px",
+                    "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255, 255, 255, 1))"
                 },
                 "sm": {
                     "top": "0",
                     "left": "0",
+                    "color": "rgba(0,0,0,1)",
                     "width": "100%",
                     "height": "auto",
                     "minWidth": "2px",
@@ -83,12 +88,13 @@
                     "marginTop": "0",
                     "minHeight": "1vh",
                     "marginLeft": "0",
-                    "paddingTop": "20px",
+                    "paddingTop": "120px",
                     "marginRight": "0",
-                    "paddingLeft": "20px",
+                    "paddingLeft": "15px",
                     "marginBottom": "0",
-                    "paddingRight": "20px",
-                    "paddingBottom": "20px"
+                    "paddingRight": "15px",
+                    "paddingBottom": "80px",
+                    "backgroundImage": "linear-gradient(to right, rgba(174,144,96,1), rgba(255, 255, 255, 1))"
                 }
             },
             "hover": {
@@ -109,9 +115,21 @@
                             "fontFamily": "var(--font-playfair)",
                             "fontWeight": "600"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "48px",
+                            "fontFamily": "var(--font-playfair)",
+                            "fontWeight": "600"
+                        },
+                        "md": {
+                            "fontSize": "48px",
+                            "fontFamily": "var(--font-playfair)",
+                            "fontWeight": "600"
+                        },
+                        "sm": {
+                            "fontSize": "32px",
+                            "fontFamily": "var(--font-playfair)",
+                            "fontWeight": "600"
+                        }
                     },
                     "content": "Accessibility",
                     "hover": {
@@ -133,9 +151,21 @@
                             "marginTop": "30px",
                             "fontWeight": "500"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "md": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "sm": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        }
                     },
                     "content": "Accessibility statement for Kamabistro restaurant.",
                     "hover": {
@@ -155,9 +185,15 @@
                         "xl": {
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "fontWeight": "300"
+                        }
                     },
                     "content": "<div>Irish Times Pub &amp; Restaurant is committed to making our site accessible to people with disabilities. We are continuously gathering feedback and improving the user experience for everyone.&nbsp;</div>",
                     "hover": {
@@ -179,9 +215,21 @@
                             "marginTop": "40px",
                             "fontWeight": "500"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "22px",
+                            "marginTop": "40px",
+                            "fontWeight": "500"
+                        },
+                        "md": {
+                            "fontSize": "22px",
+                            "marginTop": "40px",
+                            "fontWeight": "500"
+                        },
+                        "sm": {
+                            "fontSize": "22px",
+                            "marginTop": "40px",
+                            "fontWeight": "500"
+                        }
                     },
                     "content": "Conformance",
                     "hover": {
@@ -201,9 +249,15 @@
                         "xl": {
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "fontWeight": "300"
+                        }
                     },
                     "content": "To provide great experience to everyone we are using The Web Content Accessibility Guidelines (WCAG). The guidelines have three levels of accessibility (A, Level AA, and Level AAA). Irish Times Pub &amp; Restaurant has chosen level AA as a target for our website and we are fully committed to monitoring our site to maintain this level of compliance.&nbsp;",
                     "hover": {
@@ -225,9 +279,21 @@
                             "marginTop": "30px",
                             "fontWeight": "500"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "md": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "sm": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        }
                     },
                     "content": "Third Party Vendors",
                     "hover": {
@@ -247,9 +313,15 @@
                         "xl": {
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "fontWeight": "300"
+                        }
                     },
                     "content": "We encourage our third party vendors (online order and delivery providers, reservations and event management, social media, review sites, travel recommendation sites, etc.) to provide content that is accessible and user friendly, even though we cannot control their content that appears on our website.&nbsp;",
                     "hover": {
@@ -271,9 +343,21 @@
                             "marginTop": "30px",
                             "fontWeight": "500"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "md": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "sm": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        }
                     },
                     "content": "Feedback",
                     "hover": {
@@ -293,9 +377,15 @@
                         "xl": {
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "fontWeight": "300"
+                        }
                     },
                     "content": "How are we doing? We welcome your feedback on how to improve accessibility and usability of Irish Times Pub &amp; Restaurant website. Please let us know using this email address: E-mail:&nbsp;Kama@kamabistro.com",
                     "hover": {
@@ -316,9 +406,18 @@
                             "marginTop": "5px",
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "marginTop": "5px",
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "marginTop": "5px",
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "marginTop": "5px",
+                            "fontWeight": "300"
+                        }
                     },
                     "content": "We try to respond to feedback within 2 business days.",
                     "hover": {
@@ -340,9 +439,21 @@
                             "marginTop": "30px",
                             "fontWeight": "500"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "md": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        },
+                        "sm": {
+                            "fontSize": "22px",
+                            "marginTop": "30px",
+                            "fontWeight": "500"
+                        }
                     },
                     "content": "Assistance",
                     "hover": {
@@ -362,11 +473,17 @@
                         "xl": {
                             "fontWeight": "300"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "fontWeight": "300"
+                        },
+                        "md": {
+                            "fontWeight": "300"
+                        },
+                        "sm": {
+                            "fontWeight": "300"
+                        }
                     },
-                    "content": "If you need any assistance please call us at 7084858787 during our regular business hours and we'd be happy to help you with anything on our site.&nbsp;",
+                    "content": "If you need any assistance please call us at&nbsp;(708)352-3300 during our regular business hours and we'd be happy to help you with anything on our site.&nbsp;",
                     "hover": {
                         "lg": {},
                         "md": {},
@@ -1050,7 +1167,7 @@
                                                 "sm": {},
                                                 "xl": {}
                                             },
-                                            "href": null,
+                                            "href": "/privacy-policy",
                                             "aria": "Visit our privacy policy page"
                                         },
                                         {
@@ -1092,7 +1209,7 @@
                                                 "sm": {},
                                                 "xl": {}
                                             },
-                                            "href": null,
+                                            "href": "/terms-and-condition",
                                             "aria": "Visit our terms and condition page"
                                         },
                                         {
@@ -1136,7 +1253,7 @@
                                                 "sm": {},
                                                 "xl": {}
                                             },
-                                            "href": null,
+                                            "href": "/accessibility",
                                             "aria": "Visit our accessibility page"
                                         }
                                     ]
