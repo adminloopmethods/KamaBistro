@@ -3,8 +3,9 @@
     "name": "LandingPage - La Grange",
     "route": "/landingpage",
     "locationId": "cd3c7512-d48e-48dd-89ef-01df249fefd1",
+    "locationName": "la-grange",
     "createdAt": "2025-09-26T04:55:47.876Z",
-    "updatedAt": "2025-09-26T06:14:23.414Z",
+    "updatedAt": "2025-09-26T09:46:42.248Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
@@ -6182,60 +6183,14 @@
                     ]
                 },
                 {
-                    "id": "13e19f51-ddab-4f49-bb8d-92326a4ebec0",
-                    "name": "img",
-                    "style": {
-                        "id": "aede6368-fb0e-4fbd-a0a2-8ad5ea412d37",
-                        "xl": {
-                            "top": "-28.4944%",
-                            "left": "-20.2253%",
-                            "filter": "brightness(1.4)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "lg": {
-                            "top": "44.2471%",
-                            "left": "-36.266%",
-                            "filter": "brightness(1.4)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "md": {
-                            "top": "0.95763%",
-                            "left": "-42.1149%",
-                            "width": "100vw",
-                            "filter": "brightness(1.4)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        },
-                        "sm": {
-                            "top": "-24.0781%",
-                            "left": "20.3851%",
-                            "width": "100vw",
-                            "filter": "brightness(1.4)",
-                            "zIndex": "1",
-                            "position": "absolute"
-                        }
-                    },
-                    "content": "/file_1757929839941",
-                    "hover": {
-                        "lg": {},
-                        "md": {},
-                        "sm": {},
-                        "xl": {}
-                    },
-                    "href": null,
-                    "aria": ""
-                },
-                {
                     "id": "0587ad5b-5640-48a7-86a2-fbb26ac7e005",
                     "name": "img",
                     "style": {
                         "id": "e4ad8293-796c-4582-946c-6174892a4c18",
                         "xl": {
-                            "top": "-12.0688%",
-                            "left": "77.4555%",
-                            "width": "50vw",
+                            "top": "-31.0363%",
+                            "left": "79.288%",
+                            "width": "700px",
                             "zIndex": "1",
                             "position": "absolute"
                         },
@@ -6279,9 +6234,15 @@
                         "xl": {
                             "zIndex": "2"
                         },
-                        "lg": {},
-                        "md": {},
-                        "sm": {}
+                        "lg": {
+                            "zIndex": "2"
+                        },
+                        "md": {
+                            "zIndex": "2"
+                        },
+                        "sm": {
+                            "zIndex": "2"
+                        }
                     },
                     "content": "",
                     "hover": {
@@ -6298,7 +6259,7 @@
         {
             "id": "73a34098-3d23-4254-819e-a7fca38ad8ee",
             "name": "section",
-            "givenName": "Footer - Landingpage - LG",
+            "givenName": "Footer-Landing-LG-L",
             "style": {
                 "id": "80a421c9-7fe2-4a23-b73b-9b8730773543",
                 "xl": {
@@ -6675,58 +6636,64 @@
                                             "paddingBottom": ""
                                         },
                                         "lg": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "md": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "sm": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         }
                                     },
                                     "hover": {
@@ -7039,58 +7006,64 @@
                                             "paddingBottom": ""
                                         },
                                         "lg": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "md": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "sm": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         }
                                     },
                                     "hover": {
@@ -7133,54 +7106,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -7202,9 +7184,24 @@
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "&nbsp;",
                                                     "hover": {
@@ -7250,54 +7247,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -7319,9 +7325,24 @@
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "<br>",
                                                     "hover": {
@@ -7367,54 +7388,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -7436,9 +7466,24 @@
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "<br>",
                                                     "hover": {

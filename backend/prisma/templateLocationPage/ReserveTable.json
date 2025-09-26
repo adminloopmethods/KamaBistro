@@ -3,8 +3,9 @@
     "name": "Reserve Table - wicker park",
     "route": "/reserve-table",
     "locationId": "e301c0cc-50b5-41ec-a66a-bfec2eda44e8",
+    "locationName": "wicker-park",
     "createdAt": "2025-09-26T04:55:47.675Z",
-    "updatedAt": "2025-09-26T06:08:25.659Z",
+    "updatedAt": "2025-09-26T09:38:17.374Z",
     "editedWidth": "1280px",
     "Status": true,
     "editorId": null,
@@ -3248,8 +3249,9 @@
                     "style": {
                         "id": "242b8f7f-818c-436f-a246-08478664ae03",
                         "xl": {
-                            "top": "4.64566%",
-                            "left": "73.2449%",
+                            "top": "-27.9259%",
+                            "left": "77.8915%",
+                            "width": "800px",
                             "zIndex": "1",
                             "position": "absolute"
                         },
@@ -3285,11 +3287,11 @@
             ]
         },
         {
-            "id": "240f1422-6e04-413a-8c34-9021869cc6fb",
+            "id": "6e4735bb-bab4-421b-9719-4d0dab7d95df",
             "name": "section",
-            "givenName": "Footer - Landingpage - WP",
+            "givenName": "Footer-Landing-WP-L",
             "style": {
-                "id": "0a9fcd18-dfd7-46fb-a533-ff88a2e26edd",
+                "id": "ad64eda6-c244-4f5b-a8b0-d0f9c112a60c",
                 "xl": {
                     "top": "0",
                     "left": "0",
@@ -3392,11 +3394,11 @@
             "aria": null,
             "elements": [
                 {
-                    "id": "bc9668d2-947c-42ba-a1f8-c6319226489f",
+                    "id": "0ac7b06c-4a11-4c22-90a5-1fb8ed9138ad",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "e7fbcc23-0a4d-4254-b67c-a65b68a5d552",
+                        "id": "d3bfe779-7399-4a63-8abc-57f36d57269c",
                         "xl": {
                             "gap": "100px",
                             "top": "0",
@@ -3493,11 +3495,11 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "5c7eb135-75aa-4153-bec6-e83a5790c8da",
+                            "id": "fbd13385-ac8e-433f-9bdd-20e24dad3431",
                             "name": "section",
                             "givenName": null,
                             "style": {
-                                "id": "c62b9ef6-a4a5-41d5-8bd9-8cf9c0d64ad1",
+                                "id": "e5a0e346-500f-43f2-a38b-8e20cfbee278",
                                 "xl": {
                                     "top": "0",
                                     "left": "0",
@@ -3580,10 +3582,10 @@
                             "aria": null,
                             "elements": [
                                 {
-                                    "id": "e26b3638-6e8d-42fb-83d3-8905d97cd0f4",
+                                    "id": "36ee2b03-eeb7-480b-b7ac-737c9a9cd2fd",
                                     "name": "img",
                                     "style": {
-                                        "id": "b8a15d67-a22b-478d-8312-34a53bf66eb4",
+                                        "id": "e7d45956-7564-4133-adca-35a380d639a4",
                                         "xl": {
                                             "width": "12vw",
                                             "height": "5vw",
@@ -3616,10 +3618,10 @@
                                     "aria": null
                                 },
                                 {
-                                    "id": "66625e39-dc95-414b-ba9a-7f310f53c3ab",
+                                    "id": "3818eb98-e39e-4e34-9bc3-4cf2b58a2fed",
                                     "name": "p",
                                     "style": {
-                                        "id": "7c0ded89-9d64-41c0-a6a2-bb9a1c4b80e0",
+                                        "id": "08191350-d664-479f-9168-cb9a186169f4",
                                         "xl": {
                                             "marginBottom": "10px"
                                         },
@@ -3638,11 +3640,11 @@
                                     "aria": null
                                 },
                                 {
-                                    "id": "28d1b690-a37a-45d9-a5d6-2ee302ffb005",
+                                    "id": "31f664a5-b353-47d3-8958-13a6351ea326",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "3ee1cedf-d079-4885-b4a5-d1fb28b2d141",
+                                        "id": "69eadc18-838d-41a0-a307-920d87a12f9b",
                                         "xl": {
                                             "gap": "15px",
                                             "top": "0",
@@ -3664,58 +3666,64 @@
                                             "paddingBottom": ""
                                         },
                                         "lg": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "md": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "sm": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
                                             "height": "auto",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
-                                            "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingLeft": "",
+                                            "marginBottom": "10px",
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         }
                                     },
                                     "hover": {
@@ -3727,10 +3735,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "35b2bba6-8936-4282-bfdb-de42e74705e0",
+                                            "id": "57ec1480-0559-496e-992f-342130e53903",
                                             "name": "a",
                                             "style": {
-                                                "id": "9139a920-e6f2-4caf-b981-04b95c232df8",
+                                                "id": "bc38c876-a007-4db4-8afa-22e98ac8f4ef",
                                                 "xl": {
                                                     "display": "block"
                                                 },
@@ -3749,10 +3757,10 @@
                                             "aria": "call us at (708)352-3300"
                                         },
                                         {
-                                            "id": "86560845-e87f-44ae-84c5-6d2be8b1278c",
+                                            "id": "e26654c7-df1f-4489-86f7-c94eb9bffe44",
                                             "name": "p",
                                             "style": {
-                                                "id": "5eb4f7e4-3554-4db9-9d14-20c8ff6b3e7b",
+                                                "id": "4667e119-60ef-47ea-9e5c-392462a01079",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -3769,10 +3777,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "78df4298-8dc7-46da-b579-58d1854f9aaf",
+                                            "id": "73b3654f-676a-420c-95e9-e604728bb60f",
                                             "name": "a",
                                             "style": {
-                                                "id": "ce9d049d-d848-414f-b162-b27c6b3c6ae7",
+                                                "id": "0ffc3785-7048-4e90-af17-6e13a54f1021",
                                                 "xl": {
                                                     "display": "block"
                                                 },
@@ -3793,11 +3801,11 @@
                                     ]
                                 },
                                 {
-                                    "id": "be50a758-2001-469a-9772-b1bbee879f6f",
+                                    "id": "3928a2cf-0f33-442c-9799-2fdfc88eebcd",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "33d66619-0807-4c44-aba0-0e9fde20f9be",
+                                        "id": "99cf00b0-2f82-4016-b073-f0454ec25758",
                                         "xl": {
                                             "gap": "10px",
                                             "top": "0",
@@ -3888,10 +3896,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "d9e2a95e-b97c-423e-8910-2ce22cf3e82f",
+                                            "id": "dd1259b1-22c6-4dd7-9851-e0d108e97d38",
                                             "name": "a",
                                             "style": {
-                                                "id": "8025951e-b552-4f6b-b2e5-7a8c96870536",
+                                                "id": "39adc170-d28c-4650-baa5-9618373a5bbc",
                                                 "xl": {
                                                     "display": "inline-block"
                                                 },
@@ -3914,10 +3922,10 @@
                                             "aria": "Visit our privacy policy page"
                                         },
                                         {
-                                            "id": "46b35303-74d2-4cb9-a242-783dfae99714",
+                                            "id": "bd8a60c3-bd24-4dbc-879d-4a8fc52c0168",
                                             "name": "p",
                                             "style": {
-                                                "id": "79c20595-6d94-4c5f-b666-0b2e38725c55",
+                                                "id": "ea52943b-5a8a-407d-b01a-77968a1c18e7",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -3934,10 +3942,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "00dcfc52-3d80-47a3-9929-ccd2f6a59e21",
+                                            "id": "44d083dc-f1cb-4f5d-b5ba-4085a2544828",
                                             "name": "a",
                                             "style": {
-                                                "id": "3c9830bd-bcc6-47cb-affc-4054f0227279",
+                                                "id": "c2b3a3ce-7e85-45c8-b9e7-4406aef6d060",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -3956,10 +3964,10 @@
                                             "aria": "Visit our terms and condition page"
                                         },
                                         {
-                                            "id": "79a98961-550f-40c1-b284-24f583a0126b",
+                                            "id": "1f2d8ab2-9791-4bc2-b398-9239410d7693",
                                             "name": "p",
                                             "style": {
-                                                "id": "63c142d0-2842-4b36-88f1-b3e48dba9bb8",
+                                                "id": "f4e87df6-c6f7-4630-b464-b8e84d712c81",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -3976,10 +3984,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "f44f024a-827b-4687-95d5-739bd3f6c1f1",
+                                            "id": "72f9ba25-236b-480f-9d25-1a2e8f800c8e",
                                             "name": "a",
                                             "style": {
-                                                "id": "c956a911-4ff5-4d20-8dca-2d752b9df2c1",
+                                                "id": "6990d70a-876b-4100-9473-0b310f294d69",
                                                 "xl": {
                                                     "paddingBottom": "px"
                                                 },
@@ -4002,11 +4010,11 @@
                                     ]
                                 },
                                 {
-                                    "id": "5e8d5e20-05bb-4178-99b7-d74e5dd3661d",
+                                    "id": "f1831e97-f338-48d0-aed2-bb6260ae837c",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "50d2c417-1561-42f9-94e8-bcf1f404b5f3",
+                                        "id": "3726bb43-3caa-4a4e-bc74-6b15b6e4fe19",
                                         "xl": {
                                             "gap": "15px",
                                             "top": "0",
@@ -4028,58 +4036,64 @@
                                             "paddingBottom": ""
                                         },
                                         "lg": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "md": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         },
                                         "sm": {
+                                            "gap": "15px",
                                             "top": "0",
                                             "left": "0",
                                             "width": "100%",
-                                            "height": "auto",
+                                            "height": "",
+                                            "display": "flex",
                                             "minWidth": "2px",
                                             "overflow": "hidden",
                                             "position": "relative",
-                                            "marginTop": "0",
+                                            "marginTop": "10px",
                                             "minHeight": "1vh",
                                             "marginLeft": "0",
-                                            "paddingTop": "20px",
+                                            "paddingTop": "",
                                             "marginRight": "0",
-                                            "paddingLeft": "20px",
+                                            "paddingLeft": "",
                                             "marginBottom": "0",
-                                            "paddingRight": "20px",
-                                            "paddingBottom": "20px"
+                                            "paddingRight": "",
+                                            "paddingBottom": ""
                                         }
                                     },
                                     "hover": {
@@ -4091,11 +4105,11 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "81cfd38e-81c6-4b09-bd54-c577251e0264",
+                                            "id": "a32f56f9-e7cc-4844-8732-5fb65239f0a3",
                                             "name": "section",
                                             "givenName": null,
                                             "style": {
-                                                "id": "c2aadaba-e75d-4070-b6b3-d9c52d2e5343",
+                                                "id": "41777194-b485-4e16-aec0-626b38b075e3",
                                                 "xl": {
                                                     "top": "0",
                                                     "left": "0",
@@ -4122,54 +4136,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775934776)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -4181,19 +4204,34 @@
                                             "aria": null,
                                             "elements": [
                                                 {
-                                                    "id": "1f8a86cf-7522-4ae3-9bf7-8b1ec0c17bdb",
+                                                    "id": "977e219d-5fb1-44d8-be1f-ab00bece16cc",
                                                     "name": "a",
                                                     "style": {
-                                                        "id": "c973410b-06bf-4693-a688-48792406776e",
+                                                        "id": "87910613-2ae1-4097-ae9f-cf5d7953fe75",
                                                         "xl": {
                                                             "width": "40px",
                                                             "height": "40px",
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "&nbsp;",
                                                     "hover": {
@@ -4208,11 +4246,11 @@
                                             ]
                                         },
                                         {
-                                            "id": "1c90fd1a-f16f-40e9-8db2-66a85de1a02a",
+                                            "id": "7dd14fea-dbb6-488c-8e69-3208085620ca",
                                             "name": "section",
                                             "givenName": null,
                                             "style": {
-                                                "id": "9fa88cff-4e74-4ab2-90a5-90acc443aab4",
+                                                "id": "97ba2278-8f1a-47fc-a042-aef12301b2e3",
                                                 "xl": {
                                                     "top": "0",
                                                     "left": "0",
@@ -4239,54 +4277,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956435)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -4298,19 +4345,34 @@
                                             "aria": null,
                                             "elements": [
                                                 {
-                                                    "id": "8f17140f-1494-479c-b294-933f1d09716a",
+                                                    "id": "1ee86195-40ae-475b-8522-1e3231a51bf5",
                                                     "name": "a",
                                                     "style": {
-                                                        "id": "9bf19f20-05ea-4c10-9d01-f96bd754fc0f",
+                                                        "id": "b848b5bb-ad4b-4229-a6a0-2c2e13368d60",
                                                         "xl": {
                                                             "width": "40px",
                                                             "height": "40px",
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "<br>",
                                                     "hover": {
@@ -4325,11 +4387,11 @@
                                             ]
                                         },
                                         {
-                                            "id": "5844b88c-227f-45a4-a3a3-573917b758a8",
+                                            "id": "59d6e9df-03a6-4683-9bad-dab822e975be",
                                             "name": "section",
                                             "givenName": null,
                                             "style": {
-                                                "id": "bbbef403-6e7b-42bb-9362-dac2d8ad2628",
+                                                "id": "73f25d41-d154-4742-bc75-c55f960e5f65",
                                                 "xl": {
                                                     "top": "0",
                                                     "left": "0",
@@ -4356,54 +4418,63 @@
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "md": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 },
                                                 "sm": {
                                                     "top": "0",
                                                     "left": "0",
                                                     "width": "100%",
                                                     "height": "auto",
+                                                    "zIndex": "2",
                                                     "minWidth": "2px",
                                                     "overflow": "hidden",
                                                     "position": "relative",
                                                     "marginTop": "0",
                                                     "minHeight": "1vh",
                                                     "marginLeft": "0",
-                                                    "paddingTop": "20px",
+                                                    "paddingTop": "1px",
                                                     "marginRight": "0",
-                                                    "paddingLeft": "20px",
+                                                    "paddingLeft": "1px",
                                                     "marginBottom": "0",
-                                                    "paddingRight": "20px",
-                                                    "paddingBottom": "20px"
+                                                    "paddingRight": "1px",
+                                                    "paddingBottom": "1px",
+                                                    "backgroundImage": "url(https://res.cloudinary.com/dmcxybhjm/image/upload/v1745838647/file_1758775956428)",
+                                                    "backgroundRepeat": "no-repeat"
                                                 }
                                             },
                                             "hover": {
@@ -4415,19 +4486,34 @@
                                             "aria": null,
                                             "elements": [
                                                 {
-                                                    "id": "981b6549-c8de-43cf-bb5f-4c8e1ce79fce",
+                                                    "id": "a9f61356-1ac0-44b3-b6ee-ffba29b84e70",
                                                     "name": "a",
                                                     "style": {
-                                                        "id": "a19c02ec-6035-48a6-a1d2-f5833034128f",
+                                                        "id": "22f06fe7-018f-42c4-89e1-1e994ada7723",
                                                         "xl": {
                                                             "width": "40px",
                                                             "height": "40px",
                                                             "display": "block",
                                                             "marginTop": "px"
                                                         },
-                                                        "lg": {},
-                                                        "md": {},
-                                                        "sm": {}
+                                                        "lg": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "md": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        },
+                                                        "sm": {
+                                                            "width": "40px",
+                                                            "height": "40px",
+                                                            "display": "block",
+                                                            "marginTop": "px"
+                                                        }
                                                     },
                                                     "content": "<br>",
                                                     "hover": {
@@ -4446,11 +4532,11 @@
                             ]
                         },
                         {
-                            "id": "80687526-b110-44be-9a0c-5d1db5eee32f",
+                            "id": "4c4e98dd-2562-4c9c-8239-1a9defe353db",
                             "name": "section",
                             "givenName": null,
                             "style": {
-                                "id": "a9fb20f0-f741-4960-bc7e-5fbfa7831f54",
+                                "id": "ae7bec1d-80ca-45ad-9afc-449eb7fbd280",
                                 "xl": {
                                     "top": "0",
                                     "left": "0",
@@ -4539,11 +4625,11 @@
                             "aria": null,
                             "elements": [
                                 {
-                                    "id": "074d6a14-30a5-4a19-94f4-f25bcf2a896f",
+                                    "id": "235974aa-f55e-4b39-9e6a-d6b1c37be367",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "d5aa27a9-75ee-44a2-b3bb-06dca18b28ac",
+                                        "id": "73b91db8-83b0-49cf-bebb-aea0319922f3",
                                         "xl": {
                                             "top": "0",
                                             "left": "0",
@@ -4626,10 +4712,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "9ce9c7fb-14ab-4c09-9405-abe78a6d6022",
+                                            "id": "544cb311-ad7b-43a3-a063-6837f1b03ee4",
                                             "name": "h3",
                                             "style": {
-                                                "id": "4938e62b-fc9f-4f7d-b992-7b86e4d2a766",
+                                                "id": "5cd86565-c15b-4223-8689-f1297e1d6642",
                                                 "xl": {
                                                     "fontSize": "20px",
                                                     "fontWeight": "500",
@@ -4662,10 +4748,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "dbf859b5-af0d-4d22-8470-93de349d5776",
+                                            "id": "f05b7b31-f66e-4ec6-827b-b1d80821e6eb",
                                             "name": "p",
                                             "style": {
-                                                "id": "49d07b89-b66a-4271-8ca5-6342eb237c6a",
+                                                "id": "4c13fb0a-fd11-4a81-be90-6243ce41c7b4",
                                                 "xl": {
                                                     "marginBottom": "8px"
                                                 },
@@ -4693,10 +4779,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "466d1c65-8c9c-49b7-aee9-0faf8941ac72",
+                                            "id": "e62551d0-9002-486d-91bb-e02271ed32f7",
                                             "name": "p",
                                             "style": {
-                                                "id": "d7734737-544a-4dc4-a49c-a3d0d1458ff1",
+                                                "id": "6946370e-c6e5-4cc4-aab6-fd554c6be660",
                                                 "xl": {
                                                     "marginBottom": "8px"
                                                 },
@@ -4724,10 +4810,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "8111582c-9380-41eb-be2f-a2efe066ce86",
+                                            "id": "4292694b-395e-4e7e-aee2-a0acec01fa87",
                                             "name": "p",
                                             "style": {
-                                                "id": "ad6d67aa-59c6-43fa-8c38-ec361810f6b5",
+                                                "id": "a7994494-21d4-4be9-bb3e-24fdccc3727a",
                                                 "xl": {
                                                     "marginBottom": "8px"
                                                 },
@@ -4755,10 +4841,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "641a4075-7142-410b-b39c-ecc7bc201b7b",
+                                            "id": "dbf33997-af44-4c80-9cae-f12803c40891",
                                             "name": "p",
                                             "style": {
-                                                "id": "869f2f64-9496-469c-8093-59ba6df85dad",
+                                                "id": "20729bcd-f2e0-4e27-a8a5-9162106f572e",
                                                 "xl": {
                                                     "marginBottom": "8px"
                                                 },
@@ -4786,10 +4872,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "38658fbb-aaa4-499a-abdc-a48f1dc4064d",
+                                            "id": "942b3404-e35a-4076-84a8-909be4c928a2",
                                             "name": "p",
                                             "style": {
-                                                "id": "af8a7d36-e78e-4bf5-b6b4-0db6efed532e",
+                                                "id": "2c5ef851-7fc4-422e-8162-d840676ab507",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {
@@ -4813,11 +4899,11 @@
                                     ]
                                 },
                                 {
-                                    "id": "dea1a499-c93b-470d-ab29-e95769dcffcb",
+                                    "id": "b0ba7856-01d6-4715-a12e-c5b0a7e176db",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "248b04f6-cfe0-4b59-b310-b1929de6830c",
+                                        "id": "669b6551-f15b-41b9-bbe7-8a98a18d97ea",
                                         "xl": {
                                             "top": "0",
                                             "left": "0",
@@ -4900,10 +4986,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "3a2f54cd-c696-47e6-b232-c46eebe381b0",
+                                            "id": "3e940336-2f2f-42a9-b537-a5b60847bfdb",
                                             "name": "h3",
                                             "style": {
-                                                "id": "0c78258d-8e3a-40f4-abc4-7e224c768d0b",
+                                                "id": "e53b4d21-690e-40c7-aa22-2281a430ae7a",
                                                 "xl": {
                                                     "marginTop": "40px"
                                                 },
@@ -4924,10 +5010,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "30148fa6-bf3b-4eda-a3cf-993cce9ca52b",
+                                            "id": "333ee4b4-584e-4c34-9814-3ba9dfea46f5",
                                             "name": "p",
                                             "style": {
-                                                "id": "f7e74e05-6715-4ba3-8c3a-ad7185ff0a79",
+                                                "id": "fba65344-f583-406f-a431-142c790b744a",
                                                 "xl": {
                                                     "fontWeight": "300",
                                                     "marginBottom": "8px"
@@ -4957,10 +5043,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "0fbea26b-913a-4692-94fe-578426939238",
+                                            "id": "ff80e742-f399-44e7-a55a-ff6ef1a943c1",
                                             "name": "h3",
                                             "style": {
-                                                "id": "712e1b56-cb77-4910-b53d-d3d3f59ac596",
+                                                "id": "35d68676-2ca3-4579-8c5f-e609a4defb2c",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -4977,10 +5063,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "ca9e7574-23eb-4d58-b9a3-1ab4860641cd",
+                                            "id": "661461bc-1c3d-41b8-83f4-b27289f85bf8",
                                             "name": "p",
                                             "style": {
-                                                "id": "a23dd95f-eecd-41a0-abd8-09b215bfe60e",
+                                                "id": "12ba4335-3ad0-41fa-8d5e-fbb72855e6e8",
                                                 "xl": {
                                                     "fontWeight": "300",
                                                     "marginBottom": "8px"
@@ -5010,10 +5096,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "09745f46-c2a7-431d-bad6-24becb35b10d",
+                                            "id": "2dfa5165-ee2b-4433-a6df-05cc7c46037c",
                                             "name": "h3",
                                             "style": {
-                                                "id": "ce693320-c0e5-4d6f-8378-8d2890220421",
+                                                "id": "599e0ae2-224c-416a-b4a8-ded14b4e6a85",
                                                 "xl": {},
                                                 "lg": {},
                                                 "md": {},
@@ -5030,10 +5116,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "2a08238a-d236-463a-883f-001468e79b44",
+                                            "id": "53d3e69f-b4bb-4924-8074-f2f5b9253994",
                                             "name": "p",
                                             "style": {
-                                                "id": "35566d32-25c9-4ca9-b5f3-28a0e0955633",
+                                                "id": "8e37fda1-0b28-4e5d-873c-00ec68bba1c4",
                                                 "xl": {
                                                     "fontWeight": "300"
                                                 },
@@ -5063,11 +5149,11 @@
                             ]
                         },
                         {
-                            "id": "d325e891-5da5-4410-af7a-ef4cb1ce5218",
+                            "id": "01498296-6795-4ebc-89d9-9288157bf6bb",
                             "name": "section",
                             "givenName": null,
                             "style": {
-                                "id": "c891fe8a-1476-4ff3-a3bf-19924d480289",
+                                "id": "efb44016-0b46-4cd1-bfd5-78db34b1faf7",
                                 "xl": {
                                     "top": "0",
                                     "left": "0",
@@ -5150,10 +5236,10 @@
                             "aria": null,
                             "elements": [
                                 {
-                                    "id": "6e2f0e4e-8873-4f89-a6b4-6c1ddc40ad80",
+                                    "id": "e5e191fe-dd5a-4857-b122-49b04c66c0b4",
                                     "name": "h3",
                                     "style": {
-                                        "id": "1a5ad6b8-f057-42b3-8267-048e005bab0f",
+                                        "id": "a1663bdd-1a7c-4cfa-b030-3ea499bc8276",
                                         "xl": {
                                             "fontSize": "20px",
                                             "marginTop": "15px",
@@ -5186,11 +5272,11 @@
                                     "aria": null
                                 },
                                 {
-                                    "id": "c5de0f91-0e3f-4c86-b60d-0b26c0f45efe",
+                                    "id": "69e4fcd1-7d82-4520-9903-66eae09fea4c",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "20d9e55e-7a03-4b46-bed9-dac37ec1b11c",
+                                        "id": "afe8c166-721c-4453-895a-fe6a0ce22cd6",
                                         "xl": {
                                             "top": "0",
                                             "left": "0",
@@ -5277,10 +5363,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "0e1b681d-254b-4f95-8058-8c2e7f56df23",
+                                            "id": "72606210-0a9c-4d33-8f25-feb42c6c3223",
                                             "name": "img",
                                             "style": {
-                                                "id": "c3df30a9-0704-4d38-b635-9a112db6f5eb",
+                                                "id": "296c1ac6-6fc3-4456-9f3a-f8d68cff340a",
                                                 "xl": {
                                                     "width": "22px",
                                                     "height": "22px"
@@ -5306,10 +5392,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "5bef7cb3-9deb-4899-93b6-7ff0b05713f9",
+                                            "id": "7cc8a1b5-d3e0-465d-a24b-68f1e12bbb8a",
                                             "name": "a",
                                             "style": {
-                                                "id": "78db0705-d94f-42c1-a2ff-2bc4830f7074",
+                                                "id": "2bf914c6-0357-4e2e-8c80-1d1bebbe0130",
                                                 "xl": {
                                                     "textDecoration": "underline"
                                                 },
@@ -5338,11 +5424,11 @@
                                     ]
                                 },
                                 {
-                                    "id": "ca87dd13-3982-44ed-b3af-273a458a1764",
+                                    "id": "11a69ba6-5b31-4e02-9a44-4263ac642c98",
                                     "name": "section",
                                     "givenName": null,
                                     "style": {
-                                        "id": "6b57b7cf-2da4-4b7e-bb79-031e4e7e4aa0",
+                                        "id": "cdc5374b-8eb6-4954-b65d-d9c4474f32f4",
                                         "xl": {
                                             "top": "0",
                                             "left": "0",
@@ -5429,10 +5515,10 @@
                                     "aria": null,
                                     "elements": [
                                         {
-                                            "id": "ecc31830-9308-4ad7-a1b0-77ac0c51e545",
+                                            "id": "7ef1da2f-0090-4b5b-bce1-fc87a4100d81",
                                             "name": "img",
                                             "style": {
-                                                "id": "c44ab0de-22ff-4689-80b2-dafa4470a6ca",
+                                                "id": "3f295980-5265-4a3c-870b-0640e9dfe6c0",
                                                 "xl": {
                                                     "width": "22px",
                                                     "height": "22px"
@@ -5458,10 +5544,10 @@
                                             "aria": null
                                         },
                                         {
-                                            "id": "09083520-50be-42af-88ef-8cfada320606",
+                                            "id": "bab6a21a-fd08-425c-a32b-60e8b3bcb273",
                                             "name": "a",
                                             "style": {
-                                                "id": "7fed4b9a-f23f-492e-8f35-978f850f05c6",
+                                                "id": "0f828df7-e591-482b-9d45-0bdf120dbc95",
                                                 "xl": {
                                                     "textDecoration": "underline"
                                                 },
@@ -5494,11 +5580,11 @@
                     ]
                 },
                 {
-                    "id": "ede29147-b061-4a5b-99ae-cca8b213d32f",
+                    "id": "8993f15a-ee7d-4e89-a60d-218b464d3b1b",
                     "name": "section",
                     "givenName": null,
                     "style": {
-                        "id": "a3cee491-288d-4f65-b6d6-5d77c15ee947",
+                        "id": "1b2d8e69-daea-43aa-825a-16b311d34973",
                         "xl": {
                             "top": "0",
                             "left": "0",
@@ -5581,10 +5667,10 @@
                     "aria": null,
                     "elements": [
                         {
-                            "id": "7126770d-6583-4ef2-b0d6-a901b93b35ba",
+                            "id": "108b3360-6097-4bee-8a8c-256ef1516e92",
                             "name": "division",
                             "style": {
-                                "id": "75aeec1f-b44e-46db-ba31-639b080d8038",
+                                "id": "9f049c87-3fd9-4818-9a42-2c69d71d33ad",
                                 "xl": {
                                     "width": "100%",
                                     "height": "1px",
@@ -5621,10 +5707,10 @@
                             "aria": null
                         },
                         {
-                            "id": "9f874d44-f047-4104-b03a-547f376c08de",
+                            "id": "b234c893-a481-46bf-844f-81f1345cc155",
                             "name": "p",
                             "style": {
-                                "id": "fe239887-991d-4c19-8ce6-a6119f5b22d9",
+                                "id": "db3e3226-8056-4c59-875d-d58e6924cb5c",
                                 "xl": {
                                     "marginTop": "30px",
                                     "textAlign": "right",
@@ -5671,10 +5757,10 @@
                     ]
                 },
                 {
-                    "id": "12bca27b-fc8b-467a-a9ca-59844b91d845",
+                    "id": "1989d0f6-a5c7-4530-9a16-5f56e3e7d6cb",
                     "name": "img",
                     "style": {
-                        "id": "2c076160-aebd-490a-8e00-2fd034049000",
+                        "id": "65523c40-af3a-4d43-aa91-6488e11dafef",
                         "xl": {
                             "top": "-36.871%",
                             "left": "-12.0683%",
@@ -5684,8 +5770,8 @@
                             "position": "absolute"
                         },
                         "lg": {
-                            "top": "-46.9599%",
-                            "left": "-30.6807%",
+                            "top": "-50.3356%",
+                            "left": "-28.7276%",
                             "width": "750px",
                             "filter": "brightness(0.3)",
                             "zIndex": "1",
@@ -5719,10 +5805,10 @@
                     "aria": null
                 },
                 {
-                    "id": "77248f93-f164-4234-b2a4-2b0fde3e04d7",
+                    "id": "58f2bb9f-cbd0-4608-834a-f622b4da2054",
                     "name": "img",
                     "style": {
-                        "id": "3c233f5a-27a9-424e-bb5b-fab522e1344d",
+                        "id": "98ede1c5-8010-43ad-851a-10bb55c40651",
                         "xl": {
                             "top": "-78.4359%",
                             "left": "75.0391%",
