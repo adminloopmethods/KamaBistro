@@ -604,7 +604,7 @@ export const getContentByIdService = async (id) => {
 
   if (!section) return null;
 
-  // recursive loader
+  // recursive loader for children
   const loadChildren = async (parentId) => {
     const children = await prismaClient.content.findMany({
       where: { parentId },
@@ -622,42 +622,53 @@ export const getContentByIdService = async (id) => {
     return children;
   };
 
-  // attach full tree under the root section
   section.children = await loadChildren(section.id);
 
-  // transform with regenerated IDs
+  // transformer
   const transformSection = (section) => {
     const merged = [
-      ...(section.children?.map((child) => {
-        const transformedChild = transformSection(child);
-        return {
-          ...transformedChild,
-          id: crypto.randomUUID(),
-          type: "section",
-        };
-      }) || []),
-
-      ...(section.elements?.map((el) => ({
-        ...el,
+      ...(section.children?.map((child) => ({
         id: crypto.randomUUID(),
-        type: "element",
+        name: child.name,
+        givenName: child.givenName,
+        hover: child.hover || null,
+        aria: child.aria || null,
+        style: child.style ? { ...child.style, id: undefined } : null,
+        order: child.order,
+        type: "section",
+        elements: transformSection(child).elements, // recurse
+      })) || []),
+      ...(section.elements?.map((el) => ({
+        id: crypto.randomUUID(),
+        name: el.name,
+        content: el.content,
+        items: el.items || [], // include list items
+        hover: el.hover || null,
+        href: el.href || null, // ✅ include href
+        aria: el.aria || null,
+        captions: el.captions || null, // include captions if needed
+        transcript: el.transcript || null, // include transcript if needed
         style: el.style ? { ...el.style, id: undefined } : null,
+        order: el.order,
+        type: "element",
       })) || []),
     ];
 
     merged.sort((a, b) => a.order - b.order);
 
     return {
-      ...section,
       id: crypto.randomUUID(),
+      name: section.name,
+      givenName: section.givenName,
+      hover: section.hover || null,
+      aria: section.aria || null,
       style: section.style ? { ...section.style, id: undefined } : null,
-      elements: merged,
+      elements: merged.map(({ order, type, ...rest }) => rest),
     };
   };
 
   return transformSection(section);
 };
-
 
 /////////// Proposed table services
 
