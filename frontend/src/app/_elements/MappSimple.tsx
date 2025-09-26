@@ -13,7 +13,7 @@ type SingleLocationMapProps = {
 const SingleLocationMap: React.FC<SingleLocationMapProps> = ({ style }) => {
     return (
         <div style={{ ...style }}>
-            <div className="w-[100%] h-[100%]" style={{ pointerEvents: "none" }}>
+            {/* <div className="w-[100%] h-[100%]" style={{ pointerEvents: "none" }}> */}
                 <APIProvider apiKey={googleApi || ""}>
                     <Map
                         defaultCenter={DEFAULT_CENTER}
@@ -26,7 +26,7 @@ const SingleLocationMap: React.FC<SingleLocationMapProps> = ({ style }) => {
                         />
                     </Map>
                 </APIProvider>
-            </div>
+            {/* </div> */}
         </div>
     );
 };

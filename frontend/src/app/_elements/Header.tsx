@@ -57,7 +57,7 @@ const Header: React.FC = () => {
 
           {/* Logo in center */}
           <Link href="/" aria-label="Go to Home">
-            <img src={logo.src} alt="Company Logo" width={173} className="w-auto mx-4 aspect-[2.5/1]" />
+            <img src={logo.src} alt="Company Logo" width={173} className=" mx-4 aspect-[2.5/1]" />
           </Link>
 
           {/* Right links */}
