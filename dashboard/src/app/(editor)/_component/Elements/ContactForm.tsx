@@ -1,24 +1,34 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent, ReactNode } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { toast } from "sonner";
-import DimesionCss from "@/app/(editor)/_component/common/dimensionToolbar.module.css"
 import { sendMessageReq } from "@/functionality/fetch";
+import DimesionCss from "@/app/(editor)/_component/common/dimensionToolbar.module.css";
 
+// -------------------- Types --------------------
 interface FormData {
   name: string;
   email: string;
   message: string;
 }
 
-interface FormGroupProps {
+type ContactFormProps = {
+  style?: React.CSSProperties;
+  parentRef?: HTMLElement | null;
+};
+
+// -------------------- Form Group --------------------
+const FormGroup = ({
+  label,
+  htmlFor,
+  required = false,
+  children,
+}: {
   label: string;
   htmlFor: string;
   required?: boolean;
-  children: ReactNode;
-}
-
-const FormGroup = ({ label, htmlFor, required = false, children }: FormGroupProps) => (
+  children: React.ReactNode;
+}) => (
   <div className="mb-4 flex flex-col">
     <label htmlFor={htmlFor} className="mb-1 font-[300]">
       {label} {required && <span aria-hidden="true">*</span>}
@@ -27,46 +37,62 @@ const FormGroup = ({ label, htmlFor, required = false, children }: FormGroupProp
   </div>
 );
 
-export default function ContactForm() {
+// -------------------- Contact Form --------------------
+const ContactForm = ({ style, parentRef }: ContactFormProps) => {
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
   });
-
   const [loading, setLoading] = useState(false);
+  const [formStyle, setFormStyle] = useState<React.CSSProperties>(style || {});
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  // ---- Sync style if parent updates ----
+  useEffect(() => {
+    if (style) setFormStyle(style);
+  }, [style]);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setLoading(true);
+  // ---- Handle input changes ----
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    },
+    []
+  );
 
-    try {
-      const res = await sendMessageReq(formData);
+  // ---- Handle submit ----
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setLoading(true);
 
-      if (res.success) {
-        toast.success("Message sent successfully!");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        toast.error(res.error || "Failed to send message.");
+      try {
+        const res = await sendMessageReq(formData);
+
+        if (res.success) {
+          toast.success("Message sent successfully!");
+          setFormData({ name: "", email: "", message: "" });
+        } else {
+          toast.error(res.error || "Failed to send message.");
+        }
+      } catch (error) {
+        console.error("Error submitting form:", error);
+        toast.error("Something went wrong.");
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Something went wrong.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+    [formData]
+  );
 
   return (
     <form
+      ref={formRef}
       onSubmit={handleSubmit}
-      className="w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] mx-auto p-6 sm:p-8 shadow-lg rounded-md border bg-[#F4ECE3]"
+      style={{ ...formStyle }}
+      className="w-[95%] sm:w-[90%] md:w-[70%] lg:w-[60%] xl:w-[50%] relative z-[50] mx-auto p-6 sm:p-8 shadow-lg rounded-md border bg-[#F4ECE3]"
       aria-label="Contact Form"
     >
       {/* Name */}
@@ -102,7 +128,11 @@ export default function ContactForm() {
       </FormGroup>
 
       {/* Message */}
-      <FormGroup label="How can we help you?" htmlFor="messengersMessage" required>
+      <FormGroup
+        label="How can we help you?"
+        htmlFor="messengersMessage"
+        required
+      >
         <textarea
           id="messengersMessage"
           name="message"
@@ -117,6 +147,7 @@ export default function ContactForm() {
         />
       </FormGroup>
 
+      {/* Submit */}
       <button
         type="submit"
         className="bg-[#AE9060] text-[18px] sm:text-[20px] text-white px-4 py-2 rounded-[4px] w-full mt-2 disabled:opacity-50 focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -126,4 +157,6 @@ export default function ContactForm() {
       </button>
     </form>
   );
-}
+};
+
+export default React.memo(ContactForm);

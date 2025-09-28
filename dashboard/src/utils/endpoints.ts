@@ -2,6 +2,8 @@ const BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL as string;
 export const cloudinaryApiPoint = process.env
   .NEXT_PUBLIC_CLOUDINARY_API as string;
 
+export const googleApi = process.env.NEXT_PUBLIC_GOOGLE_MAPS_NEW_API_KEY;
+
 if (!BASE_URL) {
   console.error("NEXT_PUBLIC_BACK_ENDPOINT environment variable is not set!");
 }
@@ -11,7 +13,7 @@ const users = "user";
 const content = "content";
 const media = "media";
 const role = "role";
-const contact = "contact"
+const contact = "contact";
 
 const endpointMap = {
   login: `${auth}/login`,
@@ -41,6 +43,13 @@ const endpointMap = {
   // content
   createContent: `${content}/`,
   getSection: `${content}/section/`,
+  proposeUpdate: `${content}/propose/`,
+  getProposedVersions: `${content}/proposed-versions`,
+  getProposedVersionsByID: `${content}/proposed-versions/`,
+  getProposedUpdates: `${content}/proposed-updates`,
+  approveProposedVersion: `${content}/proposed-versions/approve/`,
+  getWebpageVersions: `${content}/versions/`,
+  rollbackWebpageVersion: `${content}/rollback/`,
 
   // Media
   uploadMedia: `${media}/upload`,
@@ -48,7 +57,7 @@ const endpointMap = {
   getMedia: `${media}/getMedia`,
 
   //Message
-  contact: `${contact}/`
+  contact: `${contact}/`,
 } as const;
 
 type EndpointKey = keyof typeof endpointMap;

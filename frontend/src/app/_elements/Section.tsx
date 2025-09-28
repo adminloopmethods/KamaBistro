@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState, CSSProperties } from "react";
+import React, { useRef, useState, CSSProperties, useEffect } from "react";
 import { useMyContext } from "@/Context/ApiContext";
 import { mapElement } from "@/functionalities/createElement";
 
@@ -96,12 +96,16 @@ const Section: React.FC<SectionProps> = ({
     }
   };
 
+  useEffect(() => {
+    setElements(element)
+  }, [element])
+
   return (
     <div
       style={{
         position: thisStyle?.position,
-        left: style.left || 0,
-        top: style.top || 0,
+        left: style?.left || 0,
+        top: style?.top || 0,
       }}
     >
       <section
@@ -146,7 +150,7 @@ const Section: React.FC<SectionProps> = ({
           const Component = mapElement[Element.name];
           return (
             <Component
-              key={i}
+              key={Element.id}
               element={Element}
               style={Element.style?.[activeScreen]}
               currentWidth={activeScreen}

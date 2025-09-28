@@ -8,6 +8,7 @@ import MediaModule from "../modules/media/index.js";
 import WebsiteModule from "../modules/website/index.js";
 import ReminderModule from "../modules/reminder/index.js";
 import ContactModule from "../modules/contact/index.js"
+import ToastModule from "../modules/toast/index.js";
 
 const modules = [
   AuthModule,
@@ -19,7 +20,8 @@ const modules = [
   MediaModule,
   WebsiteModule,
   ReminderModule,
-  ContactModule
+  ContactModule,
+  ToastModule
 ];
 
 const useModules = (app) => {

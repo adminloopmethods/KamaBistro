@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Playfair_Display, Poppins } from "next/font/google";
 import "@/app/globals.css";
 import { Provider } from "@/Context/EditorContext";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import ProviderWrapper from "../redux/ProvideWrapper";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,11 +44,13 @@ export default function EditorLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${playfair.variable} antialiased bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100`}
       >
-        <ThemeProvider>
-          <Provider>
-            <div className="flex-1 h-full">{children}</div>
-          </Provider>
-        </ThemeProvider>
+        <ProviderWrapper>
+          <ThemeProvider>
+            <Provider>
+              <div className="flex-1 h-full">{children}</div>
+            </Provider>
+          </ThemeProvider>
+        </ProviderWrapper>
       </body>
     </html>
   );

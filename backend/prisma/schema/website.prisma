@@ -1,7 +1,7 @@
 model Webpage {
   id          String         @id @default(uuid())
   name        String
-  route       String         @unique
+  route       String
   locationId  String?
   location    location?      @relation(fields: [locationId], references: [id])
   contents    Content[]
@@ -20,6 +20,7 @@ model Webpage {
   proposedVersion proposedVersion[]
   draft           draft[]
 
+  @@unique([route, locationId]) // ← compound unique constraint
   @@index([locationId])
   @@index([editorId])
   @@index([verifierId])
@@ -93,6 +94,7 @@ model version {
   version   Json
   webpageId String
   webpage   Webpage @relation(fields: [webpageId], references: [id])
+  isLive    Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

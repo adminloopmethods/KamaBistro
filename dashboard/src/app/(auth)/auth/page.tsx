@@ -233,7 +233,7 @@ const Login: React.FC = () => {
                 className={`w-full py-3 bg-[#AE9060] text-white rounded-lg font-medium transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus:ring-2 focus:ring-[#AE9060]/50 focus:ring-offset-2 ${
                   !isFormValid() || isLoading
                     ? "opacity-70 cursor-not-allowed"
-                    : "hover:bg-[#9c7d52]"
+                    : "hover:bg-[#9c7d52] cursor-pointer"
                 }`}
               >
                 {isLoading ? (

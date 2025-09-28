@@ -1,0 +1,46 @@
+model Menu {
+    id            String      @id @default(uuid())
+    name          String
+    createdAt     DateTime    @default(now())
+    updatedAt     DateTime    @updatedAt
+    lastFetchedAt DateTime?
+    menuGroups    MenuGroup[]
+}
+
+model MenuGroup {
+    id        String     @id @default(uuid())
+    name      String
+    menuId    String
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+    menu      Menu       @relation(fields: [menuId], references: [id], onDelete: Cascade)
+    menuItems MenuItem[]
+
+    @@index([menuId]) // Manual index on relation field
+}
+
+model MenuItem {
+    id          String    @id @default(uuid())
+    name        String
+    price       Float
+    active      Boolean
+    image       String
+    menuGroupId String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    menuGroup   MenuGroup @relation(fields: [menuGroupId], references: [id], onDelete: Cascade)
+
+    @@index([menuGroupId]) // Manual index on relation field
+}
+
+model ToastToken {
+    id           String   @id @default(uuid())
+    tokenType    String
+    accessToken  String
+    expiresIn    Int
+    scope        String?
+    idToken      String?
+    refreshToken String?
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+}

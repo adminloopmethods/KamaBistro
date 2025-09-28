@@ -2,19 +2,18 @@
 
 import React, { useRef, useEffect, useState, FocusEvent } from "react";
 import Link from "next/link";
-import { BaseElement } from "@/app/(editor)/_functionality/createElement";
+import { BaseElement, LinkElement } from "@/app/(editor)/_functionality/createElement";
 import { useMyContext } from "@/Context/EditorContext";
 import { convertVWVHtoPxParentClamped } from "@/utils/convertVWVHtoParent";
 
 type LinkProps = {
-    element: BaseElement;
+    element: LinkElement;
     editable?: boolean;
     style?: React.CSSProperties;
     updateContent: (id: string, property: string, value: any) => void;
     updateElement: (id: string, updatedElement: BaseElement) => void;
     rmElement: (id: string) => void;
     parentRef: HTMLElement | null;
-
 };
 
 const LinkComponent: React.FC<LinkProps> = ({
@@ -28,9 +27,11 @@ const LinkComponent: React.FC<LinkProps> = ({
 }) => {
     const elementRef = useRef<HTMLAnchorElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
-    const [thisElement, setThisElement] = useState<BaseElement>(element);
+    const [thisElement, setThisElement] = useState<LinkElement>(element);
     const { contextRef, contextElement, toolbarRef, screenStyleObj, activeScreen } = useMyContext();
     const [isEditing, setEditing] = useState<boolean>(false);
+
+    const href = thisElement.href
 
     // Set text from element.content
     useEffect(() => {
@@ -57,7 +58,7 @@ const LinkComponent: React.FC<LinkProps> = ({
 
     const handleBlur = (e: FocusEvent<HTMLAnchorElement>) => {
         const value = elementRef.current?.innerHTML ?? "";
-        setThisElement((prev: BaseElement) => ({
+        setThisElement((prev: LinkElement) => ({
             ...prev,
             content: value.trim(),
         }));
@@ -160,7 +161,7 @@ const LinkComponent: React.FC<LinkProps> = ({
                         zIndex: 9999,
                         width: "300px",
                     }}
-                    className="space-y-3 p-3 rounded-xl border border-gray-200 bg-gray-50 shadow-sm"
+                    className="space-y-3 p-3 rounded-xl text-[black] border border-gray-200 bg-gray-50 shadow-sm"
                 >
                     <div>
                         <label className="block text-xs font-medium text-gray-600 mb-1">
@@ -169,7 +170,7 @@ const LinkComponent: React.FC<LinkProps> = ({
                         <input
                             type="text"
                             placeholder="https://example.com"
-                            value={thisElement.href || ""}
+                            value={href || ""}
                             onChange={(e) =>
                                 setThisElement((prev) => ({ ...prev, href: e.target.value }))
                             }

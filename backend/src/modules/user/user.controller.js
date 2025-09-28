@@ -58,7 +58,7 @@ const AssignPageRoleHandler = async (req, res) => {
 };
 
 const GetAllUsers = async (req, res) => {
-  const {name, email, phone, status, page, limit} = req.query;
+  const {name, email, phone, status, location, page, limit} = req.query; // Add location
   const pageNum = parseInt(page) || 1;
   const limitNum = parseInt(limit) || 40;
   const allUser = await getAllUsers(
@@ -66,6 +66,7 @@ const GetAllUsers = async (req, res) => {
     email,
     phone,
     status,
+    location, // Add location
     pageNum,
     limitNum
   );

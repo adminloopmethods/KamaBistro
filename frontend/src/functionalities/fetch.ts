@@ -19,6 +19,10 @@ const isTokenExpired = (token: string): boolean => {
     }
 };
 
+type FetchOptions = RequestInit & {
+    timeout?: number;
+};
+
 // Clear all storage except theme and redirect
 const clearSession = (): void => {
     const theme = localStorage.getItem("theme");
@@ -30,7 +34,6 @@ const clearSession = (): void => {
 // Headers type
 type HeadersType = Record<string, string>;
 
-// Core fetch logic
 const makerequest = async (
     uri: string,
     method: methods,
@@ -39,11 +42,16 @@ const makerequest = async (
     cookie: boolean = false,
     timeout: number = 10000
 ): Promise<ApiResponse> => {
-    const token = localStorage.getItem("token");
+    let token: string | null = null;
 
-    if (token && isTokenExpired(token)) {
-        clearSession();
-        return { error: "Session expired. Please log in again.", ok: false };
+    // ✅ Only access localStorage in the browser
+    if (typeof window !== "undefined") {
+        token = localStorage.getItem("token");
+
+        if (token && isTokenExpired(token)) {
+            clearSession();
+            return { error: "Session expired. Please log in again.", ok: false };
+        }
     }
 
     const controller = new AbortController();
@@ -68,7 +76,7 @@ const makerequest = async (
         const response = await fetch(uri, options);
 
         if (response.status === 555) {
-            clearSession();
+            if (typeof window !== "undefined") clearSession();
             return { error: "Critical session error. Please log in again.", ok: false };
         }
 
@@ -89,7 +97,7 @@ const makerequest = async (
         clearTimeout(timeoutId);
         return result;
     }
-}
+};
 
 
 // Content-Type presets
@@ -98,14 +106,31 @@ const ContentType = {
 };
 
 // API Calls
+export async function getContentReq(
+    route: string,
+    location?: string,
+    fetchOptions: FetchOptions = {}
+): Promise<ApiResponse> {
+    let routeId: string;
 
-export async function getContentReq(id: string): Promise<ApiResponse> {
+    if (route === "") {
+        routeId = location ? "landingpage" : "home";
+    } else {
+        routeId = route;
+    }
+
+    const url = `${endpoint.route("content")}${routeId}?location=${location ?? false}`;
 
     return await makerequest(
-        endpoint.route("content") + (id === "" ? "home" : id),
+        url,
         "GET",
+        undefined,
+        fetchOptions.headers as Record<string, string>,
+        false,
+        fetchOptions.timeout ?? 10000
     );
 }
+
 
 export async function sendMessageReq(formData: Record<string, any>) {
     return await makerequest(

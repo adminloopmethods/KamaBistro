@@ -30,7 +30,7 @@ const styleClasses = `
 `;
 
 const sectionsOptions: Option[] = [
-  { label: "Section", value: "section" },
+  { label: "Container", value: "section" },
 ];
 
 const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
@@ -76,27 +76,40 @@ const AddSection: React.FC<AddSectionProps> = ({ controller }) => {
   };
 
   useEffect(() => {
-    async function getAllSectionNames() {
-      const response = await getSectionNamesReq()
+  async function getAllSectionNames() {
+    const response = await getSectionNamesReq();
 
-      if (response.ok) {
-        setOldSections(() => {
-          return response.contents.map((e: any, i: number) => {
-            if (!e.givenName) return null
-            const lastThreeChar = String(e.givenName).slice(-3).split("")
-            const isDuplicate = lastThreeChar[0] === "(" && typeof (lastThreeChar[1]) === "number" && lastThreeChar[2] === ")"
-            const postsuffix = isDuplicate ? `(${lastThreeChar[1] + 1})` : "(1)"
-            const givenName: string = e.givenName ? `${e.givenName}` : ("random" + (i + 1))
-            return {
-              value: e.id, label: givenName
+    if (response.ok) {
+      const seenNames = new Set<string>();
+
+      const filteredSections = response.contents
+        .map((e: any, i: number) => {
+          if (!e.givenName) return null;
+
+          // Optional: you can handle duplicates with suffixes if you want
+          let givenName: string = e.givenName;
+          if (seenNames.has(givenName)) {
+            // Add a suffix to make it unique
+            let counter = 1;
+            while (seenNames.has(`${givenName}(${counter})`)) {
+              counter++;
             }
-          }).filter(Boolean)
-        })
-      }
-    }
+            givenName = `${givenName}(${counter})`;
+          }
 
-    getAllSectionNames()
-  }, [])
+          seenNames.add(givenName);
+
+          return { value: e.id, label: givenName };
+        })
+        .filter(Boolean); // remove nulls
+
+      setOldSections(filteredSections);
+    }
+  }
+
+  getAllSectionNames();
+}, []);
+
 
   return (
     <CustomSelect

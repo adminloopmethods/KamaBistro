@@ -82,6 +82,7 @@ const ImageElemComponent: React.FC<ImageComponentProps> = ({
           paddingBottom: 0,
           paddingLeft: 0,
           paddingRight: 0,
+          width:"100%"
         }}
         width={imgWidth}
         height={imgHeight}

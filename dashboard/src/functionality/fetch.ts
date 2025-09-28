@@ -1,5 +1,5 @@
 import endpoint from "@/utils/endpoints";
-import { json } from "stream/consumers";
+import {json} from "stream/consumers";
 
 type methods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE" | "OTPTIONS";
 
@@ -117,7 +117,7 @@ const makerequest = async (
 
   if (token && isTokenExpired(token)) {
     clearSession();
-    return { error: "Session expired. Please log in again.", ok: false };
+    return {error: "Session expired. Please log in again.", ok: false};
   }
 
   const controller = new AbortController();
@@ -125,7 +125,7 @@ const makerequest = async (
 
   const finalHeaders: HeadersType = {
     ...headers,
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(token ? {Authorization: `Bearer ${token}`} : {}),
   };
 
   const options: RequestInit = {
@@ -133,17 +133,17 @@ const makerequest = async (
     headers: finalHeaders,
     credentials: cookie ? "include" : "same-origin",
     signal: controller.signal,
-    ...(body && method.toUpperCase() !== "GET" ? { body } : {}),
+    ...(body && method.toUpperCase() !== "GET" ? {body} : {}),
   };
 
-  let result: ApiResponse = { ok: false, error: "Unknown error" };
+  let result: ApiResponse = {ok: false, error: "Unknown error"};
 
   try {
     const response = await fetch(uri, options);
 
     if (response.status === 555) {
       clearSession();
-      return { error: "Critical session error. Please log in again.", ok: false };
+      return {error: "Critical session error. Please log in again.", ok: false};
     }
 
     if (!response.ok) {
@@ -155,9 +155,9 @@ const makerequest = async (
     result.ok = true;
   } catch (err: any) {
     if (err.name === "AbortError") {
-      result = { error: "Request timed out", ok: false };
+      result = {error: "Request timed out", ok: false};
     } else {
-      result = { ...err, ok: false };
+      result = {...err, ok: false};
     }
   } finally {
     clearTimeout(timeoutId);
@@ -167,7 +167,7 @@ const makerequest = async (
 
 // Content-Type presets
 const ContentType = {
-  json: { "Content-Type": "application/json" },
+  json: {"Content-Type": "application/json"},
 };
 
 // API Calls
@@ -222,8 +222,27 @@ export async function forgotPasswordUpdateReq(
 }
 
 // Get all users
-export async function getUsersReq(): Promise<ApiResponse> {
-  return await makerequest(endpoint.route("getUsers"), "GET");
+export async function getUsersReq(filters?: {
+  name?: string;
+  email?: string;
+  phone?: string;
+  status?: string;
+  location?: string;
+  page?: number;
+  limit?: number;
+}): Promise<ApiResponse> {
+  const queryParams = new URLSearchParams();
+
+  if (filters?.name) queryParams.append("name", filters.name);
+  if (filters?.email) queryParams.append("email", filters.email);
+  if (filters?.phone) queryParams.append("phone", filters.phone);
+  if (filters?.status) queryParams.append("status", filters.status);
+  if (filters?.location) queryParams.append("location", filters.location);
+  if (filters?.page) queryParams.append("page", filters.page.toString());
+  if (filters?.limit) queryParams.append("limit", filters.limit.toString());
+
+  const url = `${endpoint.route("getUsers")}?${queryParams.toString()}`;
+  return await makerequest(url, "GET");
 }
 
 export async function getUserProfileReq(): Promise<ApiResponse> {
@@ -250,7 +269,7 @@ export async function activateUserReq(id: string): Promise<ApiResponse> {
   return await makerequest(
     endpoint.route("activateUser"),
     "PUT",
-    JSON.stringify({ id }),
+    JSON.stringify({id}),
     ContentType.json
   );
 }
@@ -259,7 +278,7 @@ export async function deactivateUserReq(id: string): Promise<ApiResponse> {
   return await makerequest(
     endpoint.route("deactivateUser"),
     "PUT",
-    JSON.stringify({ id }),
+    JSON.stringify({id}),
     ContentType.json
   );
 }
@@ -339,6 +358,64 @@ export async function createContentReq(
   );
 }
 
+export async function proposeUpdateReq(
+  id: string,
+  data: Record<string, any>
+): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("proposeUpdate") + id,
+    "POST",
+    JSON.stringify(data),
+    ContentType.json
+  );
+}
+
+export async function getProposedUpdatesReq(
+  webpageId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("getProposedVersions")}?webpageId=${webpageId}`,
+    "GET"
+  );
+}
+
+export async function getProposedUpdatesByIDReq(
+  webpageId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("getProposedVersionsByID") + webpageId,
+    "GET"
+  );
+}
+
+export async function approveProposedVersionReq(
+  proposedVersionId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    endpoint.route("approveProposedVersion") + proposedVersionId,
+    "POST"
+  );
+}
+
+export async function getWebpageVersionsReq(
+  webpageId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("getWebpageVersions")}${webpageId}`,
+    "GET"
+  );
+}
+
+export async function rollbackWebpageVersionReq(
+  webpageId: string,
+  versionId: string
+): Promise<ApiResponse> {
+  return await makerequest(
+    `${endpoint.route("rollbackWebpageVersion")}${webpageId}/${versionId}`,
+    "POST"
+  );
+}
+
 // Save content (update)
 export async function saveContentReq(
   id: string,
@@ -410,12 +487,11 @@ export async function deleteMedia(id: string): Promise<Record<string, any>> {
   }
 }
 
-
 export async function sendMessageReq(formData: Record<string, any>) {
   return await makerequest(
     endpoint.route("contact"),
     "POST",
     JSON.stringify(formData),
     ContentType.json
-  )
+  );
 }

@@ -1,10 +1,12 @@
-// webpagecard.tsx
-import React from "react";
+// components/WebpageCard.tsx
+"use client";
+import React, {useState} from "react";
 import {Edit, UserPlus, X} from "lucide-react";
+import {History} from "lucide-react";
 import {useRouter} from "next/navigation";
 import {getRoleByName, removeUserFromPageRole} from "@/utils/roleManagement";
 import {useUser} from "@/Context/UserContext";
-// import { useUser } from "@/context/UserContext"; // Assuming you have a user context
+import VersionHistoryModal from "./VersionHistoryModal";
 
 interface User {
   id: string;
@@ -23,6 +25,10 @@ interface Webpage {
   verifier?: User;
   status: "draft" | "published" | "needs-review";
   route: string;
+  versionCount?: number;
+  updatedAt?: string;
+  name?: string;
+  count?: number;
 }
 
 interface Props {
@@ -30,7 +36,7 @@ interface Props {
   formatDate: (dateString: string) => string;
   getStatusStyle: (status: string) => string;
   openAssignModal: (page: Webpage, role: "editor" | "verifier") => void;
-  onUserRemoved: () => void; // Callback to refresh data
+  onUserRemoved: () => void;
 }
 
 const WebpageCard: React.FC<Props> = ({
@@ -41,14 +47,16 @@ const WebpageCard: React.FC<Props> = ({
   onUserRemoved,
 }) => {
   const router = useRouter();
-  const {user: currentUser} = useUser(); // Get current user from context
-  const [isRemoving, setIsRemoving] = React.useState<{
+  const {user: currentUser} = useUser();
+  const [isRemoving, setIsRemoving] = useState<{
     editor: boolean;
     verifier: boolean;
   }>({editor: false, verifier: false});
+  const [showVersionHistory, setShowVersionHistory] = useState(false);
 
-  const isAdmin = currentUser?.isSuperUser; // Check if current user is admin
-  // console.log("Current User:", currentUser);
+  const isAdmin = currentUser?.isSuperUser;
+
+  console.log("WebpageCard render:", page);
 
   const handleRemoveUser = async (role: "editor" | "verifier") => {
     try {
@@ -66,10 +74,9 @@ const WebpageCard: React.FC<Props> = ({
       });
 
       if (response.ok) {
-        onUserRemoved(); // Trigger refresh
+        onUserRemoved();
       } else {
         console.error("Failed to remove user:", response.error);
-        // You might want to show a toast notification here
       }
     } catch (error) {
       console.error("Error removing user:", error);
@@ -82,17 +89,26 @@ const WebpageCard: React.FC<Props> = ({
     router.push(`/editor/${page.id}`);
   };
 
-  const renderRoleSection = (
-    roleType: "editor" | "verifier",
-    user?: User
-    // bgColor: string
-  ) => (
+  const getCurrentWebpageData = () => {
+    return {
+      id: page.id,
+      title: page.title,
+      name: page.name || page.title,
+    };
+  };
+
+  const handleRollbackSuccess = () => {
+    onUserRemoved(); // This will refresh the page data
+    setShowVersionHistory(false);
+  };
+
+  const renderRoleSection = (roleType: "editor" | "verifier", user?: User) => (
     <div className="mb-4">
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-medium text-gray-700 dark:text-gray-300 capitalize">
           {roleType}
         </span>
-        {isAdmin && // Only show assign/remove buttons if user is admin
+        {isAdmin &&
           (!user ? (
             <button
               onClick={() => openAssignModal(page, roleType)}
@@ -123,7 +139,7 @@ const WebpageCard: React.FC<Props> = ({
       </div>
       <div className="flex flex-wrap gap-2">
         {user ? (
-          <div className={`flex items-center  px-3 py-1.5 rounded-lg`}>
+          <div className={`flex items-center px-3 py-1.5 rounded-lg`}>
             <div className="bg-gray-200 border-2 border-dashed rounded-xl w-6 h-6 mr-2 flex items-center justify-center text-xs font-medium">
               {user.name.charAt(0).toUpperCase()}
             </div>
@@ -156,13 +172,19 @@ const WebpageCard: React.FC<Props> = ({
           <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-xl">
             {page.icon}
           </div>
-          <span
-            className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
-              page.status
-            )}`}
-          >
-            {page.status?.replace("-", " ")}
-          </span>
+
+          <div className="flex items-center space-x-2">
+            {/* <span
+              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
+                page.status
+              )}`}
+            >
+              {page.status?.replace("-", " ")}
+            </span> */}
+            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs">
+              {page.count || 0} versions
+            </span>
+          </div>
         </div>
 
         <div className="mt-4">
@@ -175,16 +197,8 @@ const WebpageCard: React.FC<Props> = ({
         </div>
 
         <div className="mt-6">
-          {renderRoleSection(
-            "editor",
-            page.editor
-            // "bg-indigo-50 dark:bg-indigo-900/20"
-          )}
-          {renderRoleSection(
-            "verifier",
-            page.verifier
-            // "bg-green-50 dark:bg-green-900/20"
-          )}
+          {renderRoleSection("editor", page.editor)}
+          {/* {renderRoleSection("verifier", page.verifier)} */}
         </div>
 
         <div className="mt-6 flex space-x-3">
@@ -195,23 +209,24 @@ const WebpageCard: React.FC<Props> = ({
             <Edit className="w-5 h-5 mr-2" />
             Edit Content
           </button>
-          {isAdmin && ( // Only show settings button for admin
-            <button className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 p-2.5 rounded-xl">
-              <svg
-                className="w-5 h-5 text-gray-700 dark:text-gray-300"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 5v.01M12 12v.01M12 19v.01"
-                />
-              </svg>
+
+          {isAdmin && (
+            <button
+              onClick={() => setShowVersionHistory(true)}
+              className="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 p-2.5 rounded-xl"
+              title="Version History"
+            >
+              <History className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </button>
           )}
+
+          {/* Add the VersionHistoryModal */}
+          <VersionHistoryModal
+            show={showVersionHistory}
+            onClose={() => setShowVersionHistory(false)}
+            webpage={getCurrentWebpageData()}
+            onRollbackSuccess={handleRollbackSuccess}
+          />
         </div>
       </div>
     </div>
@@ -219,3 +234,16 @@ const WebpageCard: React.FC<Props> = ({
 };
 
 export default WebpageCard;
+
+{
+  /* {showVersionHistory && (
+        <VersionHistoryModal
+          isOpen={showVersionHistory}
+          onClose={() => setShowVersionHistory(false)}
+          webpageId={page.id}
+          webpageName={page.title}
+          currentWebpageData={getCurrentWebpageData()}
+          onRollback={handleRollbackSuccess}
+        />
+      )} */
+}

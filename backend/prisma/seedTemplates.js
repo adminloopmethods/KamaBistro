@@ -1,8 +1,7 @@
 // Import dependencies
 import { randomUUID } from "node:crypto";
-import { PrismaClient } from "@prisma/client";
 import { createWebpageService } from "../src/modules/content/content.service.js";
-
+import prismaClient from "../src/config/dbConfig.js";
 // import pages
 import home from "./templatesBase/Home.json" assert {type: "json"}
 import OurGroup from "./templatesBase/OurGroup.json" assert {type: "json"}
@@ -10,13 +9,33 @@ import OurCulture from "./templatesBase/OurCulture.json" assert {type: "json"}
 import PrivateDinning from "./templatesBase/PrivateDinning.json" assert {type: "json"}
 import Catering from "./templatesBase/Catering.json" assert {type: "json"}
 import ContactUs from "./templatesBase/Contact-us.json" assert { type: "json" }
-// import pages for landing
-import homeLanding from "./templateLandingPage/HomeLanding.json" assert {type: "json"}
-import orderOnline from "./templateLandingPage/OrderOnline.json" assert {type: "json"}
-import privateDinning from "./templateLandingPage/PrivateDinning.json" assert {type: "json"}
-import landingCatering from "./templateCateringPage/LandingCatering.json" assert {type: "json"}
-import reserveTable from "./templateReserveTablePage/ReserveTable.json" assert {type: "json"}
+import accessibility from "./templatesBase/accessibilityPage.json" assert { type: "json" }
+import privacyPolicy from "./templatesBase/privacyPolicy.json" assert { type: "json" }
+import termsNCondition from "./templatesBase/termsAndCodition.json" assert { type: "json" }
 
+// import pages for location 1
+import homeLanding from "./templateLocationPage/HomeLanding.json" assert {type: "json"}
+import orderOnline from "./templateLocationPage/OrderOnline.json" assert {type: "json"}
+import privateDinning from "./templateLocationPage/PrivateDinning.json" assert {type: "json"}
+import landingCatering from "./templateLocationPage/LandingCatering.json" assert {type: "json"}
+import reserveTable from "./templateLocationPage/ReserveTable.json" assert {type: "json"}
+import menu from "./templateLocationPage/Menu.json" assert {type: "json"}
+
+// import pages for location 2
+import homeLandingTwo from "./templateLocationPage2/HomeLanding.json" assert {type: "json"}
+import orderOnlineTwo from "./templateLocationPage2/OrderOnline.json" assert {type: "json"}
+import privateDinningTwo from "./templateLocationPage2/PrivateDinning.json" assert {type: "json"}
+import landingCateringTwo from "./templateLocationPage2/LandingCatering.json" assert {type: "json"}
+import reserveTableTwo from "./templateLocationPage2/ReserveTable.json" assert {type: "json"}
+import menuTwo from "./templateLocationPage2/Menu.json" assert {type: "json"}
+
+// import pages for location 3
+import homeLandingThree from "./templateLocationPage3/HomeLanding.json" assert {type: "json"}
+import orderOnlineThree from "./templateLocationPage3/OrderOnline.json" assert {type: "json"}
+import privateDinningThree from "./templateLocationPage3/PrivateDinning.json" assert {type: "json"}
+import landingCateringThree from "./templateLocationPage3/LandingCatering.json" assert {type: "json"}
+import reserveTableThree from "./templateLocationPage3/ReserveTable.json" assert {type: "json"}
+import menuThree from "./templateLocationPage3/Menu.json" assert {type: "json"}
 
 // Put them in an array
 const webpages = [
@@ -27,13 +46,33 @@ const webpages = [
   PrivateDinning,
   Catering,
   ContactUs,
+  accessibility,
+  privacyPolicy,
+  termsNCondition,
 
-  // landing pages
+  // location 1 pages
   homeLanding,
   orderOnline,
   privateDinning,
   landingCatering,
-  reserveTable
+  reserveTable,
+  menu,
+
+  // location 2 pages
+  homeLandingTwo,
+  orderOnlineTwo,
+  privateDinningTwo,
+  landingCateringTwo,
+  reserveTableTwo,
+  menuTwo,
+
+  // location 3 pages
+  homeLandingThree,
+  orderOnlineThree,
+  privateDinningThree,
+  landingCateringThree,
+  reserveTableThree,
+  menuThree
 ]
 
 // Function to recursively replace all "id" fields with new UUIDs
@@ -54,43 +93,31 @@ function replaceIds(obj) {
   return obj;
 }
 
-// Main function to process all webpages in a transaction
-export async function processWebpages() {
-  const prisma = new PrismaClient();
 
-  // Prepare all new data first
-  const newPages = webpages.map(page => {
+async function getLocationId(locationName) {
+  if (!locationName) return null
+  const location = await prismaClient.location.findFirst({
+    where: { name: locationName }
+  });
+  return location?.id;
+}
+
+// Main function to process all webpages
+async function processWebpages() {
+  for (const page of webpages) {
+
     const newData = replaceIds(page);
+
+    const locationID = await getLocationId(page.locationName)
+    newData.locationId = locationID
+
+    // Refresh timestamps
     newData.createdAt = new Date().toISOString();
     newData.updatedAt = new Date().toISOString();
-    return newData;
-  });
 
-  try {
-    await prisma.$transaction(async (tx) => {
-      // We assume createWebpageService can accept a Prisma transaction client as an optional argument
-      // If not, you may need to refactor createWebpageService to accept tx or use tx directly here
-      for (const newData of newPages) {
-        try {
-          await createWebpageService(newData, tx);
-          console.log(`Inserted page with route: ${newData.route}`);
-        } catch (error) {
-          // Prisma error code for unique constraint violation is P2002
-          if (error.code === 'P2002' && error.meta && error.meta.target && error.meta.target.includes('route')) {
-            console.warn(`Skipped duplicate route: ${newData.route}`);
-            // Optionally, you can throw here to rollback the whole transaction if you want strict all-or-nothing
-            throw error;
-          } else {
-            console.error(`Error inserting page with route: ${newData.route}`, error);
-            throw error; // Rollback transaction on any error
-          }
-        }
-      }
-    });
-    console.log("All pages inserted successfully in a single transaction.");
-  } catch (err) {
-    console.error("Transaction failed. No data was inserted.", err);
-  } finally {
-    await prisma.$disconnect();
+    // Save to database
+    await createWebpageService(newData);
   }
 }
+
+processWebpages().then(() => console.log("Pages created successfully"));

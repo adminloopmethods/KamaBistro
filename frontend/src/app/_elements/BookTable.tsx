@@ -9,7 +9,7 @@ interface BookTableProps {
   restref?: string;
 }
 
-const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
+const BookTableWicker: React.FC<BookTableProps> = ({ restref = "1320541" }) => {
   const [time, setTime] = useState<string>("19:00");
 
   // Store date as Date object
@@ -30,16 +30,13 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
   // The “profile//reserve” URL // accepts datetime without timezone; OpenTable resolves it server-side.
   // For stronger TZ control, we still compute a best-effort ISO.
   const deepLink = useMemo(() => {
-    const base = `https://www.opentable.com/restaurant/profile/${encodeURIComponent(
-      restref
-    )}/reserve`;
+    const base = `https://www.opentable.com/booking/restref/availability?rid=${encodeURIComponent(restref)}`;
 
-    // Option A (recommended): profile/<restref>/reserve?cover=2&datetime=2025-06-02T19:00
     const params = new URLSearchParams();
-    params.set("cover", String(covers));
+    params.set("partySize", String(covers));
     params.set("datetime", dtLocal); // “YYYY-MM-DDTHH:mm”
 
-    return `${base}?${params.toString()}`;
+    return `${base}&${params.toString()}`;
   }, [covers, dtLocal, restref]);
 
   // ---- UI helpers
@@ -63,34 +60,37 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
   };
 
   return (
-    <div className="bg-transparent backdrop-blur-[10px] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4">
+    <div className="bg-gradient-to-r from-[#E3D9C9] to-[#D5C5AC] backdrop-blur-[10px] z-[10] rounded-[24px] shadow-sm border border-[#AE906066] p-4 md:p-6 space-y-4 w-[100%]">
+
       {/* Date */}
-      <label className="block relative w-full">
-        <span className="text-sm font-medium text-amber-900">Date</span>
-        <div className="mt-1 w-full">
+      <div className="block relative w-full">
+        <span className="text-sm font-medium text-[black]">Date</span>
+        <div className="mt-1 w-full ">
           <DatePicker
-            selected={date} // Pass Date object here
-            onChange={(date: Date | null) => setDate(date || new Date())} // Handle date change
-            className="w-full rounded-[16px] pl-15 border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
+            selected={date}
+            onChange={(date: Date | null) => setDate(date || new Date())}
+            onSelect={() => { }} // triggers when a date is selected
+            shouldCloseOnSelect={true}   // 👈 this is the key
+            className="w-full rounded-[16px] pl-15 border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400 box-border"
             aria-label="Select date"
-            dateFormat="yyyy-MM-dd"
+            dateFormat="MMMM d, yyyy"
           />
           <CalendarClock className="absolute left-4 top-10 pointer-events-none" />
         </div>
-      </label>
+      </div>
 
       {/* Time */}
       <label className="block relative">
-        <span className="text-sm font-medium text-amber-900">Time</span>
+        <span className="text-sm font-medium text-[black]">Time</span>
         <div className="mt-1">
           <select
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select time"
           >
             {timeOptions.map((t) => (
-              <option key={t} value={t}>
+              <option className="bg-amber-100/20" key={t} value={t}>
                 {to12h(t)}
               </option>
             ))}
@@ -102,16 +102,16 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
       {/* People */}
       <label className="block relative">
-        <span className="text-sm font-medium text-amber-900">Guests</span>
+        <span className="text-sm font-medium text-[black]">Guests</span>
         <div className="mt-1">
           <select
             value={covers}
             onChange={(e) => setCovers(Number(e.target.value))}
-            className="w-full appearance-none pl-15 rounded-[16px] border border-amber-200 bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
+            className="w-full appearance-none pl-15 rounded-[16px] border border-[#AE906066] bg-white/80 px-4 py-3 outline-none focus:ring-2 focus:ring-amber-400"
             aria-label="Select number of guests"
           >
             {peopleOptions.map((p) => (
-              <option key={p} value={p}>
+              <option className="bg-amber-100/20" key={p} value={p}>
                 {p} {p === 1 ? "Person" : "People"}
               </option>
             ))}
@@ -123,7 +123,7 @@ const BookTable: React.FC<BookTableProps> = ({ restref = "12345" }) => {
 
       <button
         onClick={handleBook}
-        className="w-full rounded-[16px] px-6 py-4 font-semibold bg-amber-700 text-white hover:bg-amber-800 active:bg-amber-900 transition"
+        className="w-full rounded-[16px] px-6 py-4 font-semibold bg-[#AE9060] text-white hover:bg-[#9e7a40] active:bg-[#9e7a40] transition cursor-pointer"
       >
         Book Now
       </button>
@@ -139,4 +139,4 @@ function to12h(hhmm: string): string {
   return `${hh}:${m.toString().padStart(2, "0")} ${am ? "AM" : "PM"}`;
 }
 
-export default BookTable;
+export default BookTableWicker;
