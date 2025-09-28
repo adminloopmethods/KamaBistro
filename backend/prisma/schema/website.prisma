@@ -1,30 +1,29 @@
 model Webpage {
-  id          String    @id @default(uuid())
+  id          String         @id @default(uuid())
   name        String
   route       String
   locationId  String?
-  location    location? @relation(fields: [locationId], references: [id])
+  location    location?      @relation(fields: [locationId], references: [id])
   contents    Content[]
   versions    version[]
   pageRoles   PageUserRole[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
   editedWidth String?
-  Status      Boolean   @default(true)
+  Status      Boolean        @default(true)
 
   editorId String?
   editor   User?   @relation("WebpageEditor", fields: [editorId], references: [id])
 
   verifierId      String?
-  verifier        User? @relation("WebpageVerifier", fields: [verifierId], references: [id])
+  verifier        User?             @relation("WebpageVerifier", fields: [verifierId], references: [id])
   proposedVersion proposedVersion[]
   draft           draft[]
 
+  @@unique([route, locationId]) // ← compound unique constraint
   @@index([locationId])
   @@index([editorId])
   @@index([verifierId])
-
-  @@unique([route, locationId])  // ← compound unique constraint
 }
 
 model Content {
@@ -95,6 +94,7 @@ model version {
   version   Json
   webpageId String
   webpage   Webpage @relation(fields: [webpageId], references: [id])
+  isLive    Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

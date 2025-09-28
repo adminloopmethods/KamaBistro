@@ -92,13 +92,14 @@ const WebpageCard: React.FC<Props> = ({
   const getCurrentWebpageData = () => {
     return {
       id: page.id,
-      name: page.title,
-      updatedAt: page.lastEdited,
+      title: page.title,
+      name: page.name || page.title,
     };
   };
 
   const handleRollbackSuccess = () => {
-    onUserRemoved();
+    onUserRemoved(); // This will refresh the page data
+    setShowVersionHistory(false);
   };
 
   const renderRoleSection = (roleType: "editor" | "verifier", user?: User) => (
@@ -218,10 +219,24 @@ const WebpageCard: React.FC<Props> = ({
               <History className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </button>
           )}
+
+          {/* Add the VersionHistoryModal */}
+          <VersionHistoryModal
+            show={showVersionHistory}
+            onClose={() => setShowVersionHistory(false)}
+            webpage={getCurrentWebpageData()}
+            onRollbackSuccess={handleRollbackSuccess}
+          />
         </div>
       </div>
+    </div>
+  );
+};
 
-      {showVersionHistory && (
+export default WebpageCard;
+
+{
+  /* {showVersionHistory && (
         <VersionHistoryModal
           isOpen={showVersionHistory}
           onClose={() => setShowVersionHistory(false)}
@@ -230,9 +245,5 @@ const WebpageCard: React.FC<Props> = ({
           currentWebpageData={getCurrentWebpageData()}
           onRollback={handleRollbackSuccess}
         />
-      )}
-    </div>
-  );
-};
-
-export default WebpageCard;
+      )} */
+}

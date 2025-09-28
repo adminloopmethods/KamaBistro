@@ -243,24 +243,6 @@ export const updateWebpageByIdService = async (
 ) => {
   const currentWebpage = getWebpageByIdService(id);
 
-  if (options.createVersion && currentWebpage) {
-    const versionData = {
-      name: currentWebpage.name,
-      contents: currentWebpage.contents,
-      route: currentWebpage.route,
-      editedWidth: currentWebpage.editedWidth,
-      locationId: currentWebpage.locationId,
-      updatedAt: currentWebpage.updatedAt,
-    };
-
-    await prismaClient.version.create({
-      data: {
-        webpageId: id,
-        version: versionData,
-      },
-    });
-  }
-
   // 1) Update webpage meta
   await prismaClient.webpage.update({
     where: {id},
@@ -521,6 +503,25 @@ export const updateWebpageByIdService = async (
   //     data: {webpageId: id, version: finalWebpage},
   //   });
   // }
+
+  if (options.createVersion && currentWebpage) {
+    // const versionData = {
+    //   name: currentWebpage.name,
+    //   // contents: currentWebpage.contents,
+    //   route: currentWebpage.route,
+    //   editedWidth: currentWebpage.editedWidth,
+    //   locationId: currentWebpage.locationId,
+    //   updatedAt: currentWebpage.updatedAt,
+    // };
+
+    await prismaClient.version.create({
+      data: {
+        webpageId: id,
+        version: finalWebpage,
+        // otherData: versionData,
+      },
+    });
+  }
 
   return finalWebpage;
 };

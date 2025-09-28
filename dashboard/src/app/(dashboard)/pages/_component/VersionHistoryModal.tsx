@@ -1,161 +1,197 @@
 // components/VersionHistoryModal.tsx
 "use client";
 import React, {useState, useEffect} from "react";
-import {X, Clock, RotateCcw, User, Calendar, CheckCircle} from "lucide-react";
+import {X, Calendar, RotateCcw, CheckCircle} from "lucide-react";
 import {
   getWebpageVersionsReq,
   rollbackWebpageVersionReq,
 } from "@/functionality/fetch";
 
+interface VersionContent {
+  Status: boolean;
+  contents: any[];
+  createdAt: string;
+  editedWidth: string;
+  editorId: string;
+  id: string;
+  locationId: string | null;
+  name: string;
+  route: string;
+  updatedAt: string;
+  verifierId: string;
+}
+
+interface ApiVersion {
+  id: string;
+  version: VersionContent;
+  webpageId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface Version {
   id: string;
+  versionNumber: number;
+  title: string;
+  content: any;
   createdAt: string;
-  version: {
-    name: string;
-    updatedAt: string;
-    editor?: {
-      name: string;
-      email: string;
-    };
-  };
+  updatedAt: string;
+  isLive: boolean;
 }
 
-interface VersionHistoryModalProps {
-  isOpen: boolean;
+interface Webpage {
+  id: string;
+  title: string;
+  name?: string;
+}
+
+interface Props {
+  show: boolean;
   onClose: () => void;
-  webpageId: string;
-  webpageName: string;
-  currentWebpageData?: any; // Add current webpage data to identify live version
-  onRollback: () => void;
+  webpage: Webpage | null;
+  onRollbackSuccess: () => void;
 }
 
-const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
-  isOpen,
+const VersionHistoryModal: React.FC<Props> = ({
+  show,
   onClose,
-  webpageId,
-  webpageName,
-  currentWebpageData,
-  onRollback,
+  webpage,
+  onRollbackSuccess,
 }) => {
   const [versions, setVersions] = useState<Version[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isRollingBack, setIsRollingBack] = useState<string | null>(null);
-  const [currentVersionId, setCurrentVersionId] = useState<string | null>(null);
+  const [currentLiveVersionId, setCurrentLiveVersionId] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
-    if (isOpen && webpageId) {
+    if (show && webpage?.id) {
       fetchVersions();
     }
-  }, [isOpen, webpageId]);
-
-  // Determine which version is currently live based on updatedAt timestamp
-  const findCurrentVersionId = (versions: Version[], currentData: any) => {
-    if (!currentData || !versions.length) return null;
-
-    // Create a fingerprint of the current content
-    const createContentFingerprint = (content: any) => {
-      const simplifyContent = (obj: any): any => {
-        if (Array.isArray(obj)) {
-          return obj.map(simplifyContent).filter(Boolean);
-        } else if (obj && typeof obj === "object") {
-          const simple: any = {};
-          // Only include content-related fields, ignore metadata and timestamps
-          const includeFields = [
-            "name",
-            "content",
-            "givenName",
-            "href",
-            "aria",
-            "children",
-            "elements",
-          ];
-          includeFields.forEach((field) => {
-            if (obj[field] !== undefined) {
-              simple[field] = simplifyContent(obj[field]);
-            }
-          });
-          return Object.keys(simple).length ? simple : null;
-        }
-        return obj;
-      };
-
-      return JSON.stringify(simplifyContent(content));
-    };
-
-    const currentFingerprint = createContentFingerprint(currentData.contents);
-
-    // Find the version with matching content
-    for (const version of versions) {
-      const versionFingerprint = createContentFingerprint(
-        version.version.contents
-      );
-      if (versionFingerprint === currentFingerprint) {
-        return version.id;
-      }
-    }
-
-    return null;
-  };
+  }, [show, webpage?.id]);
 
   const fetchVersions = async () => {
+    if (!webpage?.id) return;
+
     try {
       setIsLoading(true);
-      const response = await getWebpageVersionsReq(webpageId);
+      const response = await getWebpageVersionsReq(webpage.id);
 
-      if (response.ok && response.versions) {
-        const sortedVersions = response.versions.sort(
-          (a: Version, b: Version) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      console.log("Versions API response:", response); // Debug log
+
+      if (response.ok && Array.isArray(response.versions)) {
+        // Transform API response to our expected format
+        const transformedVersions: Version[] = response.versions.map(
+          (apiVersion: ApiVersion, index: number) => {
+            // Use the index to create a version number (newest first)
+            const versionNumber = response.versions.length - index;
+
+            // Check if this version is live - look for Status: true in the version object
+            const isLive = apiVersion.version.Status === true;
+
+            console.log(`Version ${versionNumber}:`, {
+              id: apiVersion.id,
+              status: apiVersion.version.Status,
+              isLive: isLive,
+              name: apiVersion.version.name,
+            }); // Debug log
+
+            return {
+              id: apiVersion.id,
+              versionNumber: versionNumber,
+              title: apiVersion.version.name,
+              content: apiVersion.version.contents,
+              createdAt: apiVersion.createdAt,
+              updatedAt: apiVersion.updatedAt,
+              isLive: isLive,
+            };
+          }
+        );
+
+        // Sort by version number (newest first)
+        const sortedVersions = transformedVersions.sort(
+          (a, b) => b.versionNumber - a.versionNumber
         );
 
         setVersions(sortedVersions);
 
-        // Determine which version is currently live
-        const liveVersionId = findCurrentVersionId(
-          sortedVersions,
-          currentWebpageData
+        // Find the currently live version
+        const liveVersion = sortedVersions.find(
+          (v: Version) => v.isLive === true
         );
-        setCurrentVersionId(liveVersionId);
+        setCurrentLiveVersionId(liveVersion?.id || null);
+
+        console.log(
+          "All versions with live status:",
+          sortedVersions.map((v) => ({
+            id: v.id,
+            version: v.versionNumber,
+            isLive: v.isLive,
+          }))
+        ); // Debug log
+        console.log("Live version ID:", liveVersion?.id); // Debug log
+      } else {
+        console.error(
+          "Failed to fetch versions or invalid response format:",
+          response
+        );
       }
     } catch (error) {
-      console.error("Failed to fetch versions:", error);
+      console.error("Error fetching versions:", error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleRollback = async (versionId: string) => {
+  const handleRollback = async (versionId: string, versionNumber: number) => {
+    if (!webpage?.id) return;
+
     try {
       setIsRollingBack(versionId);
-      const response = await rollbackWebpageVersionReq(webpageId, versionId);
+
+      // Optimistically update the UI first
+      setVersions((prevVersions) =>
+        prevVersions.map((version) => ({
+          ...version,
+          isLive: version.id === versionId,
+        }))
+      );
+      setCurrentLiveVersionId(versionId);
+
+      const response = await rollbackWebpageVersionReq(webpage.id, versionId);
+
+      console.log("Rollback response:", response); // Debug log
 
       if (response.ok) {
-        // Update the current version to the one we rolled back to
-        setCurrentVersionId(versionId);
-
-        // Refresh the versions list to get any updates
+        // Refetch to confirm the change with the server
         await fetchVersions();
 
-        // Notify parent component to refresh the main webpage data
-        onRollback();
-
         // Show success message
-        alert(
-          "Webpage rolled back successfully! The page will now reflect this version."
-        );
+        // alert(`Successfully rolled back to version ${versionNumber}!`);
+
+        // Refresh the parent component data
+        onRollbackSuccess();
       } else {
-        alert("Failed to rollback: " + response.error);
+        console.error("Rollback failed:", response.error);
+        alert("Rollback failed: " + (response.error || "Unknown error"));
+
+        // If rollback failed, refetch to get the correct state from server
+        await fetchVersions();
       }
     } catch (error) {
-      console.error("Rollback error:", error);
-      alert("Failed to rollback webpage");
+      console.error("Error during rollback:", error);
+      alert("An error occurred during rollback");
+
+      // If there was an error, refetch to get the correct state from server
+      await fetchVersions();
     } finally {
       setIsRollingBack(null);
     }
   };
 
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
@@ -164,151 +200,136 @@ const VersionHistoryModal: React.FC<VersionHistoryModalProps> = ({
     });
   };
 
-  // Check if a version is the current live version
-  const isCurrentVersion = (versionId: string) => {
-    return versionId === currentVersionId;
+  const getVersionBadge = (version: Version) => {
+    if (version.id === currentLiveVersionId) {
+      return (
+        <div className="flex items-center space-x-1 bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-200 px-2 py-1 rounded-full text-xs font-medium">
+          <CheckCircle className="w-3 h-3" />
+          <span>Currently Live</span>
+        </div>
+      );
+    }
+
+    return null;
   };
 
-  if (!isOpen) return null;
+  const getCurrentLiveVersion = () => {
+    return versions.find((v) => v.id === currentLiveVersionId);
+  };
+
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center space-x-3">
-            <Clock className="w-6 h-6 text-indigo-600" />
-            <div>
-              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                Version History
-              </h2>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                {webpageName}
-              </p>
-            </div>
+        <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+              Version History - {webpage?.title || webpage?.name}
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">
+              {getCurrentLiveVersion() &&
+                `Current live version: V${
+                  getCurrentLiveVersion()?.versionNumber
+                }`}
+            </p>
           </div>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div className="p-6 overflow-auto max-h-[70vh]">
           {isLoading ? (
-            <div className="flex justify-center py-8">
+            <div className="flex justify-center items-center py-8">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
             </div>
           ) : versions.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              No version history found
+              No version history available
             </div>
           ) : (
             <div className="space-y-4">
-              {versions.map((version, index) => {
-                const isLive = isCurrentVersion(version.id);
-                const isOldest = index === versions.length - 1;
-
-                return (
-                  <div
-                    key={version.id}
-                    className={`border rounded-lg p-4 transition-colors ${
-                      isLive
-                        ? "border-green-500 bg-green-50 dark:bg-green-900/20"
-                        : "border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center space-x-2">
-                        <div
-                          className={`flex items-center justify-center w-6 h-6 rounded-full text-sm font-medium ${
-                            isLive
-                              ? "bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-300"
-                              : "bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300"
-                          }`}
-                        >
-                          {versions.length - index}
-                        </div>
-                        <span className="font-medium text-gray-900 dark:text-white">
-                          Version {versions.length - index}
-                          {isLive && (
-                            <span className="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Live
-                            </span>
-                          )}
+              {versions.map((version) => (
+                <div
+                  key={version.id}
+                  className={`border rounded-lg p-4 transition-all ${
+                    version.id === currentLiveVersionId
+                      ? "border-green-500 bg-green-50 dark:bg-green-900/20"
+                      : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600"
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center space-x-3">
+                      <div
+                        className={`flex items-center justify-center w-8 h-8 rounded-full ${
+                          version.id === currentLiveVersionId
+                            ? "bg-green-100 text-green-600 dark:bg-green-800 dark:text-green-300"
+                            : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300"
+                        }`}
+                      >
+                        <span className="text-sm font-bold">
+                          V{version.versionNumber}
                         </span>
                       </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 dark:text-white">
+                          {version.title}
+                        </h3>
+                        <div className="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400 mt-1">
+                          <div className="flex items-center space-x-1">
+                            <Calendar className="w-4 h-4" />
+                            <span>{formatDate(version.createdAt)}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {getVersionBadge(version)}
+                  </div>
+
+                  <div className="flex justify-end">
+                    {version.id !== currentLiveVersionId && (
                       <button
-                        onClick={() => handleRollback(version.id)}
-                        disabled={isRollingBack === version.id || isLive}
-                        className={`flex items-center space-x-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
-                          isLive
-                            ? "bg-gray-100 dark:bg-gray-700 text-gray-400 cursor-not-allowed"
-                            : "bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-amber-800"
-                        }`}
+                        onClick={() =>
+                          handleRollback(version.id, version.versionNumber)
+                        }
+                        disabled={isRollingBack === version.id}
+                        className="flex items-center space-x-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                       >
                         {isRollingBack === version.id ? (
                           <>
-                            <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-amber-600"></div>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
                             <span>Rolling back...</span>
                           </>
                         ) : (
                           <>
-                            <RotateCcw className="w-3 h-3" />
-                            <span>Rollback to this version</span>
+                            <RotateCcw className="w-4 h-4" />
+                            <span>Rollback to V{version.versionNumber}</span>
                           </>
                         )}
                       </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 dark:text-gray-400">
-                      <div className="flex items-center space-x-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>{formatDateTime(version.createdAt)}</span>
-                        {isOldest && (
-                          <span className="text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-                            Original
-                          </span>
-                        )}
-                      </div>
-
-                      {version.version.editor && (
-                        <div className="flex items-center space-x-2">
-                          <User className="w-4 h-4" />
-                          <span>{version.version.editor.name}</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="mt-3 text-xs text-gray-500 dark:text-gray-500">
-                      Webpage: {version.version.name}
-                    </div>
+                    )}
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
           )}
         </div>
 
         {/* Footer */}
-        <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-750">
-          <div className="flex justify-between items-center">
-            <span className="text-sm text-gray-600 dark:text-gray-400">
-              {versions.length} versions found •{" "}
-              {currentVersionId
-                ? "Live version highlighted"
-                : "Unable to detect live version"}
-            </span>
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg transition-colors"
-            >
-              Close
-            </button>
-          </div>
+        <div className="flex justify-end p-6 border-t border-gray-200 dark:border-gray-700">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>
