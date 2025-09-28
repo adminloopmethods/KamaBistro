@@ -254,21 +254,6 @@ const Section: React.FC<SectionProps> = ({
     };
   }, [isDragging]);
 
-  useEffect(() => {
-    setSectionStyle((prev) => {
-      if (JSON.stringify(prev) !== JSON.stringify(style)) {
-        return style;
-      }
-      return prev;
-    });
-  }, [style]);
-
-  useEffect(() => {
-    if (divRef.current?.style) {
-      divRef.current.style.outline = "1px dashed gray";
-    }
-  }, [])
-
   const showAllChildren = () => {
     setElements((prev: ElementTypeCustom[]) =>
       prev.map((e: ElementTypeCustom) => {
@@ -317,7 +302,24 @@ const Section: React.FC<SectionProps> = ({
   const runningWidth = activeScreen !== "xl";
   const runningStyle = runningWidth ? convertVWVHtoPxParentClamped(sectionStyle, parentRef) : sectionStyle
 
+  useEffect(() => {
+    if (divRef.current?.style) {
+      divRef.current.style.outline = "1px dashed gray";
+    }
+  }, [])
+
   /////////////// Reason for infinite renders/////////////////////////////////
+  useEffect(() => {
+    if (JSON.stringify(sectionStyle) !== JSON.stringify(style)) {
+      setSectionStyle((prev) => {
+        if (JSON.stringify(prev) !== JSON.stringify(style)) {
+          return style;
+        }
+        return prev;
+      });
+    }
+  }, [style]);
+
   useEffect(() => {
     if (finalUpdate) {
       finalUpdate(section.id, { ...section, elements: elements, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
@@ -332,14 +334,17 @@ const Section: React.FC<SectionProps> = ({
   }, [elements, hover])
 
   useEffect(() => {
-    if (finalUpdate) {
-      finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
-    }
+    if (JSON.stringify(sectionStyle) === JSON.stringify(style)) {
+      if (finalUpdate) {
+        finalUpdate(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+        contextForSection.setCurrentSection(sectionStyle)
+      }
 
-    if (updateParentElement) {
-      updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+      if (updateParentElement) {
+        updateParentElement(section.id, { ...section, style: { ...section.style, [activeScreen]: sectionStyle }, hover: { ...section.hover, [activeScreen]: hover } }, lastSection)
+        contextForSection.setCurrentSection(sectionStyle)
+      }
     }
-    contextForSection.setCurrentSection(sectionStyle)
   }, [sectionStyle])
   /////////////////////////////////////////////////////////////////////////
 
