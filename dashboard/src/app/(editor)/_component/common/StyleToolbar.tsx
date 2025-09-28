@@ -6,6 +6,7 @@ import CustomSelect from '@/app/_common/CustomSelect';
 import { screenType, useMyContext } from '@/Context/EditorContext';
 import { debounce } from "lodash";
 import CopyStylesUI from './CopyStyleUI';
+import ColorPickerWithAlphaSection from './ColorPickerForDimesion';
 
 // Split a combined backgroundImage into gradient and URL
 function splitBackground(backgroundImage: string) {
@@ -39,8 +40,6 @@ function parseGradient(gradient: string) {
     return { direction: direction.trim(), color1: color1.trim(), color2: color2.trim() };
 }
 
-
-
 const shadowPresets: Record<string, string> = {
     none: 'none',
     sm: '0 1px 3px rgba(0,0,0,0.1)',
@@ -55,55 +54,9 @@ const shadowPresets: Record<string, string> = {
 
 type StyleToolbarProps = {
     updateStyles: (styles: Record<string, any>, applyAll?: boolean) => void;
-    rmSection?: (id: string) => void;
 };
 
-// ✅ Reusable color + transparency picker
-const ColorPickerWithAlpha: React.FC<{
-    label: string;
-    value: string;
-    onChange: (val: string) => void;
-    onLiveChange?: (val: string) => void
-}> = ({ label, value, onChange, onLiveChange }) => {
-    const alphaMatch = value?.match(/rgba\(\d+,\s*\d+,\s*\d+,\s*(\d?\.?\d+)\)/);
-    const alpha = alphaMatch ? parseFloat(alphaMatch[1]) : 1;
-
-    const hex = value?.startsWith("rgba") ? "#" + rgbaToHex(value) : value || "#000000";
-
-    return (
-        <div className="flex flex-col gap-1">
-            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">{label}</label>
-            <div className="flex items-center gap-2">
-                <input
-                    type="color"
-                    value={hex}
-                    onChange={(e) => {
-                        const rgba = hexToRgba(e.target.value, alpha);
-                        onChange(rgba);
-                        onLiveChange?.(rgba)
-                    }}
-                    className={`w-10 h-10 border rounded cursor-pointer ${dimensionStyle.colorInput}`}
-                />
-                <input
-                    type="range"
-                    min={0}
-                    max={1}
-                    step={0.01}
-                    value={alpha}
-                    onChange={(e) => {
-                        const rgba = hexToRgba(hex, parseFloat(e.target.value));
-                        onLiveChange?.(rgba)
-                        onChange(rgba);
-                    }}
-                    className="flex-1 accent-stone-600"
-                />
-                <span className="text-xs w-8 text-right">{alpha.toFixed(2)}</span>
-            </div>
-        </div>
-    );
-};
-
-const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) => {
+const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles }) => {
     const { contextForSection, screenStyleObj } = useMyContext()
     const { sectionRef, currentSection } = contextForSection
 
@@ -280,20 +233,28 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
             {/* Gradient */}
             <label className="text-xs font-medium text-gray-700 dark:text-gray-200">Gradient Colors:</label>
             <div className="flex flex-col gap-3">
-                <ColorPickerWithAlpha
+                <ColorPickerWithAlphaSection
                     label="Color 1"
                     value={color1}
                     onChange={(newColor) => {
                         setColor1(newColor);
                         handleGradientUpdate(newColor, undefined, undefined);
                     }}
+                    onLiveChange={(value) => {
+                        const g = `linear-gradient(${gradientDirection}, ${value}, ${color2})`;
+                        sectionRef?.current?.style.setProperty("background-image", `${g}, url(${bgImage})`, "important")
+                    }}
                 />
-                <ColorPickerWithAlpha
+                <ColorPickerWithAlphaSection
                     label="Color 2"
                     value={color2}
                     onChange={(newColor) => {
                         setColor2(newColor);
                         handleGradientUpdate(undefined, newColor, undefined);
+                    }}
+                    onLiveChange={(value) => {
+                        const g = `linear-gradient(${gradientDirection}, ${color1}, ${value})`;
+                        sectionRef?.current?.style.setProperty("background-image", `${g}, url(${bgImage})`, "important")
                     }}
                 />
             </div>
@@ -418,7 +379,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
             {/* Text Color */}
             {renderInputRow(
                 '',
-                <ColorPickerWithAlpha
+                <ColorPickerWithAlphaSection
                     label="Text Color"
                     value={textColor}
                     onChange={(val) => {
@@ -485,7 +446,7 @@ const StyleToolbar: React.FC<StyleToolbarProps> = ({ updateStyles, rmSection }) 
 
                 {renderInputRow(
                     'Border Color',
-                    <ColorPickerWithAlpha
+                    <ColorPickerWithAlphaSection
                         label="Pick"
                         value={borderColor}
                         onChange={(val) => {

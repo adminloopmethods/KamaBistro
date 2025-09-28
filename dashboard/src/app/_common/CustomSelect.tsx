@@ -11,8 +11,8 @@ import { ChevronDown } from "lucide-react";
 type Option = {
     label: string;
     value: string;
-    disabele?: Boolean
-    onClick?: () => Promise<void>
+    disabele?: Boolean;
+    onClick?: () => Promise<void>;
 };
 
 type CustomSelectProps = {
@@ -41,10 +41,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     addBaseClass = "",
 }) => {
     const [selected, setSelected] = useState<string>(Default || firstValue);
+    const [highlighted, setHighlighted] = useState<string | null>(null);
     const [open, setOpen] = useState(false);
     const [dropUp, setDropUp] = useState(false);
     const [dropdownMaxHeight, setDropdownMaxHeight] = useState(240);
     const dropdownRef: RefObject<HTMLDivElement | null> = useRef(null);
+    const [searchKey, setSearchKey] = useState<string>("");
+    const [searchIndex, setSearchIndex] = useState<number>(0);
 
     useEffect(() => {
         setSelected(Default || firstValue);
@@ -53,16 +56,15 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
     const handleSelect = (value: string, onClick?: () => void, both?: Boolean) => {
         if (both) {
             setSelected(value);
-            onClick?.()
+            onClick?.();
             if (onChange) onChange(value);
         } else if (onClick) {
-            onClick?.()
+            onClick?.();
         } else {
             setSelected(value);
             if (onChange) onChange(value);
         }
-
-
+        setHighlighted(null);
         setOpen(false);
     };
 
@@ -74,11 +76,11 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                 !dropdownRef.current.contains(e.target)
             ) {
                 setOpen(false);
+                setHighlighted(null);
             }
         };
 
         document.addEventListener("mousedown", handleClickOutside);
-
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
@@ -113,6 +115,56 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         }
         setOpen((prev) => !prev);
     };
+
+    // Keyboard navigation for first-letter search
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (!open) return;
+
+            const key = e.key.toLowerCase();
+
+            // ENTER -> confirm highlighted
+            if (e.key === "Enter" && highlighted) {
+                const opt = options.find((o) => o.value === highlighted);
+                if (opt) {
+                    handleSelect(opt.value, opt.onClick);
+                }
+                return;
+            }
+
+            if (key.length === 1 && /[a-z0-9]/i.test(key)) {
+                const matchingOptions = options.filter((opt) =>
+                    opt.label.toLowerCase().startsWith(key)
+                );
+
+                if (matchingOptions.length > 0) {
+                    let nextIndex = 0;
+
+                    if (searchKey === key) {
+                        nextIndex = (searchIndex + 1) % matchingOptions.length;
+                    }
+
+                    const match = matchingOptions[nextIndex];
+                    if (match) {
+                        // 🔹 highlight only
+                        setHighlighted(match.value);
+
+                        // scroll into view
+                        const el = document.getElementById(`option-${match.value}`);
+                        el?.scrollIntoView({ block: "nearest" });
+                    }
+
+                    setSearchKey(key);
+                    setSearchIndex(nextIndex);
+                }
+            }
+        };
+
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [open, searchKey, searchIndex, options, highlighted]);
 
     return (
         <div
@@ -164,10 +216,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
                         )}
                         {options.map((opt) => (
                             <li
+                                id={`option-${opt.value}`}
                                 key={opt.value}
                                 onClick={() => handleSelect(opt.value, opt.onClick)}
-                                className={`px-3 py-2 hover:bg-gray-100 cursor-pointer dark:text-[black] ${selected === opt.value ? "bg-gray-100 font-medium" : ""
-                                    }`}
+                                className={`px-3 py-2 cursor-pointer dark:text-[black]
+                                    ${selected === opt.value ? "bg-gray-100 font-medium" : ""}
+                                    ${highlighted === opt.value ? "bg-blue-100" : "hover:bg-gray-100"}`}
                             >
                                 {opt.label}
                             </li>

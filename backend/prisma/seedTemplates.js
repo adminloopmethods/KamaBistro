@@ -9,6 +9,9 @@ import OurCulture from "./templatesBase/OurCulture.json" assert {type: "json"}
 import PrivateDinning from "./templatesBase/PrivateDinning.json" assert {type: "json"}
 import Catering from "./templatesBase/Catering.json" assert {type: "json"}
 import ContactUs from "./templatesBase/Contact-us.json" assert { type: "json" }
+import accessibility from "./templatesBase/accessibilityPage.json" assert { type: "json" }
+import privacyPolicy from "./templatesBase/privacyPolicy.json" assert { type: "json" }
+import termsNCondition from "./templatesBase/termsAndCodition.json" assert { type: "json" }
 
 // import pages for location 1
 import homeLanding from "./templateLocationPage/HomeLanding.json" assert {type: "json"}
@@ -43,6 +46,9 @@ const webpages = [
   PrivateDinning,
   Catering,
   ContactUs,
+  accessibility,
+  privacyPolicy,
+  termsNCondition,
 
   // location 1 pages
   homeLanding,

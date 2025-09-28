@@ -11,8 +11,12 @@ type LinkProps = {
 
 const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
     const isExternal = element.href?.startsWith("http");
+    const display = style?.display || "inline-block";
 
-    const display = style?.display ? style?.display : "inline-block"
+    // Remove &nbsp; and <br> (case-insensitive)
+    const cleanContent = element.content
+        ? element.content.replace(/(&nbsp;|<br\s*\/?>)/gi, "").trim()
+        : "";
 
     if (isExternal) {
         return (
@@ -21,11 +25,11 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
                 aria-label={element.aria || ""}
                 title={element.aria}
                 id={element.id}
-                style={{ ...style, position: "relative", zIndex: "2", display }}
+                style={{ ...style, position: "relative", zIndex: 2, display }}
                 target="_blank"
                 rel="noopener noreferrer"
             >
-                {element.content || "Link Text"}
+                {cleanContent}
             </a>
         );
     }
@@ -35,9 +39,9 @@ const LinkComponent: React.FC<LinkProps> = ({ element, style }) => {
             href={element.href || "#"}
             aria-label={element.aria || ""}
             id={element.id}
-            style={{ ...style, position: "relative", zIndex: "2", display }}
+            style={{ ...style, position: "relative", zIndex: 2, display }}
         >
-            {element.content || "Link Text"}
+            {cleanContent}
         </Link>
     );
 };

@@ -22,10 +22,10 @@ export const toastFetchController = async (req, res) => {
         const token = await getTokenByLoginToastPOS({ clientId, clientSecret, userAccessType, hostname });
 
         // get the full menu from toast using the "token"
-        const fullMenu = await getMenuFromToastPOS({ hostname, restaurantGuid, token })
+        const { cache, menu } = await getMenuFromToastPOS({ hostname, restaurantGuid, token })
 
         // format the fullMenu so we can have only the neccessary fields
-        const formatMenu = simplifyMenu(fullMenu);
+        const formatMenu = cache ? menu : simplifyMenu(menu);
 
         res.status(201).json({ success: true, formatMenu });
     } catch (error) {
