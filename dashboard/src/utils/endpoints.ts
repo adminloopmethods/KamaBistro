@@ -50,6 +50,9 @@ const endpointMap = {
   approveProposedVersion: `${content}/proposed-versions/approve/`,
   getWebpageVersions: `${content}/versions/`,
   rollbackWebpageVersion: `${content}/rollback/`,
+  activateWebpage: `${content}/activate/`,
+  deactivateWebpage: `${content}/deactivate/`,
+  toggleWebpageStatus: `${content}/toggle-status/`,
 
   // Media
   uploadMedia: `${media}/upload`,

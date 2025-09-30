@@ -16,6 +16,9 @@ import {
   getProposedVersionByIdService,
   getProposedVersionByWebpageIdService,
   rollbackWebpageVersionService,
+  deactivateWebpageService,
+  toggleWebpageStatusService,
+  activateWebpageService,
 } from "./content.service.js";
 
 export const createWebpage = async (req, res) => {
@@ -101,28 +104,34 @@ export const updateWebpageById = async (req, res) => {
 };
 
 // ---------------- GET WEBPAGE BY ROUTE ----------------
+
 export const getWebpageByRoute = async (req, res) => {
   try {
     const {route} = req.params;
-    const {location} = req.query; // frontend sends ?location=<locationId> or nothing
+    const {location} = req.query;
 
     // Normalize route
     const normalizedRoute = route === "home" ? "/" : `/${route}`;
 
-    // Get the ID from route + location handling
-    const id = await findWebpageIdByRouteService(normalizedRoute, location);
+    // Get the ID from route + location handling (only active webpages)
+    const id = await findWebpageIdByRouteService(
+      normalizedRoute,
+      location,
+      true
+    );
+
     console.log(id);
 
     if (!id) {
-      logger.warn(`Webpage with route '${normalizedRoute}' not found.`);
-      return res.status(404).json({error: "Webpage not found."});
+      logger.warn(`Active webpage with route '${normalizedRoute}' not found.`);
+      return res.status(404).json({error: "Webpage not found or is inactive."});
     }
 
     // Fetch webpage by ID
     const webpage = await getWebpageByIdService(id);
 
-    if (!webpage) {
-      return res.status(404).json({error: "Webpage not found."});
+    if (!webpage || !webpage.Status) {
+      return res.status(404).json({error: "Webpage not found or is inactive."});
     }
 
     res.json({webpage});
@@ -333,5 +342,70 @@ export const rollbackWebpageVersion = async (req, res) => {
   } catch (error) {
     logger.error(`Error rolling back webpage: ${error.message}`, {error});
     res.status(500).json({error: "Failed to roll back webpage"});
+  }
+};
+
+export const activateWebpage = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const existing = await getWebpageByIdService(id);
+    if (!existing) {
+      logger.warn(`Webpage with ID '${id}' not found.`);
+      return res.status(404).json({error: "Webpage not found."});
+    }
+
+    const activatedWebpage = await activateWebpageService(id);
+    res.json({
+      message: "Webpage activated successfully",
+      webpage: activatedWebpage,
+    });
+  } catch (error) {
+    logger.error(`Error activating webpage: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to activate webpage."});
+  }
+};
+
+export const deactivateWebpage = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const existing = await getWebpageByIdService(id);
+    if (!existing) {
+      logger.warn(`Webpage with ID '${id}' not found.`);
+      return res.status(404).json({error: "Webpage not found."});
+    }
+
+    const deactivatedWebpage = await deactivateWebpageService(id);
+    res.json({
+      message: "Webpage deactivated successfully",
+      webpage: deactivatedWebpage,
+    });
+  } catch (error) {
+    logger.error(`Error deactivating webpage: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to deactivate webpage."});
+  }
+};
+
+export const toggleWebpageStatus = async (req, res) => {
+  try {
+    const {id} = req.params;
+
+    const existing = await getWebpageByIdService(id);
+    if (!existing) {
+      logger.warn(`Webpage with ID '${id}' not found.`);
+      return res.status(404).json({error: "Webpage not found."});
+    }
+
+    const toggledWebpage = await toggleWebpageStatusService(id);
+    const status = toggledWebpage.Status ? "activated" : "deactivated";
+
+    res.json({
+      message: `Webpage ${status} successfully`,
+      webpage: toggledWebpage,
+    });
+  } catch (error) {
+    logger.error(`Error toggling webpage status: ${error.message}`, {error});
+    res.status(500).json({error: "Failed to toggle webpage status."});
   }
 };
