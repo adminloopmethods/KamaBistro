@@ -111,7 +111,6 @@ export const getWebpageByRoute = async (req, res) => {
 
     // Get the ID from route + location handling
     const id = await findWebpageIdByRouteService(normalizedRoute, location);
-    console.log(id);
 
     if (!id) {
       logger.warn(`Webpage with route '${normalizedRoute}' not found.`);
@@ -134,7 +133,6 @@ export const getWebpageByRoute = async (req, res) => {
 
 // ---------------- GET ALL CONTENTS ----------------
 export const getAllContentsController = async (req, res) => {
-  console.log("on controller");
 
   try {
     const contents = await getAllContentsService();
