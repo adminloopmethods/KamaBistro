@@ -90,12 +90,12 @@ const VersionHistoryModal: React.FC<Props> = ({
             // Check if this version is live - look for Status: true in the version object
             const isLive = apiVersion.version.Status === true;
 
-            console.log(`Version ${versionNumber}:`, {
-              id: apiVersion.id,
-              status: apiVersion.version.Status,
-              isLive: isLive,
-              name: apiVersion.version.name,
-            }); // Debug log
+            // console.log(`Version ${versionNumber}:`, {
+            //   id: apiVersion.id,
+            //   status: apiVersion.version.Status,
+            //   isLive: isLive,
+            //   name: apiVersion.version.name,
+            // }); // Debug log
 
             return {
               id: apiVersion.id,

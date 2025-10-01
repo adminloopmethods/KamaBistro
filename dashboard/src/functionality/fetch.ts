@@ -406,6 +406,21 @@ export async function getWebpageVersionsReq(
   );
 }
 
+// Activate webpage
+export async function activateWebpageReq(id: string): Promise<ApiResponse> {
+  return await makerequest(endpoint.route("activateWebpage") + id, "PATCH");
+}
+
+// Deactivate webpage
+export async function deactivateWebpageReq(id: string): Promise<ApiResponse> {
+  return await makerequest(endpoint.route("deactivateWebpage") + id, "PATCH");
+}
+
+// Toggle webpage status
+export async function toggleWebpageStatusReq(id: string): Promise<ApiResponse> {
+  return await makerequest(endpoint.route("toggleWebpageStatus") + id, "PATCH");
+}
+
 export async function rollbackWebpageVersionReq(
   webpageId: string,
   versionId: string

@@ -1,12 +1,16 @@
-// components/WebpageCard.tsx
 "use client";
 import React, {useState} from "react";
-import {Edit, UserPlus, X} from "lucide-react";
+import {Edit, UserPlus, X, Power, PowerOff} from "lucide-react";
 import {History} from "lucide-react";
 import {useRouter} from "next/navigation";
 import {getRoleByName, removeUserFromPageRole} from "@/utils/roleManagement";
 import {useUser} from "@/Context/UserContext";
 import VersionHistoryModal from "./VersionHistoryModal";
+import {
+  activateWebpageReq,
+  deactivateWebpageReq,
+  toggleWebpageStatusReq,
+} from "@/functionality/fetch";
 
 interface User {
   id: string;
@@ -23,12 +27,13 @@ interface Webpage {
   lastEdited: string;
   editor?: User;
   verifier?: User;
-  status: "draft" | "published" | "needs-review";
+  status: "active" | "inactive" | "draft" | "published" | "needs-review";
   route: string;
   versionCount?: number;
   updatedAt?: string;
   name?: string;
   count?: number;
+  Status?: boolean;
 }
 
 interface Props {
@@ -52,11 +57,45 @@ const WebpageCard: React.FC<Props> = ({
     editor: boolean;
     verifier: boolean;
   }>({editor: false, verifier: false});
+  const [isTogglingStatus, setIsTogglingStatus] = useState(false);
   const [showVersionHistory, setShowVersionHistory] = useState(false);
 
   const isAdmin = currentUser?.isSuperUser;
 
-  console.log("WebpageCard render:", page);
+  const isActive =
+    page.Status !== undefined
+      ? page.Status
+      : page.status === "active" || page.status === "published";
+
+  const handleToggleStatus = async () => {
+    try {
+      setIsTogglingStatus(true);
+
+      let response;
+      if (page.Status !== undefined) {
+        // Use toggle endpoint for simplicity
+        response = await toggleWebpageStatusReq(page.id);
+      } else {
+        // Fallback to individual endpoints
+        if (isActive) {
+          response = await deactivateWebpageReq(page.id);
+        } else {
+          response = await activateWebpageReq(page.id);
+        }
+      }
+
+      if (response.ok) {
+        onUserRemoved();
+      } else {
+        console.error("Failed to toggle webpage status:", response.error);
+        // You might want to show a toast notification here
+      }
+    } catch (error) {
+      console.error("Error toggling webpage status:", error);
+    } finally {
+      setIsTogglingStatus(false);
+    }
+  };
 
   const handleRemoveUser = async (role: "editor" | "verifier") => {
     try {
@@ -98,7 +137,7 @@ const WebpageCard: React.FC<Props> = ({
   };
 
   const handleRollbackSuccess = () => {
-    onUserRemoved(); // This will refresh the page data
+    onUserRemoved();
     setShowVersionHistory(false);
   };
 
@@ -174,13 +213,42 @@ const WebpageCard: React.FC<Props> = ({
           </div>
 
           <div className="flex items-center space-x-2">
-            {/* <span
-              className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusStyle(
-                page.status
-              )}`}
-            >
-              {page.status?.replace("-", " ")}
-            </span> */}
+            {/* Status badge with toggle button for admin */}
+            <div className="flex items-center space-x-2">
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  isActive
+                    ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
+                    : "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300"
+                }`}
+              >
+                {isActive ? "Active" : "Inactive"}
+              </span>
+
+              {isAdmin && (
+                <button
+                  onClick={handleToggleStatus}
+                  disabled={isTogglingStatus}
+                  className={`p-1.5 rounded-lg transition-colors ${
+                    isActive
+                      ? "bg-red-100 hover:bg-red-200 text-red-600 dark:bg-red-900/30 dark:hover:bg-red-900/50 dark:text-red-400"
+                      : "bg-green-100 hover:bg-green-200 text-green-600 dark:bg-green-900/30 dark:hover:bg-green-900/50 dark:text-green-400"
+                  } disabled:opacity-50 disabled:cursor-not-allowed`}
+                  title={isActive ? "Deactivate Page" : "Activate Page"}
+                >
+                  {isTogglingStatus ? (
+                    <div
+                      className={`w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin`}
+                    />
+                  ) : isActive ? (
+                    <PowerOff className="w-4 h-4" />
+                  ) : (
+                    <Power className="w-4 h-4" />
+                  )}
+                </button>
+              )}
+            </div>
+
             <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full text-xs">
               {page.count || 0} versions
             </span>
@@ -219,31 +287,18 @@ const WebpageCard: React.FC<Props> = ({
               <History className="w-5 h-5 text-gray-700 dark:text-gray-300" />
             </button>
           )}
-
-          {/* Add the VersionHistoryModal */}
-          <VersionHistoryModal
-            show={showVersionHistory}
-            onClose={() => setShowVersionHistory(false)}
-            webpage={getCurrentWebpageData()}
-            onRollbackSuccess={handleRollbackSuccess}
-          />
         </div>
       </div>
+
+      {/* Version History Modal */}
+      <VersionHistoryModal
+        show={showVersionHistory}
+        onClose={() => setShowVersionHistory(false)}
+        webpage={getCurrentWebpageData()}
+        onRollbackSuccess={handleRollbackSuccess}
+      />
     </div>
   );
 };
 
 export default WebpageCard;
-
-{
-  /* {showVersionHistory && (
-        <VersionHistoryModal
-          isOpen={showVersionHistory}
-          onClose={() => setShowVersionHistory(false)}
-          webpageId={page.id}
-          webpageName={page.title}
-          currentWebpageData={getCurrentWebpageData()}
-          onRollback={handleRollbackSuccess}
-        />
-      )} */
-}

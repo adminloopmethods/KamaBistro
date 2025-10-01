@@ -95,12 +95,13 @@ const CMSDashboard = () => {
         console.log("Raw webpage data:", response.webpages); // Debug log
 
         const mappedWebpages = response.webpages.map((webpage: any) => {
-          console.log(`Webpage ${webpage.name}:`, {
-            editorId: webpage.editorId,
-            editor: webpage.editor?.name,
-            verifierId: webpage.verifierId,
-            verifier: webpage.verifier?.name,
-          }); // Debug log
+          // console.log(`Webpage ${webpage.name}:`, {
+          //   editorId: webpage.editorId,
+          //   editor: webpage.editor?.name,
+          //   verifierId: webpage.verifierId,
+          //   verifier: webpage.verifier?.name,
+          //   Status: webpage.Status, // Add this line
+          // });
 
           // Extract editor and verifier information correctly
           const editor =
@@ -130,9 +131,10 @@ const CMSDashboard = () => {
             lastEdited: webpage.updatedAt,
             editor,
             verifier,
-            status: webpage.status,
+            status: webpage.Status ? "active" : "inactive", // Map boolean to string
+            Status: webpage.Status, // Keep the original boolean
             route: webpage.route,
-            count: webpage._count.versions,
+            count: webpage._count?.versions || 0,
           };
         });
 

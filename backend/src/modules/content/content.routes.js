@@ -2,8 +2,10 @@ import {Router} from "express";
 import tryCatchWrap from "../../errors/tryCatchWrap.js";
 import auditLogger from "../../helper/auditLogger.js";
 import {
+  activateWebpage,
   // approveProposedVersion,
   createWebpage,
+  deactivateWebpage,
   getAllContentsController,
   getAllWebpages,
   getContentByIdController,
@@ -13,6 +15,7 @@ import {
   getWebpageByRoute,
   getWebpageVersions,
   rollbackWebpageVersion,
+  toggleWebpageStatus,
   // proposeWebpageUpdate,
   // proposeWebpageVersion,
   updateWebpageById,
@@ -55,6 +58,10 @@ router.put("/:id", tryCatchWrap(updateWebpageById));
 
 router.get("/versions/:id", tryCatchWrap(getWebpageVersions));
 router.post("/rollback/:id/:versionId", tryCatchWrap(rollbackWebpageVersion));
+
+router.patch("/activate/:id", tryCatchWrap(activateWebpage));
+router.patch("/deactivate/:id", tryCatchWrap(deactivateWebpage));
+router.patch("/toggle-status/:id", tryCatchWrap(toggleWebpageStatus));
 // router.post("/propose/:id", tryCatchWrap(proposeWebpageUpdate));
 // router.delete("/", clearWebpagesTablesController)
 
